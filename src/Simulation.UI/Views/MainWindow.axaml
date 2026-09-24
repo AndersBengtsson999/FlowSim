@@ -1,0 +1,89 @@
+<Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:vm="using:Simulation.UI.ViewModels" xmlns:charts="using:Simulation.UI.Controls"
+ xmlns:app="clr-namespace:Simulation.Application;assembly=Simulation.Application"
+ x:Class="Simulation.UI.Views.MainWindow" x:DataType="vm:MainWindowViewModel"
+ Title="Software Development Simulation" Width="1240" Height="900" MinWidth="1080" MinHeight="650" Background="#F3F6FA">
+ <Window.Styles>
+  <Style Selector="TextBlock.section"><Setter Property="FontSize" Value="11"/><Setter Property="FontWeight" Value="Bold"/><Setter Property="Foreground" Value="#497182"/></Style>
+  <Style Selector="TextBlock.note"><Setter Property="FontSize" Value="12"/><Setter Property="Foreground" Value="#526279"/><Setter Property="TextWrapping" Value="Wrap"/></Style>
+  <Style Selector="Border.card"><Setter Property="Background" Value="White"/><Setter Property="CornerRadius" Value="8"/></Style>
+  <Style Selector="Button"><Setter Property="Padding" Value="14,10"/><Setter Property="CornerRadius" Value="6"/></Style>
+ </Window.Styles>
+ <Grid RowDefinitions="Auto,*,Auto" Margin="24">
+  <StackPanel Spacing="5" Margin="0,0,0,18"><TextBlock Text="Software Development Simulation" FontSize="27" FontWeight="Bold" Foreground="#173B50"/><TextBlock Text="Compare capacity choices. Follow the flow. See what remains unfinished." Foreground="#526279"/></StackPanel>
+  <Grid Grid.Row="1" ColumnDefinitions="365,22,*">
+   <Border Classes="card" Padding="16"><ScrollViewer><StackPanel IsEnabled="{Binding CanEdit}">
+<Grid ColumnDefinitions="*,64,64"><TextBlock Text="TEAM &amp; CAPACITY" Classes="section"/><TextBlock Grid.Column="1" Text="A" FontWeight="Bold"/><TextBlock Grid.Column="2" Text="B" FontWeight="Bold"/></Grid>
+<Grid ColumnDefinitions="*,64,64" Margin="0,4"><TextBlock Text="Developers" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Margin="0,0,5,0" Text="{Binding NumberOfDevelopers, Mode=TwoWay}" AutomationProperties.Name="A Developers"/><TextBox Grid.Column="2" Text="{Binding DevelopersB, Mode=TwoWay}" AutomationProperties.Name="B Developers"/></Grid>
+<Grid ColumnDefinitions="*,64,64" Margin="0,4"><TextBlock Text="Testers" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Margin="0,0,5,0" Text="{Binding NumberOfTesters, Mode=TwoWay}" AutomationProperties.Name="A Testers"/><TextBox Grid.Column="2" Text="{Binding TestersB, Mode=TwoWay}" AutomationProperties.Name="B Testers"/></Grid>
+<Grid ColumnDefinitions="*,64,64" Margin="0,4"><TextBlock Text="Dev. capacity / person / day" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Margin="0,0,5,0" Text="{Binding DeveloperCapacity, Mode=TwoWay}" AutomationProperties.Name="A Dev. capacity / person / day"/><TextBox Grid.Column="2" Text="{Binding DeveloperCapacityB, Mode=TwoWay}" AutomationProperties.Name="B Dev. capacity / person / day"/></Grid>
+<Grid ColumnDefinitions="*,64,64" Margin="0,4"><TextBlock Text="Test capacity / person / day" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Margin="0,0,5,0" Text="{Binding TesterCapacity, Mode=TwoWay}" AutomationProperties.Name="A Test capacity / person / day"/><TextBox Grid.Column="2" Text="{Binding TesterCapacityB, Mode=TwoWay}" AutomationProperties.Name="B Test capacity / person / day"/></Grid>
+<Grid ColumnDefinitions="*,64,64" Margin="0,4"><TextBlock Text="WIP limit" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Margin="0,0,5,0" Text="{Binding WipLimit, Mode=TwoWay}" AutomationProperties.Name="A WIP limit"/><TextBox Grid.Column="2" Text="{Binding WipLimitB, Mode=TwoWay}" AutomationProperties.Name="B WIP limit"/></Grid>
+<TextBlock Text="SHARED WORKLOAD &amp; TIME" Classes="section" Margin="0,20,0,8"/><TextBlock Text="A and B use identical items, dependencies and seeds." Classes="note" Margin="0,0,0,8"/>
+<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Work items" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Text="{Binding NumberOfWorkItems, Mode=TwoWay}" AutomationProperties.Name="Work items"/></Grid>
+<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Duration (days)" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Text="{Binding DurationDays, Mode=TwoWay}" AutomationProperties.Name="Duration (days)"/></Grid>
+<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Sprint length (days)" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Text="{Binding SprintLength, Mode=TwoWay}" AutomationProperties.Name="Sprint length (days)"/></Grid>
+<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Release interval (days)" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Text="{Binding ReleaseInterval, Mode=TwoWay}" AutomationProperties.Name="Release interval (days)"/></Grid>
+<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Seed" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Text="{Binding RandomSeed, Mode=TwoWay}" AutomationProperties.Name="Seed"/></Grid>
+<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Size (work units)" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Text="{Binding Size, Mode=TwoWay}" AutomationProperties.Name="Size (work units)"/></Grid>
+<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Complexity" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Text="{Binding Complexity, Mode=TwoWay}" AutomationProperties.Name="Complexity"/></Grid>
+<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Dependency probability (0–1)" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBox Grid.Column="1" Text="{Binding DependencyProbability, Mode=TwoWay}" AutomationProperties.Name="Dependency probability (0–1)"/></Grid>
+
+    <TextBlock Text="One team · daily steps · one-day review. Sprint and release intervals do not gate work." Classes="note" Margin="0,18,0,0"/>
+   </StackPanel></ScrollViewer></Border>
+   <Grid Grid.Column="2" RowDefinitions="Auto,*">
+    <TextBlock Text="{Binding ResultTitle}" FontSize="19" FontWeight="SemiBold" Margin="0,0,0,10"/>
+    <TabControl Grid.Row="1">
+     <TabItem Header="Overview"><ScrollViewer><StackPanel Margin="0,10,0,0">
+      <TextBlock Text="Run A alone or compare A and B. Differences are B minus A; a positive difference is not always better." Classes="note"/>
+<Grid ColumnDefinitions="*,92,92,92" Margin="12,12,12,8"><TextBlock Text="Metric" Classes="section"/><TextBlock Grid.Column="1" Text="A" Classes="section" HorizontalAlignment="Right"/><TextBlock Grid.Column="2" Text="B" Classes="section" HorizontalAlignment="Right"/><TextBlock Grid.Column="3" Text="Δ B − A" Classes="section" HorizontalAlignment="Right"/></Grid>
+ <ItemsControl ItemsSource="{Binding ComparisonRows}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:MetricRow">
+ <Border Classes="card" Margin="0,0,0,5" Padding="12,11"><Grid ColumnDefinitions="*,92,92,92"><TextBlock Text="{Binding Label}" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Grid.Column="1" Text="{Binding A}" HorizontalAlignment="Right" FontWeight="SemiBold"/><TextBlock Grid.Column="2" Text="{Binding B}" HorizontalAlignment="Right" FontWeight="SemiBold"/><TextBlock Grid.Column="3" Text="{Binding Difference}" HorizontalAlignment="Right"/></Grid></Border>
+ </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+      <Border Background="#FFF4DB" CornerRadius="8" Padding="14" Margin="0,12,0,0"><TextBlock Text="Lead and cycle time include completed items only. Check unfinished work before judging delivery: a growing queue can be hidden by these averages. No completions gives 0; batch results average per-run values including zeros." Classes="note"/></Border>
+      <TextBlock Text="Blocked time is dependency-blocked item-days / unfinished item-days. Δ for percentages is in percentage points (pp). No automatic good/bad coloring is applied." Classes="note" Margin="0,12,0,0"/>
+     </StackPanel></ScrollViewer></TabItem>
+     <TabItem Header="Status over time"><ScrollViewer><StackPanel Margin="0,10,0,0" Spacing="6">
+      <TextBlock Text="{Binding HistoryNote}" Classes="note"/>
+      <WrapPanel><TextBlock Text="● Backlog  " Foreground="#64748B"/><TextBlock Text="● Development  " Foreground="#3B82F6"/><TextBlock Text="● Code Review  " Foreground="#9470DC"/><TextBlock Text="● Testing  " Foreground="#B86D00"/><TextBlock Text="● Done" Foreground="#149185"/></WrapPanel>
+      <TextBlock Text="{Binding DayLabel}" FontWeight="SemiBold"/>
+      <Slider Minimum="0" Maximum="{Binding LastDayIndex}" Value="{Binding SelectedDay, Mode=TwoWay}" TickFrequency="1" IsSnapToTickEnabled="True" IsEnabled="{Binding HasResults}" AutomationProperties.Name="Inspect day"/>
+      <TextBlock Text="Scenario A · items" FontWeight="SemiBold"/>
+      <charts:StatusChart History="{Binding HistoryA}" SelectedDay="{Binding SelectedDay}" Height="205"/>
+      <TextBlock Text="{Binding DayDetailA}" Classes="note"/>
+      <StackPanel IsVisible="{Binding HasComparison}" Spacing="6"><TextBlock Text="Scenario B · items" FontWeight="SemiBold" Margin="0,12,0,0"/>
+       <charts:StatusChart History="{Binding HistoryB}" SelectedDay="{Binding SelectedDay}" Height="205"/>
+       <TextBlock Text="{Binding DayDetailB}" Classes="note"/>
+      </StackPanel>
+     </StackPanel></ScrollViewer></TabItem>
+     <TabItem Header="Unfinished work"><ScrollViewer><StackPanel Margin="0,10,0,0">
+      <TextBlock Text="{Binding UnfinishedNote}" Classes="note"/>
+<Grid ColumnDefinitions="*,92,92,92" Margin="12,12,12,8"><TextBlock Text="Metric" Classes="section"/><TextBlock Grid.Column="1" Text="A" Classes="section" HorizontalAlignment="Right"/><TextBlock Grid.Column="2" Text="B" Classes="section" HorizontalAlignment="Right"/><TextBlock Grid.Column="3" Text="Δ B − A" Classes="section" HorizontalAlignment="Right"/></Grid>
+ <ItemsControl ItemsSource="{Binding UnfinishedRows}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:MetricRow">
+ <Border Classes="card" Margin="0,0,0,5" Padding="12,11"><Grid ColumnDefinitions="*,92,92,92"><TextBlock Text="{Binding Label}" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Grid.Column="1" Text="{Binding A}" HorizontalAlignment="Right" FontWeight="SemiBold"/><TextBlock Grid.Column="2" Text="{Binding B}" HorizontalAlignment="Right" FontWeight="SemiBold"/><TextBlock Grid.Column="3" Text="{Binding Difference}" HorizontalAlignment="Right"/></Grid></Border>
+ </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+      <TextBlock Text="Dependency-blocked and ready-to-start are disjoint parts of backlog at the horizon. Ready backlog may wait for a WIP slot or the next day. Zero unfinished items gives age 0. All generated items arrive at day 0, so their total ages match; cycle ages can differ." Classes="note" Margin="0,8"/>
+      <StackPanel IsVisible="{Binding IsSingleRun}">
+<TextBlock Text="A · oldest unfinished items" FontWeight="SemiBold" Margin="0,16,0,8"/>
+ <Grid ColumnDefinitions="45,*,75,75,90" Margin="10,0,10,5"><TextBlock Text="ID"/><TextBlock Grid.Column="1" Text="Status"/><TextBlock Grid.Column="2" Text="Age"/><TextBlock Grid.Column="3" Text="Cycle age"/><TextBlock Grid.Column="4" Text="Blocked?"/></Grid>
+ <ItemsControl ItemsSource="{Binding OldestA}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="app:UnfinishedItem"><Border Classes="card" Padding="10,6" Margin="0,0,0,3"><Grid ColumnDefinitions="45,*,75,75,90"><TextBlock Text="{Binding Id}"/><TextBlock Grid.Column="1" Text="{Binding Status}"/><TextBlock Grid.Column="2" Text="{Binding Age}"/><TextBlock Grid.Column="3" Text="{Binding CycleAge, TargetNullValue='—'}"/><TextBlock Grid.Column="4" Text="{Binding DependencyBlocked}"/></Grid></Border></DataTemplate></ItemsControl.ItemTemplate></ItemsControl><StackPanel IsVisible="{Binding HasComparison}"><TextBlock Text="B · oldest unfinished items" FontWeight="SemiBold" Margin="0,16,0,8"/>
+ <Grid ColumnDefinitions="45,*,75,75,90" Margin="10,0,10,5"><TextBlock Text="ID"/><TextBlock Grid.Column="1" Text="Status"/><TextBlock Grid.Column="2" Text="Age"/><TextBlock Grid.Column="3" Text="Cycle age"/><TextBlock Grid.Column="4" Text="Blocked?"/></Grid>
+ <ItemsControl ItemsSource="{Binding OldestB}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="app:UnfinishedItem"><Border Classes="card" Padding="10,6" Margin="0,0,0,3"><Grid ColumnDefinitions="45,*,75,75,90"><TextBlock Text="{Binding Id}"/><TextBlock Grid.Column="1" Text="{Binding Status}"/><TextBlock Grid.Column="2" Text="{Binding Age}"/><TextBlock Grid.Column="3" Text="{Binding CycleAge, TargetNullValue='—'}"/><TextBlock Grid.Column="4" Text="{Binding DependencyBlocked}"/></Grid></Border></DataTemplate></ItemsControl.ItemTemplate></ItemsControl></StackPanel></StackPanel>
+     </StackPanel></ScrollViewer></TabItem>
+    </TabControl>
+   </Grid>
+  </Grid>
+  <StackPanel Grid.Row="2" Margin="0,16,0,0" Spacing="8">
+   <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Foreground="#B42318" TextWrapping="Wrap"/>
+   <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" Height="3"/>
+   <StackPanel Orientation="Horizontal" Spacing="8">
+    <Button Content="Run Simulation (A)" Command="{Binding RunCommand}"/>
+    <Button Content="Run 100 Runs (A)" Command="{Binding RunBatchCommand}"/>
+    <Button Content="Compare A / B" Command="{Binding CompareCommand}" Background="#176B77" Foreground="White"/>
+    <Button Content="Compare 100 Pairs" Command="{Binding CompareBatchCommand}"/>
+    <Button Content="Cancel" Command="{Binding CancelCommand}" IsVisible="{Binding IsBusy}"/>
+   </StackPanel>
+   <TextBlock Text="{Binding StatusMessage}" Classes="note"/>
+  </StackPanel>
+ </Grid>
+</Window>
