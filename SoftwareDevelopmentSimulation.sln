@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulation.Core.Tests", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulation.Application.Tests", "tests\Simulation.Application.Tests\Simulation.Application.Tests.csproj", "{EE184089-9E38-4B3F-9AF1-5B81E46DADE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulation.UI.Tests", "tests\Simulation.UI.Tests\Simulation.UI.Tests.csproj", "{83A016CD-874D-4F63-888A-56A08CA7D921}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,18 @@ Global
 		{EE184089-9E38-4B3F-9AF1-5B81E46DADE6}.Release|x64.Build.0 = Release|Any CPU
 		{EE184089-9E38-4B3F-9AF1-5B81E46DADE6}.Release|x86.ActiveCfg = Release|Any CPU
 		{EE184089-9E38-4B3F-9AF1-5B81E46DADE6}.Release|x86.Build.0 = Release|Any CPU
+		{83A016CD-874D-4F63-888A-56A08CA7D921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83A016CD-874D-4F63-888A-56A08CA7D921}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83A016CD-874D-4F63-888A-56A08CA7D921}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{83A016CD-874D-4F63-888A-56A08CA7D921}.Debug|x64.Build.0 = Debug|Any CPU
+		{83A016CD-874D-4F63-888A-56A08CA7D921}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{83A016CD-874D-4F63-888A-56A08CA7D921}.Debug|x86.Build.0 = Debug|Any CPU
+		{83A016CD-874D-4F63-888A-56A08CA7D921}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83A016CD-874D-4F63-888A-56A08CA7D921}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83A016CD-874D-4F63-888A-56A08CA7D921}.Release|x64.ActiveCfg = Release|Any CPU
+		{83A016CD-874D-4F63-888A-56A08CA7D921}.Release|x64.Build.0 = Release|Any CPU
+		{83A016CD-874D-4F63-888A-56A08CA7D921}.Release|x86.ActiveCfg = Release|Any CPU
+		{83A016CD-874D-4F63-888A-56A08CA7D921}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,5 +126,6 @@ Global
 		{4B058412-FA8F-42AB-B859-F278D0E311E1} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{B004B5E6-2D56-4D23-9E15-E5061845BFF4} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{EE184089-9E38-4B3F-9AF1-5B81E46DADE6} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{83A016CD-874D-4F63-888A-56A08CA7D921} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal

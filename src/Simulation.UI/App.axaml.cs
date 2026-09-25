@@ -15,7 +15,7 @@ public partial class App : Avalonia.Application
         {
             var viewModel = new MainWindowViewModel();
             desktop.MainWindow = new MainWindow { DataContext = viewModel };
-            desktop.MainWindow.Closed += (_, _) => viewModel.Cancel();
+            desktop.MainWindow.Closed += (_, _) => { viewModel.Cancel(); viewModel.Sensitivity.Cancel(); };
         }
         base.OnFrameworkInitializationCompleted();
     }

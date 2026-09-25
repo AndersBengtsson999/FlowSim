@@ -16,9 +16,10 @@ public sealed record TeamParameters(int Developers, int Testers, double Develope
 }
 
 public sealed record StatusPoint(int Day, double Backlog, double Development,
-    double CodeReview, double Testing, double Done, double WaitingForCodeReview, double WaitingForTesting)
+    double CodeReview, double Testing, double Done, double WaitingForCodeReview, double WaitingForTesting,
+    double WaitingForRework = 0, double Rework = 0)
 {
-    public double Total => Backlog + Development + CodeReview + Testing + Done + WaitingForCodeReview + WaitingForTesting;
+    public double Total => Backlog + Development + CodeReview + Testing + Done + WaitingForCodeReview + WaitingForTesting + WaitingForRework + Rework;
 }
 
 public sealed record UnfinishedItem(string Id, string Title, WorkItemStatus Status,
@@ -26,7 +27,8 @@ public sealed record UnfinishedItem(string Id, string Title, WorkItemStatus Stat
 
 public sealed record UnfinishedSummary(double Count, double Backlog, double Development,
     double CodeReview, double Testing, double DependencyBlocked, double ReadyBacklog,
-    double AverageAge, double OldestAge, double WaitingForCodeReview, double WaitingForTesting);
+    double AverageAge, double OldestAge, double WaitingForCodeReview, double WaitingForTesting,
+    double WaitingForRework = 0, double Rework = 0);
 
 public sealed record ScenarioReport(RunMetrics Metrics, IReadOnlyList<StatusPoint> History,
     UnfinishedSummary Unfinished, IReadOnlyList<UnfinishedItem> OldestItems);
@@ -42,7 +44,7 @@ public static class ResultAnalysis
         // Dependency-blocked at the horizon is supplied separately by the scenario-aware overload.
         var history = result.Days.Select(d => new StatusPoint(d.Day + 1,
             d.BacklogCount, d.DevelopmentCount, d.CodeReviewCount, d.TestingCount, d.DoneCount,
-            d.WaitingForCodeReviewCount, d.WaitingForTestingCount)).ToArray();
+            d.WaitingForCodeReviewCount, d.WaitingForTestingCount, d.WaitingForReworkCount, d.ReworkCount)).ToArray();
         var items = unfinished.Select(w => new UnfinishedItem(w.Id, w.Name, w.State,
             horizon - w.CreatedDay, w.DevelopmentStartedDay is int start ? horizon - start : null, false)).ToArray();
         return new ScenarioReport(RunMetrics.From(result), history,
@@ -55,7 +57,9 @@ public static class ResultAnalysis
                 items.Length == 0 ? 0 : items.Average(w => w.Age),
                 items.Length == 0 ? 0 : items.Max(w => w.Age),
                 unfinished.Count(w => w.State == WorkItemStatus.WaitingForCodeReview),
-                unfinished.Count(w => w.State == WorkItemStatus.WaitingForTesting)),
+                unfinished.Count(w => w.State == WorkItemStatus.WaitingForTesting),
+                unfinished.Count(w => w.State == WorkItemStatus.WaitingForRework),
+                unfinished.Count(w => w.State == WorkItemStatus.Rework)),
             items.OrderByDescending(w => w.Age).ThenBy(w => w.Id, StringComparer.Ordinal).Take(20).ToArray());
     }
 

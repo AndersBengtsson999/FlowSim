@@ -69,8 +69,11 @@ public sealed class SimulationEngineTests
     {
         var result = new SimulationEngine().Run(Scenario());
         var item = result.WorkItems[0];
-        Assert.Equal(Enum.GetValues<WorkItemStatus>().Skip(1), item.Transitions.Select(t => t.To));
-        Assert.Equal(Enum.GetValues<WorkItemStatus>().SkipLast(1), item.Transitions.Select(t => t.From));
+        WorkItemStatus[] forwardFlow = [WorkItemStatus.Backlog, WorkItemStatus.Development,
+            WorkItemStatus.WaitingForCodeReview, WorkItemStatus.CodeReview, WorkItemStatus.WaitingForTesting,
+            WorkItemStatus.Testing, WorkItemStatus.Done];
+        Assert.Equal(forwardFlow.Skip(1), item.Transitions.Select(t => t.To));
+        Assert.Equal(forwardFlow.SkipLast(1), item.Transitions.Select(t => t.From));
         Assert.Equal(0, item.DevelopmentStartedDay);
         Assert.Equal(5, item.DevelopmentCompletedDay);
         Assert.Equal(5, item.CodeReviewStartedDay);

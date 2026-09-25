@@ -10,6 +10,8 @@ public static class ScenarioValidator
         if (string.IsNullOrWhiteSpace(scenario.Name)) Fail("Scenario name is required.");
         if (scenario.SimulationDays <= 0) Fail("SimulationDays must be positive.");
         if (scenario.Team is null) Fail("Team configuration is required.");
+        if (scenario.Quality is null) Fail("Quality settings are required.");
+        scenario.Quality!.Validate();
         var team = scenario.Team!;
         if (team.DeveloperCount < 0 || team.TesterCount < 0) Fail("Resource counts cannot be negative.");
         if (!NonnegativeFinite(team.DeveloperCapacityPerDay) || !NonnegativeFinite(team.TesterCapacityPerDay)

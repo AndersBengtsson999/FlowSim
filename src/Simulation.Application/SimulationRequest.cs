@@ -19,19 +19,25 @@ public sealed record SimulationRequest
     public double CodeReviewEffort { get; init; } = 1;
     public double TestingEffort { get; init; } = 2;
 
+    public int RandomSeed { get; init; } = 12345;
+    public DefectSettings Quality { get; init; } = new();
+    // Null preserves the original per-stage fixed effort setting and mixed-effort Core scenarios.
+    public IEffortDistribution? DevelopmentDistribution { get; init; }
+    public IEffortDistribution? CodeReviewDistribution { get; init; }
+    public IEffortDistribution? TestingDistribution { get; init; }
+
     public SimulationScenario ToScenario()
     {
         if (NumberOfWorkItems < 0 || NumberOfWorkItems > 2000 || SimulationDays > 3650
             || (long)NumberOfWorkItems * SimulationDays > 1_000_000)
             throw new ScenarioValidationException("Maximum 2,000 items, 3,650 days and 1,000,000 item-days per run.");
-        // Validate effort settings even when there are no generated items.
-        if (new[] { DevelopmentEffort, CodeReviewEffort, TestingEffort }.Any(e => !double.IsFinite(e) || e < 0))
-            throw new ScenarioValidationException("Efforts must be finite and nonnegative.");
+        var development = DevelopmentDistribution ?? new FixedEffort(DevelopmentEffort);
+        var review = CodeReviewDistribution ?? new FixedEffort(CodeReviewEffort);
+        var testing = TestingDistribution ?? new FixedEffort(TestingEffort);
         var scenario = new SimulationScenario(Name, SimulationDays,
             new Team(DeveloperCount, TesterCount, DeveloperCapacityPerDay, TesterCapacityPerDay),
             DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit,
-            Enumerable.Range(1, NumberOfWorkItems).Select(id =>
-                new WorkItem($"STORY-{id}", $"Story {id}", DevelopmentEffort, CodeReviewEffort, TestingEffort)).ToArray());
+            EffortGenerator.Generate(NumberOfWorkItems, development, review, testing, RandomSeed), RandomSeed) { Quality = Quality };
         ScenarioValidator.Validate(scenario);
         return scenario;
     }

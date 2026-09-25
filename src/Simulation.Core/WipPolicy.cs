@@ -15,6 +15,7 @@ public static class WipPolicy
     {
         WorkItemStatus.Development => scenario.DevelopmentWipLimit,
         WorkItemStatus.CodeReview => scenario.CodeReviewWipLimit,
+        WorkItemStatus.Rework => scenario.Quality.ReworkWipLimit,
         WorkItemStatus.Testing => scenario.TestingWipLimit,
         _ => throw new ArgumentOutOfRangeException(nameof(stage), "WIP applies to active stages.")
     };

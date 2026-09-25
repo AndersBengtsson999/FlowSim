@@ -1,84 +1,206 @@
 <Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  xmlns:vm="using:Simulation.UI.ViewModels" xmlns:charts="using:Simulation.UI.Controls"
- xmlns:app="clr-namespace:Simulation.Application;assembly=Simulation.Application"
+ xmlns:views="using:Simulation.UI.Views"
+ xmlns:core="clr-namespace:Simulation.Core;assembly=Simulation.Core"
  x:Class="Simulation.UI.Views.MainWindow" x:DataType="vm:MainWindowViewModel"
- Title="Software Development Simulation" Width="1240" Height="900" MinWidth="1080" MinHeight="650" Background="#F3F6FA">
+ Title="Software Development Simulation" Width="1240" Height="900" MinWidth="1020" MinHeight="680" Background="#F3F6FA">
  <Window.Styles>
-  <Style Selector="TextBlock.section"><Setter Property="FontSize" Value="11"/><Setter Property="FontWeight" Value="Bold"/><Setter Property="Foreground" Value="#497182"/></Style>
+  <Style Selector="TextBlock.section"><Setter Property="FontSize" Value="17"/><Setter Property="FontWeight" Value="SemiBold"/><Setter Property="Foreground" Value="#173B50"/></Style>
   <Style Selector="TextBlock.note"><Setter Property="FontSize" Value="12"/><Setter Property="Foreground" Value="#526279"/><Setter Property="TextWrapping" Value="Wrap"/></Style>
-  <Style Selector="Border.card"><Setter Property="Background" Value="White"/><Setter Property="CornerRadius" Value="8"/></Style>
-  <Style Selector="Button"><Setter Property="Padding" Value="14,10"/><Setter Property="CornerRadius" Value="6"/></Style>
+  <Style Selector="Border.card"><Setter Property="Background" Value="White"/><Setter Property="CornerRadius" Value="6"/><Setter Property="Padding" Value="18"/></Style>
+  <Style Selector="Button"><Setter Property="Padding" Value="12,10"/><Setter Property="Margin" Value="0,0,8,5"/></Style>
+  <Style Selector="TextBox"><Setter Property="MinWidth" Value="100"/></Style>
  </Window.Styles>
  <Grid RowDefinitions="Auto,*,Auto" Margin="24">
-  <StackPanel Spacing="5" Margin="0,0,0,18"><TextBlock Text="Software Development Simulation" FontSize="27" FontWeight="Bold" Foreground="#173B50"/><TextBlock Text="Compare capacity choices. Follow the flow. See what remains unfinished." Foreground="#526279"/></StackPanel>
-  <Grid Grid.Row="1" ColumnDefinitions="365,22,*">
-   <Border Classes="card" Padding="16"><ScrollViewer><StackPanel IsEnabled="{Binding CanEdit}">
-<Grid ColumnDefinitions="*,64,64"><TextBlock Text="TEAM &amp; ACTIVE WIP" Classes="section"/><TextBlock Grid.Column="1" Text="A" FontWeight="Bold"/><TextBlock Grid.Column="2" Text="B" FontWeight="Bold"/></Grid>
-<Grid ColumnDefinitions="*,64,64" Margin="0,4"><TextBlock Text="Developers" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Margin="0,0,5,0" Text="{Binding NumberOfDevelopers, Mode=TwoWay}" AutomationProperties.Name="A Developers"/><TextBox Grid.Column="2" Text="{Binding DevelopersB, Mode=TwoWay}" AutomationProperties.Name="B Developers"/></Grid>
-<Grid ColumnDefinitions="*,64,64" Margin="0,4"><TextBlock Text="Testers" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Margin="0,0,5,0" Text="{Binding NumberOfTesters, Mode=TwoWay}" AutomationProperties.Name="A Testers"/><TextBox Grid.Column="2" Text="{Binding TestersB, Mode=TwoWay}" AutomationProperties.Name="B Testers"/></Grid>
-<Grid ColumnDefinitions="*,64,64" Margin="0,4"><TextBlock Text="Developer capacity / day" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Margin="0,0,5,0" Text="{Binding DeveloperCapacity, Mode=TwoWay}" AutomationProperties.Name="A Developer capacity / day"/><TextBox Grid.Column="2" Text="{Binding DeveloperCapacityB, Mode=TwoWay}" AutomationProperties.Name="B Developer capacity / day"/></Grid>
-<Grid ColumnDefinitions="*,64,64" Margin="0,4"><TextBlock Text="Tester capacity / day" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Margin="0,0,5,0" Text="{Binding TesterCapacity, Mode=TwoWay}" AutomationProperties.Name="A Tester capacity / day"/><TextBox Grid.Column="2" Text="{Binding TesterCapacityB, Mode=TwoWay}" AutomationProperties.Name="B Tester capacity / day"/></Grid>
-<Grid ColumnDefinitions="*,64,64" Margin="0,4"><TextBlock Text="Development WIP" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Margin="0,0,5,0" Text="{Binding DevelopmentWipLimit, Mode=TwoWay}" AutomationProperties.Name="A Development WIP"/><TextBox Grid.Column="2" Text="{Binding DevelopmentWipLimitB, Mode=TwoWay}" AutomationProperties.Name="B Development WIP"/></Grid>
-<Grid ColumnDefinitions="*,64,64" Margin="0,4"><TextBlock Text="Code Review WIP" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Margin="0,0,5,0" Text="{Binding CodeReviewWipLimit, Mode=TwoWay}" AutomationProperties.Name="A Code Review WIP"/><TextBox Grid.Column="2" Text="{Binding CodeReviewWipLimitB, Mode=TwoWay}" AutomationProperties.Name="B Code Review WIP"/></Grid>
-<Grid ColumnDefinitions="*,64,64" Margin="0,4"><TextBlock Text="Testing WIP" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Margin="0,0,5,0" Text="{Binding TestingWipLimit, Mode=TwoWay}" AutomationProperties.Name="A Testing WIP"/><TextBox Grid.Column="2" Text="{Binding TestingWipLimitB, Mode=TwoWay}" AutomationProperties.Name="B Testing WIP"/></Grid>
-<TextBlock Text="Capacity per person in abstract work units. Review shares developer capacity and is served first. Waiting states do not occupy active WIP slots." Classes="note" Margin="0,10"/><TextBlock Text="SHARED WORKLOAD" Classes="section" Margin="0,10"/>
-<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Work items" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Text="{Binding NumberOfWorkItems, Mode=TwoWay}" AutomationProperties.Name="Work items"/></Grid>
-<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Working days" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Text="{Binding DurationDays, Mode=TwoWay}" AutomationProperties.Name="Working days"/></Grid>
-<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Development effort" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Text="{Binding DevelopmentEffort, Mode=TwoWay}" AutomationProperties.Name="Development effort"/></Grid>
-<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Code Review effort" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Text="{Binding CodeReviewEffort, Mode=TwoWay}" AutomationProperties.Name="Code Review effort"/></Grid>
-<Grid ColumnDefinitions="*,90" Margin="0,3"><TextBlock Text="Testing effort" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Text="{Binding TestingEffort, Mode=TwoWay}" AutomationProperties.Name="Testing effort"/></Grid>
-<TextBlock Text="Model v0.1 · FIFO · max 1 unit/item/day. This form generates equal-effort, independent items. Defaults are the 30-item baseline; explicit dependencies and mixed efforts are supported in Core." Classes="note" Margin="0,10"/>
-   </StackPanel></ScrollViewer></Border>
-   <Grid Grid.Column="2" RowDefinitions="Auto,*">
-    <TextBlock Text="{Binding ResultTitle}" FontSize="19" FontWeight="SemiBold" Margin="0,0,0,10"/>
-    <TabControl Grid.Row="1">
-     <TabItem Header="Overview"><ScrollViewer><StackPanel Margin="0,10,0,0">
-      <TextBlock Text="Run A alone or compare A and B. Differences are B minus A; a positive difference is not always better." Classes="note"/>
-<Grid ColumnDefinitions="*,92,92,92" Margin="12,12,12,8"><TextBlock Text="Metric" Classes="section"/><TextBlock Grid.Column="1" Text="A" Classes="section" HorizontalAlignment="Right"/><TextBlock Grid.Column="2" Text="B" Classes="section" HorizontalAlignment="Right"/><TextBlock Grid.Column="3" Text="Δ B − A" Classes="section" HorizontalAlignment="Right"/></Grid>
- <ItemsControl ItemsSource="{Binding ComparisonRows}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:MetricRow">
- <Border Classes="card" Margin="0,0,0,5" Padding="12,11"><Grid ColumnDefinitions="*,92,92,92"><TextBlock Text="{Binding Label}" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Grid.Column="1" Text="{Binding A}" HorizontalAlignment="Right" FontWeight="SemiBold"/><TextBlock Grid.Column="2" Text="{Binding B}" HorizontalAlignment="Right" FontWeight="SemiBold"/><TextBlock Grid.Column="3" Text="{Binding Difference}" HorizontalAlignment="Right"/></Grid></Border>
- </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
-      <Border Background="#FFF4DB" CornerRadius="8" Padding="14" Margin="0,12,0,0"><TextBlock Text="Lead and cycle time include completed items only. Check unfinished work before judging delivery: a growing queue can be hidden by these averages. No completions gives 0, which does not mean fast delivery." Classes="note"/></Border>
-      <TextBlock Text="Developer use includes development and review; the two rows below it show their shares of total developer capacity. Review time covers time in the active CodeReview state for items that exited it. It excludes WaitingForCodeReview. Average review WIP counts active items after admission. Blocked time is dependency-blocked item-days / unfinished item-days. Δ for percentages is in percentage points (pp). No automatic good/bad coloring is applied." Classes="note" Margin="0,12,0,0"/>
-     </StackPanel></ScrollViewer></TabItem>
-     <TabItem Header="Status over time"><ScrollViewer><StackPanel Margin="0,10,0,0" Spacing="6">
-      <TextBlock Text="{Binding HistoryNote}" Classes="note"/>
-      <WrapPanel><TextBlock Text="● Backlog  " Foreground="#64748B"/><TextBlock Text="● Development  " Foreground="#3B82F6"/><TextBlock Text="● Waiting review  " Foreground="#D8B4FE"/><TextBlock Text="● Code Review  " Foreground="#9470DC"/><TextBlock Text="● Waiting test  " Foreground="#FACC15"/><TextBlock Text="● Testing  " Foreground="#B86D00"/><TextBlock Text="● Done" Foreground="#149185"/></WrapPanel>
-      <TextBlock Text="{Binding DayLabel}" FontWeight="SemiBold"/>
-      <Slider Minimum="0" Maximum="{Binding LastDayIndex}" Value="{Binding SelectedDay, Mode=TwoWay}" TickFrequency="1" IsSnapToTickEnabled="True" IsEnabled="{Binding HasResults}" AutomationProperties.Name="Inspect day"/>
-      <TextBlock Text="Scenario A · items" FontWeight="SemiBold"/>
-      <charts:StatusChart History="{Binding HistoryA}" SelectedDay="{Binding SelectedDay}" Height="205"/>
-      <TextBlock Text="{Binding DayDetailA}" Classes="note"/>
-      <StackPanel IsVisible="{Binding HasComparison}" Spacing="6"><TextBlock Text="Scenario B · items" FontWeight="SemiBold" Margin="0,12,0,0"/>
-       <charts:StatusChart History="{Binding HistoryB}" SelectedDay="{Binding SelectedDay}" Height="205"/>
-       <TextBlock Text="{Binding DayDetailB}" Classes="note"/>
-      </StackPanel>
-     </StackPanel></ScrollViewer></TabItem>
-     <TabItem Header="Unfinished work"><ScrollViewer><StackPanel Margin="0,10,0,0">
-      <TextBlock Text="{Binding UnfinishedNote}" Classes="note"/>
-<Grid ColumnDefinitions="*,92,92,92" Margin="12,12,12,8"><TextBlock Text="Metric" Classes="section"/><TextBlock Grid.Column="1" Text="A" Classes="section" HorizontalAlignment="Right"/><TextBlock Grid.Column="2" Text="B" Classes="section" HorizontalAlignment="Right"/><TextBlock Grid.Column="3" Text="Δ B − A" Classes="section" HorizontalAlignment="Right"/></Grid>
- <ItemsControl ItemsSource="{Binding UnfinishedRows}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:MetricRow">
- <Border Classes="card" Margin="0,0,0,5" Padding="12,11"><Grid ColumnDefinitions="*,92,92,92"><TextBlock Text="{Binding Label}" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Grid.Column="1" Text="{Binding A}" HorizontalAlignment="Right" FontWeight="SemiBold"/><TextBlock Grid.Column="2" Text="{Binding B}" HorizontalAlignment="Right" FontWeight="SemiBold"/><TextBlock Grid.Column="3" Text="{Binding Difference}" HorizontalAlignment="Right"/></Grid></Border>
- </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
-      <TextBlock Text="Dependency-blocked and ready-to-start are disjoint parts of backlog at the horizon. Ready backlog may wait for a WIP slot or the next day. Zero unfinished items gives age 0. All generated items arrive at day 0, so their total ages match; cycle ages can differ." Classes="note" Margin="0,8"/>
-      <StackPanel IsVisible="{Binding IsSingleRun}">
-<TextBlock Text="A · oldest unfinished items" FontWeight="SemiBold" Margin="0,16,0,8"/>
- <Grid ColumnDefinitions="90,*,55,75,70" Margin="10,0,10,5"><TextBlock Text="ID"/><TextBlock Grid.Column="1" Text="Status"/><TextBlock Grid.Column="2" Text="Age"/><TextBlock Grid.Column="3" Text="Cycle age"/><TextBlock Grid.Column="4" Text="Blocked?"/></Grid>
- <ItemsControl ItemsSource="{Binding OldestA}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="app:UnfinishedItem"><Border Classes="card" Padding="10,6" Margin="0,0,0,3"><Grid ColumnDefinitions="90,*,55,75,70"><TextBlock Text="{Binding Id}"/><TextBlock Grid.Column="1" Text="{Binding Status}" TextWrapping="Wrap"/><TextBlock Grid.Column="2" Text="{Binding Age}"/><TextBlock Grid.Column="3" Text="{Binding CycleAge, TargetNullValue='—'}"/><TextBlock Grid.Column="4" Text="{Binding DependencyBlocked}"/></Grid></Border></DataTemplate></ItemsControl.ItemTemplate></ItemsControl><StackPanel IsVisible="{Binding HasComparison}"><TextBlock Text="B · oldest unfinished items" FontWeight="SemiBold" Margin="0,16,0,8"/>
- <Grid ColumnDefinitions="90,*,55,75,70" Margin="10,0,10,5"><TextBlock Text="ID"/><TextBlock Grid.Column="1" Text="Status"/><TextBlock Grid.Column="2" Text="Age"/><TextBlock Grid.Column="3" Text="Cycle age"/><TextBlock Grid.Column="4" Text="Blocked?"/></Grid>
- <ItemsControl ItemsSource="{Binding OldestB}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="app:UnfinishedItem"><Border Classes="card" Padding="10,6" Margin="0,0,0,3"><Grid ColumnDefinitions="90,*,55,75,70"><TextBlock Text="{Binding Id}"/><TextBlock Grid.Column="1" Text="{Binding Status}" TextWrapping="Wrap"/><TextBlock Grid.Column="2" Text="{Binding Age}"/><TextBlock Grid.Column="3" Text="{Binding CycleAge, TargetNullValue='—'}"/><TextBlock Grid.Column="4" Text="{Binding DependencyBlocked}"/></Grid></Border></DataTemplate></ItemsControl.ItemTemplate></ItemsControl></StackPanel></StackPanel>
-     </StackPanel></ScrollViewer></TabItem>
-    </TabControl>
-   </Grid>
+  <StackPanel Spacing="5" Margin="0,0,0,16">
+   <TextBlock Text="Software Development Simulation" FontSize="27" FontWeight="Bold" Foreground="#173B50"/>
+   <TextBlock Text="Explore capacity, work flow and queues with fixed or reproducible variable effort." Classes="note"/>
+  </StackPanel>
+  <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedView, Mode=TwoWay}">
+   <TabItem Header="Scenario">
+    <ScrollViewer><StackPanel Spacing="16" Margin="0,16,0,16">
+     <TextBlock Text="Configure one scenario. Run the baseline, change one parameter, and run again to explore its effect." Classes="note"/>
+     <Grid ColumnDefinitions="*,18,*" RowDefinitions="Auto,18,Auto" IsEnabled="{Binding CanEdit}">
+<Border Grid.Column="0" Grid.Row="0" Classes="card"><StackPanel Spacing="10"><TextBlock Text="Simulation" Classes="section"/>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Simulation Days"/><TextBlock Text="Number of simulated working days. Every day provides nominal capacity; calendar dates and weekends are not modelled." Classes="note"/></StackPanel><TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding DurationDays, Mode=TwoWay}" ToolTip.Tip="Number of simulated working days. Every day provides nominal capacity; calendar dates and weekends are not modelled." AutomationProperties.Name="Simulation Days"/></Grid>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Work Items"/><TextBlock Text="Number of independent Work Items created at day 0. Effort is configured separately for each stage, fixed or sampled once per item." Classes="note"/></StackPanel><TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding NumberOfWorkItems, Mode=TwoWay}" ToolTip.Tip="Number of independent Work Items created at day 0. Effort is configured separately for each stage, fixed or sampled once per item." AutomationProperties.Name="Work Items"/></Grid>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Random Seed"/><TextBlock Text="Integer seed for reproducible effort generation. The first Monte Carlo run uses this seed." Classes="note"/></StackPanel><TextBox Grid.Column="1" Text="{Binding RandomSeed, Mode=TwoWay}" ToolTip.Tip="Integer seed for reproducible effort generation. The first Monte Carlo run uses this seed." AutomationProperties.Name="Random Seed"/></Grid>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Number of Runs"/><TextBlock Text="Monte Carlo repetitions, from 1 to 10,000. Single-run mode ignores this setting." Classes="note"/></StackPanel><TextBox Grid.Column="1" Text="{Binding NumberOfRuns, Mode=TwoWay}" ToolTip.Tip="Monte Carlo repetitions, from 1 to 10,000. Single-run mode ignores this setting." AutomationProperties.Name="Number of Runs"/></Grid>
+</StackPanel></Border>
+<Border Grid.Column="2" Grid.Row="0" Classes="card"><StackPanel Spacing="10"><TextBlock Text="Team" Classes="section"/>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Developers"/><TextBlock Text="Number of developers sharing Development and Code Review work. Code Review receives capacity first." Classes="note"/></StackPanel><TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding NumberOfDevelopers, Mode=TwoWay}" ToolTip.Tip="Number of developers sharing Development and Code Review work. Code Review receives capacity first." AutomationProperties.Name="Developers"/></Grid>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Testers"/><TextBlock Text="Number of testers providing capacity for Testing only." Classes="note"/></StackPanel><TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding NumberOfTesters, Mode=TwoWay}" ToolTip.Tip="Number of testers providing capacity for Testing only." AutomationProperties.Name="Testers"/></Grid>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Developer Capacity / Day"/><TextBlock Text="Abstract work capacity per developer and simulated day. 1.0 is one normal unit of daily capacity, not hours." Classes="note"/></StackPanel><TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding DeveloperCapacity, Mode=TwoWay}" ToolTip.Tip="Abstract work capacity per developer and simulated day. 1.0 is one normal unit of daily capacity, not hours." AutomationProperties.Name="Developer Capacity / Day"/></Grid>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Tester Capacity / Day"/><TextBlock Text="Abstract work capacity per tester and simulated day. 1.0 is one normal unit of daily capacity, not hours." Classes="note"/></StackPanel><TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding TesterCapacity, Mode=TwoWay}" ToolTip.Tip="Abstract work capacity per tester and simulated day. 1.0 is one normal unit of daily capacity, not hours." AutomationProperties.Name="Tester Capacity / Day"/></Grid>
+</StackPanel></Border>
+<Border Grid.Column="0" Grid.Row="2" Classes="card"><StackPanel Spacing="10"><TextBlock Text="WIP Limits" Classes="section"/>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Development WIP"/><TextBlock Text="Maximum number of Work Items actively in Development at once. Waiting states do not consume these slots." Classes="note"/></StackPanel><TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding DevelopmentWipLimit, Mode=TwoWay}" ToolTip.Tip="Maximum number of Work Items actively in Development at once. Waiting states do not consume these slots." AutomationProperties.Name="Development WIP"/></Grid>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Code Review WIP"/><TextBlock Text="Maximum number of Work Items actively in Code Review at once. Waiting for Code Review does not consume these slots." Classes="note"/></StackPanel><TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding CodeReviewWipLimit, Mode=TwoWay}" ToolTip.Tip="Maximum number of Work Items actively in Code Review at once. Waiting for Code Review does not consume these slots." AutomationProperties.Name="Code Review WIP"/></Grid>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Testing WIP"/><TextBlock Text="Maximum number of Work Items actively in Testing at once. Waiting for Testing does not consume these slots." Classes="note"/></StackPanel><TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding TestingWipLimit, Mode=TwoWay}" ToolTip.Tip="Maximum number of Work Items actively in Testing at once. Waiting for Testing does not consume these slots." AutomationProperties.Name="Testing WIP"/></Grid>
+</StackPanel></Border>
+<Border Grid.Column="2" Grid.Row="2" Classes="card"><StackPanel Spacing="10">
+<TextBlock Text="Work Item Effort" Classes="section"/>
+<TextBlock Text="Choose Fixed or Triangular for each stage. Effort is abstract work, not elapsed days." Classes="note"/>
+<ItemsControl ItemsSource="{Binding EffortEditors}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:EffortEditorViewModel">
+ <StackPanel Spacing="6" Margin="0,0,0,14">
+  <Grid ColumnDefinitions="*,160"><TextBlock Text="{Binding Stage}" FontWeight="SemiBold" VerticalAlignment="Center"/><ComboBox Grid.Column="1" ItemsSource="{Binding Kinds}" SelectedItem="{Binding Kind, Mode=TwoWay}" HorizontalAlignment="Stretch" ToolTip.Tip="Fixed preserves one effort value. Triangular samples values between Minimum and Maximum, with Most Likely as the mode." AutomationProperties.Name="{Binding Stage}"/></Grid>
+  <Grid ColumnDefinitions="*,110" IsVisible="{Binding IsFixed}"><TextBlock Text="Effort" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding FixedValue, Mode=TwoWay}" ToolTip.Tip="Capacity units needed for this stage of each Work Item; nonnegative. Not elapsed time." AutomationProperties.Name="Fixed Effort"/></Grid>
+  <Grid ColumnDefinitions="*,8,*,8,*" IsVisible="{Binding IsTriangular}">
+   <StackPanel><TextBlock Text="Minimum"/><TextBox Text="{Binding Minimum, Mode=TwoWay}" ToolTip.Tip="Smallest effort, strictly greater than zero." AutomationProperties.Name="Minimum"/></StackPanel>
+   <StackPanel Grid.Column="2"><TextBlock Text="Most Likely"/><TextBox Text="{Binding MostLikely, Mode=TwoWay}" ToolTip.Tip="Mode of the triangular distribution; between Minimum and Maximum. Not necessarily the mean." AutomationProperties.Name="Most Likely"/></StackPanel>
+   <StackPanel Grid.Column="4"><TextBlock Text="Maximum"/><TextBox Text="{Binding Maximum, Mode=TwoWay}" ToolTip.Tip="Largest effort; at least Most Likely." AutomationProperties.Name="Maximum"/></StackPanel>
   </Grid>
-  <StackPanel Grid.Row="2" Margin="0,16,0,0" Spacing="8">
-   <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Foreground="#B42318" TextWrapping="Wrap"/>
-   <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" Height="3"/>
-   <StackPanel Orientation="Horizontal" Spacing="8">
-    <Button Content="Run Simulation (A)" Command="{Binding RunCommand}"/>
-    <Button Content="Compare A / B" Command="{Binding CompareCommand}" Background="#176B77" Foreground="White"/>
+ </StackPanel>
+</DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+</StackPanel></Border>
+     </Grid>
+<Border Classes="card" IsEnabled="{Binding CanEdit}"><StackPanel Spacing="12">
+<TextBlock Text="Quality &amp; Rework" Classes="section"/>
+<CheckBox Content="Defects Enabled" IsChecked="{Binding DefectsEnabled, Mode=TwoWay}" ToolTip.Tip="Enable seeded discovery of defects after completed Code Review and Testing attempts. Disabled preserves the original forward-only flow."/>
+<TextBlock Text="Defects belong to their Work Item. Review → Rework → Development share one developer pool, in that priority order. Probabilities apply to each completed inspection attempt." Classes="note"/>
+<Grid ColumnDefinitions="*,24,*" IsVisible="{Binding DefectsEnabled}">
+<StackPanel Spacing="12">
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Code Review Defect Probability (%)" TextWrapping="Wrap"/><TextBlock Text="Probability that a completed Code Review attempt discovers a defect requiring Rework. Enter 0–100 percent." Classes="note"/></StackPanel><TextBox Grid.Column="1" Text="{Binding CodeReviewDefectProbability, Mode=TwoWay}" ToolTip.Tip="Probability that a completed Code Review attempt discovers a defect requiring Rework. Enter 0–100 percent." AutomationProperties.Name="Code Review Defect Probability (%)"/></Grid>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Testing Defect Probability (%)" TextWrapping="Wrap"/><TextBlock Text="Probability that a completed Testing attempt discovers a defect requiring Rework. Enter 0–100 percent. Corrected work must pass Code Review again." Classes="note"/></StackPanel><TextBox Grid.Column="1" Text="{Binding TestingDefectProbability, Mode=TwoWay}" ToolTip.Tip="Probability that a completed Testing attempt discovers a defect requiring Rework. Enter 0–100 percent. Corrected work must pass Code Review again." AutomationProperties.Name="Testing Defect Probability (%)"/></Grid>
+<Grid ColumnDefinitions="*,110"><StackPanel Margin="0,0,14,0"><TextBlock Text="Rework WIP Limit" TextWrapping="Wrap"/><TextBlock Text="Maximum active Rework items. Waiting for Rework does not count against this limit." Classes="note"/></StackPanel><TextBox Grid.Column="1" Text="{Binding ReworkWipLimit, Mode=TwoWay}" ToolTip.Tip="Maximum active Rework items. Waiting for Rework does not count against this limit." AutomationProperties.Name="Rework WIP Limit"/></Grid>
+<TextBlock Text="A defect adds Rework effort. Rework completion always returns to Waiting for Code Review, including defects discovered in Testing. Repeated defects are possible; the simulation ends at its configured horizon." Classes="note"/>
+</StackPanel><StackPanel Grid.Column="2" Spacing="8"><TextBlock Text="Additional developer capacity required to correct a discovered defect. Sampled separately by discovery source." Classes="note"/><ItemsControl ItemsSource="{Binding ReworkEffortEditors}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:EffortEditorViewModel">
+ <StackPanel Spacing="6" Margin="0,0,0,14">
+  <Grid ColumnDefinitions="*,160"><TextBlock Text="{Binding Stage}" FontWeight="SemiBold" VerticalAlignment="Center"/><ComboBox Grid.Column="1" ItemsSource="{Binding Kinds}" SelectedItem="{Binding Kind, Mode=TwoWay}" HorizontalAlignment="Stretch" ToolTip.Tip="Fixed preserves one effort value. Triangular samples values between Minimum and Maximum, with Most Likely as the mode." AutomationProperties.Name="{Binding Stage}"/></Grid>
+  <Grid ColumnDefinitions="*,110" IsVisible="{Binding IsFixed}"><TextBlock Text="Effort" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding FixedValue, Mode=TwoWay}" ToolTip.Tip="Capacity units needed for this stage of each Work Item; nonnegative. Not elapsed time." AutomationProperties.Name="Fixed Effort"/></Grid>
+  <Grid ColumnDefinitions="*,8,*,8,*" IsVisible="{Binding IsTriangular}">
+   <StackPanel><TextBlock Text="Minimum"/><TextBox Text="{Binding Minimum, Mode=TwoWay}" ToolTip.Tip="Smallest effort, strictly greater than zero." AutomationProperties.Name="Minimum"/></StackPanel>
+   <StackPanel Grid.Column="2"><TextBlock Text="Most Likely"/><TextBox Text="{Binding MostLikely, Mode=TwoWay}" ToolTip.Tip="Mode of the triangular distribution; between Minimum and Maximum. Not necessarily the mean." AutomationProperties.Name="Most Likely"/></StackPanel>
+   <StackPanel Grid.Column="4"><TextBlock Text="Maximum"/><TextBox Text="{Binding Maximum, Mode=TwoWay}" ToolTip.Tip="Largest effort; at least Most Likely." AutomationProperties.Name="Maximum"/></StackPanel>
+  </Grid>
+ </StackPanel>
+</DataTemplate></ItemsControl.ItemTemplate></ItemsControl></StackPanel></Grid></StackPanel></Border>
+     <Border Classes="card"><StackPanel Spacing="6">
+      <TextBlock Text="Effort is work, not elapsed time" Classes="section"/>
+      <TextBlock Text="One Work Item receives at most 1 capacity unit per day, in one stage. Queues and unavailable capacity can extend elapsed time. Development, Code Review and Rework share developer capacity; Testing has a separate pool." Classes="note"/>
+      <TextBlock Text="This form generates independent items. Variable effort is sampled once per item and stage; daily team capacity remains fixed. Dependencies are supported by Core but are not editable here." Classes="note"/>
+     </StackPanel></Border>
+    </StackPanel></ScrollViewer>
+   </TabItem>
+   <TabItem Header="Flow">
+    <Grid RowDefinitions="Auto,*" Margin="0,16,0,0">
+     <StackPanel Spacing="6">
+      <TextBlock Text="{Binding DayLabel}" Classes="section"/>
+      <Grid ColumnDefinitions="Auto,*,Auto" IsEnabled="{Binding HasResults}">
+       <TextBlock Text="Selected Day (1–final)" VerticalAlignment="Center"/>
+       <Slider Grid.Column="1" Margin="16,0" Minimum="1" Maximum="{Binding LastDay}" Value="{Binding SelectedDay, Mode=TwoWay}" TickFrequency="1" IsSnapToTickEnabled="True" AutomationProperties.Name="Selected Day"/>
+       <TextBlock Grid.Column="2" Text="{Binding LastDay}" VerticalAlignment="Center"/>
+      </Grid>
+      <TextBlock Text="End-of-day counts. Blue = active stage; amber = waiting queue. An active-stage item may receive no capacity. Selecting a day does not rerun the simulation." Classes="note" Margin="0,0,0,12"/>
+     </StackPanel>
+     <TextBlock Grid.Row="1" IsVisible="{Binding HasNoResults}" Text="Run Simulation from Scenario to see the flow and daily charts." Classes="note"/>
+     <Grid Grid.Row="1" ColumnDefinitions="340,18,*" IsVisible="{Binding HasResults}">
+      <ScrollViewer><ItemsControl ItemsSource="{Binding FlowStates}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:FlowStateRow">
+       <StackPanel><Border Background="{Binding Background}" CornerRadius="5" Padding="10,5"><Grid ColumnDefinitions="*,Auto">
+        <StackPanel><TextBlock Text="{Binding Name}" FontWeight="SemiBold"/><TextBlock Text="{Binding Kind}" Classes="note"/></StackPanel>
+        <StackPanel Grid.Column="1" Margin="8,0,0,0"><TextBlock Text="{Binding Count}" FontSize="20" HorizontalAlignment="Right"/><TextBlock Text="Work Items" FontSize="10"/></StackPanel>
+       </Grid></Border><TextBlock Text="{Binding Arrow}" HorizontalAlignment="Center" Foreground="#64748B" FontSize="12"/></StackPanel>
+      </DataTemplate></ItemsControl.ItemTemplate></ItemsControl></ScrollViewer>
+      <ScrollViewer Grid.Column="2"><StackPanel Spacing="14">
+       <Border Classes="card"><StackPanel Spacing="8">
+        <TextBlock Text="Feedback loop · Code Review or Testing discovers a defect ↘" Classes="section" TextWrapping="Wrap"/>
+        <Grid ColumnDefinitions="*,30,*">
+         <Border Background="#FFF2D8" Padding="12"><StackPanel><TextBlock Text="Waiting for Rework" FontWeight="SemiBold"/><TextBlock Text="{Binding WaitingForReworkCount}" FontSize="22"/><TextBlock Text="Work Items · queue" Classes="note"/></StackPanel></Border>
+         <TextBlock Grid.Column="1" Text="→" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+         <Border Grid.Column="2" Background="#E8F1F7" Padding="12"><StackPanel><TextBlock Text="Rework" FontWeight="SemiBold"/><TextBlock Text="{Binding ReworkCount}" FontSize="22"/><TextBlock Text="Work Items · developer capacity" Classes="note"/></StackPanel></Border>
+        </Grid>
+        <TextBlock Text="↩ Rework completed → Waiting for Code Review. The main downward flow shows successful inspections; Testing defects also return through Code Review before Testing again." Classes="note"/>
+       </StackPanel></Border>
+       <Border Classes="card"><StackPanel><TextBlock Text="WIP over time" Classes="section"/><TextBlock Text="Total WIP · all started but unfinished Work Items, including queues" Classes="note"/><charts:DailyChart Days="{Binding Days}" SelectedDay="{Binding SelectedDay}" Mode="Wip" Height="190"/></StackPanel></Border>
+       <Border Classes="card"><StackPanel><TextBlock Text="Queues over time" Classes="section"/><TextBlock Text="Blue: Waiting for Code Review · Amber: Waiting for Testing" Classes="note"/><charts:DailyChart Days="{Binding Days}" SelectedDay="{Binding SelectedDay}" Mode="Queues" Height="190"/></StackPanel></Border>
+       <Border Classes="card"><StackPanel><TextBlock Text="Rework over time" Classes="section"/><TextBlock Text="Blue: active Rework · Amber: Waiting for Rework" Classes="note"/><charts:DailyChart Days="{Binding Days}" SelectedDay="{Binding SelectedDay}" Mode="ReworkStates" Height="170"/></StackPanel></Border>
+       <Border Classes="card"><StackPanel><TextBlock Text="Daily capacity" Classes="section"/><TextBlock Text="Blue: used · Gray: available · abstract capacity units" Classes="note"/><TextBlock Text="{Binding CapacityDetail}" Classes="note" Margin="0,6"/>
+        <TextBlock Text="Developers · Development + Code Review + Rework" FontWeight="SemiBold"/><charts:DailyChart Days="{Binding Days}" SelectedDay="{Binding SelectedDay}" Mode="Developers" Height="170"/>
+        <TextBlock Text="Rework · part of used developer capacity" FontWeight="SemiBold"/><charts:DailyChart Days="{Binding Days}" SelectedDay="{Binding SelectedDay}" Mode="ReworkCapacity" Height="170"/>
+        <TextBlock Text="Testers · Testing" FontWeight="SemiBold"/><charts:DailyChart Days="{Binding Days}" SelectedDay="{Binding SelectedDay}" Mode="Testers" Height="170"/>
+       </StackPanel></Border>
+      </StackPanel></ScrollViewer>
+     </Grid>
+    </Grid>
+   </TabItem>
+   <TabItem Header="Results">
+    <Grid Margin="0,16,0,0">
+     <TextBlock IsVisible="{Binding HasNoResults}" Text="Run Simulation to see metrics and Work Item details." Classes="note"/>
+     <TabControl IsVisible="{Binding HasResults}">
+      <TabItem Header="Summary"><ScrollViewer><StackPanel Spacing="12" Margin="0,12">
+       <TextBlock Text="{Binding SingleRunLabel}" Classes="section"/>
+       <TextBlock Text="Results from the last completed run. Time averages include completed Work Items only; an empty average is shown as 0." Classes="note"/>
+       <ItemsControl ItemsSource="{Binding Metrics}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:MetricRow">
+        <Border Classes="card" Padding="14,10" Margin="0,0,0,6" ToolTip.Tip="{Binding Explanation}"><Grid ColumnDefinitions="*,210">
+         <StackPanel Margin="0,0,16,0"><TextBlock Text="{Binding Label}" FontWeight="SemiBold"/><TextBlock Text="{Binding Explanation}" Classes="note"/></StackPanel>
+         <TextBlock Grid.Column="1" Text="{Binding Value}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="17"/>
+        </Grid></Border>
+       </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+<TextBlock Text="Quality &amp; Rework" Classes="section"/><ItemsControl ItemsSource="{Binding QualityMetrics}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:MetricRow">
+        <Border Classes="card" Padding="14,10" Margin="0,0,0,6" ToolTip.Tip="{Binding Explanation}"><Grid ColumnDefinitions="*,210">
+         <StackPanel Margin="0,0,16,0"><TextBlock Text="{Binding Label}" FontWeight="SemiBold"/><TextBlock Text="{Binding Explanation}" Classes="note"/></StackPanel>
+         <TextBlock Grid.Column="1" Text="{Binding Value}" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="17"/>
+        </Grid></Border>
+       </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+       <TextBlock Text="High utilization is not automatically good. High WIP is not automatically bad. These metrics describe system behaviour and should be interpreted together." Classes="note"/>
+       <TextBlock Text="Active time + queue waiting need not equal cycle time: admitted items can stall without capacity. An end-of-day queue count can be nonzero even when admission at the next boundary gives zero elapsed queue waiting." Classes="note"/>
+      </StackPanel></ScrollViewer></TabItem>
+      <TabItem Header="Work Items"><Grid RowDefinitions="Auto,*" Margin="0,12">
+       <TextBlock Text="Read-only results, in scenario order. Days are boundary timestamps: start 0, finish up to the horizon. Blank lead/cycle time means incomplete. Times are simulated working days." Classes="note" Margin="0,0,0,12"/>
+       <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <StackPanel MinWidth="2220">
+<Grid ColumnDefinitions="110,100,190,120,80,100,100,100,110,100,140,140,140,110,110,150,150,150" Background="#E2E8F0" Margin="0,0,0,4"><TextBlock Grid.Column="0" Text="Id" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="1" Text="Name" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="2" Text="Final State" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="3" Text="Development Started" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="4" Text="Done" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="5" Text="Lead Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="6" Text="Cycle Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="7" Text="Active Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="8" Text="Waiting Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="9" Text="Blocked Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="10" Text="Development Effort" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="11" Text="Code Review Effort" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="12" Text="Testing Effort" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="13" Text="Defects Found" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="14" Text="Rework Count" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="15" Text="Total Rework Effort" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="16" Text="Code Review Attempts" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/><TextBlock Grid.Column="17" Text="Testing Attempts" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold"/></Grid><ItemsControl ItemsSource="{Binding WorkItems}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="core:WorkItemResult"><Border Background="White" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1"><Grid ColumnDefinitions="110,100,190,120,80,100,100,100,110,100,140,140,140,110,110,150,150,150"><TextBlock Grid.Column="0" Text="{Binding Id}" Margin="8"/><TextBlock Grid.Column="1" Text="{Binding Name}" Margin="8"/><TextBlock Grid.Column="2" Text="{Binding FinalState}" Margin="8"/><TextBlock Grid.Column="3" Text="{Binding DevelopmentStartedDay}" Margin="8"/><TextBlock Grid.Column="4" Text="{Binding DoneDay}" Margin="8"/><TextBlock Grid.Column="5" Text="{Binding LeadTime}" Margin="8"/><TextBlock Grid.Column="6" Text="{Binding CycleTime}" Margin="8"/><TextBlock Grid.Column="7" Text="{Binding ActiveTime}" Margin="8"/><TextBlock Grid.Column="8" Text="{Binding WaitingTime}" Margin="8"/><TextBlock Grid.Column="9" Text="{Binding BlockedTime}" Margin="8"/><TextBlock Grid.Column="10" Text="{Binding DevelopmentEffort, StringFormat=0.###}" Margin="8" ToolTip.Tip="{Binding DevelopmentEffort}"/><TextBlock Grid.Column="11" Text="{Binding CodeReviewEffort, StringFormat=0.###}" Margin="8" ToolTip.Tip="{Binding CodeReviewEffort}"/><TextBlock Grid.Column="12" Text="{Binding TestingEffort, StringFormat=0.###}" Margin="8" ToolTip.Tip="{Binding TestingEffort}"/><TextBlock Grid.Column="13" Text="{Binding DefectsFound, StringFormat=0.###}" Margin="8" ToolTip.Tip="{Binding DefectsFound}"/><TextBlock Grid.Column="14" Text="{Binding ReworkCount, StringFormat=0.###}" Margin="8" ToolTip.Tip="{Binding ReworkCount}"/><TextBlock Grid.Column="15" Text="{Binding TotalReworkEffort, StringFormat=0.###}" Margin="8" ToolTip.Tip="{Binding TotalReworkEffort}"/><TextBlock Grid.Column="16" Text="{Binding CodeReviewAttempts, StringFormat=0.###}" Margin="8" ToolTip.Tip="{Binding CodeReviewAttempts}"/><TextBlock Grid.Column="17" Text="{Binding TestingAttempts, StringFormat=0.###}" Margin="8" ToolTip.Tip="{Binding TestingAttempts}"/></Grid></Border></DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+        </StackPanel>
+       </ScrollViewer>
+      </Grid></TabItem>
+      <TabItem Header="Item History"><Grid RowDefinitions="Auto,Auto,*" Margin="0,12">
+       <ComboBox ItemsSource="{Binding WorkItems}" SelectedItem="{Binding SelectedWorkItem, Mode=TwoWay}" Width="300" HorizontalAlignment="Left" AutomationProperties.Name="History Work Item"><ComboBox.ItemTemplate><DataTemplate x:DataType="core:WorkItemResult"><TextBlock Text="{Binding Id}"/></DataTemplate></ComboBox.ItemTemplate></ComboBox>
+       <TextBlock Grid.Row="1" Text="Boundary days are zero-based. Capacity is applied during [day, day+1); completion and defect discovery are stamped day+1. Repeated inspections and rework are retained." Classes="note" Margin="0,10"/>
+       <ScrollViewer Grid.Row="2"><ItemsControl ItemsSource="{Binding SelectedHistory}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:HistoryRow"><Border Background="White" Padding="10" Margin="0,0,0,3"><Grid ColumnDefinitions="70,*"><TextBlock Text="{Binding Day, StringFormat='Day {0}'}"/><TextBlock Grid.Column="1" Text="{Binding Description}" TextWrapping="Wrap"/></Grid></Border></DataTemplate></ItemsControl.ItemTemplate></ItemsControl></ScrollViewer>
+      </Grid></TabItem>
+     </TabControl>
+    </Grid>
+   </TabItem>
+   <TabItem Header="Monte Carlo">
+    <ScrollViewer><StackPanel Spacing="14" Margin="0,16">
+     <TextBlock Text="{Binding MonteCarloLabel}" Classes="section"/>
+     <TextBlock Text="Repeated runs sample effort and, when enabled, defect discovery and Rework. Capacity stays fixed. These are model outcomes, not real-project predictions without calibration. The Variable Effort Example is illustrative, not Easy-Laser data." Classes="note"/>
+     <StackPanel IsVisible="{Binding HasMonteCarlo}" Spacing="14">
+      <TextBlock Text="Percentiles of per-run metrics · linear interpolation · Samples = runs included. Lead/cycle percentiles omit runs with no completed items. Other metrics include every run. — means no observations." Classes="note"/>
+      <Grid ColumnDefinitions="*,100,100,100,100,80" Background="#E2E8F0">
+       <TextBlock Text="Metric" Margin="10"/><TextBlock Grid.Column="1" Text="P50" Margin="10"/><TextBlock Grid.Column="2" Text="P75" Margin="10"/><TextBlock Grid.Column="3" Text="P85" Margin="10"/><TextBlock Grid.Column="4" Text="P95" Margin="10"/><TextBlock Grid.Column="5" Text="Samples" Margin="10"/>
+      </Grid>
+      <ItemsControl ItemsSource="{Binding MonteCarloMetrics}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:PercentileRow">
+       <Border Background="White" Padding="0,6" Margin="0,0,0,3"><Grid ColumnDefinitions="*,100,100,100,100,80">
+        <TextBlock Text="{Binding Name}" Margin="10,0" TextWrapping="Wrap"/><TextBlock Grid.Column="1" Text="{Binding P50}" Margin="10,0"/><TextBlock Grid.Column="2" Text="{Binding P75}" Margin="10,0"/><TextBlock Grid.Column="3" Text="{Binding P85}" Margin="10,0"/><TextBlock Grid.Column="4" Text="{Binding P95}" Margin="10,0"/><TextBlock Grid.Column="5" Text="{Binding SampleCount}" Margin="10,0"/>
+       </Grid></Border>
+      </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+<TextBlock Text="Quality &amp; Rework · all runs included" Classes="section"/><ItemsControl ItemsSource="{Binding MonteCarloQualityMetrics}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:PercentileRow">
+       <Border Background="White" Padding="0,6" Margin="0,0,0,3"><Grid ColumnDefinitions="*,100,100,100,100,80">
+        <TextBlock Text="{Binding Name}" Margin="10,0" TextWrapping="Wrap"/><TextBlock Grid.Column="1" Text="{Binding P50}" Margin="10,0"/><TextBlock Grid.Column="2" Text="{Binding P75}" Margin="10,0"/><TextBlock Grid.Column="3" Text="{Binding P85}" Margin="10,0"/><TextBlock Grid.Column="4" Text="{Binding P95}" Margin="10,0"/><TextBlock Grid.Column="5" Text="{Binding SampleCount}" Margin="10,0"/>
+       </Grid></Border>
+      </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+      <Grid ColumnDefinitions="*,16,*">
+       <Border Classes="card"><StackPanel><TextBlock Text="Average Lead Time" Classes="section"/><charts:HistogramChart Bins="{Binding LeadTimeHistogram}" AxisLabel="Average Lead Time (working days)" Height="240"/></StackPanel></Border>
+       <Border Grid.Column="2" Classes="card"><StackPanel><TextBlock Text="Throughput / 5 days" Classes="section"/><charts:HistogramChart Bins="{Binding ThroughputHistogram}" AxisLabel="Work Items / 5 working days" Height="240"/></StackPanel></Border>
+      </Grid>
+      <TextBlock Text="Histograms use 10 equal-width bins; identical observations share one bar. Queue percentiles refer to each run's maximum end-of-day queue. A higher percentile is not automatically better or worse." Classes="note"/>
+      <TextBlock Text="Flow and Results retain the last single run, not an averaged Monte Carlo run. Select Run Simulation to inspect individual generated efforts and daily flow at the current seed." Classes="note"/>
+     </StackPanel>
+    </StackPanel></ScrollViewer>
+   </TabItem>
+   <TabItem Header="Sensitivity"><views:SensitivityView DataContext="{Binding Sensitivity}"/></TabItem>
+  </TabControl>
+  <StackPanel Grid.Row="2" Spacing="8" Margin="0,16,0,0">
+   <WrapPanel Orientation="Horizontal">
+    <Button Content="Run Simulation" Command="{Binding RunCommand}" Background="#176A78" Foreground="White"/>
+    <Button Content="Run Monte Carlo" Command="{Binding MonteCarloCommand}"/>
+    <Button Content="Variable Effort Example" Command="{Binding VariableEffortCommand}"/>
+    <Button Content="Defects &amp; Rework Example" Command="{Binding DefectsExampleCommand}"/>
+    <Button Content="Reset to Baseline" Command="{Binding ResetCommand}"/>
     <Button Content="Cancel" Command="{Binding CancelCommand}" IsVisible="{Binding IsBusy}"/>
-   </StackPanel>
+   </WrapPanel>
+   <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Foreground="#B42318" TextWrapping="Wrap"/>
    <TextBlock Text="{Binding StatusMessage}" Classes="note"/>
   </StackPanel>
  </Grid>
