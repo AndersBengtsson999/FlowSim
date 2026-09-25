@@ -2,42 +2,36 @@ using Simulation.Core;
 
 namespace Simulation.Application;
 
+/// <summary>Simple UI request; explicit heterogeneous work/dependencies can be supplied to Core.</summary>
 public sealed record SimulationRequest
 {
-    public int NumberOfDevelopers { get; init; } = 5;
-    public int NumberOfTesters { get; init; } = 2;
-    public double DeveloperCapacity { get; init; } = 2;
-    public double TesterCapacity { get; init; } = 2;
-    public int WipLimit { get; init; } = 8;
-    public int NumberOfWorkItems { get; init; } = 50;
-    public int DurationDays { get; init; } = 60;
-    public int SprintLength { get; init; } = 10;
-    public int ReleaseInterval { get; init; } = 10;
-    public int RandomSeed { get; init; } = 42;
-    public double Size { get; init; } = 5;
-    public double Complexity { get; init; } = 1.5;
-    public double DependencyProbability { get; init; } = 0.15;
+    public string Name { get; init; } = "Simulation Model v0.1 baseline";
+    public int DeveloperCount { get; init; } = 5;
+    public int TesterCount { get; init; } = 2;
+    public double DeveloperCapacityPerDay { get; init; } = 1;
+    public double TesterCapacityPerDay { get; init; } = 1;
+    public int DevelopmentWipLimit { get; init; } = 5;
+    public int CodeReviewWipLimit { get; init; } = 3;
+    public int TestingWipLimit { get; init; } = 3;
+    public int NumberOfWorkItems { get; init; } = 30;
+    public int SimulationDays { get; init; } = 100;
+    public double DevelopmentEffort { get; init; } = 5;
+    public double CodeReviewEffort { get; init; } = 1;
+    public double TestingEffort { get; init; } = 2;
 
     public SimulationScenario ToScenario()
     {
-        if (NumberOfWorkItems < 0 || NumberOfWorkItems > 2000 || DurationDays > 3650
-            || (long)NumberOfWorkItems * DurationDays > 1_000_000)
-            throw new ArgumentException("Max 2 000 objekt, 3 650 dagar och 1 000 000 objekt-dagar per körning.");
-        if (!double.IsFinite(DependencyProbability) || DependencyProbability is < 0 or > 1)
-            throw new ArgumentException("Beroendesannolikhet måste vara mellan 0 och 1.");
-        if (!double.IsFinite(Size) || Size <= 0 || !double.IsFinite(Complexity) || Complexity <= 0)
-            throw new ArgumentException("Storlek och komplexitet måste vara positiva, ändliga tal.");
-        var random = new Random(RandomSeed);
-        var items = Enumerable.Range(1, NumberOfWorkItems)
-            .Select(id => new WorkItem(id, $"Work item {id}", Size, Complexity)).ToArray();
-        var dependencies = new List<Dependency>();
-        for (var id = 2; id <= NumberOfWorkItems; id++)
-            if (random.NextDouble() < DependencyProbability)
-                dependencies.Add(new Dependency(id, random.Next(1, id)));
-        var scenario = new SimulationScenario(
-            new Organization("Simulated organization", [new Team("Team 1", NumberOfDevelopers, NumberOfTesters, WipLimit)]),
-            items, dependencies, DurationDays, DeveloperCapacity, TesterCapacity,
-            SprintLength, ReleaseInterval, RandomSeed);
+        if (NumberOfWorkItems < 0 || NumberOfWorkItems > 2000 || SimulationDays > 3650
+            || (long)NumberOfWorkItems * SimulationDays > 1_000_000)
+            throw new ScenarioValidationException("Maximum 2,000 items, 3,650 days and 1,000,000 item-days per run.");
+        // Validate effort settings even when there are no generated items.
+        if (new[] { DevelopmentEffort, CodeReviewEffort, TestingEffort }.Any(e => !double.IsFinite(e) || e < 0))
+            throw new ScenarioValidationException("Efforts must be finite and nonnegative.");
+        var scenario = new SimulationScenario(Name, SimulationDays,
+            new Team(DeveloperCount, TesterCount, DeveloperCapacityPerDay, TesterCapacityPerDay),
+            DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit,
+            Enumerable.Range(1, NumberOfWorkItems).Select(id =>
+                new WorkItem($"STORY-{id}", $"Story {id}", DevelopmentEffort, CodeReviewEffort, TestingEffort)).ToArray());
         ScenarioValidator.Validate(scenario);
         return scenario;
     }

@@ -16,7 +16,7 @@ public sealed class StatusChart : Control
     public IReadOnlyList<StatusPoint>? History { get => GetValue(HistoryProperty); set => SetValue(HistoryProperty, value); }
     public int SelectedDay { get => GetValue(SelectedDayProperty); set => SetValue(SelectedDayProperty, value); }
     private static readonly IBrush[] Colors = [Brush.Parse("#CBD5E1"), Brush.Parse("#3B82F6"),
-        Brush.Parse("#A78BFA"), Brush.Parse("#F59E0B"), Brush.Parse("#149185")];
+        Brush.Parse("#D8B4FE"), Brush.Parse("#A78BFA"), Brush.Parse("#FACC15"), Brush.Parse("#F59E0B"), Brush.Parse("#149185")];
 
     static StatusChart() => AffectsRender<StatusChart>(HistoryProperty, SelectedDayProperty);
 
@@ -36,7 +36,7 @@ public sealed class StatusChart : Control
         for (var i = 0; i < history.Count; i++)
         {
             var point = history[i];
-            double[] values = [point.Backlog, point.Development, point.CodeReview, point.Testing, point.Done];
+            double[] values = [point.Backlog, point.Development, point.WaitingForCodeReview, point.CodeReview, point.WaitingForTesting, point.Testing, point.Done];
             var y = plot.Bottom;
             for (var state = 0; state < values.Length; state++)
             {

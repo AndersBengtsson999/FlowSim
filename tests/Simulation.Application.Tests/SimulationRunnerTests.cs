@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Simulation.Application;
+using Simulation.Core;
 using Xunit;
 
 namespace Simulation.Application.Tests;
@@ -7,68 +8,85 @@ namespace Simulation.Application.Tests;
 public sealed class SimulationRunnerTests
 {
     [Fact]
-    public void RequestGeneratesReproducibleAcyclicDependencies()
+    public void BaselineMatchesTheV01SpecificationExactly()
     {
-        var request = new SimulationRequest { NumberOfWorkItems = 20, DependencyProbability = 1 };
-        var scenario = request.ToScenario();
-        Assert.Equal(19, scenario.Dependencies.Count);
-        Assert.All(scenario.Dependencies, d => Assert.True(d.DependsOnWorkItemId < d.WorkItemId));
-        Assert.Equal(JsonSerializer.Serialize(scenario), JsonSerializer.Serialize(request.ToScenario()));
+        var scenario = BaselineScenario.Create();
+        Assert.Equal(100, scenario.SimulationDays);
+        Assert.Equal(new Team(5, 2, 1, 1), scenario.Team);
+        Assert.Equal(5, scenario.DevelopmentWipLimit);
+        Assert.Equal(3, scenario.CodeReviewWipLimit);
+        Assert.Equal(3, scenario.TestingWipLimit);
+        Assert.Equal(30, scenario.WorkItems.Count);
+        Assert.Equal(30, scenario.WorkItems.Select(w => w.Id).Distinct().Count());
+        Assert.All(scenario.WorkItems, w =>
+        {
+            Assert.Equal(5, w.DevelopmentEffort);
+            Assert.Equal(1, w.CodeReviewEffort);
+            Assert.Equal(2, w.TestingEffort);
+            Assert.Empty(w.Dependencies);
+            Assert.Equal(WorkItemStatus.Backlog, w.State);
+        });
     }
 
     [Fact]
-    public void DifferentSeedsGenerateDifferentScenarios()
+    public void BaselineRunsRepeatedlyWithIdenticalStatesTimingAndCapacity()
     {
-        var request = new SimulationRequest { DependencyProbability = 1 };
-        Assert.NotEqual(JsonSerializer.Serialize(request.ToScenario().Dependencies),
-            JsonSerializer.Serialize((request with { RandomSeed = 43 }).ToScenario().Dependencies));
+        var scenario = BaselineScenario.Create();
+        var engine = new SimulationEngine();
+        var first = engine.Run(scenario);
+        for (var run = 0; run < 5; run++)
+            Assert.Equal(JsonSerializer.Serialize(first), JsonSerializer.Serialize(engine.Run(scenario)));
+        Assert.Equal(100, first.Days.Count);
+        Assert.Equal(first.WorkItems.Count(w => w.State == WorkItemStatus.Done), first.CompletedWorkItems);
+        Assert.Equal(first.CompletedWorkItems / 100.0, first.Throughput);
+        Assert.All(first.Days, d =>
+        {
+            Assert.Equal(30, d.Items.Count);
+            Assert.InRange(d.DevelopmentWork + d.ReviewWork, 0, 5);
+            Assert.InRange(d.TestingWork, 0, 2);
+            Assert.InRange(d.DevelopmentWip, 0, 5);
+            Assert.InRange(d.ReviewWip, 0, 3);
+            Assert.InRange(d.TestingWip, 0, 3);
+        });
+        Assert.All(scenario.WorkItems, w => Assert.Empty(w.Transitions));
     }
 
     [Fact]
-    public void BatchUses100DistinctSeedsAndCorrectMeans()
+    public void RequestEffortsAreIndependentRatherThanDerivedFromSize()
     {
-        var request = new SimulationRequest { NumberOfWorkItems = 5, DurationDays = 10 };
+        var scenario = new SimulationRequest { DevelopmentEffort = 7, CodeReviewEffort = 0.3, TestingEffort = 9 }.ToScenario();
+        Assert.All(scenario.WorkItems, w =>
+        {
+            Assert.Equal(7, w.RemainingDevelopmentEffort);
+            Assert.Equal(0.3, w.RemainingCodeReviewEffort);
+            Assert.Equal(9, w.RemainingTestingEffort);
+        });
+    }
+
+    [Fact]
+    public void RunnerDelegatesToTheDomainEngine()
+    {
+        var request = new SimulationRequest();
+        Assert.Equal(JsonSerializer.Serialize(new SimulationEngine().Run(request.ToScenario())),
+            JsonSerializer.Serialize(new SimulationRunner().Run(request)));
+    }
+
+    [Fact]
+    public void InvalidRequestsAreRejectedBeforeExecution()
+    {
         var runner = new SimulationRunner();
-        var result = runner.RunBatch(request);
-        Assert.Equal(100, result.Runs.Count);
-        Assert.Equal(Enumerable.Range(42, 100), result.Runs.Select(r => r.Seed));
-        Assert.Equal(result.Runs.Average(r => r.CompletedWorkItems), result.Mean.CompletedWorkItems);
-        Assert.Equal(result.Runs.Average(r => r.Throughput), result.Mean.Throughput);
-        Assert.Equal(RunMetrics.From(runner.Run(request)), result.Runs[0]);
-        Assert.Equal(JsonSerializer.Serialize(result), JsonSerializer.Serialize(runner.RunBatch(request)));
+        Assert.Throws<ScenarioValidationException>(() => runner.Run(new() { NumberOfWorkItems = -1 }));
+        Assert.Throws<ScenarioValidationException>(() => runner.Run(new() { DeveloperCount = -1 }));
+        Assert.Throws<ScenarioValidationException>(() => runner.Run(new() { NumberOfWorkItems = 2000, SimulationDays = 3650 }));
+        Assert.Throws<ScenarioValidationException>(() => runner.Run(new() { NumberOfWorkItems = 0, TestingEffort = double.NaN }));
+        Assert.Throws<ScenarioValidationException>(() => runner.Run(new() { CodeReviewWipLimit = 0 }));
     }
 
     [Fact]
-    public void BatchSeedOverflowIsDeterministic()
+    public void CancellationPropagates()
     {
-        var result = new SimulationRunner().RunBatch(new SimulationRequest
-            { RandomSeed = int.MaxValue, NumberOfWorkItems = 0, DurationDays = 1 }, 2);
-        Assert.Equal(int.MinValue, result.Runs[1].Seed);
-    }
-
-    [Fact]
-    public void InvalidRequestsAreRejected()
-    {
-        var runner = new SimulationRunner();
-        Assert.Throws<ArgumentException>(() => runner.Run(new() { NumberOfWorkItems = -1 }));
-        Assert.Throws<ArgumentException>(() => runner.Run(new() { DependencyProbability = 2 }));
-        Assert.Throws<ArgumentException>(() => runner.Run(new() { Size = 0 }));
-        Assert.Throws<ArgumentException>(() => runner.Run(new() { NumberOfDevelopers = -1 }));
-        Assert.Throws<ArgumentException>(() => runner.Run(new() { NumberOfWorkItems = 2000, DurationDays = 3650 }));
-        Assert.Throws<ArgumentOutOfRangeException>(() => runner.RunBatch(new(), 0));
-    }
-
-    [Fact]
-    public void BatchCanBeCancelledBetweenRuns()
-    {
-        using var source = new CancellationTokenSource();
-        var progress = new CallbackProgress(_ => source.Cancel());
-        Assert.Throws<OperationCanceledException>(() => new SimulationRunner().RunBatch(
-            new SimulationRequest { NumberOfWorkItems = 1, DurationDays = 1 }, 100, progress, source.Token));
-    }
-
-    private sealed class CallbackProgress(Action<int> callback) : IProgress<int>
-    {
-        public void Report(int value) => callback(value);
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
+        Assert.Throws<OperationCanceledException>(() => new SimulationRunner().Run(new(), cancellation.Token));
     }
 }

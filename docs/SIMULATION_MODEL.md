@@ -1,116 +1,207 @@
-# Simuleringsmodell – inkrement 1 och resultatanalys i inkrement 2
+# Simulation Model v0.1 — Steps 2–4
 
-## Syfte och domän
+## Purpose and scope
 
-Modellen utforskar hur kapacitet, arbetsstorlek, komplexitet, beroenden och WIP påverkar leverans. Den ger förenklade experimentresultat, inte en prognoskalibrerad organisationsmodell.
+This version defines the simulation world and basic workflow for a software development system. It is an explicit, simplified model, not a project-management system or a calibrated prediction of an organization. Delivery and queues emerge from effort, available capacity, dependencies, FIFO ordering and WIP limits. There are no rules that declare a resource a bottleneck based on headcount ratios.
 
-- **Organization** har ett namn och en lista av **Team**. I denna version måste listan innehålla exakt ett team; fler team avvisas tills det finns uttryckliga regler för teamtilldelning.
-- **Team** innehåller namn, antal utvecklare, antal testare och WIP-gräns.
-- **WorkItem** innehåller ID, titel, storlek, komplexitet, prioritet, status samt skapad-, start- och klartid. Tider är heltal i förflutna simuleringsdagar, inte kalenderdatum. Större prioritetsvärde behandlas först.
-- **Dependency(WorkItemId, DependsOnWorkItemId)** anger en riktad relation. Alla föregångare måste vara Done innan Development får börja. Flera beroenden stöds av Core. Saknade referenser, självberoenden och cykler avvisas; dubbletter har ingen extra effekt.
-- **Sprint(Start, End, Duration)** är ett halvt öppet intervall. Sista sprinten kortas vid simuleringens slut.
-- **Release(Date, IncludedWorkItems)** innehåller objekt som blivit Done vid releasedatumet och inte ingått i en tidigare release.
-- **SimulationScenario** håller organisation, arbetsobjekt, beroenden, daglig kapacitet per person, längd, sprint-/releaseintervall och seed.
-- **SimulationResult** innehåller mätetal, slutliga arbetsobjekt, dagliga snapshots, sprintar och releaser.
+This document describes the current implementation. It supersedes the earlier incremental model with Size/Complexity, seeded random ordering, a single WIP limit and a fixed/derived review stage.
 
-Motorn skapar separat körningstillstånd; inmatade objekt ändras inte. Core kan även användas direkt med heterogena objekt, egna prioriteter, skapandetider och beroenden.
+## Entities and boundaries
 
-## Ett diskret tidssteg
+- **Team**: DeveloperCount, TesterCount, DeveloperCapacityPerDay and TesterCapacityPerDay. Both per-person capacity defaults are 1.0. The computed totals are nominal capacity per working day.
+- **WorkItem**: string Id and Name; independent DevelopmentEffort, CodeReviewEffort and TestingEffort; corresponding remaining efforts; dependency IDs; State; CreatedDay; DevelopmentStartedDay, DevelopmentCompletedDay, CodeReviewStartedDay, CodeReviewCompletedDay, TestingStartedDay, TestingCompletedDay and DoneDay.
+- **SimulationScenario**: Name, SimulationDays, one Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit and an ordered collection of WorkItems.
+- **SimulationResult**: aggregate measures, immutable WorkItemResult records and daily snapshots. Every result retains its ordered transition history. Daily item snapshots include state, remaining efforts and actual work consumed in each stage.
 
-Dag `d` representerar intervallet `[d, d + 1)`. Körningen omfattar exakt `DurationDays` dagar från dag noll.
+Configuration properties on WorkItem are read-only. Remaining efforts equal initial efforts at construction. Execution state and timestamps have private setters, and internal domain methods enforce the next legal transition. UI code cannot assign an arbitrary state. Dependencies are defensively copied into a read-only collection.
 
-1. Vid dagens början räknas skapade, ofärdiga objekt och backlogobjekt som är blockerade av beroenden.
-2. Prioritera objekt efter fallande prioritet. Likvärdiga objekt ordnas med seedstyrd slump, med ID som sista skiljekriterium. Indata sorteras först efter ID så att listordningen inte styr slumpsekvensen.
-3. Fyll lediga WIP-platser med tillgängliga backlogobjekt vars samtliga beroenden är Done. `StartedAt = d`. Nya objekt får utvecklingskapacitet samma dag. Start innebär inträde i Development även om utvecklarkapaciteten är noll.
-4. Sampla WIP efter intag, före dagens arbete. Development, CodeReview och Testing upptar alla WIP-platser.
-5. Behandla varje objekt exakt en gång i dagens ordning:
-   - **Development:** kvarvarande arbete börjar på `Size × Complexity`. Konsumera högst återstående gemensam utvecklarkapacitet. Vid noll återstående arbete: CodeReview.
-   - **CodeReview:** gå till Testing. Detta steg upptar en hel dag men ingen separat utvecklar- eller testkapacitet.
-   - **Testing:** kvarvarande testarbete börjar på `Size`. Konsumera högst återstående testkapacitet. Vid noll återstående arbete: Done och `CompletedAt = d + 1`.
-6. Spara dagens förbrukning och statusar efter arbetet. Om `d + 1` är en releasegräns, skapa en release av hittills klara, ännu ej releasade objekt.
+Each engine run creates fresh execution copies. Inputs remain unchanged and can be reused. Completed or partially executed items are rejected as new scenario inputs. IDs are case-sensitive and must be unique. The order of the input collection is meaningful for simultaneous FIFO arrivals.
 
-Ett objekt kan aldrig kaskadera genom flera statusar på samma dag. En ledig WIP-plats eller ett avklarat beroende kan utnyttjas tidigast nästa dag. Ett objekt med storlek 1, komplexitet 1 och kapacitet 1 blir CodeReview vid slutet av dag 0, Testing vid slutet av dag 1 och Done vid tidpunkt 3.
+Simulation.Core uses only .NET libraries. Simulation.Application generates requests, exposes the baseline, orchestrates runs and projects reports. The existing UI configures requests and displays reports. Infrastructure remains reserved for future persistence.
 
-## Kapacitet och WIP
+## Resources and capacity
 
 ```text
-Daglig utvecklarkapacitet = NumberOfDevelopers × DeveloperCapacityPerDay
-Daglig testkapacitet      = NumberOfTesters × TesterCapacityPerDay
-Utvecklingsarbete        = Size × Complexity
-Testarbete               = Size
+Developer pool/day = DeveloperCount × DeveloperCapacityPerDay
+Tester pool/day    = TesterCount × TesterCapacityPerDay
 ```
 
-Kapaciteter är separata pooler. Oanvänd kapacitet förs inte vidare till nästa dag. Ett objekt får konsumera hela poolen; inga individer eller maximalt en utvecklare per objekt modelleras. Prioritet och seedstyrd ordning styr fördelningen. WIP-gränsen begränsar aktiva objekt, inte antalet starter per dag. Noll personal/kapacitet är giltigt och kan skapa permanent kö.
+Capacity is an abstract work unit, **not hours**. There are two resource types. Code review and development consume the **same** developer pool; testing consumes only the tester pool. Review receives capacity first. Remaining developer capacity is available for development in the same day. Unused capacity does not carry forward.
 
-## Seed och scenariogenerering
+For each item in an active stage, the allocator applies:
 
-Application genererar `NumberOfWorkItems` likadana objekt med ID 1…N, prioritet 0 och `CreatedAt = 0`. Storlek och komplexitet är parametrar. Varje objekt efter det första får, med `DependencyProbability`, ett beroende till ett slumpmässigt valt lägre ID. Detta skapar en acyklisk graf med högst en föregångare per genererat objekt. Core stödjer fler föregångare.
+```text
+min(remaining stage effort, remaining resource pool, 1.0, capacity per person)
+```
 
-Både generatorn och motorn använder egna `System.Random`-instanser med scenariots seed. Samma parametrar och seed reproducerar resultatet på samma .NET-version. Reproducerbarhet över framtida implementationer av .NET:s slumptalsgenerator garanteras inte. Utan beroenden och med identiska objekt kan olika seeds ge samma aggregerade mått; slump garanterar inte olika resultat.
+Thus one item can never consume more than 1.0 capacity unit per day. Five developers with capacity 1 can instead advance five separate items by one unit each. A person with capacity 0.5 can apply at most 0.5 to one item per day. Capacity above 1 increases the aggregate pool but never the per-item limit; unused capacity is possible when too few items are active. Fractions left after a small review can be allocated to another item's development.
 
-100-körningsläget använder seed, seed + 1, … seed + 99. Heltalsöverslag sker uttryckligen med 32-bitars wraparound. Varje körning är fristående. Batchen sparar mätetal, inte 100 fullständiga dagshistoriker. UI visar aritmetiska medelvärden per körning, även för lead/cycle time, snarare än viktade medelvärden över alla objekt. Körningar utan färdiga objekt bidrar med noll för lead/cycle time.
+This is a pool model with a one-person-per-item cap, not a schedule of named individuals. Fractional allocations can represent sequential work on different items. Authors and reviewers are not tracked: a team with one developer can review its own modeled work. No individual skill or self-review constraint is implemented.
 
-## Mått och nämnare
+Nominal Team capacity is kept separate from the daily pool variables in the engine. Future capacity reductions can be introduced at that boundary; meetings, support, absence and similar adjustments are not implemented.
 
-| Mått | Definition |
+## Explicit efforts
+
+A story can require 5 development units, 1 review unit and 2 testing units. These are independent inputs; none is computed from Size, Complexity or a review factor. Partial work persists in the relevant Remaining...Effort property. Each stage consumes only its own effort.
+
+Efforts may be zero but cannot be negative or non-finite. Zero-effort stages still visit their active and waiting states under the normal daily rules. They require no resource units, even if that resource pool is zero. Positive effort does not advance with zero capacity.
+
+A subtraction residue at most `initial effort × 1e-12` is rounded to zero after positive work has actually been applied. This avoids an extra day due solely to floating-point arithmetic, for example ten allocations of 0.1. Capacity ledger comparisons should use a numerical tolerance.
+
+## States and workflow
+
+```text
+Backlog
+  → Development
+  → WaitingForCodeReview
+  → CodeReview
+  → WaitingForTesting
+  → Testing
+  → Done
+```
+
+Every edge is recorded; no state is skipped. Waiting states are real domain states with visible snapshot counts, not aliases for active states. Queue-entry times are captured by the preceding stage's completion timestamp.
+
+**Active means admitted to the stage**, not guaranteed to receive work that day. For example, an admitted Development item can receive no capacity because review consumed the pool. Its daily work field will be zero. The separate waiting states represent items that have not yet been admitted to the next stage, usually because of its WIP limit or the day boundary.
+
+There is no backlog-to-testing shortcut and no transition out of Done. A stage completes when its remaining effort reaches zero. Partial items retain their state and effort for the next day.
+
+## Daily execution and timestamps
+
+The smallest time unit is one working day. Day `d` is the interval `[d, d+1)`. The first day starts at 0; a 100-day scenario ends at time 100. All days have identical nominal capacity. Calendar dates and non-working days are not modeled.
+
+The implementation deliberately uses a conservative day-boundary interpretation of the conceptual workflow:
+
+1. At day start, count created unfinished items and dependency-blocked backlog items.
+2. Admit eligible Backlog items into Development in FIFO order while its WIP policy permits. Dependencies are evaluated using the state at this boundary.
+3. Admit existing WaitingForCodeReview items into CodeReview, and existing WaitingForTesting items into Testing, each in FIFO order while its WIP policy permits.
+4. Sample the three active occupancies and initialize that day's developer and tester pools.
+5. Allocate developer capacity to active CodeReview items in FIFO order. Completed reviews transition to WaitingForTesting at time `d+1`.
+6. Allocate the remaining developer pool to active Development items in FIFO order. Completed development transitions to WaitingForCodeReview at time `d+1`.
+7. Allocate tester capacity to active Testing items in FIFO order. Completed testing transitions to Done at time `d+1`.
+8. Record end-of-day states, remaining efforts, work consumption and transitions.
+
+**All admissions happen before all work.** A completion never frees a slot for another admission later in the same day. New waiting items enter their next active stage no earlier than the following day's start. A dependent item can start on the day whose start equals its predecessor's DoneDay.
+
+This choice differs from admitting newly completed work downstream during the same day's later processing steps. It guarantees that an item receives capacity from at most one stage on a day and leaves queues visible at day end. No fractional-day or within-day scheduling is implemented.
+
+Start timestamps record **admission** to an active state at `d`; completion timestamps record reaching zero effort at `d+1`. A waiting transition and subsequent admission can have the same numerical boundary timestamp, while remaining distinct ordered transitions. Waiting duration can therefore be zero when a slot is available at the next boundary. No artificial extra waiting day is added.
+
+Example with sufficient available capacity and one item requiring 5/1/2 units:
+
+| Working interval | Outcome |
 |---|---|
-| Completed Work Items | Antal objekt med Done vid körningens slut |
-| Throughput | Antal Done / hela simuleringslängden, objekt per dag |
-| Average Lead Time | Medel av `CompletedAt − CreatedAt` för Done-objekt |
-| Average Cycle Time | Medel av `CompletedAt − StartedAt` för Done-objekt |
-| Average WIP | Aritmetiskt medel av WIP-samplen efter dagens intag |
-| Blocked Time | Summan av beroendeblockerade backlogobjekt vid dagsstart / summan av skapade, ofärdiga objekt vid dagsstart |
-| Developer Utilization | Förbrukat utvecklingsarbete / tillgängligt utvecklingsarbete över alla dagar |
-| Tester Utilization | Förbrukat testarbete / tillgängligt testarbete över alla dagar |
+| `[0,5)` | Five development allocations of at most 1; DevelopmentStartedDay 0, DevelopmentCompletedDay 5 |
+| `[5,6)` | Review admitted at 5; CodeReviewCompletedDay 6 |
+| `[6,8)` | Testing admitted at 6; TestingCompletedDay and DoneDay 8 |
 
-Blockerad tid är en andel **objekt-dagar**, inte en andel av kalenderdagarna. WIP-kö, resursbrist och CodeReview räknas inte som beroendeblockering. Beroendeblockering räknas även när WIP är fullt. Framtida objekt räknas först från CreatedAt. Utnyttjandegrad inkluderar alla simulerade dagar, även tomma dagar efter att backloggen tömts.
+At the end of engine day 4 the item is WaitingForCodeReview; at the end of day 5 it is WaitingForTesting. An active stage can start and finish between two end-of-day chart samples. Admission occupancy, transition history and work consumption still record that activity.
 
-Noll nämnare ger noll. Lead/cycle time är noll när inget objekt är klart; det är en visningskonvention och betyder inte att ofärdigt arbete har noll leveranstid. Ofärdiga objekt ingår inte i lead/cycle time. UI visar andelar i procent. `DailySnapshot.Day` är nollbaserad; dess WIP/blocked-värden är från dagens början medan statusarna är från dagens slut.
+## FIFO
 
-### Kontrollerbart exempel
+There are no priority classes and no random tie-breaking.
 
-Två objekt A och B har storlek 1 och komplexitet 1. B beror på A, WIP är 2, och båda resurspoolerna har kapacitet 1/dag. Körningen varar 6 dagar.
+- Eligible backlog items: oldest CreatedDay first. Blocked and future items are skipped without preventing eligible items from starting.
+- Active development allocation: earliest DevelopmentStartedDay first. An older, previously blocked backlog item does not displace an already admitted item.
+- Review admission/allocation: earliest DevelopmentCompletedDay first.
+- Testing admission/allocation: earliest CodeReviewCompletedDay first.
+- Equal timestamps: original scenario collection order, maintained by stable ordering. IDs are not used to assign priority.
 
-- A startar dag 0 och är klart vid tidpunkt 3.
-- B startar dag 3 och är klart vid tidpunkt 6.
-- Throughput = 2/6, lead time = (3+6)/2 = 4,5 dagar, cycle time = 3 dagar.
-- WIP är 1 varje dag. Blockerad tid = 3/9 objekt-dagar = 1/3.
-- Båda utnyttjandegraderna är 2/6 = 1/3.
+Review-stage precedence over development is the only resource-order policy. FIFO continues to apply within each stage. A partially served item retains its queue position.
 
-## Sprintar och releaser
+## Dependencies and validation
 
-Sprintar är rapporteringsintervall, inte fasta åtaganden eller batchgränser för intag. Release sker vid multiplar av ReleaseInterval. Done och released är skilda begrepp; ett objekt kan vara Done men vänta på en release efter simuleringshorisonten. Ingen extra slutrelease skapas. Throughput mäter Done, inte antal releasade objekt. Tomma schemalagda releaser behålls.
+A WorkItem leaves Backlog only when **all** referenced items are Done. Dependencies are direct, explicit IDs supplied on WorkItems. No random graph generation is present. Duplicate references to the same valid predecessor are redundant and have the same effect as one reference.
 
-## Avgränsningar
+Before execution, ScenarioValidator rejects invalid configurations using ScenarioValidationException with an explanatory message:
 
-Alla dagar har samma kapacitet: inga helger, frånvaro, omarbete, defekter, testfel, kompetensskillnader, möteskostnader eller tidsåtgång för context switching. Ingen separat reviewkapacitet eller tester-/utvecklarväxling. Ingen persistens eller kalibrering mot historiska data. Scenarioresultat är avsedda för jämförande experiment under dessa uttryckliga antaganden.
+- missing scenario/item name or ID, duplicate IDs, null team/collections/items;
+- nonpositive SimulationDays or any active-stage WIP limit;
+- negative headcounts, negative/non-finite capacities or overflowing aggregate capacity;
+- negative/non-finite efforts or negative CreatedDay;
+- execution-state items supplied as fresh backlog input;
+- missing/blank dependency references, self-dependencies, and circular dependency graphs.
 
+Cycle validation uses an iterative topological traversal, avoiding recursion on long chains. Zero personnel, zero capacity, zero efforts and an empty workload are valid experiments. Future CreatedDay values are supported and ignored for admissions until that day arrives.
 
-## Inkrement 2: parade experiment och resultatanalys
+## WIP policy
 
-Inga statusregler, kapacitetsregler, slumpregler eller ursprungliga mätformler ändras. `ExperimentRunner` kör den befintliga motorn och `ResultAnalysis` projicerar dess utdata till rapporter.
+WipPolicy is the single admission/occupancy policy boundary:
 
-### Rättvis A/B-jämförelse
+| Limit | States counted in v0.1 |
+|---|---|
+| DevelopmentWipLimit | Development only |
+| CodeReviewWipLimit | CodeReview only |
+| TestingWipLimit | Testing only |
 
-`TeamParameters` för B kan ändra personalstyrka, kapacitet per person och WIP. A och B delar exakt samma WorkItem- och Dependency-listor, seed, horisont, sprintlängd och releaseintervall. Modellen ändrar aldrig dessa indata under körning. Ett seed per par genererar arbetsobjekten en gång; samma scenariotillstånd ligger till grund för båda körningarna.
+Waiting states, Backlog and Done do not consume active WIP slots. Waiting queues have no separate limits in this version. The engine consults the policy instead of duplicating membership assumptions at each admission point. Changing membership to include a waiting state belongs in this policy in a future version.
 
-100-parsläget kör två scenarier för varje seed i intervallet seed … seed + 99, med samma dokumenterade wraparound som tidigare. Rapporten innehåller aritmetiska medelvärden per scenario. Differensen är B − A. För procentmått anges differensen i procentenheter. Ingen statistisk signifikans eller generell förbättring sluts utifrån differensens tecken.
+Daily active occupancy (`DevelopmentWip`, `ReviewWip`, `TestingWip`, and their legacy sum `Wip`) is sampled after admission, before work. These fields measure admission-policy occupancy. They are distinct from the new end-of-day `TotalWip`, which includes waiting queues and is used for `AverageWip`.
 
-### Status över tid
+## Metrics and Interpretation
 
-Varje punkt representerar status **efter** dagens arbete; dag 1 är slutet av motorns dag 0. De fem statusantalens summa är antalet objekt som skapats under eller före den dagen. Framtida objekt utesluts från rapporten även om de redan finns i scenariots inputlista.
+Metrics describe simulated system behaviour; they do not classify results as good or bad. Higher utilization or throughput alone is not an automatic recommendation. No bottleneck classifier is implemented.
 
-Diagrammen visar antal, inte andelar eller genomflöde. Båda använder samma skala eftersom jämförda scenarier delar arbetsobjekt och skapandetider. Ett dagreglage visar exakta antal för samma dag i A och B. Batchdiagrammet visar medelantal i varje status per dag; det är inte en enskild körning och kan innehålla bråktal.
+`SimulationEngine` records observations; `SimulationResultBuilder` aggregates them in Core. Application and UI consume these results without redefining metrics. `WorkItemResult` is a detached immutable record with final state, all timestamps, remaining efforts, read-only transition history and time metrics. `State` is a compatibility alias of `FinalState`. Returned result, day, observation and transition collections are read-only copies; no mutable execution WorkItems escape the engine.
 
-### Ofärdigt arbete vid horisonten
+Day `d` represents `[d,d+1)`. Admission is stamped `d`, completion `d+1`; subtraction needs **no added 1**. Snapshot `Day` is zero-based; the existing UI labels it as end of day `Day+1`.
 
-- Ett ofärdigt objekt är skapat före horisonten och är inte Done.
-- Ålder = horisonten − CreatedAt. Cycle age = horisonten − StartedAt, eller saknat värde om Development inte startat.
-- Beroendeblockerad backlog räknas med **slutliga** statusar på föregångarna. Detta kan skilja sig från sista DailySnapshot.BlockedItems, som samplas vid dagens början.
-- Redo backlog = backlog minus beroendeblockerad backlog. Dessa objekt kan vänta på WIP-utrymme eller nästa dags intag. Detta mått påstår inte att väntan beror på en bestämd resurs.
-- Genomsnittlig och högsta ålder räknas bland ofärdiga objekt. Tom mängd ger noll.
-- De 20 äldsta objekten sorteras efter fallande ålder, därefter stigande ID. UI visar status, ålder, cycle age och beroendeblockering.
-- Alla objekt som genereras av nuvarande UI skapas dag 0. Därför är totalåldern densamma för alla kvarvarande objekt; cycle age och status kan däremot skilja sig. Mer varierande åldrar kräver framtida inflödesmodell eller egna skapandetider via Core.
-- I batchläget visas medelvärden av körningarnas ofärdiga antal och åldersmått. ”Oldest age” är medelvärdet av varje körnings högsta ålder, inte maximum över hela batchen. Körningar utan ofärdiga objekt bidrar med noll. Individlistor visas endast för enskilda körningar.
+| Metric | Exact definition |
+|---|---|
+| SimulationDays | Configured working-day horizon, including idle days after work finishes |
+| TotalWorkItems / IncompleteWorkItems | All configured items / total minus Done, including future arrivals |
+| CompletedWorkItems | Items Done at the horizon |
+| LeadTime | DoneDay − CreatedDay; null for incomplete items |
+| CycleTime | DoneDay − DevelopmentStartedDay; null for incomplete items |
+| ActiveTime | Number of observed days with positive development, review **or** testing allocation; each day counts at most once regardless of work amount |
+| WaitingForCodeReviewTime / WaitingForTestingTime | Whole working intervals spent in the corresponding waiting state **after start-of-day admissions** |
+| WaitingTime | Sum of those two queue times; ordinary Backlog waiting is excluded |
+| BlockedTime | Created Backlog intervals with at least one incomplete dependency at day start; WIP-only backlog delay is excluded |
+| AverageLeadTime / CycleTime / ActiveTime / WaitingTime / BlockedTime | Arithmetic means over **Done items only**, or 0 when none are Done |
+| Throughput / ThroughputPerDay | CompletedWorkItems / SimulationDays |
+| ThroughputPerFiveDays | ThroughputPerDay × 5 working days |
+| TotalWip | End-of-day Development + WaitingForCodeReview + CodeReview + WaitingForTesting + Testing; excludes Backlog and Done |
+| AverageWip | Arithmetic mean of daily TotalWip across the entire horizon |
+| MaximumWaitingForCodeReviewQueue / MaximumWaitingForTestingQueue | Maximum corresponding **end-of-day** queue count; not a within-day peak |
+| AvailableDeveloperCapacity / AvailableTesterCapacity | Nominal team pool for that day, even if there is no work |
+| UsedDeveloperCapacity / UsedTesterCapacity | Actual development + review allocation / actual testing allocation for that day |
+| DeveloperUtilization / TesterUtilization | Sum of corresponding used capacity divided by sum of available capacity over all simulated days; 0 when available capacity is 0 |
 
-Lead/cycle time inkluderar alltjämt endast Done-objekt. Gränssnittet uppmanar därför till att även granska kvarvarande arbete. Rapporterna introducerar inte censureringsjusterade ledtider eller prognoser för ofärdiga objekt.
+Every daily snapshot exposes all seven end-of-day state counts, TotalWip, available/used resource capacities, stage work and detailed item observations. Items not yet created are excluded from daily counts and elapsed-time accumulation. Incomplete items retain observed active, queue and blocked times but have no completed lead/cycle time.
+
+A queue transition at boundary 5 followed by admission at boundary 5 has zero elapsed queue time, even though the preceding day's end snapshot shows an item in that queue. Thus summing end-of-day queue counts is **not** the waiting-time definition. Waiting measurement uses the state after admissions for the interval. Future chart consumers should preserve this distinction.
+
+An active-state item can receive zero capacity. Such an interval counts neither as ActiveTime nor as queue WaitingTime. Zero-effort stages also consume an interval under the existing workflow but contribute no ActiveTime. Consequently ActiveTime + WaitingTime need not equal CycleTime; these measurements are not an exhaustive time partition. LeadTime can additionally contain ordinary backlog wait and dependency-blocked time. Stage StartedDay records admission, not first positive capacity allocation.
+
+Legacy report metrics remain available: BlockedTimeFraction is dependency-blocked backlog item-days divided by created unfinished item-days at day start. DevelopmentUtilization and ReviewUtilization split the shared developer capacity denominator. AverageReviewWip samples active review occupancy after admission. AverageReviewTime averages review completion minus admission for items that exited review, including active-state stalls but excluding its preceding queue.
+
+Application reports count only items created before the relevant snapshot/horizon. Unfinished age is horizon − CreatedDay; cycle age is horizon − DevelopmentStartedDay, or absent if never admitted. Dependency blocking at the horizon uses final predecessor states, which may differ from the last day's starting sample.
+
+## Baseline and demonstration
+
+`Simulation.Application.BaselineScenario.Create()` returns a fresh baseline, also represented by the default SimulationRequest and initial UI values:
+
+| Setting | Value |
+|---|---:|
+| SimulationDays | 100 |
+| DeveloperCount / TesterCount | 5 / 2 |
+| Capacity per developer / tester per day | 1 / 1 |
+| Development / CodeReview / Testing WIP | 5 / 3 / 3 |
+| WorkItems | 30, IDs STORY-1 through STORY-30 in that order |
+| Development / CodeReview / Testing effort per item | 5 / 1 / 2 |
+| CreatedDay | 0 for all |
+| Dependencies | None |
+
+No delivery target or bottleneck classification is attached to the baseline. Its results are computed by the same engine as any other scenario.
+
+The existing Avalonia form supports independent effort inputs, stage WIP, single runs and deterministic resource-only A/B comparisons with the same workload. Core supports explicit mixed-effort items and dependencies; the form currently generates independent, identical-effort items. The application-level UI request retains its safety bounds of 2,000 items, 3,650 days and 1,000,000 item-days.
+
+## Determinism and exclusions
+
+The engine uses no Random, seed, wall clock, unordered allocation or parallel scheduling. Reusing the same ordered scenario produces identical states, work allocations and timestamps. As with all floating-point software, this is not a promise of byte-identical arithmetic across hypothetical different numerical implementations.
+
+The previous seeded batches, Monte Carlo interface, generic size/complexity effort derivation, sprint and release modeling, priorities and random dependencies were removed from the current execution path. They are not silently ignored settings.
+
+No bugs, rework, technical debt, UX/PO/requirements roles, expedite classes, interruptions, support work, meetings, sickness, individual skill/productivity profiles, specialists, pairing, multiple teams, hardware dependencies, release trains, compliance/CRA, DevOps or AI simulation is implemented. The chart UI is presentation, not a modeled UX resource.
+
+The historical reference-experiment document predates this version and is explicitly marked as superseded. Its old numerical expectations must not be used as v0.1 acceptance tests without re-derivation.
