@@ -2,7 +2,7 @@
 
 An Avalonia desktop simulator for exploring software delivery using capacity, independent stage effort, queues, dependencies and WIP. This is a simulation tool, not a project-management application.
 
-The current implementation is **Simulation Model v0.1, Steps 2–8**. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
+The current implementation is **Simulation Model v0.1, Steps 2–9 with the Step 11B Simple Mode redesign**. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
 
 ## Build and run on macOS
 
@@ -31,8 +31,8 @@ SoftwareDevelopmentSimulation.sln
 src/
   Simulation.Core/             Domain, validation, WipPolicy, deterministic engine and metric builder
   Simulation.Application/      Requests, baseline, run orchestration and result reports
-  Simulation.Infrastructure/   Reserved for future persistence
-  Simulation.UI/               Scenario, Flow, Results and Monte Carlo views and charts
+  Simulation.Infrastructure/   Versioned scenario/experiment JSON and comparison CSV
+  Simulation.UI/               Scenario, Flow, Results, Monte Carlo, Sensitivity and Compare views
 tests/
   Simulation.Core.Tests/       Workflow, capacity, FIFO, WIP, dependencies, validation and metrics
   Simulation.UI.Tests/         ViewModel reset, execution, selection and formatting
@@ -42,7 +42,7 @@ docs/
   REFERENCE_EXPERIMENTS.md     Historical experiment proposal; superseded assumptions
 ```
 
-Project references remain `UI → Application → Core` and `Infrastructure → Application`. Core has no project references, package references, Avalonia, UI or persistence dependencies. State and remaining effort on WorkItem have private setters; domain methods control progression. Runs copy input items rather than mutating scenario definitions.
+Project references are `UI → Application → Core`, `UI → Infrastructure` and `Infrastructure → Application`. Core has no project references, package references, Avalonia, UI or persistence dependencies. State and remaining effort on WorkItem have private setters; domain methods control progression. Runs copy input items rather than mutating scenario definitions.
 
 ## Basic model
 
@@ -78,7 +78,7 @@ The form supports zero headcounts/capacity and an empty workload. Triangular par
 On macOS ARM64 with .NET 10.0.401:
 
 - Entire Release solution builds with 0 warnings and 0 errors.
-- **159 xUnit tests pass**: 77 Core, 60 Application, 22 UI ViewModel tests.
+- **183 xUnit tests pass**: 77 Core, 80 Application, 26 UI ViewModel tests.
 - Native macOS verification covers the previous quality/flow results and the new sensitivity tab: parameter sweeps, chart/table bindings, extreme reports, 100-run-per-point Monte Carlo, responsiveness and cancellation.
 - Existing Fixed and Variable Effort no-defect results match the previous version exactly, including daily states and timestamps. Core still has no project or package dependencies.
 
@@ -90,7 +90,7 @@ See [metric definitions](docs/SIMULATION_MODEL.md#metrics-and-interpretation) an
 
 ## Scope and limitations
 
-Step 6 adds effort generation and Monte Carlo around the existing daily simulation. It adds no charting package. Lightweight Avalonia drawing controls read daily snapshots directly. The previous A/B UI and stacked status chart are replaced by single-scenario inspection; existing Application comparison helpers and their regression tests remain available, but are not exposed in the UI.
+Step 6 adds effort generation and Monte Carlo around the existing daily simulation. It adds no charting package. Lightweight Avalonia drawing controls read daily snapshots directly. The previous A/B UI and stacked status chart are replaced by single-scenario inspection; existing Application comparison helpers and their regression tests remain available, and Step 9 provides a separate structured Compare area.
 
 Charts show sampled end-of-day values connected by lines; they do not imply continuous intra-day activity. WIP shows the total only; stage counts are available in the selected-day flow. The Work Items table is read-only, in scenario order, with scrolling and no sorting/filtering/export. Reset clears old results. Editing fields retains the last completed results until the next Run, which replaces them; there is no multi-run history.
 
@@ -130,3 +130,22 @@ Open **Sensitivity**, choose a base scenario and parameter, edit the comma-separ
 The entire Core implementation remains unchanged. Analysis services live in Application and the new tab has its own ViewModel and drawing control. No third-party package was added. A warm-up window is not proof of steady state; completed-item times retain their full lifetimes and exclude unfinished items.
 
 Read [the definitions](docs/SIMULATION_MODEL.md#model-validation) and [the detailed validation report](docs/VALIDATION_RESULTS.md) before interpreting plateaus, lead time or WIP saturation. The report includes measured sweeps, extreme comparisons, deterministic Monte Carlo verification and limitations. Technical Debt has not been implemented.
+
+
+## Scenario comparison and experiments (Step 9)
+
+Open **Compare → Advanced Comparison**, duplicate Baseline, rename the alternative, and use **Edit Selected Scenario** to modify it in the existing Scenario form. Apply the draft, choose a comparison reference and **Run All Scenarios**. Compare metrics as rows/scenarios as columns, inspect highlighted parameter differences, and select scalar or observed daily-flow charts. Out of Date results are excluded, with their historical configuration still available in traceability.
+
+**Run Monte Carlo Comparison** defaults to 500 runs per scenario. Common Random Numbers defaults on and uses the comparison seed sequence across scenarios. The ordinary table shows distributions and differences of P50s; a separate table shows the distribution of signed differences per paired run. Disabled common seeds use each scenario's configured seed and omit pairing.
+
+Save/load scenarios and experiments using human-readable JSON (SchemaVersion 1, SimulationModelVersion 0.1). Export current comparison results to CSV with values, deltas, percentiles, full configuration snapshots and run provenance. JSON saves configurations only; no database or result-history archive is introduced.
+
+See [the experiment workflow](docs/EXPERIMENTS.md), [exact comparison semantics](docs/SIMULATION_MODEL.md#scenario-comparison) and [measured comparison results](docs/COMPARISON_RESULTS.md). Core execution rules are unchanged; its only new file declares the explicit model-version constant. Technical Debt remains out of scope.
+
+## Simplified workflow (Step 11)
+
+Use **Simulate → Run Baseline**, inspect the six primary results, then **Duplicate & Compare**. Change Testers and choose Run Simulation to open the selected comparison pair automatically. Advanced measurements and experiment tools remain in expandable sections. Sensitivity, Model Validation and Monte Carlo are under **Analyze**. See [GUI guide and verification limits](docs/GUI_REDESIGN.md). Simulation and persistence semantics are unchanged.
+
+## Simple Mode (Step 11B)
+
+The application now starts at **Home**. Choose **Run**, **Change & Compare** or **Explore**. Run shows four result cards; Change & Compare creates its before/after pair automatically; Explore exposes one parameter and one chart. Expert scenario management, Monte Carlo, validation, exports and diagnostics remain under **Advanced Tools**. This supersedes the normal navigation described in earlier increments. See [Simple Mode guide, file inventory and verification](docs/SIMPLE_MODE.md).

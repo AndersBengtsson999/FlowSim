@@ -11,7 +11,7 @@ public enum AnalysisMetric
     TotalDefectsFound, TotalReworkEffort, ReworkDeveloperCapacityShare,
     AverageAvailableDeveloperCapacity, AverageUsedDeveloperCapacity, AverageAvailableTesterCapacity, AverageUsedTesterCapacity,
     DevelopmentWipSaturation, CodeReviewWipSaturation, TestingWipSaturation, ReworkWipSaturation,
-    AverageWaitingForCodeReviewQueue, AverageWaitingForTestingQueue, AverageWaitingForReworkQueue, AverageBacklog
+    AverageWaitingForCodeReviewQueue, AverageWaitingForTestingQueue, AverageWaitingForReworkQueue, AverageBacklog, AverageBlockedTime
 }
 public sealed record AnalysisMeasurements(int StartDay, int EndDay, IReadOnlyDictionary<AnalysisMetric, double?> Values);
 
@@ -36,6 +36,7 @@ public static class AnalysisMetrics
             [AnalysisMetric.AverageCycleTime] = ItemMean(w => w.CycleTime!.Value),
             [AnalysisMetric.AverageActiveTime] = ItemMean(w => w.ActiveTime),
             [AnalysisMetric.AverageWaitingTime] = ItemMean(w => w.WaitingTime),
+            [AnalysisMetric.AverageBlockedTime] = ItemMean(w => w.BlockedTime),
             [AnalysisMetric.AverageWip] = days.Average(d => d.TotalWip),
             [AnalysisMetric.DeveloperUtilization] = Ratio(dev, days.Sum(d => d.AvailableDeveloperCapacity)),
             [AnalysisMetric.TesterUtilization] = Ratio(days.Sum(d => d.UsedTesterCapacity), days.Sum(d => d.AvailableTesterCapacity)),

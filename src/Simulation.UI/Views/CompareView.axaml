@@ -1,0 +1,286 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:charts="using:Simulation.UI.Controls" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:views="using:Simulation.UI.Views" xmlns:core="clr-namespace:Simulation.Core;assembly=Simulation.Core" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Simulation.UI.Views.CompareView" x:DataType="vm:CompareViewModel">
+ <UserControl.Styles>
+  <Style Selector="TextBlock.different">
+   <Setter Property="FontWeight" Value="Bold" />
+   <Setter Property="TextDecorations" Value="Underline" />
+  </Style>
+ </UserControl.Styles>
+ <UserControl.Resources>
+  <DataTemplate x:Key="MatrixRow" x:DataType="vm:CompareTextRow">
+   <StackPanel Orientation="Horizontal" Margin="0,4">
+    <TextBlock Width="260" Text="{Binding Label}" TextWrapping="Wrap" />
+    <ItemsControl ItemsSource="{Binding Cells}">
+     <ItemsControl.ItemsPanel>
+      <ItemsPanelTemplate>
+       <StackPanel Orientation="Horizontal" />
+      </ItemsPanelTemplate>
+     </ItemsControl.ItemsPanel>
+     <ItemsControl.ItemTemplate>
+      <DataTemplate x:DataType="vm:CompareTextCell">
+       <TextBlock Width="210" Margin="0,0,14,0" Text="{Binding Text}" TextWrapping="Wrap" Classes.different="{Binding Different}" />
+      </DataTemplate>
+     </ItemsControl.ItemTemplate>
+    </ItemsControl>
+   </StackPanel>
+  </DataTemplate>
+  <DataTemplate x:Key="HeaderCell" x:DataType="vm:CompareTextCell">
+   <TextBlock Width="210" Margin="0,0,14,0" Text="{Binding Text}" FontWeight="Bold" TextWrapping="Wrap" />
+  </DataTemplate>
+  <vm:PresentationLabels x:Key="HumanLabel" />
+ </UserControl.Resources>
+ <ScrollViewer>
+  <StackPanel Spacing="14" Margin="0,16">
+   <StackPanel Spacing="10">
+    <TextBlock Text="Compare scenarios · What changed?" FontSize="22" FontWeight="SemiBold" />
+    <Grid ColumnDefinitions="*,24,*" IsEnabled="{Binding CanEdit}">
+     <StackPanel Grid.Column="0">
+      <TextBlock Text="Baseline Scenario" />
+      <ComboBox ItemsSource="{Binding Scenarios}" SelectedItem="{Binding Baseline, Mode=TwoWay}" HorizontalAlignment="Stretch">
+       <ComboBox.ItemTemplate>
+        <DataTemplate x:DataType="vm:ScenarioEntry">
+         <TextBlock Text="{Binding Name}" />
+        </DataTemplate>
+       </ComboBox.ItemTemplate>
+      </ComboBox>
+     </StackPanel>
+     <StackPanel Grid.Column="2">
+      <TextBlock Text="Compare With" />
+      <ComboBox ItemsSource="{Binding Alternatives}" SelectedItem="{Binding Alternative, Mode=TwoWay}" HorizontalAlignment="Stretch">
+       <ComboBox.ItemTemplate>
+        <DataTemplate x:DataType="vm:ScenarioEntry">
+         <TextBlock Text="{Binding Name}" />
+        </DataTemplate>
+       </ComboBox.ItemTemplate>
+      </ComboBox>
+     </StackPanel>
+    </Grid>
+    <WrapPanel>
+     <Button Content="Edit Alternative" Command="{Binding EditAlternativeCommand}" />
+     <Button Content="Run Baseline + Alternative" Command="{Binding RunPairCommand}" />
+    </WrapPanel>
+    <TextBlock Text="{Binding ChangeSummary}" FontWeight="SemiBold" />
+    <ItemsControl ItemsSource="{Binding ChangedParameters}">
+     <ItemsControl.ItemTemplate>
+      <DataTemplate x:DataType="vm:ChangedParameter">
+       <Grid ColumnDefinitions="300,*" Margin="0,5">
+        <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="0" />
+        <TextBlock Text="{Binding Change}" TextWrapping="Wrap" Grid.Column="1" />
+       </Grid>
+      </DataTemplate>
+     </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="{Binding PairStatus}" TextWrapping="Wrap" />
+    <Grid ColumnDefinitions="300,*,*,*">
+     <TextBlock Text="Result" FontWeight="SemiBold" Grid.Column="0" />
+     <TextBlock Text="Baseline" FontWeight="SemiBold" Grid.Column="1" />
+     <TextBlock Text="Alternative" FontWeight="SemiBold" Grid.Column="2" />
+     <TextBlock Text="Difference" FontWeight="SemiBold" Grid.Column="3" />
+    </Grid>
+    <ItemsControl ItemsSource="{Binding SimpleMetrics}">
+     <ItemsControl.ItemTemplate>
+      <DataTemplate x:DataType="vm:SimpleMetric">
+       <Grid ColumnDefinitions="300,*,*,*" Margin="0,5" ToolTip.Tip="{Binding Explanation}">
+        <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Grid.Column="0" />
+        <TextBlock Text="{Binding Before}" TextWrapping="Wrap" Grid.Column="1" />
+        <TextBlock Text="{Binding After}" TextWrapping="Wrap" Grid.Column="2" />
+        <TextBlock Text="{Binding Difference}" TextWrapping="Wrap" Grid.Column="3" />
+       </Grid>
+      </DataTemplate>
+     </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    <TextBlock Text="Largest observed queue · each scenario" FontWeight="SemiBold" />
+    <Grid ColumnDefinitions="*,24,*">
+     <TextBlock Text="{Binding BaselineQueue}" TextWrapping="Wrap" />
+     <TextBlock Text="{Binding AlternativeQueue}" TextWrapping="Wrap" Grid.Column="2" />
+    </Grid>
+    <StackPanel IsVisible="{Binding HasPairFlow}" Spacing="6">
+     <TextBlock Text="Flow · Baseline / Alternative" FontSize="18" />
+     <TextBlock Text="{Binding FlowDayLabel}" TextWrapping="Wrap" />
+     <Slider Minimum="1" Maximum="{Binding FlowLastDay}" Value="{Binding FlowDay, Mode=TwoWay}" TickFrequency="1" IsSnapToTickEnabled="True" />
+     <ItemsControl ItemsSource="{Binding SimpleFlow}">
+      <ItemsControl.ItemTemplate>
+       <DataTemplate x:DataType="vm:FlowComparisonRow">
+        <Grid ColumnDefinitions="240,*,*" Margin="0,5">
+         <TextBlock Text="{Binding Name}" />
+         <StackPanel Margin="0,0,16,0" Grid.Column="1">
+          <TextBlock Text="{Binding Before}" />
+          <ProgressBar Value="{Binding Before}" Maximum="{Binding Scale}" Height="6" Foreground="#768FA6" />
+         </StackPanel>
+         <StackPanel Margin="0,0,16,0" Grid.Column="2">
+          <TextBlock Text="{Binding After}" />
+          <ProgressBar Value="{Binding After}" Maximum="{Binding Scale}" Height="6" Foreground="#768FA6" />
+         </StackPanel>
+        </Grid>
+       </DataTemplate>
+      </ItemsControl.ItemTemplate>
+     </ItemsControl>
+    </StackPanel>
+   </StackPanel>
+   <Expander Header="Advanced Comparison · scenarios, all parameters, Monte Carlo and exports" HorizontalAlignment="Stretch" IsExpanded="False">
+    <StackPanel Spacing="10">
+     <TextBlock Text="Scenarios and experiments" FontSize="20" FontWeight="Bold" />
+     <TextBlock Text="Create alternatives, select a reference and compare measurements. No scenario is ranked. The comparison reference is always included." TextWrapping="Wrap" />
+     <StackPanel Spacing="10" IsEnabled="{Binding CanEdit}">
+      <Grid ColumnDefinitions="*,16,*">
+       <StackPanel>
+        <TextBlock Text="Experiment name" />
+        <TextBox Text="{Binding ExperimentName, Mode=TwoWay}" />
+       </StackPanel>
+       <StackPanel Grid.Column="2">
+        <TextBlock Text="Description" />
+        <TextBox Text="{Binding Description, Mode=TwoWay}" />
+       </StackPanel>
+      </Grid>
+      <Grid ColumnDefinitions="*,16,*">
+       <StackPanel>
+        <TextBlock Text="Scenarios (checkbox includes in comparison)" />
+        <ListBox ItemsSource="{Binding Scenarios}" SelectedItem="{Binding Selected, Mode=TwoWay}" Height="240">
+         <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="vm:ScenarioEntry">
+           <StackPanel Orientation="Horizontal" Spacing="10">
+            <CheckBox IsChecked="{Binding Included, Mode=TwoWay}" />
+            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding Status}" VerticalAlignment="Center" FontStyle="Italic" />
+           </StackPanel>
+          </DataTemplate>
+         </ListBox.ItemTemplate>
+        </ListBox>
+       </StackPanel>
+       <StackPanel Grid.Column="2" Spacing="8">
+        <TextBlock Text="Comparison Baseline" />
+        <ComboBox ItemsSource="{Binding Scenarios}" SelectedItem="{Binding Baseline, Mode=TwoWay}" HorizontalAlignment="Stretch">
+         <ComboBox.ItemTemplate>
+          <DataTemplate x:DataType="vm:ScenarioEntry">
+           <TextBlock Text="{Binding Name}" />
+          </DataTemplate>
+         </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Text="Selected scenario name" />
+        <TextBox Text="{Binding ScenarioName, Mode=TwoWay}" />
+        <WrapPanel>
+         <Button Content="Rename" Command="{Binding RenameCommand}" />
+         <Button Content="Edit Selected Scenario" Command="{Binding EditCommand}" />
+        </WrapPanel>
+        <TextBlock Text="Editing uses the existing Scenario form. Apply changes there; uncommitted drafts and outdated results are excluded." TextWrapping="Wrap" />
+       </StackPanel>
+      </Grid>
+      <WrapPanel>
+       <Button Content="Add Scenario" Command="{Binding AddCommand}" />
+       <Button Content="Duplicate Scenario" Command="{Binding DuplicateCommand}" />
+       <Button Content="Delete Scenario" Command="{Binding DeleteCommand}" />
+       <Button Content="Reset Scenario to Baseline" Command="{Binding ResetCommand}" />
+      </WrapPanel>
+      <WrapPanel>
+       <Button Content="Save Scenario" Click="SaveScenario" />
+       <Button Content="Load Scenario" Click="LoadScenario" />
+       <Button Content="Save Experiment" Click="SaveExperiment" />
+       <Button Content="Load Experiment" Click="LoadExperiment" />
+       <Button Content="Export Results CSV" Click="ExportCsv" />
+      </WrapPanel>
+      <WrapPanel>
+       <ComboBox ItemsSource="{Binding Demonstrations}" SelectedItem="{Binding Demonstration, Mode=TwoWay}" Width="240" />
+       <Button Content="Load Demonstration Experiment" Command="{Binding DemonstrationCommand}" />
+      </WrapPanel>
+      <TextBlock Text="Demonstration experiments replace the in-memory collection. Save it first to retain it. Values are illustrative, not calibrated recommendations." TextWrapping="Wrap" />
+      <WrapPanel>
+       <StackPanel Margin="0,0,16,0">
+        <TextBlock Text="Run Mode" />
+        <ComboBox ItemsSource="{Binding Modes}" SelectedItem="{Binding Mode, Mode=TwoWay}" Width="180">
+         <ComboBox.ItemTemplate>
+          <DataTemplate x:CompileBindings="False">
+           <TextBlock Text="{Binding Converter={StaticResource HumanLabel}}" />
+          </DataTemplate>
+         </ComboBox.ItemTemplate>
+        </ComboBox>
+       </StackPanel>
+       <StackPanel Margin="0,0,16,0">
+        <TextBlock Text="Base Random Seed" />
+        <TextBox Text="{Binding BaseSeed, Mode=TwoWay}" Width="150" />
+       </StackPanel>
+       <StackPanel>
+        <TextBlock Text="Monte Carlo Runs" />
+        <TextBox Text="{Binding MonteCarloRuns, Mode=TwoWay}" Width="150" />
+       </StackPanel>
+      </WrapPanel>
+      <CheckBox Content="Common Random Numbers (same effective seed sequence for every scenario)" IsChecked="{Binding CommonRandomNumbers, Mode=TwoWay}" ToolTip.Tip="Uses equivalent random seeds across scenarios to make comparisons less affected by random variation." />
+      <TextBlock Text="Common seeds share generated effort where configurations permit; changed scheduling can change defect draw assignment. Otherwise each scenario uses its configured seed. Results include the full horizon, without sensitivity warm-up." TextWrapping="Wrap" />
+      <WrapPanel>
+       <Button Content="Run Selected Scenario" Command="{Binding RunSelectedCommand}" />
+       <Button Content="Run All Scenarios" Command="{Binding RunAllCommand}" />
+       <Button Content="Run Monte Carlo Comparison" Command="{Binding MonteCarloCommand}" />
+      </WrapPanel>
+     </StackPanel>
+     <Button Content="Cancel Comparison" Command="{Binding CancelCommand}" IsVisible="{Binding IsBusy}" HorizontalAlignment="Left" />
+     <TextBlock Text="{Binding Status}" TextWrapping="Wrap" />
+     <TextBlock Text="Full metric matrix · P50 is the median. P75, P85 and P95 indicate 75%, 85% and 95% of runs at or below that value. Differences are alternative minus baseline. Utilization differences use percentage points." TextWrapping="Wrap" />
+     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+      <StackPanel>
+       <ItemsControl ItemsSource="{Binding Headers}" ItemTemplate="{StaticResource HeaderCell}" Margin="260,0,0,5">
+        <ItemsControl.ItemsPanel>
+         <ItemsPanelTemplate>
+          <StackPanel Orientation="Horizontal" />
+         </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+       </ItemsControl>
+       <ItemsControl ItemsSource="{Binding Rows}" ItemTemplate="{StaticResource MatrixRow}" />
+      </StackPanel>
+     </ScrollViewer>
+     <Expander Header="Show All Parameters · differences are bold and underlined" IsExpanded="False">
+      <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+       <StackPanel>
+        <ItemsControl ItemsSource="{Binding ParameterHeaders}" ItemTemplate="{StaticResource HeaderCell}" Margin="260,0,0,5">
+         <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+           <StackPanel Orientation="Horizontal" />
+          </ItemsPanelTemplate>
+         </ItemsControl.ItemsPanel>
+        </ItemsControl>
+        <ItemsControl ItemsSource="{Binding ParameterRows}" ItemTemplate="{StaticResource MatrixRow}" />
+       </StackPanel>
+      </ScrollViewer>
+     </Expander>
+     <TextBlock Text="Several changed parameters describe an alternative system; they do not isolate the cause of every result difference." TextWrapping="Wrap" />
+     <ComboBox ItemsSource="{Binding Metrics}" SelectedItem="{Binding Metric, Mode=TwoWay}" Width="340" HorizontalAlignment="Left">
+      <ComboBox.ItemTemplate>
+       <DataTemplate x:CompileBindings="False">
+        <TextBlock Text="{Binding Converter={StaticResource HumanLabel}}" />
+       </DataTemplate>
+      </ComboBox.ItemTemplate>
+     </ComboBox>
+     <TextBlock Text="{Binding ChartLabel}" TextWrapping="Wrap" />
+     <charts:ComparisonBarChart Values="{Binding ChartValues}" Height="300" />
+     <TextBlock Text="Flow comparison: first three included scenarios, single-run observations only. Monte Carlo has no synthesized average flow. Uncheck scenarios to focus this view." TextWrapping="Wrap" />
+     <ComboBox ItemsSource="{Binding FlowMetrics}" SelectedItem="{Binding FlowMetric, Mode=TwoWay}" Width="300" HorizontalAlignment="Left">
+      <ComboBox.ItemTemplate>
+       <DataTemplate x:CompileBindings="False">
+        <TextBlock Text="{Binding Converter={StaticResource HumanLabel}}" />
+       </DataTemplate>
+      </ComboBox.ItemTemplate>
+     </ComboBox>
+     <charts:ComparisonFlowChart Series="{Binding FlowSeries}" Height="300" />
+     <Expander Header="Paired Monte Carlo delta distributions" IsExpanded="False">
+      <StackPanel Spacing="8">
+       <TextBlock Text="Signed difference per matched run: scenario minus reference. P95 is the upper signed tail, not the largest improvement. Ratio deltas below use 0–1, not percentage points. A sample is excluded when either run lacks a completion for that time metric. Independent-seed mode has no paired deltas." TextWrapping="Wrap" />
+       <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+        <StackPanel>
+         <ItemsControl ItemsSource="{Binding Headers}" ItemTemplate="{StaticResource HeaderCell}" Margin="260,0,0,5">
+          <ItemsControl.ItemsPanel>
+           <ItemsPanelTemplate>
+            <StackPanel Orientation="Horizontal" />
+           </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+         </ItemsControl>
+         <ItemsControl ItemsSource="{Binding PairedRows}" ItemTemplate="{StaticResource MatrixRow}" />
+        </StackPanel>
+       </ScrollViewer>
+      </StackPanel>
+     </Expander>
+     <Expander Header="Selected scenario: stored result traceability" IsExpanded="False">
+      <TextBlock Text="{Binding Traceability}" TextWrapping="Wrap" />
+     </Expander>
+    </StackPanel>
+   </Expander>
+   <TextBlock Text="{Binding Status}" TextWrapping="Wrap" />
+  </StackPanel>
+ </ScrollViewer>
+</UserControl>

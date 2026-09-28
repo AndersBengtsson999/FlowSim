@@ -1,0 +1,175 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:charts="using:Simulation.UI.Controls" xmlns:views="using:Simulation.UI.Views" xmlns:core="clr-namespace:Simulation.Core;assembly=Simulation.Core" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Simulation.UI.Views.MoreSettingsView" x:DataType="vm:MainWindowViewModel">
+ <StackPanel Spacing="16" Margin="0,16,0,16">
+  <Grid ColumnDefinitions="*,18,*" RowDefinitions="Auto,18,Auto" IsEnabled="{Binding CanEdit}">
+   <Border Grid.Column="0" Grid.Row="0" Classes="card">
+    <StackPanel Spacing="10">
+     <TextBlock Text="Simulation" Classes="section" />
+     <Grid ColumnDefinitions="*,110">
+      <StackPanel Margin="0,0,14,0">
+       <TextBlock Text="Simulation Days" />
+      </StackPanel>
+      <TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding DurationDays, Mode=TwoWay}" ToolTip.Tip="Number of simulated working days. Every day provides nominal capacity; calendar dates and weekends are not modelled." AutomationProperties.Name="Simulation Days" />
+     </Grid>
+    </StackPanel>
+   </Border>
+   <Border Grid.Column="2" Grid.Row="0" Classes="card">
+    <StackPanel Spacing="10">
+     <TextBlock Text="Team" Classes="section" />
+    </StackPanel>
+   </Border>
+   <Border Grid.Column="0" Grid.Row="2" Classes="card">
+    <StackPanel Spacing="10">
+     <TextBlock Text="Flow · WIP limits" Classes="section" />
+     <Grid ColumnDefinitions="*,110">
+      <StackPanel Margin="0,0,14,0">
+       <TextBlock Text="Code Review WIP" />
+      </StackPanel>
+      <TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding CodeReviewWipLimit, Mode=TwoWay}" ToolTip.Tip="Maximum number of Work Items actively in Code Review at once. Waiting for Code Review does not consume these slots." AutomationProperties.Name="Code Review WIP" />
+     </Grid>
+    </StackPanel>
+   </Border>
+   <Border Grid.Column="2" Grid.Row="2" Classes="card">
+    <StackPanel Spacing="10">
+     <TextBlock Text="Work · effort" Classes="section" />
+     <TextBlock Text="Choose Fixed or Triangular for each stage. Effort is abstract work, not elapsed days." Classes="note" />
+     <ItemsControl ItemsSource="{Binding EffortEditors}">
+      <ItemsControl.ItemTemplate>
+       <DataTemplate x:DataType="vm:EffortEditorViewModel">
+        <StackPanel Spacing="6" Margin="0,0,0,14">
+         <Grid ColumnDefinitions="*,160">
+          <TextBlock Text="{Binding Stage}" FontWeight="SemiBold" VerticalAlignment="Center" />
+          <ComboBox Grid.Column="1" ItemsSource="{Binding Kinds}" SelectedItem="{Binding Kind, Mode=TwoWay}" HorizontalAlignment="Stretch" ToolTip.Tip="Fixed preserves one effort value. Triangular samples values between Minimum and Maximum, with Most Likely as the mode." AutomationProperties.Name="{Binding Stage}" />
+         </Grid>
+         <Grid ColumnDefinitions="*,110" IsVisible="{Binding IsFixed}">
+          <TextBlock Text="Effort" VerticalAlignment="Center" />
+          <TextBox Grid.Column="1" Text="{Binding FixedValue, Mode=TwoWay}" ToolTip.Tip="Capacity units needed for this stage of each Work Item; nonnegative. Not elapsed time." AutomationProperties.Name="Fixed Effort" />
+         </Grid>
+         <Grid ColumnDefinitions="*,8,*,8,*" IsVisible="{Binding IsTriangular}">
+          <StackPanel>
+           <TextBlock Text="Minimum" />
+           <TextBox Text="{Binding Minimum, Mode=TwoWay}" ToolTip.Tip="Smallest effort, strictly greater than zero." AutomationProperties.Name="Minimum" />
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+           <TextBlock Text="Most Likely" />
+           <TextBox Text="{Binding MostLikely, Mode=TwoWay}" ToolTip.Tip="Mode of the triangular distribution; between Minimum and Maximum. Not necessarily the mean." AutomationProperties.Name="Most Likely" />
+          </StackPanel>
+          <StackPanel Grid.Column="4">
+           <TextBlock Text="Maximum" />
+           <TextBox Text="{Binding Maximum, Mode=TwoWay}" ToolTip.Tip="Largest effort; at least Most Likely." AutomationProperties.Name="Maximum" />
+          </StackPanel>
+         </Grid>
+        </StackPanel>
+       </DataTemplate>
+      </ItemsControl.ItemTemplate>
+     </ItemsControl>
+    </StackPanel>
+   </Border>
+  </Grid>
+  <Expander Header="Quality · defects and rework" HorizontalAlignment="Stretch">
+   <StackPanel Spacing="10">
+    <Border Classes="card" IsEnabled="{Binding CanEdit}">
+     <StackPanel Spacing="12">
+      <TextBlock Text="Quality &amp; Rework" Classes="section" />
+      <CheckBox Content="Defects Enabled" IsChecked="{Binding DefectsEnabled, Mode=TwoWay}" ToolTip.Tip="Enable seeded discovery of defects after completed Code Review and Testing attempts. Disabled preserves the original forward-only flow." />
+      <TextBlock Text="Defects belong to their Work Item. Review → Rework → Development share one developer pool, in that priority order. Probabilities apply to each completed inspection attempt." Classes="note" />
+      <Grid ColumnDefinitions="*,24,*" IsVisible="{Binding DefectsEnabled}">
+       <StackPanel Spacing="12">
+        <Grid ColumnDefinitions="*,110">
+         <StackPanel Margin="0,0,14,0">
+          <TextBlock Text="Code Review Defect Probability (%)" TextWrapping="Wrap" />
+         </StackPanel>
+         <TextBox Grid.Column="1" Text="{Binding CodeReviewDefectProbability, Mode=TwoWay}" ToolTip.Tip="Probability that a completed Code Review attempt discovers a defect requiring Rework. Enter 0–100 percent." AutomationProperties.Name="Code Review Defect Probability (%)" />
+        </Grid>
+        <Grid ColumnDefinitions="*,110">
+         <StackPanel Margin="0,0,14,0">
+          <TextBlock Text="Testing Defect Probability (%)" TextWrapping="Wrap" />
+         </StackPanel>
+         <TextBox Grid.Column="1" Text="{Binding TestingDefectProbability, Mode=TwoWay}" ToolTip.Tip="Probability that a completed Testing attempt discovers a defect requiring Rework. Enter 0–100 percent. Corrected work must pass Code Review again." AutomationProperties.Name="Testing Defect Probability (%)" />
+        </Grid>
+        <Grid ColumnDefinitions="*,110">
+         <StackPanel Margin="0,0,14,0">
+          <TextBlock Text="Rework WIP Limit" TextWrapping="Wrap" />
+         </StackPanel>
+         <TextBox Grid.Column="1" Text="{Binding ReworkWipLimit, Mode=TwoWay}" ToolTip.Tip="Maximum active Rework items. Waiting for Rework does not count against this limit." AutomationProperties.Name="Rework WIP Limit" />
+        </Grid>
+        <TextBlock Text="A defect adds Rework effort. Rework completion always returns to Waiting for Code Review, including defects discovered in Testing. Repeated defects are possible; the simulation ends at its configured horizon." Classes="note" />
+       </StackPanel>
+       <StackPanel Grid.Column="2" Spacing="8">
+        <TextBlock Text="Additional developer capacity required to correct a discovered defect. Sampled separately by discovery source." Classes="note" />
+        <ItemsControl ItemsSource="{Binding ReworkEffortEditors}">
+         <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="vm:EffortEditorViewModel">
+           <StackPanel Spacing="6" Margin="0,0,0,14">
+            <Grid ColumnDefinitions="*,160">
+             <TextBlock Text="{Binding Stage}" FontWeight="SemiBold" VerticalAlignment="Center" />
+             <ComboBox Grid.Column="1" ItemsSource="{Binding Kinds}" SelectedItem="{Binding Kind, Mode=TwoWay}" HorizontalAlignment="Stretch" ToolTip.Tip="Fixed preserves one effort value. Triangular samples values between Minimum and Maximum, with Most Likely as the mode." AutomationProperties.Name="{Binding Stage}" />
+            </Grid>
+            <Grid ColumnDefinitions="*,110" IsVisible="{Binding IsFixed}">
+             <TextBlock Text="Effort" VerticalAlignment="Center" />
+             <TextBox Grid.Column="1" Text="{Binding FixedValue, Mode=TwoWay}" ToolTip.Tip="Capacity units needed for this stage of each Work Item; nonnegative. Not elapsed time." AutomationProperties.Name="Fixed Effort" />
+            </Grid>
+            <Grid ColumnDefinitions="*,8,*,8,*" IsVisible="{Binding IsTriangular}">
+             <StackPanel>
+              <TextBlock Text="Minimum" />
+              <TextBox Text="{Binding Minimum, Mode=TwoWay}" ToolTip.Tip="Smallest effort, strictly greater than zero." AutomationProperties.Name="Minimum" />
+             </StackPanel>
+             <StackPanel Grid.Column="2">
+              <TextBlock Text="Most Likely" />
+              <TextBox Text="{Binding MostLikely, Mode=TwoWay}" ToolTip.Tip="Mode of the triangular distribution; between Minimum and Maximum. Not necessarily the mean." AutomationProperties.Name="Most Likely" />
+             </StackPanel>
+             <StackPanel Grid.Column="4">
+              <TextBlock Text="Maximum" />
+              <TextBox Text="{Binding Maximum, Mode=TwoWay}" ToolTip.Tip="Largest effort; at least Most Likely." AutomationProperties.Name="Maximum" />
+             </StackPanel>
+            </Grid>
+           </StackPanel>
+          </DataTemplate>
+         </ItemsControl.ItemTemplate>
+        </ItemsControl>
+       </StackPanel>
+      </Grid>
+     </StackPanel>
+    </Border>
+   </StackPanel>
+  </Expander>
+  <Expander Header="How capacity and effort work" HorizontalAlignment="Stretch">
+   <StackPanel Spacing="10">
+    <Border Classes="card">
+     <StackPanel Spacing="6">
+      <TextBlock Text="Effort is work, not elapsed time" Classes="section" />
+      <TextBlock Text="One Work Item receives at most 1 capacity unit per day, in one stage. Queues and unavailable capacity can extend elapsed time. Development, Code Review and Rework share developer capacity; Testing has a separate pool." Classes="note" />
+      <TextBlock Text="This form generates independent items. Variable effort is sampled once per item and stage; daily team capacity remains fixed. Dependencies are supported by Core but are not editable here." Classes="note" />
+     </StackPanel>
+    </Border>
+   </StackPanel>
+  </Expander>
+  <Expander Header="Advanced · capacity, seeds and examples" HorizontalAlignment="Stretch">
+   <StackPanel Spacing="10">
+    <Grid ColumnDefinitions="*,110">
+     <StackPanel Margin="0,0,14,0">
+      <TextBlock Text="Random Seed" />
+     </StackPanel>
+     <TextBox Grid.Column="1" Text="{Binding RandomSeed, Mode=TwoWay}" ToolTip.Tip="Integer seed for reproducible effort generation. The first Monte Carlo run uses this seed." AutomationProperties.Name="Random Seed" />
+    </Grid>
+    <Grid ColumnDefinitions="*,110">
+     <StackPanel Margin="0,0,14,0">
+      <TextBlock Text="Number of Runs" />
+     </StackPanel>
+     <TextBox Grid.Column="1" Text="{Binding NumberOfRuns, Mode=TwoWay}" ToolTip.Tip="Monte Carlo repetitions, from 1 to 10,000. Single-run mode ignores this setting." AutomationProperties.Name="Number of Runs" />
+    </Grid>
+    <Grid ColumnDefinitions="*,110">
+     <StackPanel Margin="0,0,14,0">
+      <TextBlock Text="Developer Capacity / Day" />
+     </StackPanel>
+     <TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding DeveloperCapacity, Mode=TwoWay}" ToolTip.Tip="Abstract work capacity per developer and simulated day. 1.0 is one normal unit of daily capacity, not hours." AutomationProperties.Name="Developer Capacity / Day" />
+    </Grid>
+    <Grid ColumnDefinitions="*,110">
+     <StackPanel Margin="0,0,14,0">
+      <TextBlock Text="Tester Capacity / Day" />
+     </StackPanel>
+     <TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding TesterCapacity, Mode=TwoWay}" ToolTip.Tip="Abstract work capacity per tester and simulated day. 1.0 is one normal unit of daily capacity, not hours." AutomationProperties.Name="Tester Capacity / Day" />
+    </Grid>
+   </StackPanel>
+  </Expander>
+ </StackPanel>
+</UserControl>

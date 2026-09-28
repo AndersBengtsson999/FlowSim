@@ -6,12 +6,14 @@ using Simulation.Core;
 
 namespace Simulation.UI.ViewModels;
 
-public sealed class MainWindowViewModel : INotifyPropertyChanged
+public sealed partial class MainWindowViewModel : INotifyPropertyChanged
 {
     private readonly SimulationRunner runner = new();
     private SimulationResult? result;
     private MonteCarloResult? monteCarlo;
     private bool defectsEnabled;
+    private DefectSettings loadedQuality = new();
+    private string configuredName = BaselineScenario.CreateRequest().Name;
     private WorkItemResult? selectedWorkItem;
     private int selectedDay = 1;
     private int selectedView;
@@ -99,9 +101,9 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public IReadOnlyList<HistoryRow> SelectedHistory => selectedWorkItem?.Events.Select(e => new HistoryRow(e.Day,
         e.EventType switch
         {
-            WorkItemEventType.Transition => $"{e.FromState} → {e.ToState}",
-            WorkItemEventType.CapacityApplied => $"{e.FromState}: {e.EffortApplied:0.###} capacity applied",
-            WorkItemEventType.DefectFound => $"Defect found in {e.DefectSource}; {e.RequiredReworkEffort:0.###} Rework units assigned",
+            WorkItemEventType.Transition => $"{PresentationLabels.Label(e.FromState)} → {PresentationLabels.Label(e.ToState)}",
+            WorkItemEventType.CapacityApplied => $"{PresentationLabels.Label(e.FromState)}: {e.EffortApplied:0.###} capacity applied",
+            WorkItemEventType.DefectFound => $"Defect found in {PresentationLabels.Label(e.DefectSource)}; {e.RequiredReworkEffort:0.###} Rework units assigned",
             _ => e.EventType.ToString()
         })).ToArray() ?? [];
     public SimulationResult? Result => result;
@@ -115,7 +117,8 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public IReadOnlyList<DailySnapshot> Days => result?.Days ?? [];
     public IReadOnlyList<WorkItemResult> WorkItems => result?.WorkItems ?? [];
     public int LastDay => Math.Max(1, Days.Count);
-    public int SelectedView { get => selectedView; set { selectedView = value; OnPropertyChanged(); } }
+    public int SelectedView { get => selectedView; set { selectedView = value; OnPropertyChanged(); OnPropertyChanged(nameof(ShowSimulationActions)); OnPropertyChanged(nameof(MainArea)); OnPropertyChanged(nameof(SimulatePage)); OnPropertyChanged(nameof(AnalyzePage)); } }
+    public bool ShowSimulationActions => selectedView < 4;
     // The UI is one-based; Core snapshots retain their original zero-based Day.
     public int SelectedDay
     {
@@ -125,7 +128,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
             selectedDay = Math.Clamp(value, 1, LastDay);
             OnPropertyChanged(); OnPropertyChanged(nameof(SelectedSnapshot));
             OnPropertyChanged(nameof(DayLabel)); OnPropertyChanged(nameof(FlowStates));
-            OnPropertyChanged(nameof(CapacityDetail));
+            OnPropertyChanged(nameof(CapacityDetail)); OnPropertyChanged(nameof(SelectedFlowDetail));
             OnPropertyChanged(nameof(WaitingForReworkCount)); OnPropertyChanged(nameof(ReworkCount));
         }
     }
@@ -166,16 +169,22 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     public AsyncCommand MonteCarloCommand { get; }
 
     public SensitivityViewModel Sensitivity { get; }
+    public CompareViewModel Compare { get; }
 
     public MainWindowViewModel()
     {
         Sensitivity = new SensitivityViewModel(ReadRequest);
-        RunCommand = new AsyncCommand(RunAsync, () => !isBusy);
+        Compare = new CompareViewModel(ReadRequest, LoadConfiguration, index => SelectedView = index);
+        RunCommand = new AsyncCommand(RunOrApplyAsync, () => !isBusy && !Compare.IsBusy);
+        RunBaselineCommand = new(async () => { LoadConfiguration(BaselineScenario.CreateRequest()); await RunAsync(); }, () => !isBusy && !Compare.IsEditing);
+        ViewFlowCommand = new(() => SelectedView = 1, () => HasResults);
+        DuplicateCompareCommand = new(DuplicateAndCompare, () => HasResults && !isBusy && !Compare.IsBusy && !Compare.IsEditing);
         CancelCommand = new RelayCommand(Cancel, () => isBusy);
         ResetCommand = new RelayCommand(ResetToBaseline, () => !isBusy);
         VariableEffortCommand = new RelayCommand(UseVariableEffortExample, () => !isBusy);
         MonteCarloCommand = new AsyncCommand(RunMonteCarloAsync, () => !isBusy);
         DefectsExampleCommand = new RelayCommand(UseDefectsExample, () => !isBusy);
+        Compare.PropertyChanged += (_, _) => { RunCommand.Refresh(); DuplicateCompareCommand.Refresh(); RunBaselineCommand.Refresh(); };
         ResetToBaseline();
     }
 
@@ -186,6 +195,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         DevelopmentDistribution.Load(variable.DevelopmentDistribution!);
         CodeReviewDistribution.Load(variable.CodeReviewDistribution!);
         TestingDistribution.Load(variable.TestingDistribution!);
+        configuredName = BaselineScenario.CreateRequest().Name;
         var baseline = BaselineScenario.Create();
         var effort = baseline.WorkItems[0];
         NumberOfDevelopers = baseline.Team.DeveloperCount.ToString(CultureInfo.InvariantCulture);
@@ -228,8 +238,26 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         NotifyAll();
     }
 
+    public void LoadConfiguration(SimulationRequest request)
+    {
+        if (isBusy) throw new InvalidOperationException("Wait for the running simulation before editing a comparison scenario.");
+        configuredName = request.Name;
+        string N(double n) => n.ToString(CultureInfo.InvariantCulture);
+        NumberOfDevelopers = N(request.DeveloperCount); NumberOfTesters = N(request.TesterCount);
+        DeveloperCapacity = N(request.DeveloperCapacityPerDay); TesterCapacity = N(request.TesterCapacityPerDay);
+        DevelopmentWipLimit = N(request.DevelopmentWipLimit); CodeReviewWipLimit = N(request.CodeReviewWipLimit); TestingWipLimit = N(request.TestingWipLimit);
+        NumberOfWorkItems = N(request.NumberOfWorkItems); DurationDays = N(request.SimulationDays);
+        DevelopmentDistribution.Load(request.DevelopmentDistribution ?? new FixedEffort(request.DevelopmentEffort));
+        CodeReviewDistribution.Load(request.CodeReviewDistribution ?? new FixedEffort(request.CodeReviewEffort));
+        TestingDistribution.Load(request.TestingDistribution ?? new FixedEffort(request.TestingEffort));
+        RandomSeed = N(request.RandomSeed); LoadQuality(request.Quality);
+        statusMessage = "Scenario loaded into the existing editor. Apply the draft to update the comparison scenario.";
+        NotifyAll();
+    }
+
     private void LoadQuality(DefectSettings settings)
     {
+        loadedQuality = settings;
         defectsEnabled = settings.Enabled;
         CodeReviewDefectProbability = (settings.CodeReviewDefectProbability * 100).ToString(CultureInfo.InvariantCulture);
         TestingDefectProbability = (settings.TestingDefectProbability * 100).ToString(CultureInfo.InvariantCulture);
@@ -290,7 +318,9 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         try
         {
             var request = ReadRequest();
+            var executedAt = DateTimeOffset.UtcNow;
             result = await Task.Run(() => runner.Run(request, source.Token), source.Token);
+            lastRunRequest = request; lastRunTime = executedAt;
             selectedWorkItem = result.WorkItems.FirstOrDefault();
             selectedDay = 1;
             selectedView = 2;
@@ -312,6 +342,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         new(label, Format(value, format, suffix), explanation);
     private SimulationRequest ReadRequest() => new()
     {
+        Name = configuredName,
         DeveloperCount = Integer(NumberOfDevelopers, "Developers"),
         TesterCount = Integer(NumberOfTesters, "Testers"),
         DeveloperCapacityPerDay = Number(DeveloperCapacity, "Developer capacity"),
@@ -328,7 +359,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
         CodeReviewDistribution = CodeReviewDistribution.Read(),
         TestingDistribution = TestingDistribution.Read(),
         RandomSeed = Integer(RandomSeed, "Random Seed"),
-        Quality = !DefectsEnabled ? new DefectSettings() : new DefectSettings
+        Quality = !DefectsEnabled ? loadedQuality with { Enabled = false } : new DefectSettings
         {
             Enabled = true,
             CodeReviewDefectProbability = Number(CodeReviewDefectProbability, "Code Review Defect Probability (%)") / 100,
@@ -350,6 +381,7 @@ public sealed class MainWindowViewModel : INotifyPropertyChanged
     private void NotifyAll()
     {
         OnPropertyChanged(string.Empty);
+        RunBaselineCommand.Refresh(); ViewFlowCommand.Refresh(); DuplicateCompareCommand.Refresh();
         RunCommand.Refresh(); CancelCommand.Refresh(); ResetCommand.Refresh(); VariableEffortCommand.Refresh(); MonteCarloCommand.Refresh(); DefectsExampleCommand.Refresh();
     }
     private void OnPropertyChanged([CallerMemberName] string? name = null) =>

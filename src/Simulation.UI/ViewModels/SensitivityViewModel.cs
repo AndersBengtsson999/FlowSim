@@ -40,10 +40,12 @@ public sealed class SensitivityViewModel : INotifyPropertyChanged
     public bool IsBusy => busy;
     public string Status => status;
     public string ValidationReport => validationReport;
+    public string DisplayValidationReport => PresentationLabels.Report(ValidationReport);
+    public string DisplayDiagnostics => PresentationLabels.Report(Diagnostics);
     public SensitivityAnalysisResult? Result => result;
     public IReadOnlyList<AnalysisPoint> Points => result?.Points ?? [];
     public string ChartLabel => result is null ? "Run an analysis to display measurements." :
-        $"{result.Parameter} → {Metric} · {(result.Mode == SensitivityMode.MonteCarlo ? "P50 across runs" : "single run")} · measurement [{result.WarmUpDays}, {result.BaseScenario.SimulationDays}) · base value {result.BasePoint.ParameterValue}";
+        $"{PresentationLabels.Label(result.Parameter)} → {PresentationLabels.Label(Metric)} · {(result.Mode == SensitivityMode.MonteCarlo ? "P50 across runs" : "single run")} · measurement [{result.WarmUpDays}, {result.BaseScenario.SimulationDays}) · base value {result.BasePoint.ParameterValue}";
     public string ResultConfiguration => result is null ? "" : AnalysisReport.Configuration(result.BaseScenario);
     public string Diagnostics => result is null ? "" : string.Join("\n\n", new[] { result.BasePoint }.Concat(result.Points).Select(p =>
         $"{result.Parameter} = {p.ParameterValue} (base={result.BasePoint.ParameterValue})\n" + string.Join("\n", p.MeasurementWindow.Select(k =>
@@ -89,20 +91,26 @@ public sealed class SensitivityViewModel : INotifyPropertyChanged
     public Task RunAsync() => Execute(async token =>
     {
         var request = ReadRequest();
-        var measured = await Task.Run(() => new SensitivityAnalysisRunner().Run(request, Progress(), token), token);
+        var progress = Progress(); // Capture the UI context before entering the worker thread.
+        var measured = await Task.Run(() => new SensitivityAnalysisRunner().Run(request, progress, token), token);
         result = measured;
         if (!Metrics.Contains(metric)) metric = AnalysisMetric.ThroughputPerFiveDays;
-        foreach (var p in new[] { nameof(Result), nameof(Points), nameof(Rows), nameof(Metrics), nameof(Metric), nameof(ChartLabel), nameof(Diagnostics), nameof(ResultConfiguration) }) Changed(p);
+        foreach (var p in new[] { nameof(Result), nameof(Points), nameof(Rows), nameof(Metrics), nameof(Metric), nameof(ChartLabel), nameof(Diagnostics), nameof(DisplayDiagnostics), nameof(ResultConfiguration) }) Changed(p);
         status = $"Completed {measured.Points.Count} points; {measured.RunsPerPoint} run(s) per point plus base. Results describe the captured configuration.";
     });
     public Task ValidateAsync() => Execute(async token =>
     {
         int seed = Integer(Seed), warmup = Integer(WarmUpDays);
-        var report = await Task.Run(() => new ModelValidationRunner().Run(seed, warmup, Progress(), token), token);
-        validationReport = AnalysisReport.Validation(report); Changed(nameof(ValidationReport));
+        var progress = Progress();
+        var report = await Task.Run(() => new ModelValidationRunner().Run(seed, warmup, progress, token), token);
+        validationReport = AnalysisReport.Validation(report); Changed(nameof(ValidationReport)); Changed(nameof(DisplayValidationReport));
         status = "All three extreme validation experiments completed. Read the report below.";
     });
-    private IProgress<AnalysisProgress> Progress() => new Progress<AnalysisProgress>(p => { status = $"Running {p.CompletedRuns} / {p.TotalRuns}"; Changed(nameof(Status)); });
+    private IProgress<AnalysisProgress> Progress()
+    {
+        var source = cancellation;
+        return new Progress<AnalysisProgress>(p => { if (!ReferenceEquals(cancellation, source)) return; status = $"Running {p.CompletedRuns} / {p.TotalRuns}"; Changed(nameof(Status)); });
+    }
     private async Task Execute(Func<CancellationToken, Task> work)
     {
         if (busy) return;

@@ -1,4 +1,4 @@
-# Simulation Model v0.1 — Steps 2–8
+# Simulation Model v0.1 — Steps 2–9
 
 ## Purpose and scope
 
@@ -17,7 +17,7 @@ Configuration properties on WorkItem are read-only. Remaining efforts equal init
 
 Each engine run creates fresh execution copies. Inputs remain unchanged and can be reused. Completed or partially executed items are rejected as new scenario inputs. IDs are case-sensitive and must be unique. The order of the input collection is meaningful for simultaneous FIFO arrivals.
 
-Simulation.Core uses only .NET libraries. Simulation.Application generates requests, exposes the baseline, orchestrates runs and projects reports. The existing UI configures requests and displays reports. Infrastructure remains reserved for future persistence.
+Simulation.Core uses only .NET libraries. Simulation.Application generates requests, exposes the baseline, orchestrates runs and projects reports. The existing UI configures requests and displays reports. Infrastructure implements versioned scenario/experiment JSON and comparison CSV persistence from Step 9.
 
 ## Resources and capacity
 
@@ -196,7 +196,7 @@ Application reports count only items created before the relevant snapshot/horizo
 
 No delivery target or bottleneck classification is attached to the baseline. Its results are computed by the same engine as any other scenario.
 
-The Avalonia form supports fixed or triangular effort independently per stage, stage WIP, seeded single runs and Monte Carlo. The UI has Scenario, Flow, Results and Monte Carlo areas. The older Application-level comparison helpers remain tested, but comparison is not exposed in the UI. Core supports explicit mixed-effort items and dependencies; the form generates independent items with fixed or sampled effort. The application-level UI request retains its safety bounds of 2,000 items, 3,650 days and 1,000,000 item-days.
+The Avalonia form supports fixed or triangular effort independently per stage, stage WIP, seeded single runs and Monte Carlo. The UI has Scenario, Flow, Results and Monte Carlo areas. The older Application-level comparison helpers remain tested, and Step 9 adds a separate Compare area. Core supports explicit mixed-effort items and dependencies; the form generates independent items with fixed or sampled effort. The application-level UI request retains its safety bounds of 2,000 items, 3,650 days and 1,000,000 item-days.
 
 ## Determinism and exclusions
 
@@ -429,3 +429,87 @@ Reports show complete A/B configurations, all window metrics/diagnostics, absolu
 See [VALIDATION_RESULTS.md](VALIDATION_RESULTS.md) for actual sweeps, extreme results, diagnostic evidence and the model-readiness recommendation. Observed plateaus are described over tested ranges only; no interpolation implies an optimal value.
 
 Two interpretation limitations are particularly visible: bulk day-0 arrivals make mean completion-cohort lead time gravitate toward the measurement window's middle, and synchronized Fixed-effort completions can shift just across warm-up/horizon boundaries. In addition, an item admitted to an active stage can stall without accumulating queue WaitingTime. These existing assumptions are reported rather than altered. No technical debt or other new simulation mechanism is introduced in Step 8.
+
+## Scenario Comparison
+
+Step 9 adds structured comparison around the existing engine. `SimulationRequest` remains the single generated-workload configuration model. `ScenarioDefinition` wraps that immutable configuration with a Guid identity; its name is the configuration name. No per-scenario configuration copy is stored in a second editor ViewModel. Compare uses the existing Scenario form through load/apply callbacks. Core's execution rules, timing, distributions and capacity allocation are unchanged.
+
+`ExperimentSession` maintains an in-memory collection and latest immutable execution result per identity. Add creates a baseline-configured scenario. Duplicate creates a new identity and appends “Copy” to the name, sharing only immutable values. Rename preserves identity. Reset restores the original baseline configuration while retaining identity/name. Delete removes the scenario and its result; deleting the reference selects the first remaining scenario. The last scenario cannot be deleted. Collections support 1–20 scenarios, with horizontal scrolling in comparison matrices. Scenarios can be excluded using checkboxes, but the designated reference is always included.
+
+An editor draft is explicitly marked; its previous result is Out of Date and cannot enter a comparison. Apply replaces the scenario configuration after validation. Discard keeps the previous saved configuration/result. Any changed configuration field, including a rename, or comparison option marks the result outdated; this is deliberately conservative. Returning exactly to the stored record/options makes it current again. Merely choosing another comparison reference recomputes deltas without rerunning because executions do not depend on which result is the reference.
+
+`ScenarioComparisonRunner.Run` calls SimulationRunner for single runs and the existing MonteCarloRunner for Monte Carlo. RunAll validates the complete experiment and runs every configured scenario, including those not selected for display. Progress is scenario number/name and run count. A selected scenario can be run independently. Runs execute off the UI thread; cancellation keeps previous results and publishes no partial batch. Single-run comparisons retain original daily histories and are limited to 5,000,000 total item-days. Monte Carlo retains compact existing per-run results, with the existing 100,000,000 item-day limit per scenario and 500,000,000 per comparison. Other existing per-run limits still apply.
+
+All comparison metrics use the **full configured horizon**, without sensitivity warm-up. Single-run measurements reuse AnalysisMetrics at warm-up 0 and include completed items, throughput, lead/cycle/active/waiting/blocked time, WIP, utilization, maximum review/testing/rework queues and defect/rework metrics. AverageBlockedTime is additionally exposed by the shared analysis projection from its existing per-item measurements. No existing Core metric changes. Incomplete time means are absent when there are no completions; quality metrics are absent for defect-disabled scenarios. When only one side has an applicable metric, its value can be displayed but the delta is undefined. For comparison against zero defects, enable defects with zero probabilities in the reference, as in the quality demonstration.
+
+For any applicable metric, absolute delta = scenario value − reference value. Relative percentage delta = absolute delta / abs(reference) × 100; absent when the reference is zero or either side is absent. Developer/tester utilization and rework share use percentage-point delta = ratio difference × 100 in the UI/CSV. No color, rank or direction marker indicates preference.
+
+The comparison table has metrics as rows and included scenarios as columns. Parameter differences use bold/underline against the reference, solely to identify changed configuration values. Scalar bars use the chosen single-run value or Monte Carlo P50. Flow displays **observed end-of-day points**, with no interpolation or synthesized data, for the first three included scenarios in collection order. Available series are TotalWip, WaitingForCodeReview, WaitingForTesting and WaitingForRework. Different horizons share their actual day coordinates; absent days are not filled. Monte Carlo results have no aggregate time-series chart.
+
+## Experiments
+
+`Experiment` is an organizational container with identity, name, description, immutable scenario list, reference scenario ID, run mode, common-seed flag, base seed, Monte Carlo run count and explicit model version. It introduces no simulation rules. ExperimentSession and ScenarioComparisonRunner implement editing and execution; the earlier ExperimentRunner reporting API remains intact for existing consumers.
+
+Demonstration Experiments use 250 days and 500 independent items, with other Steady Flow settings (5 developers, 2 testers, capacities 1, WIP 10/5/10 and Fixed effort 5/1/2):
+
+- Developer Capacity: 1, 3, 5, 8, 10 developers; reference 5.
+- Testing Capacity: 1, 2, 3, 5, 8 testers; reference 2.
+- Development WIP: 2, 3, 5, 8, 12; reference 5.
+- Quality / Rework: both discovery probabilities 0%, 10%, 20%, 40%; reference 0%. Defects are enabled in all four, Rework WIP 3, triangular review-origin effort 1/3/6 and testing-origin 2/5/10. This example deliberately changes **two** probabilities at once.
+
+These are illustrative experiments, not calibrated recommendations. The 500-item choice keeps these demonstrations within the existing Monte Carlo workload bounds at 500 runs while supplying substantial backlog. Backlog depletion still depends on the chosen configuration and should be inspected.
+
+Changing one parameter at a time helps identify sensitivity. Changing several represents an alternative system design but weakens causal attribution. Comparison shows simulated consequences; it does not determine which organizational choice is preferable.
+
+## Common Random Numbers
+
+Common Random Numbers defaults to enabled. A separately configured comparison BaseSeed (default 12345) overrides each scenario's configured RandomSeed for execution only. Both the original configured seed and the effective execution configuration are retained. Disabled common seeds use each scenario's configured seed, and no paired inference is presented.
+
+For Monte Carlo run index i (zero-based), every scenario uses `unchecked(effectiveBaseSeed + i)` through the existing MonteCarloRunner strategy. With equal item count/distribution settings and only capacity or WIP changed, the generated underlying effort workload is identical for each matched run. There is no outcome-forcing or reordering. Changing distribution kinds/bounds, item count or scheduling may change how draws correspond; the independent discovery/rework streams still follow their existing Step 7 policy. Common seeds are a variance-reduction strategy where applicable, not a promise of identical defects or a guaranteed reduction in variance. The comparison reference can change without changing these effective seeds.
+
+## Paired Monte Carlo Comparison
+
+Monte Carlo comparison defaults to 500 runs per scenario and uses the existing runner's seed derivation and simulation path. It shows P50/P75/P85/P95 and sample counts for completed items, throughput, mean lead/cycle time, WIP, developer/tester utilization, maximum review/testing queues, and applicable total defects, consumed rework effort and rework share. Active/waiting/blocked time and maximum rework queue are available for single runs but are not retrospectively inferred from the existing compact Monte Carlo records.
+
+The main table's delta is **difference between scenario and reference P50s**. A separate paired table calculates each difference first, then summarizes those differences:
+
+```text
+delta_i = metric(scenario, seed_i) − metric(reference, seed_i)
+paired percentiles = DistributionStatistics(delta_0, delta_1, ...)
+```
+
+This is generally different from subtracting percentile values. Pairing checks equal run number and seed. For lead/cycle metrics, a pair contributes only if **both** runs completed at least one item; missing means are never substituted by zero. Sample counts expose exclusions. If no valid pairs exist, percentiles are absent. Other applicable metrics retain all pairs. With common seeds disabled there is no paired delta distribution, even if configured seeds happen to coincide.
+
+Percentiles use the existing linearly interpolated type-7 implementation. Signed deltas are sorted numerically: P95 is the upper, more positive tail, not a maximum improvement or an uncertainty interval. Ratio-based paired deltas are displayed/exported in ratio units (0.01 = one percentage point), explicitly labeled; the ordinary table uses percentage points for its scalar ratio deltas. No statistical significance, confidence interval, optimality or recommendation is implied.
+
+## Result Traceability
+
+Each `ScenarioRun` retains RunId, immutable original ScenarioDefinition, immutable effective SimulationRequest, comparison options, model version, execution-start UTC timestamp, and the actual single-run/Monte Carlo result. Monte Carlo results retain ordered run numbers and seeds. Run count is 1 for single runs or the actual Monte Carlo count. Editing a scenario never mutates its stored execution snapshot. The UI shows stored provenance even for Out of Date results, while excluding those results from tables/charts.
+
+Execution date and identity intentionally differ between reruns; reproducibility applies to observations, derived seeds, metrics and paired distributions, not wall-clock metadata. The session keeps the **latest** result per scenario, not an unbounded result archive. Saving configuration does not save result histories. CSV exports preserve the configurations and provenance of the exported result so they can be reproduced after later edits.
+
+## Simulation Model Version
+
+`Simulation.Core.SimulationModel.Version` explicitly identifies current semantics as **"0.1"**, independent of assembly/application version. This names the existing Step 7 engine semantics; Steps 8 and 9 add measurement/organization rather than new simulation behavior. Future semantic changes should deliberately update this identifier. Scenario/experiment files, experiment records, comparison results and CSV exports include it. Unknown versions are rejected with a clear message; no silent migration or execution under different semantics is implemented.
+
+## Scenario and experiment persistence
+
+Persistence belongs in Simulation.Infrastructure, which now implements ExperimentJson and ComparisonCsv. UI references Infrastructure for file operations; Core remains free of UI, JSON and filesystem dependencies. The configuration JSON envelope has SchemaVersion=1, SimulationModelVersion="0.1", DocumentKind="Scenario" or "Experiment", and the corresponding payload. All existing SimulationRequest settings, including fixed fallbacks, distribution parameters, dormant defect configuration and configured seeds, are retained. Effort objects have explicit Kind="Fixed"/"Triangular" and their numerical fields. There is no CLR type-name activation.
+
+Loading validates schema/model/kind, scenario settings, unique IDs, reference membership and supported distributions. Unknown properties and distribution kinds are rejected. Experiment loading preserves identities and creates a read-only scenario collection. Importing a standalone scenario into the current collection assigns a fresh identity to avoid collisions. Files are human-readable UTF-8 JSON, limited to 5 MB on read. Writes use a sibling temporary file followed by replacement. Native file pickers handle location selection and overwrite prompting; no database or automatic background save is introduced.
+
+## Comparison CSV export
+
+Infrastructure exports one row per scenario/metric. Columns include scenario ID/name, metric, raw Value (single value or MC P50), absolute/relative/percentage-point deltas, P50/P75/P85/P95 and sample count, paired-delta percentiles/sample count, reference ID, experiment name, run ID/mode/count, common-seed flag, effective seed, execution timestamp, schema/model versions, and original/effective configuration JSON snapshots.
+
+Numbers use invariant culture and round-trip precision. Empty cells represent missing/undefined data. Every field is CSV-quoted, with embedded quotes doubled, preserving commas and embedded newlines. Ratio Values and paired deltas are raw ratios; PercentagePointDelta is a separate scaled column. This is a text export, with no Excel-specific dependency. Configuration JSON in the CSV is a snapshot, not a reference to mutable UI settings.
+
+See [EXPERIMENTS.md](EXPERIMENTS.md) for the user workflow and [COMPARISON_RESULTS.md](COMPARISON_RESULTS.md) for measured examples, paired-distribution interpretation and verification.
+
+## Step 11 presentation
+
+The GUI groups simulation, comparison and analysis without changing this model. Primary summaries and deltas consume the existing result/calculation layer. Compare flow shows actual same-day observations, never a synthetic Monte Carlo flow. See [GUI definitions, workflow and verification](GUI_REDESIGN.md) for queue selection, day conventions, progressive disclosure and current limitations.
+
+## Step 11B — Simple Mode presentation
+
+Home/Run/Change & Compare/Explore orchestrate the existing model and services. No numerical rule changes were made. The simple comparison selects an observed same-day flow snapshot with the largest waiting-queue difference to help inspection; this is a presentation choice, not a new metric. [Simple Mode documentation](SIMPLE_MODE.md) records defaults, hidden settings, advanced access and verification.
