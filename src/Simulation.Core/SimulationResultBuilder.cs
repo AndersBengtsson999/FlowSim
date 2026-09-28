@@ -52,17 +52,17 @@ internal static class SimulationResultBuilder
         static double Ratio(double used, double available) => available == 0 ? 0 : used / available;
         var developers = days.Sum(d => d.AvailableDeveloperCapacity);
         var testers = days.Sum(d => d.AvailableTesterCapacity);
-        return new SimulationResult(scenario.Name, completed.Length, (double)completed.Length / scenario.SimulationDays,
-            Mean(w => w.LeadTime!.Value), Mean(w => w.CycleTime!.Value), days.Average(d => d.TotalWip),
+        return new SimulationResult(scenario.Name, completed.Length, Ratio(completed.Length, scenario.SimulationDays),
+            Mean(w => w.LeadTime!.Value), Mean(w => w.CycleTime!.Value), days.Select(d => (double)d.TotalWip).DefaultIfEmpty(0).Average(),
             Ratio(days.Sum(d => (double)d.BlockedItems), days.Sum(d => (double)d.UnfinishedItems)),
             Ratio(days.Sum(d => d.UsedDeveloperCapacity), developers), Ratio(days.Sum(d => d.UsedTesterCapacity), testers),
             Ratio(days.Sum(d => d.ReviewWork), developers), Ratio(days.Sum(d => d.DevelopmentWork), developers),
-            days.Average(d => d.ReviewWip), results.SelectMany(w => w.InspectionAttempts)
+            days.Select(d => (double)d.ReviewWip).DefaultIfEmpty(0).Average(), results.SelectMany(w => w.InspectionAttempts)
                 .Where(a => a.Stage == DefectSource.CodeReview && a.CompletedDay.HasValue)
                 .Select(a => (double)(a.CompletedDay!.Value - a.StartedDay)).DefaultIfEmpty(0).Average(),
             Array.AsReadOnly(results), Array.AsReadOnly(days.ToArray()), scenario.SimulationDays, items.Count,
             Mean(w => w.ActiveTime), Mean(w => w.WaitingTime), Mean(w => w.BlockedTime),
-            days.Max(d => d.WaitingForCodeReviewCount), days.Max(d => d.WaitingForTestingCount)) {
+            days.Select(d => d.WaitingForCodeReviewCount).DefaultIfEmpty(0).Max(), days.Select(d => d.WaitingForTestingCount).DefaultIfEmpty(0).Max()) {
                 RandomSeed = scenario.RandomSeed,
                 TotalDefectsFound = results.Sum(w => w.DefectsFound),
                 CodeReviewDefectsFound = results.Sum(w => w.CodeReviewDefectsFound),

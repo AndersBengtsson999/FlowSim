@@ -31,8 +31,13 @@ public sealed record DefectSettings
 /// <summary>Run-local streams independent of initial effort generation and each other.</summary>
 internal sealed class DefectPolicy(DefectSettings settings, int seed)
 {
-    private readonly SeededRandom discovery = new(unchecked(seed ^ (int)0xD3FEC701));
-    private readonly SeededRandom rework = new(unchecked(seed ^ (int)0xA11CE702));
+    private SeededRandom discovery = new(unchecked(seed ^ (int)0xD3FEC701));
+    private SeededRandom rework = new(unchecked(seed ^ (int)0xA11CE702));
+
+    internal (ulong Discovery, ulong Rework) RandomState => (discovery.State, rework.State);
+    internal void RestoreRandom(ulong discoveryState, ulong reworkState)
+    { discovery = SeededRandom.Restore(discoveryState); rework = SeededRandom.Restore(reworkState); }
+    internal void Configure(DefectSettings value) => settings = value;
 
     internal double? Inspect(DefectSource source)
     {

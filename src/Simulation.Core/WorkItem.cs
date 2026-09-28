@@ -46,6 +46,29 @@ public sealed class WorkItem
     internal WorkItem CopyForRun() => new(Id, Name, DevelopmentEffort, CodeReviewEffort,
         TestingEffort, Dependencies, CreatedDay);
 
+    internal WorkItemState Capture() => new(Id, Name, DevelopmentEffort, CodeReviewEffort, TestingEffort,
+        Dependencies.ToArray(), CreatedDay, State, RemainingDevelopmentEffort, RemainingCodeReviewEffort,
+        RemainingTestingEffort, RemainingReworkEffort, currentReworkEffort, reviewQueueDay, testingQueueDay,
+        reworkQueueDay, DevelopmentStartedDay, DevelopmentCompletedDay, CodeReviewStartedDay,
+        CodeReviewCompletedDay, TestingStartedDay, TestingCompletedDay, DoneDay,
+        transitions.ToArray(), events.ToArray(), attempts.ToArray());
+
+    internal static WorkItem Restore(WorkItemState s)
+    {
+        var w = new WorkItem(s.Id, s.Name, s.DevelopmentEffort, s.CodeReviewEffort, s.TestingEffort, s.Dependencies, s.CreatedDay)
+        {
+            State = s.State, RemainingDevelopmentEffort = s.RemainingDevelopmentEffort,
+            RemainingCodeReviewEffort = s.RemainingCodeReviewEffort, RemainingTestingEffort = s.RemainingTestingEffort,
+            RemainingReworkEffort = s.RemainingReworkEffort, currentReworkEffort = s.CurrentReworkEffort,
+            reviewQueueDay = s.ReviewQueueDay, testingQueueDay = s.TestingQueueDay, reworkQueueDay = s.ReworkQueueDay,
+            DevelopmentStartedDay = s.DevelopmentStartedDay, DevelopmentCompletedDay = s.DevelopmentCompletedDay,
+            CodeReviewStartedDay = s.CodeReviewStartedDay, CodeReviewCompletedDay = s.CodeReviewCompletedDay,
+            TestingStartedDay = s.TestingStartedDay, TestingCompletedDay = s.TestingCompletedDay, DoneDay = s.DoneDay
+        };
+        w.transitions.AddRange(s.Transitions); w.events.AddRange(s.Events); w.attempts.AddRange(s.Attempts);
+        return w;
+    }
+
     // Queue entry times remain stable while an item waits or receives partial work.
     internal int QueueEnteredDay(WorkItemStatus stage) => stage switch
     {

@@ -15,6 +15,9 @@ public sealed class SimpleChangeField(string label, string current, Func<string>
 public sealed class SimpleWorkflowViewModel : INotifyPropertyChanged
 {
     public MainWindowViewModel Owner { get; }
+    public LiveViewModel Live { get; } = new();
+    public bool LiveVisible => page == "Live";
+    public RelayCommand OpenLiveCommand { get; }
     public MainWindowViewModel Try { get; } = new();
     public CompareViewModel Pair { get; }
     public SensitivityViewModel Explore { get; }
@@ -79,6 +82,7 @@ public sealed class SimpleWorkflowViewModel : INotifyPropertyChanged
     public SimpleWorkflowViewModel(MainWindowViewModel owner)
     {
         Owner = owner;
+        OpenLiveCommand = new(() => Navigate("Live"));
         Pair = new(() => Try.CaptureSetup(), Try.LoadConfiguration, index => Navigate(index == 0 ? "Changes" : "Comparison"));
         Explore = new(() => Owner.LastRunRequest ?? Owner.CaptureSetup()) { BaseScenario = "Current Scenario form", WarmUpDays = "0" };
         HomeCommand = new(() => Navigate("Home")); OpenRunCommand = new(() => Navigate("Run"));
@@ -91,7 +95,7 @@ public sealed class SimpleWorkflowViewModel : INotifyPropertyChanged
         PrepareChanges();
     }
     public bool ShowPairInAdvanced { get; private set; }
-    public void Navigate(string destination) { page = destination; status = ""; Notify(); }
+    public void Navigate(string destination) { if (destination != "Live") Live.Pause(); page = destination; status = ""; Notify(); }
     public void PrepareChanges()
     {
         starting = startingPoint == "Last simulation" ? Owner.LastRunRequest ?? BaselineScenario.CreateRequest() : BaselineScenario.CreateRequest();
@@ -134,7 +138,7 @@ public sealed class SimpleWorkflowViewModel : INotifyPropertyChanged
         finally { busy = false; Notify(); }
     }
     public async Task ExploreAsync() { await Explore.RunAsync(); Notify(); }
-    public void Cancel() { Owner.Cancel(); Pair.Cancel(); Explore.Cancel(); }
+    public void Cancel() { Live.Dispose(); Owner.Cancel(); Pair.Cancel(); Explore.Cancel(); }
     private void Notify()
     {
         PropertyChanged?.Invoke(this, new(string.Empty));

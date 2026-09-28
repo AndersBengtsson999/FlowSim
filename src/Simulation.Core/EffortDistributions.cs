@@ -10,6 +10,9 @@ public sealed class SeededRandom(int seed) : IRandomSource
 {
     private ulong state = unchecked((uint)seed);
 
+    public ulong State => state;
+    public static SeededRandom Restore(ulong state) => new(0) { state = state };
+
     public double NextUnitDouble()
     {
         unchecked

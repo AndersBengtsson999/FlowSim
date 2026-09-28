@@ -13,7 +13,7 @@ public static class ExperimentJson
 {
     public const int SchemaVersion = 1;
     private static readonly JsonSerializerOptions Options = CreateOptions();
-    private static JsonSerializerOptions CreateOptions()
+    internal static JsonSerializerOptions CreateOptions()
     {
         var options = new JsonSerializerOptions { WriteIndented = true, IgnoreReadOnlyProperties = true, UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow };
         options.Converters.Add(new JsonStringEnumConverter()); options.Converters.Add(new EffortConverter()); return options;

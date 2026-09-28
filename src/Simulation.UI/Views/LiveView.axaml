@@ -1,0 +1,171 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:views="using:Simulation.UI.Views" xmlns:core="using:Simulation.Core" xmlns:charts="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.LiveView" x:DataType="vm:LiveViewModel">
+ <UserControl.Styles>
+  <Style Selector="ListBox#LiveFlow ListBoxItem"><Setter Property="Padding" Value="0"/><Setter Property="Margin" Value="0"/><Setter Property="MinHeight" Value="0"/></Style>
+ </UserControl.Styles>
+ <UserControl.Resources>
+  <DataTemplate x:Key="PerformanceMetric" x:DataType="vm:MetricRow">
+   <Grid ColumnDefinitions="*,Auto" Margin="0,4" ToolTip.Tip="{Binding Explanation}">
+    <TextBlock Text="{Binding Label}" TextWrapping="Wrap" Margin="0,0,12,0"/>
+    <TextBlock Grid.Column="1" Text="{Binding Value}" FontWeight="SemiBold" TextAlignment="Right"/>
+   </Grid>
+  </DataTemplate>
+      <DataTemplate x:Key="FlowRow" x:DataType="vm:FlowStateRow">
+       <StackPanel>
+        <Border Background="{Binding Background}" CornerRadius="5" Padding="8,3">
+   <Grid ColumnDefinitions="*,Auto">
+          <StackPanel>
+           <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13" />
+           <TextBlock Text="{Binding Kind}" Classes="note" FontSize="10" />
+          </StackPanel>
+          <StackPanel Grid.Column="1" Margin="8,0,0,0">
+           <TextBlock Text="{Binding Count}" FontSize="18" HorizontalAlignment="Right" />
+           <TextBlock Text="Work Items" FontSize="9" />
+          </StackPanel>
+         </Grid>
+        </Border>
+        <ProgressBar Value="{Binding Count}" Maximum="100" Height="3" Foreground="#BD8A36" />
+        <TextBlock Text="{Binding Arrow}" HorizontalAlignment="Center" Foreground="#64748B" FontSize="10" />
+       </StackPanel>
+      </DataTemplate>
+ </UserControl.Resources>
+ <Grid RowDefinitions="Auto,*,Auto">
+ <StackPanel Spacing="12" Margin="8,8,8,16">
+  <TextBlock Text="Watch the system while it runs" Classes="page" />
+  <TextBlock Text="Run the simulation continuously, change something, and see what happens." Classes="note" />
+   <Grid ColumnDefinitions="*,Auto" IsVisible="{Binding HasSession}">
+    <TextBlock Text="{Binding DayLabel}" FontSize="30" FontWeight="Bold" />
+    <WrapPanel Grid.Column="1">
+     <Button Content="Pause" Command="{Binding PauseCommand}" />
+     <Button Content="Resume" Command="{Binding ResumeCommand}" />
+     <Button Content="Step" Command="{Binding StepCommand}" />
+     <TextBlock Text="Speed" Margin="8" VerticalAlignment="Center" />
+     <ComboBox ItemsSource="{Binding Speeds}" SelectedItem="{Binding Speed, Mode=TwoWay}" Width="85"><ComboBox.ItemTemplate><DataTemplate x:DataType="x:Double"><TextBlock Text="{Binding StringFormat='{}{0}x'}" /></DataTemplate></ComboBox.ItemTemplate></ComboBox>
+    </WrapPanel>
+   </Grid>
+ </StackPanel>
+ <ScrollViewer Grid.Row="1">
+ <StackPanel Spacing="16" Margin="8">
+  <StackPanel IsVisible="{Binding SetupVisible}" Spacing="14" MaxWidth="820" HorizontalAlignment="Left">
+   <TextBlock Text="Start from" />
+   <ComboBox ItemsSource="{Binding Presets}" SelectedItem="{Binding Preset, Mode=TwoWay}" MinWidth="230" />
+   <Grid ColumnDefinitions="*,24,*" RowDefinitions="Auto,Auto" Width="740">
+    <StackPanel Spacing="10">
+     <TextBlock Text="TEAM" Classes="section" />
+<Grid ColumnDefinitions="*,100"><TextBlock Text="Developers" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.NumberOfDevelopers, Mode=TwoWay}" AutomationProperties.Name="Live Developers" /></Grid>
+<Grid ColumnDefinitions="*,100"><TextBlock Text="Testers" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.NumberOfTesters, Mode=TwoWay}" AutomationProperties.Name="Live Testers" /></Grid>
+</StackPanel><StackPanel Grid.Column="2" Spacing="10"><TextBlock Text="FLOW" Classes="section"/><Grid ColumnDefinitions="*,100"><TextBlock Text="Development WIP" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.DevelopmentWipLimit, Mode=TwoWay}" AutomationProperties.Name="Live Development WIP" /></Grid>
+<Grid ColumnDefinitions="*,100"><TextBlock Text="Testing WIP" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.TestingWipLimit, Mode=TwoWay}" AutomationProperties.Name="Live Testing WIP" /></Grid>
+</StackPanel></Grid>
+   <TextBlock Text="WORK ARRIVAL" Classes="section" />
+<Grid ColumnDefinitions="*,100"><TextBlock Text="New work · items / day" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding ArrivalRate, Mode=TwoWay}" AutomationProperties.Name="Live New work · items / day" /></Grid>
+
+   <Expander Header="More settings" HorizontalAlignment="Stretch">
+    <StackPanel Spacing="12">
+     <TextBlock Text="Work arrival" />
+     <ComboBox ItemsSource="{Binding ArrivalModes}" SelectedItem="{Binding ArrivalMode, Mode=TwoWay}" />
+<Grid ColumnDefinitions="*,100"><TextBlock Text="Initial backlog" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.NumberOfWorkItems, Mode=TwoWay}" AutomationProperties.Name="Live Initial backlog" /></Grid>
+<Grid ColumnDefinitions="*,100"><TextBlock Text="Random Seed" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.RandomSeed, Mode=TwoWay}" AutomationProperties.Name="Live Random Seed" /></Grid>
+<Grid ColumnDefinitions="*,100"><TextBlock Text="Safety Limit · days" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding SafetyLimit, Mode=TwoWay}" AutomationProperties.Name="Live Safety Limit · days" /></Grid>
+
+     <TextBlock Text="Rolling window · days" />
+     <ComboBox ItemsSource="{Binding RollingWindows}" SelectedItem="{Binding RollingWindow, Mode=TwoWay}" />
+     <views:LiveSettingsView DataContext="{Binding Setup}" />
+    </StackPanel>
+   </Expander>
+   <WrapPanel><Button Content="Start" Command="{Binding StartCommand}" Classes="primary"/><Button Content="Open Live Session" Click="OpenSession" /></WrapPanel>
+  </StackPanel>
+  <StackPanel IsVisible="{Binding HasSession}" Spacing="14">
+
+   <Grid ColumnDefinitions="380,24,*">
+    <StackPanel>
+     <ListBox Name="LiveFlow" ItemsSource="{Binding Flow}" SelectedItem="{Binding SelectedFlow, Mode=TwoWay}" ItemTemplate="{StaticResource FlowRow}" Background="Transparent" />
+     <TextBlock Text="{Binding QueueDetail}" Classes="note" Margin="8" />
+    </StackPanel>
+    <StackPanel Grid.Column="2" Spacing="10">
+     <Button Content="Change something" Command="{Binding ChangeCommand}" Classes="primary" HorizontalAlignment="Left" />
+     <Border IsVisible="{Binding IsEditing}" Classes="card">
+      <StackPanel Spacing="8">
+       <TextBlock Text="Paused · Change something" Classes="section" />
+       <Grid ColumnDefinitions="*,80,100"><TextBlock Grid.Column="1" Text="CURRENT"/><TextBlock Grid.Column="2" Text="TRY"/></Grid>
+       <ItemsControl ItemsSource="{Binding ChangeFields}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:SimpleChangeField">
+        <Grid ColumnDefinitions="*,80,100" Margin="0,3"><TextBlock Text="{Binding Label}" VerticalAlignment="Center"/><TextBlock Grid.Column="1" Text="{Binding Current}" VerticalAlignment="Center"/><TextBox Grid.Column="2" Text="{Binding Value, Mode=TwoWay}" AutomationProperties.Name="{Binding Label}"/></Grid>
+       </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+       <TextBlock Text="Optional label"/><TextBox Text="{Binding ChangeLabel, Mode=TwoWay}" MaxLength="100" AutomationProperties.Name="Change label" />
+       <Expander Header="More things to change"><StackPanel Spacing="8"><TextBlock Text="{Binding CurrentQuality}" Classes="note"/><views:LiveQualityView DataContext="{Binding Draft}" /></StackPanel></Expander>
+       <WrapPanel><Button Content="Apply Changes" Command="{Binding ApplyCommand}" Classes="primary"/><Button Content="Cancel" Command="{Binding CancelChangeCommand}" /></WrapPanel>
+      </StackPanel>
+     </Border>
+     <TextBlock Text="Team Performance" Classes="section" />
+     <StackPanel Orientation="Horizontal" Spacing="8">
+      <TextBlock Text="Window · days" VerticalAlignment="Center"/>
+      <ComboBox ItemsSource="{Binding RollingWindows}" SelectedItem="{Binding RollingWindow, Mode=TwoWay}" AutomationProperties.Name="Performance window · days" />
+     </StackPanel>
+     <TextBlock Text="{Binding WindowLabel}" Classes="note" />
+     <TextBlock Text="DELIVERY" Classes="section" />
+     <ItemsControl ItemsSource="{Binding Metrics}" ItemTemplate="{StaticResource PerformanceMetric}" />
+     <Expander Header="Flow, Capacity and Quality" HorizontalAlignment="Stretch">
+      <StackPanel Spacing="8">
+       <TextBlock Text="FLOW" Classes="section" />
+       <TextBlock Text="Now = current queue · Avg = period average · Trend = items/day" Classes="note"/>
+       <ItemsControl ItemsSource="{Binding FlowMetrics}" ItemTemplate="{StaticResource PerformanceMetric}" />
+       <TextBlock Text="CAPACITY" Classes="section" />
+       <ItemsControl ItemsSource="{Binding CapacityMetrics}" ItemTemplate="{StaticResource PerformanceMetric}" />
+       <StackPanel IsVisible="{Binding ShowPerformanceQuality}" Spacing="8">
+        <TextBlock Text="QUALITY" Classes="section" />
+        <ItemsControl ItemsSource="{Binding QualityMetrics}" ItemTemplate="{StaticResource PerformanceMetric}" />
+       </StackPanel>
+      </StackPanel>
+     </Expander>
+     <Border Classes="card"><StackPanel>
+      <TextBlock Text="Queues over time" Classes="section" />
+      <TextBlock Text="Blue: Code Review · Amber: Testing" Classes="note" />
+      <TextBlock Text="Purple: Rework" Classes="note" IsVisible="{Binding ShowRework}" />
+      <charts:LiveQueueChart Points="{Binding QueueHistory}" CurrentDay="{Binding Day}" Changes="{Binding Changes}" ShowRework="{Binding ShowRework}" Height="160" />
+      <TextBlock Text="Point at a change marker to inspect it." Classes="note" />
+     </StackPanel></Border>
+     <Expander Header="Changes" IsVisible="{Binding HasChanges}" HorizontalAlignment="Stretch">
+      <ListBox ItemsSource="{Binding Changes}" MaxHeight="190"><ListBox.ItemTemplate><DataTemplate x:DataType="vm:LiveChangeRow"><StackPanel Margin="4"><TextBlock Text="{Binding Day, StringFormat='Day {0}'}" FontWeight="Bold"/><TextBlock Text="{Binding Description}" TextWrapping="Wrap"/></StackPanel></DataTemplate></ListBox.ItemTemplate></ListBox>
+     </Expander>
+    </StackPanel>
+   </Grid>
+   <Expander Header="Before &amp; After an intervention" IsVisible="{Binding HasChanges}" HorizontalAlignment="Stretch">
+    <StackPanel Spacing="10">
+     <TextBlock Text="Uses the selected Team Performance window. A change recorded on Day N takes effect on Day N+1." Classes="note"/>
+     <ComboBox ItemsSource="{Binding Interventions}" SelectedItem="{Binding SelectedIntervention, Mode=TwoWay}" HorizontalAlignment="Stretch" AutomationProperties.Name="Compare intervention">
+      <ComboBox.ItemTemplate><DataTemplate x:DataType="core:ConfigurationChange"><StackPanel Orientation="Horizontal" Spacing="8"><TextBlock Text="{Binding Day, StringFormat='Day {0}'}"/><TextBlock Text="{Binding Label}"/></StackPanel></DataTemplate></ComboBox.ItemTemplate>
+     </ComboBox>
+     <TextBlock Text="{Binding BeforePeriod}"/>
+     <TextBlock Text="{Binding AfterPeriod}"/>
+     <TextBlock Text="{Binding ComparisonStatus}" Classes="note"/>
+     <Grid ColumnDefinitions="2*,*,*,*"><TextBlock Text="METRIC"/><TextBlock Grid.Column="1" Text="BEFORE"/><TextBlock Grid.Column="2" Text="AFTER"/><TextBlock Grid.Column="3" Text="DIFFERENCE"/></Grid>
+     <ItemsControl ItemsSource="{Binding ComparisonRows}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:PerformanceComparisonRow">
+      <Grid ColumnDefinitions="2*,*,*,*" Margin="0,4"><TextBlock Text="{Binding Metric}" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Grid.Column="1" Text="{Binding Before}"/><TextBlock Grid.Column="2" Text="{Binding After}"/><TextBlock Grid.Column="3" Text="{Binding Difference}"/></Grid>
+     </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+     <TextBlock Text="{Binding Observations}" TextWrapping="Wrap"/>
+    </StackPanel>
+   </Expander>
+   <Expander Header="Show details" HorizontalAlignment="Stretch"><StackPanel Spacing="8"><Button Content="Refresh all-time metrics (pauses)" Command="{Binding DetailsCommand}" HorizontalAlignment="Left"/><TextBlock Text="{Binding Details}" TextWrapping="Wrap"/></StackPanel></Expander>
+   <Expander Header="Checkpoints and files" HorizontalAlignment="Stretch">
+    <StackPanel Spacing="10">
+     <TextBlock Text="Create or restore a checkpoint while paused. Restoring returns to its exact day and history." Classes="note" />
+     <TextBox Text="{Binding CheckpointLabel, Mode=TwoWay}" Watermark="Checkpoint label" AutomationProperties.Name="Checkpoint label" MaxLength="100"/>
+     <Button Content="Create Checkpoint" Command="{Binding CheckpointCommand}" HorizontalAlignment="Left" />
+     <ComboBox ItemsSource="{Binding Checkpoints}" SelectedItem="{Binding SelectedCheckpoint, Mode=TwoWay}" HorizontalAlignment="Stretch"><ComboBox.ItemTemplate><DataTemplate x:DataType="vm:CheckpointRow"><TextBlock Text="{Binding Display}"/></DataTemplate></ComboBox.ItemTemplate></ComboBox>
+     <WrapPanel><Button Content="Restore" Command="{Binding RestoreCommand}"/><Button Content="Delete" Command="{Binding DeleteCheckpointCommand}"/><Button Content="Save Live Session" Click="SaveSession"/><Button Content="Open Live Session" Click="OpenSession"/></WrapPanel>
+    </StackPanel>
+   </Expander>
+   <Expander Header="Advanced Live settings" HorizontalAlignment="Stretch"><StackPanel Spacing="10">
+<Grid ColumnDefinitions="*,100"><TextBlock Text="Safety Limit · days" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding SafetyLimit, Mode=TwoWay}" AutomationProperties.Name="Live Safety Limit · days" /></Grid>
+
+    <Button Content="Update safety limit" Command="{Binding LimitCommand}" HorizontalAlignment="Left" />
+    <TextBlock Text="Rolling window · days"/><ComboBox ItemsSource="{Binding RollingWindows}" SelectedItem="{Binding RollingWindow, Mode=TwoWay}" />
+    <WrapPanel><Button Content="Stop" Command="{Binding StopCommand}"/><Button Content="Reset" Command="{Binding ResetCommand}" /></WrapPanel>
+    <TextBlock Text="Reset discards this timeline and its checkpoints. Save first to keep it." Classes="note"/>
+   </StackPanel></Expander>
+  </StackPanel>
+
+ </StackPanel>
+ </ScrollViewer>
+ <TextBlock Grid.Row="2" Text="{Binding Status}" TextWrapping="Wrap" Foreground="#175E70" Margin="8" />
+ </Grid>
+</UserControl>

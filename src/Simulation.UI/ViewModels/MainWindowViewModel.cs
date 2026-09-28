@@ -136,16 +136,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     public string DayLabel => HasResults ? $"End of simulated day {SelectedDay} of {LastDay}" : "Run a simulation to inspect its days.";
     public string CapacityDetail => SelectedSnapshot is not { } d ? "" :
         $"Selected day: developers {d.UsedDeveloperCapacity:0.##} / {d.AvailableDeveloperCapacity:0.##} units used; testers {d.UsedTesterCapacity:0.##} / {d.AvailableTesterCapacity:0.##} units used.";
-    public IReadOnlyList<FlowStateRow> FlowStates => SelectedSnapshot is not { } d ? [] :
-    [
-        new("Backlog", d.BacklogCount, "Not started", "#F1F5F9", "↓"),
-        new("Development", d.DevelopmentCount, "Active stage · developer capacity", "#E8F1F7", "↓"),
-        new("Waiting for Code Review", d.WaitingForCodeReviewCount, "QUEUE · awaiting admission", "#FFF2D8", "↓"),
-        new("Code Review", d.CodeReviewCount, "Active stage · shared developer pool", "#E8F1F7", "↓"),
-        new("Waiting for Testing", d.WaitingForTestingCount, "QUEUE · awaiting admission", "#FFF2D8", "↓"),
-        new("Testing", d.TestingCount, "Active stage · tester capacity", "#E8F1F7", "↓"),
-        new("Done", d.DoneCount, "Completed", "#E6F2ED", "")
-    ];
+    public IReadOnlyList<FlowStateRow> FlowStates => SelectedSnapshot is not { } d ? [] : FlowPresentation.Rows(d);
     public IReadOnlyList<MetricRow> Metrics => result is not { } r ? [] :
     [
         Metric("Completed Work Items", r.CompletedWorkItems, "Number of Work Items that reached Done within the simulation horizon.", "0"),

@@ -2,7 +2,7 @@
 
 An Avalonia desktop simulator for exploring software delivery using capacity, independent stage effort, queues, dependencies and WIP. This is a simulation tool, not a project-management application.
 
-The current implementation is **Simulation Model v0.1, Steps 2–9 with the Step 11B Simple Mode redesign**. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
+The current implementation is **Simulation Model v0.1 through Step 13 — Live Team Performance**, including Simple Mode and Live simulation. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
 
 ## Build and run on macOS
 
@@ -149,3 +149,26 @@ Use **Simulate → Run Baseline**, inspect the six primary results, then **Dupli
 ## Simple Mode (Step 11B)
 
 The application now starts at **Home**. Choose **Run**, **Change & Compare** or **Explore**. Run shows four result cards; Change & Compare creates its before/after pair automatically; Explore exposes one parameter and one chart. Expert scenario management, Monte Carlo, validation, exports and diagnostics remain under **Advanced Tools**. This supersedes the normal navigation described in earlier increments. See [Simple Mode guide, file inventory and verification](docs/SIMPLE_MODE.md).
+
+### Live — watch and change a running system
+
+Open **Live** (or **Start Live Simulation** on Home), select **Live Flow Demo**, and Start. Pause/Resume/Step and 0.5x–10x playback operate one evolving timeline. **Change something** pauses; edits apply next simulated day without resetting work. The flow board, rolling metrics and one queue-history chart show observations; intervention markers retain what changed and when.
+
+Secondary controls provide checkpoints and JSON save/open. The default safety stop is 10,000 days. Continuous arrivals default to 0.8 items/day with decimal fractional accumulation; Fixed Backlog remains available in More settings. The normal Run/Compare/Explore workflows are preserved.
+
+See [Live model, instructions, validation and limitations](docs/LIVE_SIMULATION.md), including the Day 100 checkpoint experiment and the capacity-only AI proxy limitation. Build/test/run remain:
+
+```sh
+dotnet build SoftwareDevelopmentSimulation.sln -c Release
+dotnet test SoftwareDevelopmentSimulation.sln -c Release
+dotnet run --project src/Simulation.UI -c Release
+```
+
+
+### Live Team Performance (Step 13)
+
+Live now shows Recent Throughput and Recent Cycle Time alongside the Flow Board. Expand **Flow, Capacity and Quality** for average WIP, separate current/average queues, OLS trends, aggregate utilization and relevant defect/rework measures. Choose a 10/20/50/100-day window (default 20).
+
+After recording a change, expand **Before & After an intervention**. The selected window anchors to the intervention day: a Day-100 change with window 20 compares Days 81–100 against 101–120. Available-day counts make partial periods explicit. Queue comparisons use averages; utilization differences use percentage points. No composite score or causal recommendation is generated.
+
+Latest verification: Release build with 0 warnings/errors and **274 tests passing**. Actual Avalonia views were rendered and visually inspected, including the Add tester experiment. Manual native macOS interaction remains unverified for this step. See [implementation, calculation semantics, measured results and verification limits](docs/LIVE_TEAM_PERFORMANCE.md).

@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:views="using:Simulation.UI.Views" x:Class="Simulation.UI.Views.LiveSettingsView" x:DataType="vm:MainWindowViewModel"><StackPanel Spacing="12"><Grid ColumnDefinitions="*,100"><TextBlock Text="Developer Capacity" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding DeveloperCapacity, Mode=TwoWay}" AutomationProperties.Name="Live Developer Capacity" /></Grid>
+<Grid ColumnDefinitions="*,100"><TextBlock Text="Tester Capacity" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding TesterCapacity, Mode=TwoWay}" AutomationProperties.Name="Live Tester Capacity" /></Grid>
+<Grid ColumnDefinitions="*,100"><TextBlock Text="Code Review WIP" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding CodeReviewWipLimit, Mode=TwoWay}" AutomationProperties.Name="Live Code Review WIP" /></Grid>
+<Grid ColumnDefinitions="*,100"><TextBlock Text="Rework WIP" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding ReworkWipLimit, Mode=TwoWay}" AutomationProperties.Name="Live Rework WIP" /></Grid>
+     <ItemsControl ItemsSource="{Binding EffortEditors}">
+      <ItemsControl.ItemTemplate>
+       <DataTemplate x:DataType="vm:EffortEditorViewModel">
+        <StackPanel Spacing="6" Margin="0,0,0,14">
+         <Grid ColumnDefinitions="*,160">
+          <TextBlock Text="{Binding Stage}" FontWeight="SemiBold" VerticalAlignment="Center" />
+          <ComboBox Grid.Column="1" ItemsSource="{Binding Kinds}" SelectedItem="{Binding Kind, Mode=TwoWay}" HorizontalAlignment="Stretch" ToolTip.Tip="Fixed preserves one effort value. Triangular samples values between Minimum and Maximum, with Most Likely as the mode." AutomationProperties.Name="{Binding Stage}" />
+         </Grid>
+         <Grid ColumnDefinitions="*,110" IsVisible="{Binding IsFixed}">
+          <TextBlock Text="Effort" VerticalAlignment="Center" />
+          <TextBox Grid.Column="1" Text="{Binding FixedValue, Mode=TwoWay}" ToolTip.Tip="Capacity units needed for this stage of each Work Item; nonnegative. Not elapsed time." AutomationProperties.Name="Fixed Effort" />
+         </Grid>
+         <Grid ColumnDefinitions="*,8,*,8,*" IsVisible="{Binding IsTriangular}">
+          <StackPanel>
+           <TextBlock Text="Minimum" />
+           <TextBox Text="{Binding Minimum, Mode=TwoWay}" ToolTip.Tip="Smallest effort, strictly greater than zero." AutomationProperties.Name="Minimum" />
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+           <TextBlock Text="Most Likely" />
+           <TextBox Text="{Binding MostLikely, Mode=TwoWay}" ToolTip.Tip="Mode of the triangular distribution; between Minimum and Maximum. Not necessarily the mean." AutomationProperties.Name="Most Likely" />
+          </StackPanel>
+          <StackPanel Grid.Column="4">
+           <TextBlock Text="Maximum" />
+           <TextBox Text="{Binding Maximum, Mode=TwoWay}" ToolTip.Tip="Largest effort; at least Most Likely." AutomationProperties.Name="Maximum" />
+          </StackPanel>
+         </Grid>
+        </StackPanel>
+       </DataTemplate>
+      </ItemsControl.ItemTemplate>
+     </ItemsControl><views:LiveQualityView /></StackPanel></UserControl>

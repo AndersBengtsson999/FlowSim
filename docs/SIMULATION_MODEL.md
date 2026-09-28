@@ -513,3 +513,11 @@ The GUI groups simulation, comparison and analysis without changing this model. 
 ## Step 11B — Simple Mode presentation
 
 Home/Run/Change & Compare/Explore orchestrate the existing model and services. No numerical rule changes were made. The simple comparison selects an observed same-day flow snapshot with the largest waiting-queue difference to help inspection; this is a presentation choice, not a new metric. [Simple Mode documentation](SIMPLE_MODE.md) records defaults, hidden settings, advanced access and verification.
+
+## Step 12 — Live, incremental continuation and arrivals
+
+The fixed Run loop and Live now call the same incremental `SimulationSession.AdvanceOneDay` and daily engine. Existing allocation, admissions, FIFO, dependency, inspection/rework and per-item capacity rules are unchanged. See [Live simulation](LIVE_SIMULATION.md) for the complete day convention, arrival algorithm, intervention/checkpoint semantics, rolling metrics, random-state strategy and persistence schema.
+
+Live adds optional continuous work at the **start** of each interval using a decimal fractional accumulator. Existing fixed runs continue with Fixed Backlog. A configuration intervention at displayed Day N takes effect in interval `[N,N+1)`, displayed as Day N+1 when complete; it never rewrites prior events or remaining efforts. Reduced limits/counts preserve existing work. New arrival efforts use their own SplitMix64 stream, and all current random states are retained in checkpoints/files.
+
+Lifetime metrics keep their existing definitions. Live's recent metrics use the last 20 completed intervals by default, or the number actually observed if fewer: completions divided by observed days × 5; mean end-of-day WIP; summed used divided by summed available developer/tester capacity. Zero-day aggregates and zero-capacity utilization are defined as zero. Current WIP and Completed remain latest occupancy and cumulative completion counts. Charts and metrics report observations without automatic recommendations or causal interpretations.

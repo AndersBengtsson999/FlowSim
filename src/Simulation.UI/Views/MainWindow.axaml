@@ -71,10 +71,12 @@
     <Button Content="Run" Command="{Binding OpenRunCommand}" />
     <Button Content="Change &amp; Compare" Command="{Binding OpenChangesCommand}" />
     <Button Content="Explore" Command="{Binding OpenExploreCommand}" />
+    <Button Content="Live" Command="{Binding OpenLiveCommand}" />
    </WrapPanel>
    <Button Grid.Column="1" Content="Advanced" ToolTip.Tip="Advanced Tools: experiments, uncertainty, validation and exports" Command="{Binding AdvancedCommand}" Background="Transparent" FontSize="12" />
   </Grid>
   <Grid Grid.Row="2">
+   <Grid IsVisible="{Binding LiveVisible}"><views:LiveView DataContext="{Binding Live}" /></Grid>
    <ScrollViewer IsVisible="{Binding HomeVisible}">
     <StackPanel MaxWidth="820" HorizontalAlignment="Left" Spacing="20" Margin="12,24">
      <TextBlock Text="What do you want to learn?" Classes="page" />
@@ -90,6 +92,10 @@
      <StackPanel Spacing="5">
       <Button Content="Explore a parameter" Command="{Binding OpenExploreCommand}" HorizontalAlignment="Left" />
       <TextBlock Text="See what happens when one part of the system changes." />
+     </StackPanel>
+     <StackPanel Spacing="5">
+      <Button Content="Start Live Simulation" Command="{Binding OpenLiveCommand}" HorizontalAlignment="Left" />
+      <TextBlock Text="Watch work move through the system and make changes while it runs." />
      </StackPanel>
      <StackPanel IsVisible="{Binding Owner.HasResults}" Spacing="6">
       <TextBlock Text="Recent simulation" Classes="section" />
