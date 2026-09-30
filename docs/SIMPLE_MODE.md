@@ -1,5 +1,7 @@
 # Step 11B — Simple Mode
 
+Historical design and verification record. Current navigation is **Live → Analyze → Advanced**, with Live startup; see [Live-first UX](LIVE_FIRST_UX.md). Legacy Home/Run components remain internally but are absent from the normal user journey.
+
 The application now starts at Home, with three question-oriented paths: **Run**, **Change & Compare**, and **Explore**. **Advanced Tools** is a smaller secondary entry. This supersedes Step 11's default Simulate/Compare/Analyze navigation; that workspace remains available to experts.
 
 ## Run and results

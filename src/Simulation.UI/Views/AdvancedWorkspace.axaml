@@ -31,7 +31,7 @@
    <TextBlock Text="Advanced Tools" FontSize="22" FontWeight="SemiBold" />
    <TextBlock Text="Detailed simulation analysis and model-development tools." Classes="note" />
   </StackPanel>
-  <TabControl Grid.Row="1" SelectedIndex="{Binding MainArea, Mode=TwoWay}">
+  <TabControl Grid.Row="1" SelectedIndex="{Binding ExpertArea, Mode=TwoWay}">
    <TabItem Header="Setup &amp; Detailed Metrics">
     <TabControl SelectedIndex="{Binding SimulatePage, Mode=TwoWay}">
      <TabItem Header="Scenario">
@@ -88,7 +88,7 @@
             <StackPanel Margin="0,0,14,0">
              <TextBlock Text="Development WIP" />
             </StackPanel>
-            <TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding DevelopmentWipLimit, Mode=TwoWay}" ToolTip.Tip="Maximum number of Work Items actively in Development at once. Waiting states do not consume these slots." AutomationProperties.Name="Development WIP" />
+            <TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding DevelopmentWipLimit, Mode=TwoWay}" ToolTip.Tip="{x:Static vm:FlowPresentation.DevelopmentWipHelp}" AutomationProperties.Name="Development WIP" />
            </Grid>
            <Grid ColumnDefinitions="*,110">
             <StackPanel Margin="0,0,14,0">
@@ -562,10 +562,7 @@
      </TabItem>
     </TabControl>
    </TabItem>
-   <TabItem Header="Scenario Manager / Experiments">
-    <views:CompareView DataContext="{Binding Compare}" />
-   </TabItem>
-   <TabItem Header="Analyze">
+   <TabItem Header="Diagnostics &amp; uncertainty">
     <TabControl SelectedIndex="{Binding AnalyzePage, Mode=TwoWay}">
      <TabItem Header="Sensitivity">
       <views:SensitivityView DataContext="{Binding Sensitivity}" />

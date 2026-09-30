@@ -1,5 +1,7 @@
 # Step 11 — GUI simplification
 
+Historical design and verification record. Current navigation is **Live → Analyze → Advanced**, with Live startup; see [Live-first UX](LIVE_FIRST_UX.md). Legacy Home/Run components remain internally but are absent from the normal user journey.
+
 This is a presentation/workflow increment. Core, Application, Infrastructure, simulation semantics, random sequences, metric calculations and persistence schema are unchanged. No continuous mode or new simulation feature was added.
 
 ## Navigation and first use

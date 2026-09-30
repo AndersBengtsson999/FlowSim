@@ -142,7 +142,7 @@ public sealed class ScenarioComparisonTests
     {
         var e = Pair(true, false, ExperimentRunMode.MonteCarlo, 19);
         var json = ExperimentJson.SaveExperiment(e); var copy = ExperimentJson.LoadExperiment(json);
-        Assert.Contains("\"SchemaVersion\": 1", json); Assert.Contains("\"SimulationModelVersion\": \"0.1\"", json);
+        Assert.Contains("\"SchemaVersion\": 1", json); Assert.Contains("\"SimulationModelVersion\": \"0.2\"", json);
         Assert.Equal(json, ExperimentJson.SaveExperiment(copy));
         Assert.Equal(e.Scenarios, copy.Scenarios); Assert.Equal(e.BaselineId, copy.BaselineId); Assert.Equal(e.Options, copy.Options);
         var scenario = e.Scenarios[0]; Assert.Equal(scenario, ExperimentJson.LoadScenario(ExperimentJson.SaveScenario(scenario)));
@@ -155,7 +155,7 @@ public sealed class ScenarioComparisonTests
     {
         var json = ExperimentJson.SaveExperiment(Pair(true));
         Assert.Throws<JsonException>(() => ExperimentJson.LoadExperiment(json.Replace("\"SchemaVersion\": 1", "\"SchemaVersion\": 99")));
-        Assert.Throws<JsonException>(() => ExperimentJson.LoadExperiment(json.Replace("\"SimulationModelVersion\": \"0.1\"", "\"SimulationModelVersion\": \"99\"")));
+        Assert.Throws<JsonException>(() => ExperimentJson.LoadExperiment(json.Replace("\"SimulationModelVersion\": \"0.2\"", "\"SimulationModelVersion\": \"99\"")));
         Assert.Throws<JsonException>(() => ExperimentJson.LoadScenario(json));
         Assert.Throws<JsonException>(() => ExperimentJson.LoadExperiment(json.Replace("\"Triangular\"", "\"Unknown\"")));
     }

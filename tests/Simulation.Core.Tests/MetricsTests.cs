@@ -108,7 +108,7 @@ public sealed class MetricsTests
         {
             Assert.Equal(2, d.AvailableDeveloperCapacity);
             Assert.Equal(1, d.AvailableTesterCapacity);
-            Assert.Equal(d.DevelopmentWork + d.ReviewWork, d.UsedDeveloperCapacity);
+            Assert.Equal(d.UsedDevelopmentCapacity + d.ReviewWork, d.UsedDeveloperCapacity);
             Assert.Equal(d.TestingWork, d.UsedTesterCapacity);
             Assert.InRange(d.UsedDeveloperCapacity, 0, 2);
             Assert.InRange(d.UsedTesterCapacity, 0, 1);

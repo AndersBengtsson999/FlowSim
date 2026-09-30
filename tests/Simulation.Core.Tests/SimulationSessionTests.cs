@@ -77,7 +77,7 @@ public sealed class SimulationSessionTests
         var day = s.AdvanceOneDay();
         Assert.Equal(developers ? 2 : 5, day.AvailableDeveloperCapacity);
         Assert.Equal(developers ? 2 : .6, day.AvailableTesterCapacity, 10);
-        Assert.All(day.Items, w => Assert.True(developers ? w.DevelopmentWork + w.CodeReviewWork + w.ReworkWork <= .4 : w.TestingWork <= .3));
+        Assert.All(day.Items, w => Assert.True(developers ? w.PrimaryDevelopmentCapacity <= .4 + 1e-12 && w.CollaborationDevelopmentCapacity <= .4 + 1e-12 && w.CodeReviewWork + w.ReworkWork <= .4 + 1e-12 : w.TestingWork <= .3));
     }
     [Fact]
     public void ReducedWipDoesNotEvictAndPreventsAdmission()

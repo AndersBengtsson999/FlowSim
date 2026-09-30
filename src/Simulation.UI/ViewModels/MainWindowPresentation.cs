@@ -16,6 +16,7 @@ public sealed partial class MainWindowViewModel
     public RelayCommand ViewFlowCommand { get; }
     public RelayCommand DuplicateCompareCommand { get; }
     // Legacy page identifiers remain stable for navigation callbacks and restored results.
+    public int ExpertArea { get => MainArea == 2 ? 1 : 0; set => MainArea = value == 1 ? 2 : 0; }
     public int MainArea { get => selectedView == 5 ? 1 : selectedView >= 3 ? 2 : 0; set { if (value != MainArea) SelectedView = value == 1 ? 5 : value == 2 ? 4 : 0; } }
     public int SimulatePage { get => selectedView < 3 ? selectedView : 0; set { if (MainArea == 0) SelectedView = value; } }
     public int AnalyzePage { get => selectedView == 3 ? 2 : selectedView == 6 ? 1 : 0; set { if (MainArea == 2) SelectedView = value == 2 ? 3 : value == 1 ? 6 : 4; } }

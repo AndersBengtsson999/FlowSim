@@ -2,7 +2,7 @@
 
 An Avalonia desktop simulator for exploring software delivery using capacity, independent stage effort, queues, dependencies and WIP. This is a simulation tool, not a project-management application.
 
-The current implementation is **Simulation Model v0.1 through Step 13 — Live Team Performance**, including Simple Mode and Live simulation. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
+The current implementation is **Simulation Model v0.2 — Development Collaboration Model v1**, following Step 13 — Live Team Performance, including Simple Mode and Live simulation. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
 
 ## Build and run on macOS
 
@@ -51,7 +51,7 @@ Backlog → Development → WaitingForCodeReview → CodeReview
         → WaitingForTesting → Testing → Done
 ```
 
-Code Review, Rework and Development share one developer pool, served in that order. Testing has a separate tester pool. Each active item consumes at most 1 unit per day, also limited by one person's configured capacity and the remaining pool. Capacity is not hours.
+Code Review, Rework and Development share one developer pool, served in that order. Testing has a separate tester pool. Development gives each active item primary capacity before allocating collaboration to the closest-to-done items. Each item can consume up to 2 capacity units for up to 1.5 effective effort. Review, Rework and Testing retain their one-unit caps. All allocations are bounded by per-person capacity, remaining work and the shared pool. Capacity is not hours.
 
 Four WIP limits count only their active state; waiting queues do not occupy active slots. FIFO ties follow scenario item order. All dependencies must be Done before development admission. Invalid and circular dependencies are rejected.
 
@@ -59,7 +59,13 @@ Admission occurs at day start; work completes at day end. Newly completed items 
 
 Read [SIMULATION_MODEL.md](docs/SIMULATION_MODEL.md) for precise daily order, timestamp, metric and validation definitions.
 
-## Using the application
+## Primary workflow: Live → Analyze → Advanced
+
+The application opens directly in **Live**. Configure Team, Work, Flow and Quality, then Start. Pause/Resume/Step, Flow Board, Team Performance, trends, interventions, checkpoints and Before/After remain in one simulator. **Run to Day**, while paused, advances the existing timeline to a chosen day without playback delays.
+
+**Analyze** contains Compare, Explore and Experiments. **Advanced** retains detailed fixed-horizon settings/results, distributions, Monte Carlo, validation and diagnostics. Navigating away pauses Live and preserves the session. Home and simple Run remain internal legacy code without primary navigation entries. See [Live-first UX and verification](docs/LIVE_FIRST_UX.md).
+
+## Advanced fixed-horizon workflow
 
 The default form and **Reset to Baseline** use `BaselineScenario.Create()`: 100 days, 5 developers, 2 testers, capacity 1 each, active WIP limits 5/3/3 and 30 independent items with effort 5/1/2. The ViewModel obtains its defaults from this factory.
 
@@ -134,11 +140,11 @@ Read [the definitions](docs/SIMULATION_MODEL.md#model-validation) and [the detai
 
 ## Scenario comparison and experiments (Step 9)
 
-Open **Compare → Advanced Comparison**, duplicate Baseline, rename the alternative, and use **Edit Selected Scenario** to modify it in the existing Scenario form. Apply the draft, choose a comparison reference and **Run All Scenarios**. Compare metrics as rows/scenarios as columns, inspect highlighted parameter differences, and select scalar or observed daily-flow charts. Out of Date results are excluded, with their historical configuration still available in traceability.
+Open **Analyze → Experiments**, duplicate Baseline, rename the alternative, and use **Edit Selected Scenario** to modify it in the existing Scenario form. Apply the draft, choose a comparison reference and **Run All Scenarios**. Compare metrics as rows/scenarios as columns, inspect highlighted parameter differences, and select scalar or observed daily-flow charts. Out of Date results are excluded, with their historical configuration still available in traceability.
 
 **Run Monte Carlo Comparison** defaults to 500 runs per scenario. Common Random Numbers defaults on and uses the comparison seed sequence across scenarios. The ordinary table shows distributions and differences of P50s; a separate table shows the distribution of signed differences per paired run. Disabled common seeds use each scenario's configured seed and omit pairing.
 
-Save/load scenarios and experiments using human-readable JSON (SchemaVersion 1, SimulationModelVersion 0.1). Export current comparison results to CSV with values, deltas, percentiles, full configuration snapshots and run provenance. JSON saves configurations only; no database or result-history archive is introduced.
+Save/load scenarios and experiments using human-readable JSON (SchemaVersion 1, SimulationModelVersion 0.2). Export current comparison results to CSV with values, deltas, percentiles, full configuration snapshots and run provenance. JSON saves configurations only; no database or result-history archive is introduced.
 
 See [the experiment workflow](docs/EXPERIMENTS.md), [exact comparison semantics](docs/SIMULATION_MODEL.md#scenario-comparison) and [measured comparison results](docs/COMPARISON_RESULTS.md). Core execution rules are unchanged; its only new file declares the explicit model-version constant. Technical Debt remains out of scope.
 
@@ -148,13 +154,13 @@ Use **Simulate → Run Baseline**, inspect the six primary results, then **Dupli
 
 ## Simple Mode (Step 11B)
 
-The application now starts at **Home**. Choose **Run**, **Change & Compare** or **Explore**. Run shows four result cards; Change & Compare creates its before/after pair automatically; Explore exposes one parameter and one chart. Expert scenario management, Monte Carlo, validation, exports and diagnostics remain under **Advanced Tools**. This supersedes the normal navigation described in earlier increments. See [Simple Mode guide, file inventory and verification](docs/SIMPLE_MODE.md).
+Historically, Step 11B started at **Home**, with **Run**, **Change & Compare** and **Explore**. The current Live-first navigation supersedes that entry path. Run shows four result cards; Change & Compare creates its before/after pair automatically; Explore exposes one parameter and one chart. Expert scenario management, Monte Carlo, validation, exports and diagnostics remain under **Advanced Tools**. This section records the historical Step 11B design; see Live-first UX above for current navigation. See [Simple Mode guide, file inventory and verification](docs/SIMPLE_MODE.md).
 
 ### Live — watch and change a running system
 
-Open **Live** (or **Start Live Simulation** on Home), select **Live Flow Demo**, and Start. Pause/Resume/Step and 0.5x–10x playback operate one evolving timeline. **Change something** pauses; edits apply next simulated day without resetting work. The flow board, rolling metrics and one queue-history chart show observations; intervention markers retain what changed and when.
+The application opens **Live** directly. Select **Live Flow Demo** and Start. Pause/Resume/Step and 0.5x–10x playback operate one evolving timeline. **Change something** pauses; edits apply next simulated day without resetting work. The flow board, rolling metrics and one queue-history chart show observations; intervention markers retain what changed and when.
 
-Secondary controls provide checkpoints and JSON save/open. The default safety stop is 10,000 days. Continuous arrivals default to 0.8 items/day with decimal fractional accumulation; Fixed Backlog remains available in More settings. The normal Run/Compare/Explore workflows are preserved.
+Secondary controls provide checkpoints and JSON save/open. The default safety stop is 10,000 days. Continuous arrivals default to 0.8 items/day with decimal fractional accumulation; Fixed Backlog remains available in More settings. Compare and Explore are under Analyze; detailed fixed-horizon runs remain under Advanced.
 
 See [Live model, instructions, validation and limitations](docs/LIVE_SIMULATION.md), including the Day 100 checkpoint experiment and the capacity-only AI proxy limitation. Build/test/run remain:
 
@@ -172,3 +178,23 @@ Live now shows Recent Throughput and Recent Cycle Time alongside the Flow Board.
 After recording a change, expand **Before & After an intervention**. The selected window anchors to the intervention day: a Day-100 change with window 20 compares Days 81–100 against 101–120. Available-day counts make partial periods explicit. Queue comparisons use averages; utilization differences use percentage points. No composite score or causal recommendation is generated.
 
 Latest verification: Release build with 0 warnings/errors and **274 tests passing**. Actual Avalonia views were rendered and visually inspected, including the Add tester experiment. Manual native macOS interaction remains unverified for this step. See [implementation, calculation semantics, measured results and verification limits](docs/LIVE_TEAM_PERFORMANCE.md).
+
+The Step 13 [developer-capacity investigation](docs/LIVE_CAPACITY_VALIDATION.md) verifies both unchanged Testing under arrival-limited demo conditions and increased Testing under abundant work. The full suite now has **282 passing tests**; simulation semantics and production code are unchanged by that investigation.
+
+Final [Before & After boundary verification](docs/LIVE_BOUNDARY_VERIFICATION.md) confirms Day-100/window-20 comparisons use **81–100 / 101–120** in every tested metric and in the running native Avalonia UI. Partial periods and 10/20/50/100-day windows are verified. **294 tests pass, with 0 build warnings/errors**; no production-code changes were needed.
+
+## Development Collaboration Model v1
+
+[Model, worked examples and verification](docs/DEVELOPMENT_COLLABORATION.md) documents primary-first allocation, Closest-to-Done collaboration, fractional reuse, consumed-capacity utilization, Flow Board details and the deliberate v0.1 persistence incompatibility. Earlier verification counts and screenshots above describe their historical steps. Technical Debt has not been started.
+
+Current v0.2 verification: **313 tests pass; Release build has 0 warnings and 0 errors**. Five native Avalonia WIP scenarios passed; results and screenshots are linked in the model report.
+
+## Live Performance Trend
+
+Live → Team Performance now includes a selectable time-series chart with 10/20/50/100-day and Full Session ranges. Daily queue and Development capacity/work series remain distinct from rolling delivery, Average WIP and utilization. Intervention markers use the recorded day and highlight the existing Before/After selection. See [semantics, architecture and verification](docs/LIVE_PERFORMANCE_TREND.md). No new chart dependency or simulation-rule change was introduced.
+
+Trend verification: **327 tests pass; Release build has 0 warnings and 0 errors**. Baseline, Day-100 WIP intervention, collaboration, Reset/checkpoint behavior and a 10,000-day native chart were verified.
+
+## Live-first UX verification
+
+Current navigation is **Live | Analyze | Advanced**, with Live selected on launch. Compare/Explore/Experiments are grouped under Analyze; the new secondary **Run to Day** control continues Live deterministically. **336 tests pass; Release build has 0 warnings and 0 errors.** See [workflow, retained legacy code and native verification](docs/LIVE_FIRST_UX.md).

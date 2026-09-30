@@ -13,7 +13,7 @@ public sealed class LivePerformanceTests(ITestOutputHelper output)
     [Fact]
     public void WindowSelectsCompletionDaysAndRetainsFullCycleTimes()
     {
-        var items = new[] { 78, 79, 98, 99 }.Select(n => new WorkItem($"W{n}", "Boundary", n, 1, 1)).ToArray();
+        var items = new[] { 78, 79, 98, 99 }.Select(n => new WorkItem($"W{n}", "Boundary", n * 1.5, 1, 1)).ToArray();
         var session = new SimulationSession(new("Boundaries", 120, new(10, 10), 10, 10, 10, items));
         var live = new LiveSimulation(session); ToDay(live, 101);
         Assert.Equal(new int?[] { 80, 81, 100, 101 }, session.WorkItems.Select(w => w.DoneDay));

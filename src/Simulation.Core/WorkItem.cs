@@ -142,11 +142,11 @@ public sealed class WorkItem
         _ => throw new InvalidOperationException("Only active stages can receive work.")
     };
 
-    internal void ApplyWork(double work, int day)
+    internal void ApplyWork(double work, int day, double? consumedCapacity = null)
     {
         if (!double.IsFinite(work) || work < 0 || work > 1 || work > RemainingEffort)
             throw new InvalidOperationException("Invalid work allocation.");
-        if (work > 0) events.Add(new(day, Id, WorkItemEventType.CapacityApplied, State, State, work));
+        if (work > 0) events.Add(new(day, Id, WorkItemEventType.CapacityApplied, State, State, work, ConsumedCapacity: consumedCapacity));
         switch (State)
         {
             case WorkItemStatus.Rework:

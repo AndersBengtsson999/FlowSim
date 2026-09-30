@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:views="using:Simulation.UI.Views" xmlns:core="using:Simulation.Core" xmlns:charts="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.LiveView" x:DataType="vm:LiveViewModel">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:views="using:Simulation.UI.Views" xmlns:core="using:Simulation.Core" xmlns:app="using:Simulation.Application" xmlns:charts="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.LiveView" x:DataType="vm:LiveViewModel">
  <UserControl.Styles>
   <Style Selector="ListBox#LiveFlow ListBoxItem"><Setter Property="Padding" Value="0"/><Setter Property="Margin" Value="0"/><Setter Property="MinHeight" Value="0"/></Style>
  </UserControl.Styles>
@@ -15,7 +15,7 @@
    <Grid ColumnDefinitions="*,Auto">
           <StackPanel>
            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="13" />
-           <TextBlock Text="{Binding Kind}" Classes="note" FontSize="10" />
+           <TextBlock Text="{Binding Kind}" Classes="note" TextWrapping="Wrap" FontSize="11" />
           </StackPanel>
           <StackPanel Grid.Column="1" Margin="8,0,0,0">
            <TextBlock Text="{Binding Count}" FontSize="18" HorizontalAlignment="Right" />
@@ -30,7 +30,7 @@
  </UserControl.Resources>
  <Grid RowDefinitions="Auto,*,Auto">
  <StackPanel Spacing="12" Margin="8,8,8,16">
-  <TextBlock Text="Watch the system while it runs" Classes="page" />
+  <TextBlock Text="Live simulation" Classes="page" />
   <TextBlock Text="Run the simulation continuously, change something, and see what happens." Classes="note" />
    <Grid ColumnDefinitions="*,Auto" IsVisible="{Binding HasSession}">
     <TextBlock Text="{Binding DayLabel}" FontSize="30" FontWeight="Bold" />
@@ -42,6 +42,16 @@
      <ComboBox ItemsSource="{Binding Speeds}" SelectedItem="{Binding Speed, Mode=TwoWay}" Width="85"><ComboBox.ItemTemplate><DataTemplate x:DataType="x:Double"><TextBlock Text="{Binding StringFormat='{}{0}x'}" /></DataTemplate></ComboBox.ItemTemplate></ComboBox>
     </WrapPanel>
    </Grid>
+   <Expander Header="Run to a day" IsVisible="{Binding HasSession}" HorizontalAlignment="Left">
+    <StackPanel Spacing="5">
+     <WrapPanel>
+      <TextBlock Text="Run to Day" VerticalAlignment="Center" Margin="0,0,8,6"/>
+      <TextBox Text="{Binding TargetDay, Mode=TwoWay}" Width="110" Margin="0,0,8,6" AutomationProperties.Name="Run to Day target"/>
+      <Button Content="Run to Day" Command="{Binding RunToDayCommand}" AutomationProperties.Name="Run to Day"/>
+     </WrapPanel>
+     <TextBlock Text="While paused, advance this session to the target day without playback delays. Pause or navigate away to stop." Classes="note"/>
+    </StackPanel>
+   </Expander>
  </StackPanel>
  <ScrollViewer Grid.Row="1">
  <StackPanel Spacing="16" Margin="8">
@@ -53,12 +63,14 @@
      <TextBlock Text="TEAM" Classes="section" />
 <Grid ColumnDefinitions="*,100"><TextBlock Text="Developers" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.NumberOfDevelopers, Mode=TwoWay}" AutomationProperties.Name="Live Developers" /></Grid>
 <Grid ColumnDefinitions="*,100"><TextBlock Text="Testers" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.NumberOfTesters, Mode=TwoWay}" AutomationProperties.Name="Live Testers" /></Grid>
-</StackPanel><StackPanel Grid.Column="2" Spacing="10"><TextBlock Text="FLOW" Classes="section"/><Grid ColumnDefinitions="*,100"><TextBlock Text="Development WIP" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.DevelopmentWipLimit, Mode=TwoWay}" AutomationProperties.Name="Live Development WIP" /></Grid>
+</StackPanel><StackPanel Grid.Column="2" Spacing="10"><TextBlock Text="FLOW" Classes="section"/><Grid ColumnDefinitions="*,100"><TextBlock Text="Development WIP" VerticalAlignment="Center" ToolTip.Tip="{x:Static vm:FlowPresentation.DevelopmentWipHelp}"/><TextBox Grid.Column="1" Text="{Binding Setup.DevelopmentWipLimit, Mode=TwoWay}" AutomationProperties.Name="Live Development WIP" /></Grid>
 <Grid ColumnDefinitions="*,100"><TextBlock Text="Testing WIP" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.TestingWipLimit, Mode=TwoWay}" AutomationProperties.Name="Live Testing WIP" /></Grid>
 </StackPanel></Grid>
-   <TextBlock Text="WORK ARRIVAL" Classes="section" />
+   <TextBlock Text="WORK" Classes="section" />
 <Grid ColumnDefinitions="*,100"><TextBlock Text="New work · items / day" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding ArrivalRate, Mode=TwoWay}" AutomationProperties.Name="Live New work · items / day" /></Grid>
 
+   <Expander Header="Work · effort per item" HorizontalAlignment="Stretch"><views:EffortSettingsView DataContext="{Binding Setup}" /></Expander>
+   <Expander Header="Quality · defects and rework" HorizontalAlignment="Stretch"><views:LiveQualityView DataContext="{Binding Setup}" /></Expander>
    <Expander Header="More settings" HorizontalAlignment="Stretch">
     <StackPanel Spacing="12">
      <TextBlock Text="Work arrival" />
@@ -80,12 +92,22 @@
     <StackPanel>
      <ListBox Name="LiveFlow" ItemsSource="{Binding Flow}" SelectedItem="{Binding SelectedFlow, Mode=TwoWay}" ItemTemplate="{StaticResource FlowRow}" Background="Transparent" />
      <TextBlock Text="{Binding QueueDetail}" Classes="note" Margin="8" />
+     <Expander Header="Development allocations" HorizontalAlignment="Stretch">
+      <StackPanel Spacing="6">
+       <TextBlock Text="Most recent day: remaining effort and capacity flow. Review and Rework retain their existing allocation rules." Classes="note" />
+       <ScrollViewer MaxHeight="230"><ItemsControl ItemsSource="{Binding DevelopmentAllocations}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:MetricRow">
+        <StackPanel Margin="4,5" ToolTip.Tip="{Binding Explanation}"><TextBlock Text="{Binding Label}" FontWeight="SemiBold"/><TextBlock Text="{Binding Value}" TextWrapping="Wrap" FontSize="12"/></StackPanel>
+       </DataTemplate></ItemsControl.ItemTemplate></ItemsControl></ScrollViewer>
+      </StackPanel>
+     </Expander>
+
     </StackPanel>
     <StackPanel Grid.Column="2" Spacing="10">
      <Button Content="Change something" Command="{Binding ChangeCommand}" Classes="primary" HorizontalAlignment="Left" />
      <Border IsVisible="{Binding IsEditing}" Classes="card">
       <StackPanel Spacing="8">
        <TextBlock Text="Paused · Change something" Classes="section" />
+       <TextBlock Text="{x:Static vm:FlowPresentation.DevelopmentWipHelp}" Classes="note"/>
        <Grid ColumnDefinitions="*,80,100"><TextBlock Grid.Column="1" Text="CURRENT"/><TextBlock Grid.Column="2" Text="TRY"/></Grid>
        <ItemsControl ItemsSource="{Binding ChangeFields}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:SimpleChangeField">
         <Grid ColumnDefinitions="*,80,100" Margin="0,3"><TextBlock Text="{Binding Label}" VerticalAlignment="Center"/><TextBlock Grid.Column="1" Text="{Binding Current}" VerticalAlignment="Center"/><TextBox Grid.Column="2" Text="{Binding Value, Mode=TwoWay}" AutomationProperties.Name="{Binding Label}"/></Grid>
@@ -116,6 +138,20 @@
        </StackPanel>
       </StackPanel>
      </Expander>
+     <Border Classes="card"><StackPanel Spacing="8">
+      <TextBlock Text="Performance Trend" Classes="section" />
+      <WrapPanel>
+       <StackPanel Margin="0,0,12,0"><TextBlock Text="Metric" Classes="note"/>
+        <ComboBox ItemsSource="{Binding TrendMetrics}" SelectedItem="{Binding TrendMetric, Mode=TwoWay}" MinWidth="220" AutomationProperties.Name="Trend metric">
+         <ComboBox.ItemTemplate><DataTemplate x:DataType="app:LiveTrendMetricOption"><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate>
+        </ComboBox>
+       </StackPanel>
+       <StackPanel><TextBlock Text="Visible range" Classes="note"/><ComboBox ItemsSource="{Binding TrendRanges}" SelectedItem="{Binding TrendRange, Mode=TwoWay}" AutomationProperties.Name="Trend time range"/></StackPanel>
+      </WrapPanel>
+      <TextBlock Text="{Binding TrendDescription}" Classes="note" TextWrapping="Wrap"/>
+      <charts:LivePerformanceTrendChart Series="{Binding Trend}" Unit="{Binding TrendMetric.Unit}" SelectedDay="{Binding SelectedTrendInterventionDay}" Height="210" AutomationProperties.Name="Performance Trend chart" />
+      <TextBlock Text="Hover for day/value and changes. Dashed lines mark recorded interventions; changes take effect the next day. The thicker line marks the Before &amp; After selection. Markers show timing, not causality." Classes="note" TextWrapping="Wrap"/>
+     </StackPanel></Border>
      <Border Classes="card"><StackPanel>
       <TextBlock Text="Queues over time" Classes="section" />
       <TextBlock Text="Blue: Code Review · Amber: Testing" Classes="note" />

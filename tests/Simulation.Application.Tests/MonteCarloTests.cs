@@ -101,7 +101,7 @@ public sealed class MonteCarloTests
     [Fact]
     public void TimePercentilesUseOnlyRunsThatHaveCompletedItems()
     {
-        var request = new SimulationRequest { NumberOfWorkItems = 1, SimulationDays = 4,
+        var request = new SimulationRequest { NumberOfWorkItems = 1, SimulationDays = 3,
             DevelopmentDistribution = new TriangularEffort(.1, 1, 3), TestingEffort = 1 };
         var result = new MonteCarloRunner().Run(new(request, 50));
         var delivered = result.Runs.Where(r => r.CompletedWorkItems > 0).ToArray();

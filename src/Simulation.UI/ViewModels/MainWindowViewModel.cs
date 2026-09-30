@@ -102,7 +102,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         e.EventType switch
         {
             WorkItemEventType.Transition => $"{PresentationLabels.Label(e.FromState)} → {PresentationLabels.Label(e.ToState)}",
-            WorkItemEventType.CapacityApplied => $"{PresentationLabels.Label(e.FromState)}: {e.EffortApplied:0.###} capacity applied",
+            WorkItemEventType.CapacityApplied => $"{PresentationLabels.Label(e.FromState)}: {e.CapacityConsumed:0.###} capacity consumed; {e.EffortApplied:0.###} effective work",
             WorkItemEventType.DefectFound => $"Defect found in {PresentationLabels.Label(e.DefectSource)}; {e.RequiredReworkEffort:0.###} Rework units assigned",
             _ => e.EventType.ToString()
         })).ToArray() ?? [];
@@ -117,7 +117,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     public IReadOnlyList<DailySnapshot> Days => result?.Days ?? [];
     public IReadOnlyList<WorkItemResult> WorkItems => result?.WorkItems ?? [];
     public int LastDay => Math.Max(1, Days.Count);
-    public int SelectedView { get => selectedView; set { selectedView = value; OnPropertyChanged(); OnPropertyChanged(nameof(ShowSimulationActions)); OnPropertyChanged(nameof(MainArea)); OnPropertyChanged(nameof(SimulatePage)); OnPropertyChanged(nameof(AnalyzePage)); } }
+    public int SelectedView { get => selectedView; set { selectedView = value; OnPropertyChanged(); OnPropertyChanged(nameof(ShowSimulationActions)); OnPropertyChanged(nameof(MainArea)); OnPropertyChanged(nameof(ExpertArea)); OnPropertyChanged(nameof(SimulatePage)); OnPropertyChanged(nameof(AnalyzePage)); } }
     public bool ShowSimulationActions => selectedView < 4;
     // The UI is one-based; Core snapshots retain their original zero-based Day.
     public int SelectedDay
@@ -127,7 +127,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         {
             selectedDay = Math.Clamp(value, 1, LastDay);
             OnPropertyChanged(); OnPropertyChanged(nameof(SelectedSnapshot));
-            OnPropertyChanged(nameof(DayLabel)); OnPropertyChanged(nameof(FlowStates));
+            OnPropertyChanged(nameof(DayLabel)); OnPropertyChanged(nameof(FlowStates)); OnPropertyChanged(nameof(DevelopmentAllocations));
             OnPropertyChanged(nameof(CapacityDetail)); OnPropertyChanged(nameof(SelectedFlowDetail));
             OnPropertyChanged(nameof(WaitingForReworkCount)); OnPropertyChanged(nameof(ReworkCount));
         }
@@ -136,6 +136,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     public string DayLabel => HasResults ? $"End of simulated day {SelectedDay} of {LastDay}" : "Run a simulation to inspect its days.";
     public string CapacityDetail => SelectedSnapshot is not { } d ? "" :
         $"Selected day: developers {d.UsedDeveloperCapacity:0.##} / {d.AvailableDeveloperCapacity:0.##} units used; testers {d.UsedTesterCapacity:0.##} / {d.AvailableTesterCapacity:0.##} units used.";
+    public IReadOnlyList<MetricRow> DevelopmentAllocations => FlowPresentation.DevelopmentAllocations(SelectedSnapshot);
     public IReadOnlyList<FlowStateRow> FlowStates => SelectedSnapshot is not { } d ? [] : FlowPresentation.Rows(d);
     public IReadOnlyList<MetricRow> Metrics => result is not { } r ? [] :
     [
@@ -165,7 +166,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     public MainWindowViewModel()
     {
         Sensitivity = new SensitivityViewModel(ReadRequest);
-        Compare = new CompareViewModel(ReadRequest, LoadConfiguration, index => SelectedView = index);
+        Compare = new CompareViewModel(ReadRequest, LoadConfiguration, index => { SelectedView = index; if (simple is not null) simple.Navigate(index == 5 ? "Experiments" : "Advanced"); });
         RunCommand = new AsyncCommand(RunOrApplyAsync, () => !isBusy && !Compare.IsBusy);
         RunBaselineCommand = new(async () => { LoadConfiguration(BaselineScenario.CreateRequest()); await RunAsync(); }, () => !isBusy && !Compare.IsEditing);
         ViewFlowCommand = new(() => SelectedView = 1, () => HasResults);

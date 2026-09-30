@@ -36,12 +36,12 @@ public sealed class SimulationEngineTests
     }
 
     [Fact]
-    public void OneItemConsumesAtMostOneUnitDespiteFiveDevelopers()
+    public void OneItemUsesTwoContributionsDespiteFiveDevelopers()
     {
         var result = new SimulationEngine().Run(Scenario(days: 4));
-        Assert.Equal(1, result.WorkItems[0].RemainingDevelopmentEffort);
-        Assert.Null(result.WorkItems[0].DevelopmentCompletedDay);
-        Assert.All(result.Days, d => Assert.Equal(1, d.DevelopmentWork));
+        Assert.Equal(0, result.WorkItems[0].RemainingDevelopmentEffort);
+        Assert.Equal(4, result.WorkItems[0].DevelopmentCompletedDay);
+        Assert.Equal(new[] { 1.5, 1.5, 1.5, .5 }, result.Days.Select(d => d.DevelopmentWork));
     }
 
     [Fact]
@@ -55,10 +55,10 @@ public sealed class SimulationEngineTests
     }
 
     [Theory]
-    [InlineData(0.5, 0.5)]
-    [InlineData(1, 1)]
-    [InlineData(2, 1)]
-    public void ItemCapIsLimitedByBothOnePersonAndOneUnit(double perPerson, double expected)
+    [InlineData(0.5, 0.75)]
+    [InlineData(1, 1.5)]
+    [InlineData(2, 1.5)]
+    public void EachDevelopmentContributionIsLimitedByPersonCapacityAndOneUnit(double perPerson, double expected)
     {
         var result = new SimulationEngine().Run(Scenario(1, new Team(5, 2, perPerson)));
         Assert.Equal(expected, result.Days[0].DevelopmentWork);
@@ -75,18 +75,18 @@ public sealed class SimulationEngineTests
         Assert.Equal(forwardFlow.Skip(1), item.Transitions.Select(t => t.To));
         Assert.Equal(forwardFlow.SkipLast(1), item.Transitions.Select(t => t.From));
         Assert.Equal(0, item.DevelopmentStartedDay);
-        Assert.Equal(5, item.DevelopmentCompletedDay);
-        Assert.Equal(5, item.CodeReviewStartedDay);
-        Assert.Equal(6, item.CodeReviewCompletedDay);
-        Assert.Equal(6, item.TestingStartedDay);
-        Assert.Equal(8, item.TestingCompletedDay);
-        Assert.Equal(8, item.DoneDay);
-        Assert.Equal(WorkItemStatus.WaitingForCodeReview, result.Days[4].Items[0].State);
-        Assert.Equal(WorkItemStatus.WaitingForTesting, result.Days[5].Items[0].State);
-        Assert.Equal(WorkItemStatus.Testing, result.Days[6].Items[0].State);
-        Assert.Equal(WorkItemStatus.Done, result.Days[7].Items[0].State);
-        Assert.Equal(8, result.AverageLeadTime);
-        Assert.Equal(8, result.AverageCycleTime);
+        Assert.Equal(4, item.DevelopmentCompletedDay);
+        Assert.Equal(4, item.CodeReviewStartedDay);
+        Assert.Equal(5, item.CodeReviewCompletedDay);
+        Assert.Equal(5, item.TestingStartedDay);
+        Assert.Equal(7, item.TestingCompletedDay);
+        Assert.Equal(7, item.DoneDay);
+        Assert.Equal(WorkItemStatus.WaitingForCodeReview, result.Days[3].Items[0].State);
+        Assert.Equal(WorkItemStatus.WaitingForTesting, result.Days[4].Items[0].State);
+        Assert.Equal(WorkItemStatus.Testing, result.Days[5].Items[0].State);
+        Assert.Equal(WorkItemStatus.Done, result.Days[6].Items[0].State);
+        Assert.Equal(7, result.AverageLeadTime);
+        Assert.Equal(7, result.AverageCycleTime);
         Assert.Equal(1.0 / 20, result.Throughput);
     }
 
@@ -98,7 +98,8 @@ public sealed class SimulationEngineTests
         Assert.All(result.Days, day => Assert.All(day.Items, item =>
         {
             Assert.InRange(new[] { item.DevelopmentWork, item.CodeReviewWork, item.TestingWork }.Count(w => w > 0), 0, 1);
-            Assert.InRange(item.DevelopmentWork + item.CodeReviewWork + item.TestingWork, 0, 1);
+            Assert.InRange(item.DevelopmentWork, 0, 1.5);
+            Assert.InRange(item.CodeReviewWork + item.TestingWork, 0, 1);
         }));
     }
 

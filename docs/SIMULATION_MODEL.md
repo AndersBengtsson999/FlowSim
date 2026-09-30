@@ -1,4 +1,6 @@
-# Simulation Model v0.1 — Steps 2–9
+# Simulation Model v0.2 — Development Collaboration Model v1
+
+Current allocation semantics are v0.2. Historical Step 2–13 measured examples and linked validation reports describe their original v0.1 runs; current collaboration measurements are in [Development Collaboration Model v1](DEVELOPMENT_COLLABORATION.md).
 
 ## Purpose and scope
 
@@ -28,15 +30,19 @@ Tester pool/day    = TesterCount × TesterCapacityPerDay
 
 Capacity is an abstract work unit, **not hours**. There are two resource types. Code review, rework and development consume the **same** developer pool; testing consumes only the tester pool. DeveloperCapacityPolicy allocates that pool in order: CodeReview, Rework, Development. Unused capacity does not carry forward.
 
-For each item in an active stage, the allocator applies:
+Code Review, Rework and Testing retain their per-item daily allocation:
 
 ```text
 min(remaining stage effort, remaining resource pool, 1.0, capacity per person)
 ```
 
-Thus one item can never consume more than 1.0 capacity unit per day. Five developers with capacity 1 can instead advance five separate items by one unit each. A person with capacity 0.5 can apply at most 0.5 to one item per day. Capacity above 1 increases the aggregate pool but never the per-item limit; unused capacity is possible when too few items are active. Fractions left after a small review can be allocated to another item's development.
+Development uses two passes over the items admitted at day start. First each gets a primary allocation in FIFO order, limited to `min(remaining effort, remaining pool, 1, DeveloperCapacityPerDay)`. Primary capacity produces equal effective effort. Then remaining active items are ordered by remaining Development effort **after primary work**, ascending, with stable FIFO/input order for ties. Each may consume up to `min(remaining effort / 0.5, remaining pool, 1, DeveloperCapacityPerDay)` collaboration capacity, producing half as much effective effort. Collaboration requires at least two developers in the team.
 
-This is a pool model with a one-person-per-item cap, not a schedule of named individuals. Fractional allocations can represent sequential work on different items. Authors and reviewers are not tracked: a team with one developer can review its own modeled work. No individual skill or self-review constraint is implemented.
+Thus a Development item can consume at most 2 capacity units and receive at most 1.5 effective effort per day. Every active item has a primary opportunity before any collaboration. Fractional leftovers remain available to other eligible active items during that day. All admissions still precede all work; completion does not admit replacement backlog work midway through a day.
+
+This is a pooled model, without named individuals or tracking authors/reviewers. Development WIP counts active items, not contributors. Per-person capacity below 1 limits each contribution; values above 1 increase the pool but not either contribution cap. With two developers at capacity 0.4, one active item can consume 0.8 and receive 0.6 effective effort. With only one developer, no second contribution is available.
+
+The 50% second-contribution efficiency is an explicit simulation assumption, not a claim about real-world pair-programming productivity. See [Development collaboration](DEVELOPMENT_COLLABORATION.md) for concepts, worked examples, compatibility and verification.
 
 Nominal Team capacity is kept separate from the daily pool variables in the engine. Future capacity reductions can be introduced at that boundary; meetings, support, absence and similar adjustments are not implemented.
 
@@ -77,7 +83,7 @@ The implementation deliberately uses a conservative day-boundary interpretation 
 3. Admit existing WaitingForCodeReview items into CodeReview, and existing WaitingForTesting items into Testing, each in FIFO order while its WIP policy permits. Admit WaitingForRework into Rework under its own WIP limit.
 4. Sample the four active occupancies and initialize that day's developer and tester pools.
 5. Allocate developer capacity to active CodeReview items in FIFO order. At completion, inspect for a defect: transition to WaitingForTesting on success or WaitingForRework on failure at time `d+1`.
-6. Allocate the remaining developer pool to active Rework items, then active Development items in FIFO order. Completed rework or development transitions to WaitingForCodeReview at time `d+1`.
+6. Allocate the remaining developer pool to active Rework items, then Development primary work in FIFO order and collaboration in stable Closest-to-Done order. Completed rework or development transitions to WaitingForCodeReview at time `d+1`.
 7. Allocate tester capacity to active Testing items in FIFO order. At completion, inspect for a defect: transition to Done on success or WaitingForRework on failure at time `d+1`.
 8. Record end-of-day states, remaining efforts, work consumption and transitions.
 
@@ -87,28 +93,28 @@ This choice differs from admitting newly completed work downstream during the sa
 
 Start timestamps record **admission** to an active state at `d`; completion timestamps record reaching zero effort at `d+1`. A waiting transition and subsequent admission can have the same numerical boundary timestamp, while remaining distinct ordered transitions. Waiting duration can therefore be zero when a slot is available at the next boundary. No artificial extra waiting day is added.
 
-Example with sufficient available capacity and one item requiring 5/1/2 units:
+Example with at least two developers, sufficient available capacity and one item requiring 5/1/2 units:
 
 | Working interval | Outcome |
 |---|---|
-| `[0,5)` | Five development allocations of at most 1; DevelopmentStartedDay 0, DevelopmentCompletedDay 5 |
-| `[5,6)` | Review admitted at 5; CodeReviewCompletedDay 6 |
-| `[6,8)` | Testing admitted at 6; TestingCompletedDay and DoneDay 8 |
+| `[0,4)` | Development work 1.5, 1.5, 1.5, 0.5; DevelopmentStartedDay 0, DevelopmentCompletedDay 4 |
+| `[4,5)` | Review admitted at 4; CodeReviewCompletedDay 5 |
+| `[5,7)` | Testing admitted at 5; TestingCompletedDay and DoneDay 7 |
 
-At the end of engine day 4 the item is WaitingForCodeReview; at the end of day 5 it is WaitingForTesting. An active stage can start and finish between two end-of-day chart samples. Admission occupancy, transition history and work consumption still record that activity.
+At the end of engine day 3 the item is WaitingForCodeReview; at the end of day 4 it is WaitingForTesting. An active stage can start and finish between two end-of-day chart samples. Admission occupancy, transition history and work consumption still record that activity.
 
 ## FIFO
 
 There are no priority classes and no random tie-breaking.
 
 - Eligible backlog items: oldest CreatedDay first. Blocked and future items are skipped without preventing eligible items from starting.
-- Active development allocation: earliest DevelopmentStartedDay first. An older, previously blocked backlog item does not displace an already admitted item.
+- Primary development allocation: earliest DevelopmentStartedDay first. An older, previously blocked backlog item does not displace an already admitted item.
 - Review admission/allocation: earliest current review-queue entry first.
 - Testing admission/allocation: earliest current testing-queue entry first.
 - Rework admission/allocation: earliest current rework-queue entry first.
 - Equal timestamps: original scenario collection order, maintained by stable ordering. IDs are not used to assign priority.
 
-CodeReview → Rework → Development precedence is the resource-order policy. FIFO continues to apply within each stage. A partially served item retains its queue position.
+CodeReview → Rework → Development precedence is the resource-order policy. FIFO applies to primary Development, Review, Rework and Testing. Development collaboration uses lowest remaining effort first after the primary pass, with FIFO ties. A partially served item retains its queue position.
 
 ## Dependencies and validation
 
@@ -129,7 +135,7 @@ Cycle validation uses an iterative topological traversal, avoiding recursion on 
 
 WipPolicy is the single admission/occupancy policy boundary:
 
-| Limit | States counted in v0.1 |
+| Limit | States counted in v0.2 |
 |---|---|
 | DevelopmentWipLimit | Development only |
 | CodeReviewWipLimit | CodeReview only |
@@ -166,7 +172,7 @@ Day `d` represents `[d,d+1)`. Admission is stamped `d`, completion `d+1`; subtra
 | AverageWip | Arithmetic mean of daily TotalWip across the entire horizon |
 | MaximumWaitingForCodeReviewQueue / MaximumWaitingForTestingQueue | Maximum corresponding **end-of-day** queue count; not a within-day peak |
 | AvailableDeveloperCapacity / AvailableTesterCapacity | Nominal team pool for that day, even if there is no work |
-| UsedDeveloperCapacity / UsedTesterCapacity | Actual development + review + rework allocation / actual testing allocation for that day |
+| UsedDeveloperCapacity / UsedTesterCapacity | Consumed Development capacity + review + rework capacity / testing capacity for that day |
 | DeveloperUtilization / TesterUtilization | Sum of corresponding used capacity divided by sum of available capacity over all simulated days; 0 when available capacity is 0 |
 
 Every daily snapshot exposes all nine end-of-day state counts, TotalWip, available/used resource capacities, stage work and detailed item observations. Items not yet created are excluded from daily counts and elapsed-time accumulation. Incomplete items retain observed active, queue and blocked times but have no completed lead/cycle time.
@@ -214,7 +220,7 @@ The Step 5 presentation changes did not modify the engine or metrics. Step 6 add
 
 - **Scenario** groups simulation length/workload, team capacity, active WIP limits and effort. Text and tooltips explain every field. Construction and Reset to Baseline both read the existing `BaselineScenario.Create()` factory, whose configuration comes from SimulationRequest defaults.
 - **Flow** shows all seven state counts for one end-of-day snapshot. Active and waiting states differ by text as well as colour. UI day 1 selects `Days[0]`; the last UI day selects `Days[SimulationDays-1]`. Changing this selection never executes the engine. The first day is selected after a run.
-- **Charts** show TotalWip, both waiting queue counts, and used versus available developer/tester capacity. Lines connect daily observations, not intra-day estimates. Developer usage includes both Development and Code Review. There is no automatic classification, smoothing or new aggregation.
+- **Charts** show TotalWip, both waiting queue counts, and used versus available developer/tester capacity. Lines connect daily observations, not intra-day estimates. Developer usage includes consumed Development, Code Review and Rework capacity. There is no automatic classification, smoothing or new aggregation.
 - **Results** contains twelve explained summary metrics and a read-only Work Items table. Time averages are completed-only working days; utilization uses percentage formatting. Dates in the item table remain the domain's zero-based boundary timestamps. Incomplete lead/cycle times remain blank.
 
 Results remain the last completed run when scenario fields are edited. A new run clears/replaces them; reset clears results and returns to Scenario. No full scenario comparison/history, editing of results, sorting/filtering, export, individual stage WIP series or charting dependency is added. Monte Carlo in Step 6 has its own aggregate tab. Scroll areas keep the interface usable at smaller window sizes.
@@ -330,7 +336,7 @@ First review/testing start timestamps are retained. Their completion timestamps 
 
 ## Rework Capacity
 
-CodeReview → Rework → Development share one developer pool in that priority order. Rework has the same per-item/day cap as development and its own active-only WIP limit. WaitingForRework does not consume that limit. All admissions precede work, so defects cannot trigger same-day rework. Daily snapshots expose WaitingForReworkCount, ReworkCount, ReworkWip and UsedReworkDeveloperCapacity. TotalWip includes both new states; developer utilization includes consumed rework.
+CodeReview → Rework → Development share one developer pool in that priority order. Rework retains its one-unit per-item/day cap (also limited by per-person capacity) and its own active-only WIP limit. WaitingForRework does not consume that limit. All admissions precede work, so defects cannot trigger same-day rework. Daily snapshots expose WaitingForReworkCount, ReworkCount, ReworkWip and UsedReworkDeveloperCapacity. TotalWip includes both new states; developer utilization includes consumed rework.
 
 ## Quality Metrics
 
@@ -490,11 +496,11 @@ Execution date and identity intentionally differ between reruns; reproducibility
 
 ## Simulation Model Version
 
-`Simulation.Core.SimulationModel.Version` explicitly identifies current semantics as **"0.1"**, independent of assembly/application version. This names the existing Step 7 engine semantics; Steps 8 and 9 add measurement/organization rather than new simulation behavior. Future semantic changes should deliberately update this identifier. Scenario/experiment files, experiment records, comparison results and CSV exports include it. Unknown versions are rejected with a clear message; no silent migration or execution under different semantics is implemented.
+`Simulation.Core.SimulationModel.Version` is **"0.2"**, independently of the assembly/application version. This version introduces Development Collaboration Model v1; v0.1 had the one-unit Development cap. Scenario/experiment files, Live sessions, result records and CSV provenance carry the model version. Existing v0.1 persisted scenarios, experiments and Live sessions are deliberately rejected by the existing version guards. There is no migration or silent reinterpretation. Preserve old files and use the v0.1 implementation for their continuation/results; explicitly recreate configurations under v0.2 for a new experiment. Editing a version label cannot migrate a saved timeline. JSON schema remains 1.
 
 ## Scenario and experiment persistence
 
-Persistence belongs in Simulation.Infrastructure, which now implements ExperimentJson and ComparisonCsv. UI references Infrastructure for file operations; Core remains free of UI, JSON and filesystem dependencies. The configuration JSON envelope has SchemaVersion=1, SimulationModelVersion="0.1", DocumentKind="Scenario" or "Experiment", and the corresponding payload. All existing SimulationRequest settings, including fixed fallbacks, distribution parameters, dormant defect configuration and configured seeds, are retained. Effort objects have explicit Kind="Fixed"/"Triangular" and their numerical fields. There is no CLR type-name activation.
+Persistence belongs in Simulation.Infrastructure, which now implements ExperimentJson and ComparisonCsv. UI references Infrastructure for file operations; Core remains free of UI, JSON and filesystem dependencies. The configuration JSON envelope has SchemaVersion=1, SimulationModelVersion="0.2", DocumentKind="Scenario" or "Experiment", and the corresponding payload. All existing SimulationRequest settings, including fixed fallbacks, distribution parameters, dormant defect configuration and configured seeds, are retained. Effort objects have explicit Kind="Fixed"/"Triangular" and their numerical fields. There is no CLR type-name activation.
 
 Loading validates schema/model/kind, scenario settings, unique IDs, reference membership and supported distributions. Unknown properties and distribution kinds are rejected. Experiment loading preserves identities and creates a read-only scenario collection. Importing a standalone scenario into the current collection assigns a fresh identity to avoid collisions. Files are human-readable UTF-8 JSON, limited to 5 MB on read. Writes use a sibling temporary file followed by replacement. Native file pickers handle location selection and overwrite prompting; no database or automatic background save is introduced.
 

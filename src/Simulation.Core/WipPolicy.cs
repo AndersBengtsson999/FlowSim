@@ -1,6 +1,6 @@
 namespace Simulation.Core;
 
-/// <summary>v0.1 counts active states only. Waiting-state membership belongs here.</summary>
+/// <summary>Counts active states only. Waiting-state membership belongs here.</summary>
 public static class WipPolicy
 {
     public static bool CountsToward(WorkItemStatus state, WorkItemStatus stage) => state == stage;

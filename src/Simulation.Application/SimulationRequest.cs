@@ -5,7 +5,7 @@ namespace Simulation.Application;
 /// <summary>Simple UI request; explicit heterogeneous work/dependencies can be supplied to Core.</summary>
 public sealed record SimulationRequest
 {
-    public string Name { get; init; } = "Simulation Model v0.1 baseline";
+    public string Name { get; init; } = $"Simulation Model v{SimulationModel.Version} baseline";
     public int DeveloperCount { get; init; } = 5;
     public int TesterCount { get; init; } = 2;
     public double DeveloperCapacityPerDay { get; init; } = 1;

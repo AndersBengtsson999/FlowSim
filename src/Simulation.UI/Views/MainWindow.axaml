@@ -63,19 +63,24 @@
    <Setter Property="FontWeight" Value="SemiBold" />
   </Style>
  </Window.Styles>
- <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="28" DataContext="{Binding Simple}" x:DataType="vm:SimpleWorkflowViewModel">
+ <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" Margin="28" DataContext="{Binding Simple}" x:DataType="vm:SimpleWorkflowViewModel">
   <TextBlock Text="Software Development Simulation" FontSize="28" FontWeight="Bold" Foreground="#173B50" Margin="0,0,0,20" />
   <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
-   <WrapPanel>
-    <Button Content="Home" Command="{Binding HomeCommand}" />
-    <Button Content="Run" Command="{Binding OpenRunCommand}" />
-    <Button Content="Change &amp; Compare" Command="{Binding OpenChangesCommand}" />
-    <Button Content="Explore" Command="{Binding OpenExploreCommand}" />
-    <Button Content="Live" Command="{Binding OpenLiveCommand}" />
+   <WrapPanel Name="PrimaryNavigation">
+    <Button Content="Live" Command="{Binding OpenLiveCommand}" Classes.primary="{Binding LiveVisible}" AutomationProperties.Name="Navigate Live" />
+    <Button Content="Analyze" Command="{Binding OpenAnalyzeCommand}" Classes.primary="{Binding AnalyzeVisible}" AutomationProperties.Name="Navigate Analyze" />
    </WrapPanel>
-   <Button Grid.Column="1" Content="Advanced" ToolTip.Tip="Advanced Tools: experiments, uncertainty, validation and exports" Command="{Binding AdvancedCommand}" Background="Transparent" FontSize="12" />
+   <Button Grid.Column="1" Content="Advanced" ToolTip.Tip="Specialist settings, reproducibility, uncertainty and diagnostics" Command="{Binding AdvancedCommand}" Classes.primary="{Binding AdvancedVisible}" FontSize="12" AutomationProperties.Name="Navigate Advanced" />
   </Grid>
-  <Grid Grid.Row="2">
+  <StackPanel Grid.Row="2" IsVisible="{Binding AnalyzeVisible}" Spacing="6" Margin="0,0,0,12">
+   <TextBlock Text="Analyze · investigate with independent scenario runs; your Live session stays paused." Classes="note" />
+   <WrapPanel>
+    <Button Content="Compare" Command="{Binding OpenChangesCommand}" Classes.primary="{Binding AnalyzeCompareVisible}" AutomationProperties.Name="Analyze Compare" />
+    <Button Content="Explore" Command="{Binding OpenExploreCommand}" Classes.primary="{Binding ExploreVisible}" AutomationProperties.Name="Analyze Explore" />
+    <Button Content="Experiments" Command="{Binding OpenExperimentsCommand}" Classes.primary="{Binding ExperimentsVisible}" AutomationProperties.Name="Analyze Experiments" />
+   </WrapPanel>
+  </StackPanel>
+  <Grid Grid.Row="3">
    <Grid IsVisible="{Binding LiveVisible}"><views:LiveView DataContext="{Binding Live}" /></Grid>
    <ScrollViewer IsVisible="{Binding HomeVisible}">
     <StackPanel MaxWidth="820" HorizontalAlignment="Left" Spacing="20" Margin="12,24">
@@ -126,7 +131,7 @@
        </Grid>
        <TextBlock Text="Flow" Classes="section" Margin="0,16,0,0" />
        <Grid ColumnDefinitions="*,120">
-        <TextBlock Text="Development WIP" VerticalAlignment="Center" />
+        <TextBlock Text="Development WIP" VerticalAlignment="Center" ToolTip.Tip="{x:Static vm:FlowPresentation.DevelopmentWipHelp}" />
         <TextBox Grid.Column="1" Text="{Binding Owner.DevelopmentWipLimit, Mode=TwoWay}" ToolTip.Tip="Maximum number of active Development items. Waiting queues are separate." />
        </Grid>
        <Grid ColumnDefinitions="*,120">
@@ -308,7 +313,7 @@
       </StackPanel>
       <StackPanel Spacing="6" Grid.Row="0" Grid.Column="2">
        <TextBlock Text="Values" />
-       <TextBox Text="{Binding Explore.Values, Mode=TwoWay}" Width="360" HorizontalAlignment="Left" />
+       <TextBox Text="{Binding Explore.Values, Mode=TwoWay}" AutomationProperties.Name="Analyze parameter values" Width="360" HorizontalAlignment="Left" />
       </StackPanel>
       <StackPanel Spacing="6" Grid.Row="2" Grid.Column="0">
        <TextBlock Text="What do you want to observe?" />
@@ -343,6 +348,7 @@
      </Expander>
     </StackPanel>
    </ScrollViewer>
+   <Grid IsVisible="{Binding ExperimentsVisible}"><views:CompareView DataContext="{Binding Owner.Compare}" /></Grid>
    <Grid IsVisible="{Binding AdvancedVisible}" RowDefinitions="Auto,*">
     <Expander Header="Current simple comparison · specialist controls" IsVisible="{Binding ShowPairInAdvanced}" MaxHeight="600" HorizontalAlignment="Stretch">
      <views:CompareView DataContext="{Binding Pair}" />
@@ -350,7 +356,7 @@
     <views:AdvancedWorkspace Grid.Row="1" DataContext="{Binding Owner}" />
    </Grid>
   </Grid>
-  <StackPanel Grid.Row="3" Spacing="5">
+  <StackPanel Grid.Row="4" Spacing="5">
    <TextBlock Text="{Binding Status}" Classes="note" />
    <Button Content="Cancel" Command="{Binding CancelCommand}" IsVisible="{Binding IsBusy}" HorizontalAlignment="Left" />
   </StackPanel>

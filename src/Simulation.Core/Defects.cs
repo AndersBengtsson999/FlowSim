@@ -4,7 +4,10 @@ public enum DefectSource { CodeReview, Testing }
 public enum WorkItemEventType { Transition, CapacityApplied, DefectFound }
 public sealed record WorkItemEvent(int Day, string WorkItemId, WorkItemEventType EventType,
     WorkItemStatus FromState, WorkItemStatus ToState, double EffortApplied = 0,
-    DefectSource? DefectSource = null, double? RequiredReworkEffort = null);
+    DefectSource? DefectSource = null, double? RequiredReworkEffort = null, double? ConsumedCapacity = null)
+{
+    public double CapacityConsumed => ConsumedCapacity ?? EffortApplied;
+}
 public sealed record InspectionAttempt(DefectSource Stage, int AttemptNumber, int StartedDay,
     int? CompletedDay = null, bool? DefectFound = null);
 

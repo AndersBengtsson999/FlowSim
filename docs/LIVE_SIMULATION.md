@@ -1,10 +1,10 @@
 # Step 12 — Live simulation
 
-Live adds one evolving simulation timeline to Home / Run / Change & Compare / Explore. Advanced remains secondary. The model is an illustrative laboratory, not a calibrated representation of a real organization and not a management recommendation engine.
+Live is the default application entry and primary evolving simulation timeline. Compare, Explore and Experiments are under Analyze; Advanced remains secondary. See [Live-first UX](LIVE_FIRST_UX.md). The model is an illustrative laboratory, not a calibrated representation of a real organization and not a management recommendation engine.
 
 ## Using Live
 
-Choose **Live**, then **Live Flow Demo**, then **Start**. The compact setup exposes developers, testers, Development/Testing WIP and new work per day. More settings contains initial backlog, arrival mode, capacities, review/rework WIP, effort distributions, quality, seed, safety limit and rolling window. Baseline, Variable Effort Example and Defects & Rework Example are also available starting points. Choosing one copies its existing configuration into the Live setup; it does not modify the normal Run setup.
+The application opens **Live**. Choose **Live Flow Demo**, then **Start**. The compact setup exposes developers, testers, Development/Testing WIP and new work per day. Work effort and Quality have their own collapsed sections. More settings contains initial backlog, arrival mode, capacities, review/rework WIP, seed, safety limit and rolling window. Baseline, Variable Effort Example and Defects & Rework Example are also available starting points. Choosing one copies its existing configuration into the Live setup; it does not modify the normal Run setup.
 
 Live Flow Demo starts with **zero initial items**, 5 developers, 2 testers, capacities 1/1, WIP 5/3/3/3, fixed development/review/testing effort 5/1/2, defects off, 0.8 new items/day, seed 12345. Baseline instead retains its 30 initial items; arrivals are additional when Continuous is selected. Fixed Backlog ignores the arrival rate.
 
@@ -13,6 +13,7 @@ The running page emphasizes the current day, the existing flow-board colors and 
 - **Start** creates a new timeline at Day 0 and starts automatic playback.
 - **Pause** stops wall-clock playback without advancing or changing domain state.
 - **Resume** continues; **Step**, while paused, processes exactly one day.
+- **Run to Day**, while paused, advances the same session to a greater integer day within its safety limit. It yields every 25 days for UI responsiveness, stops at the target and can be interrupted by Pause/navigation. No days are replayed or skipped.
 - Speeds 0.5x/1x/2x/5x/10x mean nominal intervals of 2/1/0.5/0.2/0.1 real seconds per day. A slow render can delay playback; it never adds work or skips simulated days.
 - Opening **Change something**, creating/restoring a checkpoint, opening/saving a file, requesting all-time details, or navigating to another workflow pauses playback.
 - Applying or cancelling an edit leaves playback paused. Resume is explicit.
@@ -31,7 +32,7 @@ The daily order remains:
 4. Allocate tester capacity to Testing.
 5. Record end-of-day states, actual work and capacities; increment the completed-day count.
 
-All admissions precede work. A completion cannot receive another stage's capacity in the same day. Generated items have no dependencies; existing dependencies remain intact. The existing per-item cap is still `min(1, per-person capacity)` each day. The team pool is count × per-person capacity. This means raising developer capacity from 1.0 to 1.4 increases the team pool, **but not the one-unit cap on a single item**. Fixed-duration numerical semantics have not changed.
+All admissions precede work. A completion cannot receive another stage's capacity in the same day. Generated items have no dependencies; existing dependencies remain intact. Development now uses the shared model v0.2 primary/collaboration passes; Review, Rework and Testing retain `min(1, per-person capacity)` per item/day. Each Development contribution has that cap, with the second 50% effective. Team pool remains count × per-person capacity. See [Development Collaboration Model v1](DEVELOPMENT_COLLABORATION.md).
 
 Core has no Avalonia, clock, file, JSON or persistence dependency. Application owns Live lifecycle, checkpoints and rolling analysis. Infrastructure owns the versioned JSON representation and atomic file replacement. UI owns playback scheduling, forms, chart rendering and file pickers; no work allocation or rolling-metric formulas live in ViewModels.
 
@@ -113,7 +114,7 @@ Native macOS validation runs the actual Avalonia window and its commands, checks
 
 Unchanged immutable item observations are shared between in-memory days. Full histories and per-day reference arrays are retained, so memory still grows with timeline length and item population; checkpoints and loading an additional copy increase memory further. JSON files are smaller through delta encoding, but saving/loading/checkpoint capture can pause the UI for large sessions. No history needed for continuation or metrics is discarded. The default day limit is a safety stop, not a guarantee for extreme arrival rates. There is no asynchronous background simulation or autosave in this increment.
 
-No hidden inconsistency requiring changes to fixed simulation behavior was found. Two existing model characteristics matter when interpreting Live: queues include newly completed stages at day end even if admitted immediately next morning, and capacity above 1 per person cannot increase one item's daily work beyond 1. Neither was altered to make an experiment look different.
+Historical Step 12 verification under model v0.1: no hidden inconsistency requiring changes to fixed simulation behavior was found. Two existing model characteristics matter when interpreting Live: queues include newly completed stages at day end even if admitted immediately next morning, and capacity above 1 per person cannot increase one item's daily work beyond 1. Neither was altered to make an experiment look different.
 
 ## Files
 
@@ -141,3 +142,7 @@ No project dependencies or solution architecture were replaced. There is no expl
 - [Paused intervention at Day 100](screenshots/step12-change.png)
 - [Day 200 after adding a tester](screenshots/step12-day200.png)
 - [Day 1000](screenshots/step12-day1000.png)
+
+## Live Performance Trend
+
+The Team Performance area now includes a single-metric trend chart with independent visible-range and existing rolling-window controls. Daily queues and consumed/effective Development work use authoritative snapshots; rolling throughput, cycle time, Average WIP and utilization match Step 13. Interventions remain at recorded Day N, effective N+1, with the Before/After selection highlighted. See [Live Performance Trend](LIVE_PERFORMANCE_TREND.md) for full definitions, lifecycle behavior, rendering and native validation.

@@ -11,7 +11,7 @@ public sealed class SimpleWorkflowTests
     public async Task SimpleRunUsesInputsAndFourActualResultCards()
     {
         var main = new MainWindowViewModel(); var simple = main.Simple;
-        Assert.True(simple.HomeVisible); main.NumberOfDevelopers = "4"; main.NumberOfTesters = "3";
+        Assert.True(simple.LiveVisible); main.NumberOfDevelopers = "4"; main.NumberOfTesters = "3";
         await simple.RunAsync(); Assert.True(simple.ResultsVisible);
         Assert.Equal(4, main.LastRunRequest!.DeveloperCount); Assert.Equal(3, main.LastRunRequest.TesterCount);
         Assert.Equal(4, simple.RunCards.Count);

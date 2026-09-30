@@ -121,7 +121,7 @@ public sealed class DefectTests
         var completed = a.WorkItems.Where(w => w.DoneDay.HasValue).ToArray();
         Assert.Equal(completed.Average(w => w.TotalReworkEffort), a.AverageReworkEffortPerCompletedItem);
         Assert.Equal(a.WorkItems.Sum(w => w.DefectsFound), a.TotalDefectsFound);
-        Assert.All(a.Days, d => Assert.Equal(d.DevelopmentWork + d.ReviewWork + d.UsedReworkDeveloperCapacity, d.UsedDeveloperCapacity));
+        Assert.All(a.Days, d => Assert.Equal(d.UsedDevelopmentCapacity + d.ReviewWork + d.UsedReworkDeveloperCapacity, d.UsedDeveloperCapacity));
         Assert.All(a.WorkItems, w => Assert.True(((ICollection<WorkItemEvent>)w.Events).IsReadOnly));
         Assert.All(s.WorkItems, w => Assert.Empty(w.Events));
     }

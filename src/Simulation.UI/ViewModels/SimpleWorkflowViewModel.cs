@@ -18,11 +18,16 @@ public sealed class SimpleWorkflowViewModel : INotifyPropertyChanged
     public LiveViewModel Live { get; } = new();
     public bool LiveVisible => page == "Live";
     public RelayCommand OpenLiveCommand { get; }
+    public RelayCommand OpenAnalyzeCommand { get; }
+    public RelayCommand OpenExperimentsCommand { get; }
+    public bool AnalyzeVisible => page is "Changes" or "Comparison" or "Explore" or "Experiments";
+    public bool AnalyzeCompareVisible => ChangesVisible || ComparisonVisible;
+    public bool ExperimentsVisible => page == "Experiments";
     public MainWindowViewModel Try { get; } = new();
     public CompareViewModel Pair { get; }
     public SensitivityViewModel Explore { get; }
     private SimulationRequest starting = BaselineScenario.CreateRequest();
-    private string page = "Home", startingPoint = "Baseline", status = "";
+    private string page = "Live", analyzePage = "Changes", startingPoint = "Baseline", status = "";
     private bool busy;
     public event PropertyChangedEventHandler? PropertyChanged;
     public IReadOnlyList<string> StartingPoints { get; } = ["Baseline", "Last simulation"];
@@ -83,10 +88,12 @@ public sealed class SimpleWorkflowViewModel : INotifyPropertyChanged
     {
         Owner = owner;
         OpenLiveCommand = new(() => Navigate("Live"));
+        OpenAnalyzeCommand = new(() => Navigate(analyzePage));
+        OpenExperimentsCommand = new(() => Navigate("Experiments"));
         Pair = new(() => Try.CaptureSetup(), Try.LoadConfiguration, index => Navigate(index == 0 ? "Changes" : "Comparison"));
         Explore = new(() => Owner.LastRunRequest ?? Owner.CaptureSetup()) { BaseScenario = "Current Scenario form", WarmUpDays = "0" };
         HomeCommand = new(() => Navigate("Home")); OpenRunCommand = new(() => Navigate("Run"));
-        OpenChangesCommand = new(() => { startingPoint = Owner.LastRunRequest is null ? "Baseline" : "Last simulation"; PrepareChanges(); Navigate("Changes"); }, () => CanEdit);
+        OpenChangesCommand = new(() => Navigate("Changes"), () => CanEdit);
         OpenExploreCommand = new(() => Navigate("Explore")); AdvancedCommand = new(() => Navigate("Advanced"));
         ResultsCommand = new(() => Navigate("Results")); FlowCommand = new(() => Navigate("Flow")); BackChangesCommand = new(() => Navigate("Changes"));
         AdvancedPairCommand = new(() => { ShowPairInAdvanced = true; Navigate("Advanced"); });
@@ -95,13 +102,13 @@ public sealed class SimpleWorkflowViewModel : INotifyPropertyChanged
         PrepareChanges();
     }
     public bool ShowPairInAdvanced { get; private set; }
-    public void Navigate(string destination) { if (destination != "Live") Live.Pause(); page = destination; status = ""; Notify(); }
+    public void Navigate(string destination) { if (destination != "Live") Live.Pause(); page = destination; if (AnalyzeVisible) analyzePage = destination; status = ""; Notify(); }
     public void PrepareChanges()
     {
         starting = startingPoint == "Last simulation" ? Owner.LastRunRequest ?? BaselineScenario.CreateRequest() : BaselineScenario.CreateRequest();
         Try.LoadConfiguration(starting);
         TeamChanges = [new("Developers", Try.NumberOfDevelopers, () => Try.NumberOfDevelopers, v => Try.NumberOfDevelopers = v), new("Testers", Try.NumberOfTesters, () => Try.NumberOfTesters, v => Try.NumberOfTesters = v)];
-        FlowChanges = [new("Development WIP", Try.DevelopmentWipLimit, () => Try.DevelopmentWipLimit, v => Try.DevelopmentWipLimit = v, "Maximum active Development items."), new("Testing WIP", Try.TestingWipLimit, () => Try.TestingWipLimit, v => Try.TestingWipLimit = v, "Maximum active Testing items.")];
+        FlowChanges = [new("Development WIP", Try.DevelopmentWipLimit, () => Try.DevelopmentWipLimit, v => Try.DevelopmentWipLimit = v, FlowPresentation.DevelopmentWipHelp), new("Testing WIP", Try.TestingWipLimit, () => Try.TestingWipLimit, v => Try.TestingWipLimit = v, "Maximum active Testing items.")];
         CapacityChanges = [new("Developer Capacity / day", Try.DeveloperCapacity, () => Try.DeveloperCapacity, v => Try.DeveloperCapacity = v, "Abstract work units per developer per day, not hours."), new("Tester Capacity / day", Try.TesterCapacity, () => Try.TesterCapacity, v => Try.TesterCapacity = v, "Abstract work units per tester per day, not hours.")];
         Notify();
     }
@@ -110,7 +117,7 @@ public sealed class SimpleWorkflowViewModel : INotifyPropertyChanged
     public async Task RunAsync()
     {
         await Owner.RunAsync();
-        if (Owner.HasResults) Navigate("Results"); else { status = Owner.ErrorMessage; Notify(); }
+        if (Owner.HasResults) { startingPoint = "Last simulation"; PrepareChanges(); Navigate("Results"); } else { status = Owner.ErrorMessage; Notify(); }
     }
     public async Task RunComparisonAsync()
     {

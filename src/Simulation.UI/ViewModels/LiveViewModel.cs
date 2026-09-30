@@ -34,18 +34,41 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     public IReadOnlyList<int> RollingWindows { get; } = [10, 20, 50, 100];
     private int rollingWindow = 20;
     public int RollingWindow { get => rollingWindow; set { if (!RollingWindows.Contains(value)) return; rollingWindow = value; if (Live is not null) Live.RollingWindow = value; RefreshPerformance(); Notify(); } }
+    public IReadOnlyList<LiveTrendMetricOption> TrendMetrics { get; private set; } = LivePerformanceTrend.Metrics.Where(m => m.Metric != LiveTrendMetric.ReworkQueue).ToArray();
+    public IReadOnlyList<string> TrendRanges { get; } = ["Last 10 days", "Last 20 days", "Last 50 days", "Last 100 days", "Full Session"];
+    private string trendRange = "Last 20 days";
+    private LiveTrendMetricOption trendMetric = LivePerformanceTrend.Metrics[0];
+    public string TrendRange { get => trendRange; set { if (value == trendRange || !TrendRanges.Contains(value)) return; trendRange = value; RefreshTrend(); Notify(); } }
+    public LiveTrendMetricOption TrendMetric { get => trendMetric; set { if (value is null || value == trendMetric || !TrendMetrics.Contains(value)) return; trendMetric = value; RefreshTrend(); Notify(); } }
+    public LiveTrendSeries Trend { get; private set; } = new([], []);
+    public string TrendDescription => $"{TrendMetric.Name} · {TrendMetric.Unit} · " + (TrendMetric.Rolling ? $"Rolling {RollingWindow} days ending on each plotted day; available days only." : "Daily observation for each completed simulated day.") + " Missing values are gaps.";
+    public int SelectedTrendInterventionDay => SelectedIntervention?.Day ?? -1;
+    private void RefreshTrend()
+    {
+        var rework = ShowRework || Live?.Session.InitialConfiguration.Quality.Enabled == true || Live?.Session.Changes.Any(c => c.After.Quality.Enabled) == true;
+        if (rework != TrendMetrics.Any(m => m.Metric == LiveTrendMetric.ReworkQueue))
+            TrendMetrics = LivePerformanceTrend.Metrics.Where(m => m.Metric != LiveTrendMetric.ReworkQueue || rework).ToArray();
+        if (!TrendMetrics.Contains(trendMetric)) trendMetric = LivePerformanceTrend.Metrics[0];
+        int? range = trendRange == "Full Session" ? null : int.Parse(trendRange.Split(' ')[1]);
+        Trend = Live is null ? new([], []) : LivePerformanceTrend.Project(Live.Session, TrendMetric.Metric, RollingWindow, range);
+    }
     public IReadOnlyList<double> Speeds { get; } = [0.5, 1, 2, 5, 10];
     public double Speed { get => speed; set { if (!Speeds.Contains(value)) return; speed = value; timer.Interval = TimeSpan.FromSeconds(1 / speed); Notify(); } }
     public bool HasSession => Live is not null;
     public bool SetupVisible => !HasSession;
-    public bool IsRunning => running;
-    public bool CanResume => HasSession && !running && !editing && !stopped && !(Live?.LimitReached ?? false);
+    private bool fastAdvancing, stopFastAdvance;
+    public string TargetDay { get; set; } = "100";
+    public bool IsFastAdvancing => fastAdvancing;
+    public bool IsRunning => running || fastAdvancing;
+    public AsyncCommand RunToDayCommand { get; }
+    public bool CanResume => HasSession && !running && !fastAdvancing && !editing && !stopped && !(Live?.LimitReached ?? false);
     public bool IsEditing => editing;
-    public bool CanChange => HasSession && !editing && !stopped;
+    public bool CanChange => HasSession && !fastAdvancing && !editing && !stopped;
     public int Day => Live?.Session.CurrentDay ?? 0;
     public string DayLabel => $"Day {Day}";
     public string Status => status;
     public string WindowLabel => Performance is null ? $"Last {RollingWindow} days" : $"{RollingWindow}-day window · {LivePerformancePresentation.Period(Performance)}";
+    public IReadOnlyList<MetricRow> DevelopmentAllocations => FlowPresentation.DevelopmentAllocations(Live?.Session.Days.LastOrDefault());
     public IReadOnlyList<FlowStateRow> Flow { get; private set; } = [];
     private FlowStateRow? selectedFlow;
     public FlowStateRow? SelectedFlow { get => selectedFlow; set { selectedFlow = value; Notify(); } }
@@ -114,8 +137,9 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         Setup.LoadConfiguration(LiveSimulation.Demo);
         timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         timer.Tick += (_, _) => Tick();
-        StartCommand = new(() => Guard(Start), () => !HasSession);
-        PauseCommand = new(Pause, () => running);
+        StartCommand = new(() => Guard(Start), () => !HasSession && !fastAdvancing);
+        RunToDayCommand = new(RunToDayAsync, () => CanResume);
+        PauseCommand = new(Pause, () => IsRunning);
         ResumeCommand = new(Resume, () => CanResume);
         StepCommand = new(Step, () => CanResume);
         StopCommand = new(() => { Pause(); stopped = true; status = "Stopped. Save results or Reset to start again."; Notify(); }, () => HasSession && !editing && !stopped);
@@ -123,7 +147,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         ChangeCommand = new(() => Guard(BeginChange), () => CanChange);
         ApplyCommand = new(() => Guard(ApplyChanges), () => editing);
         CancelChangeCommand = new(() => { editing = false; status = "Changes discarded. Resume when ready."; Notify(); });
-        CheckpointCommand = new(() => Guard(() => { Pause(); Live!.CreateCheckpoint(CheckpointLabel); status = "Checkpoint created."; Notify(); }), () => HasSession && !editing);
+        CheckpointCommand = new(() => Guard(() => { Pause(); Live!.CreateCheckpoint(CheckpointLabel); status = "Checkpoint created."; Notify(); }), () => HasSession && !editing && !fastAdvancing);
         RestoreCommand = new(() => Guard(() => { Pause(); if (SelectedCheckpoint is null) throw new ArgumentException("Select a checkpoint."); Live!.RestoreCheckpoint(SelectedCheckpoint.Id); stopped = false; editing = false; RebuildHistory(); Refresh(); status = "Checkpoint restored. Resume when ready."; Notify(); }));
         DeleteCheckpointCommand = new(() => { if (SelectedCheckpoint is { } c) Live?.DeleteCheckpoint(c.Id); SelectedCheckpoint = null; Notify(); });
         DetailsCommand = new(() => { Pause(); var r = Live?.Session.GetResult(); Details = r is null ? "" : $"All-time · {r.SimulationDays} days\nLead Time {r.AverageLeadTime:0.0} · Cycle Time {r.AverageCycleTime:0.0} · Waiting Time {r.AverageWaitingTime:0.0}\nThroughput {r.ThroughputPerFiveDays:0.0} / 5 days · Average WIP {r.AverageWip:0.0}\nDefects {r.TotalDefectsFound} · Rework effort {r.TotalReworkEffort:0.0}\nDeveloper utilization {r.DeveloperUtilization:P0} · Tester utilization {r.TesterUtilization:P0}"; Notify(); });
@@ -131,7 +155,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     }
     public void Start()
     {
-        if (HasSession) return;
+        if (HasSession || fastAdvancing) return;
         var limit = Positive(SafetyLimit, "Safety Limit");
         var setup = Setup.CaptureSetup();
         setup = setup with { Quality = ReadQuality(Setup) };
@@ -139,7 +163,34 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         Live.SafetyLimit = limit; Live.RollingWindow = RollingWindow;
         stopped = false; queueHistory.Clear(); Refresh(); Resume();
     }
-    public void Pause() { running = false; timer.Stop(); if (HasSession) status = "Paused."; Notify(); }
+    public void Pause() { stopFastAdvance = true; running = false; timer.Stop(); if (HasSession) status = "Paused."; Notify(); }
+    /// <summary>Presentation batching only: every interval uses the existing Live Step.</summary>
+    public async Task RunToDayAsync()
+    {
+        if (!CanResume || Live is null) return;
+        var session = Live;
+        if (!int.TryParse(TargetDay, out var target) || target <= Day || target > session.SafetyLimit)
+        { status = $"Run to Day: enter a whole day greater than {Day} and at most {session.SafetyLimit}."; Notify(); return; }
+        fastAdvancing = true; stopFastAdvance = false; timer.Stop();
+        status = $"Advancing to Day {target}… Pause to stop."; Notify();
+        try
+        {
+            while (!stopFastAdvance && ReferenceEquals(Live, session) && session.Session.CurrentDay < target)
+            {
+                if (!session.Step()) break;
+                AppendHistory();
+                if (session.Session.CurrentDay % 25 == 0)
+                {
+                    Refresh();
+                    // Yield to the Avalonia dispatcher so Pause/navigation remain responsive.
+                    await Task.Delay(1);
+                }
+            }
+            if (ReferenceEquals(Live, session)) status = session.LimitReached ? "Live simulation safety limit reached." : $"Paused at Day {Day}.";
+        }
+        catch (Exception ex) { status = ex.Message; }
+        finally { fastAdvancing = false; Refresh(); Notify(); }
+    }
     public void Resume() { if (!CanResume) return; running = true; status = "Running"; timer.Start(); Notify(); }
     public void Tick() { if (running) Advance(); }
     public void Step() { if (!CanResume) return; Advance(); }
@@ -210,6 +261,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         if (Live is null || selectedIntervention is null || !Live.Session.Changes.Contains(selectedIntervention))
             selectedIntervention = Live?.Session.Changes.LastOrDefault();
         RefreshComparison();
+        RefreshTrend();
     }
     private void RefreshComparison()
     {
@@ -245,7 +297,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     private void Notify()
     {
         PropertyChanged?.Invoke(this, new(string.Empty));
-        StartCommand?.Refresh(); PauseCommand?.Refresh(); ResumeCommand?.Refresh(); StepCommand?.Refresh(); StopCommand?.Refresh(); ChangeCommand?.Refresh(); ApplyCommand?.Refresh(); CheckpointCommand?.Refresh();
+        RunToDayCommand?.Refresh(); StartCommand?.Refresh(); PauseCommand?.Refresh(); ResumeCommand?.Refresh(); StepCommand?.Refresh(); StopCommand?.Refresh(); ChangeCommand?.Refresh(); ApplyCommand?.Refresh(); CheckpointCommand?.Refresh();
     }
-    public void Dispose() => timer.Stop();
+    public void Dispose() { stopFastAdvance = true; timer.Stop(); }
 }

@@ -18,7 +18,7 @@
   <TextBlock Grid.Row="1" IsVisible="{Binding HasNoResults}" Text="Run Simulation from Scenario to see the flow and daily charts." Classes="note" />
   <Grid Grid.Row="1" ColumnDefinitions="340,18,*" IsVisible="{Binding HasResults}">
    <ScrollViewer>
-    <ListBox ItemsSource="{Binding FlowStates}" SelectedItem="{Binding SelectedFlow, Mode=TwoWay}" Background="Transparent">
+    <StackPanel><ListBox ItemsSource="{Binding FlowStates}" SelectedItem="{Binding SelectedFlow, Mode=TwoWay}" Background="Transparent">
      <ListBox.ItemTemplate>
       <DataTemplate x:DataType="vm:FlowStateRow">
        <StackPanel>
@@ -26,7 +26,7 @@
          <Grid ColumnDefinitions="*,Auto">
           <StackPanel>
            <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
-           <TextBlock Text="{Binding Kind}" Classes="note" />
+           <TextBlock Text="{Binding Kind}" Classes="note" TextWrapping="Wrap" />
           </StackPanel>
           <StackPanel Grid.Column="1" Margin="8,0,0,0">
            <TextBlock Text="{Binding Count}" FontSize="20" HorizontalAlignment="Right" />
@@ -40,6 +40,15 @@
       </DataTemplate>
      </ListBox.ItemTemplate>
     </ListBox>
+     <Expander Header="Development allocations" HorizontalAlignment="Stretch">
+      <StackPanel Spacing="6">
+       <TextBlock Text="Selected day: remaining effort and capacity flow." Classes="note" />
+       <ScrollViewer MaxHeight="230"><ItemsControl ItemsSource="{Binding DevelopmentAllocations}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:MetricRow">
+        <StackPanel Margin="4,5" ToolTip.Tip="{Binding Explanation}"><TextBlock Text="{Binding Label}" FontWeight="SemiBold"/><TextBlock Text="{Binding Value}" TextWrapping="Wrap" FontSize="12"/></StackPanel>
+       </DataTemplate></ItemsControl.ItemTemplate></ItemsControl></ScrollViewer>
+      </StackPanel>
+     </Expander>
+</StackPanel>
    </ScrollViewer>
    <ScrollViewer Grid.Column="2">
     <StackPanel Spacing="12">

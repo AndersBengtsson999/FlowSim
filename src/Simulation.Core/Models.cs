@@ -26,14 +26,18 @@ public sealed record WorkItemDaySnapshot(string Id, WorkItemStatus State,
     double RemainingDevelopmentEffort, double RemainingCodeReviewEffort, double RemainingTestingEffort,
     double DevelopmentWork, double CodeReviewWork, double TestingWork,
     int CreatedDay, WorkItemStatus StateDuringDay, bool DependencyBlocked,
-    double ReworkWork = 0, double RemainingReworkEffort = 0);
+    double ReworkWork = 0, double RemainingReworkEffort = 0, double CollaborationDevelopmentCapacity = 0)
+{
+    public double PrimaryDevelopmentCapacity => DevelopmentWork - 0.5 * CollaborationDevelopmentCapacity;
+    public double UsedDevelopmentCapacity => DevelopmentWork + 0.5 * CollaborationDevelopmentCapacity;
+}
 
 // Day is zero-based. Occupancy is sampled after admission; item states are sampled at day end.
 public sealed record DailySnapshot(int Day, int DevelopmentWip, int ReviewWip, int TestingWip,
     int BlockedItems, int UnfinishedItems, double DevelopmentWork, double ReviewWork, double TestingWork,
     IReadOnlyList<WorkItemDaySnapshot> Items,
     double AvailableDeveloperCapacity, double AvailableTesterCapacity,
-    double UsedReworkDeveloperCapacity = 0, int ReworkWip = 0)
+    double UsedReworkDeveloperCapacity = 0, int ReworkWip = 0, double CollaborationDevelopmentCapacity = 0)
 {
     public int Wip => DevelopmentWip + ReviewWip + TestingWip + ReworkWip;
     private int Count(WorkItemStatus state) => Items.Count(w => w.CreatedDay <= Day && w.State == state);
@@ -47,7 +51,9 @@ public sealed record DailySnapshot(int Day, int DevelopmentWip, int ReviewWip, i
     public int ReworkCount => Count(WorkItemStatus.Rework);
     public int DoneCount => Count(WorkItemStatus.Done);
     public int TotalWip => DevelopmentCount + WaitingForCodeReviewCount + CodeReviewCount + WaitingForTestingCount + TestingCount + WaitingForReworkCount + ReworkCount;
-    public double UsedDeveloperCapacity => DevelopmentWork + ReviewWork + UsedReworkDeveloperCapacity;
+    public double PrimaryDevelopmentCapacity => DevelopmentWork - 0.5 * CollaborationDevelopmentCapacity;
+    public double UsedDevelopmentCapacity => DevelopmentWork + 0.5 * CollaborationDevelopmentCapacity;
+    public double UsedDeveloperCapacity => UsedDevelopmentCapacity + ReviewWork + UsedReworkDeveloperCapacity;
     public double UsedTesterCapacity => TestingWork;
 }
 
@@ -69,6 +75,7 @@ public sealed record SimulationResult(string ScenarioName, int CompletedWorkItem
     public double ReworkDeveloperCapacityShare { get; init; }
     public double AverageCodeReviewAttempts { get; init; }
     public double AverageTestingAttempts { get; init; }
+    public string SimulationModelVersion { get; init; } = SimulationModel.Version;
     public int RandomSeed { get; init; }
     public int IncompleteWorkItems => TotalWorkItems - CompletedWorkItems;
     public double ThroughputPerDay => Throughput;
