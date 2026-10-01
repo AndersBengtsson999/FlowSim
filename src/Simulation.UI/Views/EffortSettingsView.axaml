@@ -9,7 +9,7 @@
          </Grid>
          <Grid ColumnDefinitions="*,110" IsVisible="{Binding IsFixed}">
           <TextBlock Text="Effort" VerticalAlignment="Center" />
-          <TextBox Grid.Column="1" Text="{Binding FixedValue, Mode=TwoWay}" ToolTip.Tip="Capacity units needed for this stage of each Work Item; nonnegative. Not elapsed time." AutomationProperties.Name="Fixed Effort" />
+          <TextBox Grid.Column="1" Text="{Binding FixedValue, Mode=TwoWay}" ToolTip.Tip="Effective work required for this stage of each Work Item; nonnegative. Productivity determines capacity consumed. Not elapsed time." AutomationProperties.Name="Fixed Effort" />
          </Grid>
          <Grid ColumnDefinitions="*,8,*,8,*" IsVisible="{Binding IsTriangular}">
           <StackPanel>

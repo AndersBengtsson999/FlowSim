@@ -63,21 +63,22 @@
    <Setter Property="FontWeight" Value="SemiBold" />
   </Style>
   <Style Selector="Grid#Workspace"><Setter Property="Margin" Value="28"/></Style>
-  <Style Selector="TextBlock#ApplicationTitle"><Setter Property="FontSize" Value="28"/><Setter Property="Margin" Value="0,0,0,20"/></Style>
+  <Style Selector="TextBlock#ApplicationTitle"><Setter Property="FontWeight" Value="Bold"/><Setter Property="Foreground" Value="#173B50"/><Setter Property="FontSize" Value="28"/><Setter Property="Margin" Value="0,0,0,20"/></Style>
   <Style Selector="Grid#NavigationRow"><Setter Property="Margin" Value="0,0,0,16"/></Style>
   <Style Selector="Grid#Workspace.compactLive"><Setter Property="Margin" Value="16"/></Style>
   <Style Selector="Grid.compactLive TextBlock#ApplicationTitle"><Setter Property="FontSize" Value="18"/><Setter Property="Margin" Value="0,0,0,6"/></Style>
   <Style Selector="Grid.compactLive Grid#NavigationRow"><Setter Property="Margin" Value="0,0,0,4"/></Style>
   <Style Selector="Grid.compactLive Grid#NavigationRow Button"><Setter Property="Padding" Value="12,6"/></Style>
+  <StyleInclude Source="/Styles/LiveVisualStyles.axaml"/>
  </Window.Styles>
  <Grid Name="Workspace" Classes.compactLive="{Binding LiveVisible}" RowDefinitions="Auto,Auto,Auto,*,Auto" DataContext="{Binding Simple}" x:DataType="vm:SimpleWorkflowViewModel">
-  <TextBlock Name="ApplicationTitle" Text="Software Development Simulation" FontWeight="Bold" Foreground="#173B50" />
+  <TextBlock Name="ApplicationTitle" Text="Software Development Simulation" />
   <Grid Name="NavigationRow" Grid.Row="1" ColumnDefinitions="*,Auto">
    <WrapPanel Name="PrimaryNavigation">
     <Button Content="Live" Command="{Binding OpenLiveCommand}" Classes.primary="{Binding LiveVisible}" AutomationProperties.Name="Navigate Live" />
     <Button Content="Analyze" Command="{Binding OpenAnalyzeCommand}" Classes.primary="{Binding AnalyzeVisible}" AutomationProperties.Name="Navigate Analyze" />
    </WrapPanel>
-   <Button Grid.Column="1" Content="Advanced" ToolTip.Tip="Specialist settings, reproducibility, uncertainty and diagnostics" Command="{Binding AdvancedCommand}" Classes.primary="{Binding AdvancedVisible}" FontSize="12" AutomationProperties.Name="Navigate Advanced" />
+   <Button Grid.Column="1" Content="Advanced" ToolTip.Tip="Specialist settings, reproducibility, uncertainty and diagnostics" Command="{Binding AdvancedCommand}" Classes.primary="{Binding AdvancedVisible}" AutomationProperties.Name="Navigate Advanced" />
   </Grid>
   <StackPanel Grid.Row="2" IsVisible="{Binding AnalyzeVisible}" Spacing="6" Margin="0,0,0,12">
    <TextBlock Text="Analyze · investigate with independent scenario runs; your Live session stays paused." Classes="note" />
@@ -219,7 +220,7 @@
       </Grid>
       <Expander Header="More things to change" HorizontalAlignment="Stretch">
        <StackPanel Spacing="12">
-        <TextBlock Text="Capacity · abstract work units per person per day" Classes="note" />
+        <TextBlock Text="Availability · percentage of nominal capacity" Classes="note" />
         <ItemsControl ItemsSource="{Binding CapacityChanges}" ItemTemplate="{StaticResource ChangeField}" />
         <views:MoreSettingsView DataContext="{Binding Try}" />
        </StackPanel>

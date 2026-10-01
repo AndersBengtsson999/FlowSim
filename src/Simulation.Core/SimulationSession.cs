@@ -5,6 +5,7 @@ public enum WorkArrivalMode { FixedBacklog, ContinuousArrival, AlwaysAvailable }
 public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5,
     int CodeReviewWipLimit = 3, int TestingWipLimit = 3)
 {
+    public StageProductivity Productivity { get; init; } = new();
     public DefectSettings Quality { get; init; } = new();
     public WorkArrivalMode ArrivalMode { get; init; } = WorkArrivalMode.FixedBacklog;
     public decimal WorkItemsPerDay { get; init; } = 0.8m;
@@ -20,7 +21,7 @@ public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5
             throw new ScenarioValidationException("All three arrival effort distributions are required.");
     }
     internal SimulationScenario Scenario(string name, int days, IReadOnlyList<WorkItem> items, int seed) =>
-        new(name, days, Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit, items, seed) { Quality = Quality };
+        new(name, days, Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit, items, seed) { Quality = Quality, Productivity = Productivity };
 }
 
 public sealed record ConfigurationChange(int Day, string? Label, SessionConfiguration Before, SessionConfiguration After);
@@ -66,7 +67,7 @@ public sealed class SimulationSession
         ScenarioValidator.Validate(scenario);
         Name = scenario.Name; RandomSeed = scenario.RandomSeed;
         Configuration = configuration ?? new(scenario.Team, scenario.DevelopmentWipLimit, scenario.CodeReviewWipLimit,
-            scenario.TestingWipLimit) { Quality = scenario.Quality, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
+            scenario.TestingWipLimit) { Quality = scenario.Quality, Productivity = scenario.Productivity, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
                 DevelopmentEffort = scenario.DevelopmentArrivalEffort, CodeReviewEffort = scenario.CodeReviewArrivalEffort, TestingEffort = scenario.TestingArrivalEffort };
         Configuration.Validate(); InitialConfiguration = Configuration;
         items = scenario.WorkItems.Select(w => w.CopyForRun()).ToList();

@@ -80,7 +80,7 @@ public sealed class LiveSimulation
         var config = new SessionConfiguration(new(request.DeveloperCount, request.TesterCount, request.DeveloperCapacityPerDay, request.TesterCapacityPerDay) { DeveloperAvailability = request.DeveloperAvailability, TesterAvailability = request.TesterAvailability },
             request.DevelopmentWipLimit, request.CodeReviewWipLimit, request.TestingWipLimit)
         {
-            Quality = request.Quality, ArrivalMode = arrivalMode, WorkItemsPerDay = rate,
+            Quality = request.Quality, Productivity = request.Productivity, ArrivalMode = arrivalMode, WorkItemsPerDay = rate,
             DevelopmentEffort = request.DevelopmentDistribution ?? new FixedEffort(request.DevelopmentEffort),
             CodeReviewEffort = request.CodeReviewDistribution ?? new FixedEffort(request.CodeReviewEffort),
             TestingEffort = request.TestingDistribution ?? new FixedEffort(request.TestingEffort)

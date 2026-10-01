@@ -56,7 +56,7 @@ internal static class SimulationResultBuilder
             Mean(w => w.LeadTime!.Value), Mean(w => w.CycleTime!.Value), days.Select(d => (double)d.TotalWip).DefaultIfEmpty(0).Average(),
             Ratio(days.Sum(d => (double)d.BlockedItems), days.Sum(d => (double)d.UnfinishedItems)),
             Ratio(days.Sum(d => d.UsedDeveloperCapacity), developers), Ratio(days.Sum(d => d.UsedTesterCapacity), testers),
-            Ratio(days.Sum(d => d.ReviewWork), developers), Ratio(days.Sum(d => d.UsedDevelopmentCapacity), developers),
+            Ratio(days.Sum(d => d.UsedReviewCapacity), developers), Ratio(days.Sum(d => d.UsedDevelopmentCapacity), developers),
             days.Select(d => (double)d.ReviewWip).DefaultIfEmpty(0).Average(), results.SelectMany(w => w.InspectionAttempts)
                 .Where(a => a.Stage == DefectSource.CodeReview && a.CompletedDay.HasValue)
                 .Select(a => (double)(a.CompletedDay!.Value - a.StartedDay)).DefaultIfEmpty(0).Average(),

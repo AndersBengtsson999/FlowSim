@@ -1,0 +1,8 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" x:Class="Simulation.UI.Views.ProductivitySettingsView" x:DataType="vm:MainWindowViewModel">
+ <StackPanel Spacing="10">
+  <TextBlock Text="Consumed capacity × stage productivity → effective work. Default 1.00x; greater than zero. Development collaboration also applies. Rework is unchanged." TextWrapping="Wrap" Classes="note"/>
+  <Grid ColumnDefinitions="*,80,20"><TextBlock Text="Development Productivity" ToolTip.Tip="{x:Static vm:FlowPresentation.DevelopmentProductivityHelp}" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding DevelopmentProductivity, Mode=TwoWay}" AutomationProperties.Name="Development Productivity"/><TextBlock Grid.Column="2" Text="x" VerticalAlignment="Center" Margin="5,0,0,0"/></Grid>
+  <Grid ColumnDefinitions="*,80,20"><TextBlock Text="Code Review Productivity" ToolTip.Tip="{x:Static vm:FlowPresentation.CodeReviewProductivityHelp}" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding CodeReviewProductivity, Mode=TwoWay}" AutomationProperties.Name="Code Review Productivity"/><TextBlock Grid.Column="2" Text="x" VerticalAlignment="Center" Margin="5,0,0,0"/></Grid>
+  <Grid ColumnDefinitions="*,80,20"><TextBlock Text="Testing Productivity" ToolTip.Tip="{x:Static vm:FlowPresentation.TestingProductivityHelp}" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding TestingProductivity, Mode=TwoWay}" AutomationProperties.Name="Testing Productivity"/><TextBlock Grid.Column="2" Text="x" VerticalAlignment="Center" Margin="5,0,0,0"/></Grid>
+ </StackPanel>
+</UserControl>

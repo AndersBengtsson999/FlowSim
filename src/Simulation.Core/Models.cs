@@ -21,6 +21,7 @@ public sealed record SimulationScenario(string Name, int SimulationDays, Team Te
     int DevelopmentWipLimit, int CodeReviewWipLimit, int TestingWipLimit,
     IReadOnlyList<WorkItem> WorkItems, int RandomSeed = 12345)
 {
+    public StageProductivity Productivity { get; init; } = new();
     public DefectSettings Quality { get; init; } = new();
     public WorkArrivalMode ArrivalMode { get; init; } = WorkArrivalMode.FixedBacklog;
     public decimal WorkItemsPerDay { get; init; } = 0.8m;
@@ -37,8 +38,10 @@ public sealed record WorkItemDaySnapshot(string Id, WorkItemStatus State,
     int CreatedDay, WorkItemStatus StateDuringDay, bool DependencyBlocked,
     double ReworkWork = 0, double RemainingReworkEffort = 0, double CollaborationDevelopmentCapacity = 0)
 {
-    public double PrimaryDevelopmentCapacity => DevelopmentWork - 0.5 * CollaborationDevelopmentCapacity;
-    public double UsedDevelopmentCapacity => DevelopmentWork + 0.5 * CollaborationDevelopmentCapacity;
+    // Absent in pre-0.4 history: work then implied capacity at productivity 1x.
+    public StageCapacity? ConsumedCapacity { get; init; }
+    public double PrimaryDevelopmentCapacity => ConsumedCapacity is null ? DevelopmentWork - 0.5 * CollaborationDevelopmentCapacity : ConsumedCapacity.Development - CollaborationDevelopmentCapacity;
+    public double UsedDevelopmentCapacity => ConsumedCapacity?.Development ?? (DevelopmentWork + 0.5 * CollaborationDevelopmentCapacity);
 }
 
 // Day is zero-based. Occupancy is sampled after admission; item states are sampled at day end.
@@ -60,10 +63,13 @@ public sealed record DailySnapshot(int Day, int DevelopmentWip, int ReviewWip, i
     public int ReworkCount => Count(WorkItemStatus.Rework);
     public int DoneCount => Count(WorkItemStatus.Done);
     public int TotalWip => DevelopmentCount + WaitingForCodeReviewCount + CodeReviewCount + WaitingForTestingCount + TestingCount + WaitingForReworkCount + ReworkCount;
-    public double PrimaryDevelopmentCapacity => DevelopmentWork - 0.5 * CollaborationDevelopmentCapacity;
-    public double UsedDevelopmentCapacity => DevelopmentWork + 0.5 * CollaborationDevelopmentCapacity;
-    public double UsedDeveloperCapacity => UsedDevelopmentCapacity + ReviewWork + UsedReworkDeveloperCapacity;
-    public double UsedTesterCapacity => TestingWork;
+    // Absent in pre-0.4 history: work then implied capacity at productivity 1x.
+    public StageCapacity? ConsumedCapacity { get; init; }
+    public double PrimaryDevelopmentCapacity => ConsumedCapacity is null ? DevelopmentWork - 0.5 * CollaborationDevelopmentCapacity : ConsumedCapacity.Development - CollaborationDevelopmentCapacity;
+    public double UsedDevelopmentCapacity => ConsumedCapacity?.Development ?? (DevelopmentWork + 0.5 * CollaborationDevelopmentCapacity);
+    public double UsedReviewCapacity => ConsumedCapacity?.CodeReview ?? ReviewWork;
+    public double UsedDeveloperCapacity => UsedDevelopmentCapacity + UsedReviewCapacity + UsedReworkDeveloperCapacity;
+    public double UsedTesterCapacity => ConsumedCapacity?.Testing ?? TestingWork;
 }
 
 public sealed record SimulationResult(string ScenarioName, int CompletedWorkItems, double Throughput,

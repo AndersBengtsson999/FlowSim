@@ -109,7 +109,7 @@ public sealed class SimpleWorkflowViewModel : INotifyPropertyChanged
         Try.LoadConfiguration(starting);
         TeamChanges = [new("Developers", Try.NumberOfDevelopers, () => Try.NumberOfDevelopers, v => Try.NumberOfDevelopers = v), new("Testers", Try.NumberOfTesters, () => Try.NumberOfTesters, v => Try.NumberOfTesters = v)];
         FlowChanges = [new("Development WIP", Try.DevelopmentWipLimit, () => Try.DevelopmentWipLimit, v => Try.DevelopmentWipLimit = v, FlowPresentation.DevelopmentWipHelp), new("Testing WIP", Try.TestingWipLimit, () => Try.TestingWipLimit, v => Try.TestingWipLimit = v, "Maximum active Testing items.")];
-        CapacityChanges = [new("Developer Availability (%)", Try.DeveloperAvailability, () => Try.DeveloperAvailability, v => Try.DeveloperAvailability = v), new("Tester Availability (%)", Try.TesterAvailability, () => Try.TesterAvailability, v => Try.TesterAvailability = v), new("Developer Capacity / day", Try.DeveloperCapacity, () => Try.DeveloperCapacity, v => Try.DeveloperCapacity = v, "Abstract work units per developer per day, not hours."), new("Tester Capacity / day", Try.TesterCapacity, () => Try.TesterCapacity, v => Try.TesterCapacity = v, "Abstract work units per tester per day, not hours.")];
+        CapacityChanges = [new("Developer Availability (%)", Try.DeveloperAvailability, () => Try.DeveloperAvailability, v => Try.DeveloperAvailability = v), new("Tester Availability (%)", Try.TesterAvailability, () => Try.TesterAvailability, v => Try.TesterAvailability = v)];
         Notify();
     }
     public SimulationRequest StartingConfiguration => starting;

@@ -12,6 +12,8 @@ public static class ScenarioValidator
         if (scenario.Team is null) Fail("Team configuration is required.");
         if (scenario.Quality is null) Fail("Quality settings are required.");
         scenario.Quality!.Validate();
+        if (scenario.Productivity is null) Fail("Stage productivity is required.");
+        scenario.Productivity!.Validate();
         var team = scenario.Team!;
         if (!double.IsFinite(team.DeveloperAvailability) || team.DeveloperAvailability < 0 || team.DeveloperAvailability > 1
             || !double.IsFinite(team.TesterAvailability) || team.TesterAvailability < 0 || team.TesterAvailability > 1)

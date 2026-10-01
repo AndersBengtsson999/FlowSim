@@ -126,7 +126,7 @@
                </Grid>
                <Grid ColumnDefinitions="*,110" IsVisible="{Binding IsFixed}">
                 <TextBlock Text="Effort" VerticalAlignment="Center" />
-                <TextBox Grid.Column="1" Text="{Binding FixedValue, Mode=TwoWay}" ToolTip.Tip="Capacity units needed for this stage of each Work Item; nonnegative. Not elapsed time." AutomationProperties.Name="Fixed Effort" />
+                <TextBox Grid.Column="1" Text="{Binding FixedValue, Mode=TwoWay}" ToolTip.Tip="Effective work required for this stage of each Work Item; nonnegative. Productivity determines capacity consumed. Not elapsed time." AutomationProperties.Name="Fixed Effort" />
                </Grid>
                <Grid ColumnDefinitions="*,8,*,8,*" IsVisible="{Binding IsTriangular}">
                 <StackPanel>
@@ -190,7 +190,7 @@
                   </Grid>
                   <Grid ColumnDefinitions="*,110" IsVisible="{Binding IsFixed}">
                    <TextBlock Text="Effort" VerticalAlignment="Center" />
-                   <TextBox Grid.Column="1" Text="{Binding FixedValue, Mode=TwoWay}" ToolTip.Tip="Capacity units needed for this stage of each Work Item; nonnegative. Not elapsed time." AutomationProperties.Name="Fixed Effort" />
+                   <TextBox Grid.Column="1" Text="{Binding FixedValue, Mode=TwoWay}" ToolTip.Tip="Effective work required for this stage of each Work Item; nonnegative. Productivity determines capacity consumed. Not elapsed time." AutomationProperties.Name="Fixed Effort" />
                   </Grid>
                   <Grid ColumnDefinitions="*,8,*,8,*" IsVisible="{Binding IsTriangular}">
                    <StackPanel>
@@ -221,7 +221,7 @@
           <Border Classes="card">
            <StackPanel Spacing="6">
             <TextBlock Text="Effort is work, not elapsed time" Classes="section" />
-            <TextBlock Text="One Work Item receives at most 1 capacity unit per day, in one stage. Queues and unavailable capacity can extend elapsed time. Development, Code Review and Rework share developer capacity; Testing has a separate pool." Classes="note" />
+            <TextBlock Text="Each contribution consumes at most 1 capacity unit per day. Development can receive a primary and a collaboration contribution. Items use one stage per day. Queues and unavailable capacity can extend elapsed time. Development, Code Review and Rework share developer capacity; Testing has a separate pool." Classes="note" />
             <TextBlock Text="This form generates independent items. Variable effort is sampled once per item and stage; daily team capacity remains fixed. Dependencies are supported by Core but are not editable here." Classes="note" />
            </StackPanel>
           </Border>
@@ -243,15 +243,15 @@
           </Grid>
           <Grid ColumnDefinitions="*,110">
            <StackPanel Margin="0,0,14,0">
-            <TextBlock Text="Developer Capacity / Day" />
+            <TextBlock Text="Developer Capacity per Person / Day" />
            </StackPanel>
-           <TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding DeveloperCapacity, Mode=TwoWay}" ToolTip.Tip="Abstract work capacity per developer and simulated day. 1.0 is one normal unit of daily capacity, not hours." AutomationProperties.Name="Developer Capacity / Day" />
+           <TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding DeveloperCapacity, Mode=TwoWay}" ToolTip.Tip="{x:Static vm:FlowPresentation.AdvancedCapacityHelp}" AutomationProperties.Name="Developer Capacity per Person / Day" />
           </Grid>
           <Grid ColumnDefinitions="*,110">
            <StackPanel Margin="0,0,14,0">
-            <TextBlock Text="Tester Capacity / Day" />
+            <TextBlock Text="Tester Capacity per Person / Day" />
            </StackPanel>
-           <TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding TesterCapacity, Mode=TwoWay}" ToolTip.Tip="Abstract work capacity per tester and simulated day. 1.0 is one normal unit of daily capacity, not hours." AutomationProperties.Name="Tester Capacity / Day" />
+           <TextBox Grid.Column="1" VerticalAlignment="Top" Text="{Binding TesterCapacity, Mode=TwoWay}" ToolTip.Tip="{x:Static vm:FlowPresentation.AdvancedCapacityHelp}" AutomationProperties.Name="Tester Capacity per Person / Day" />
           </Grid>
           <Button Content="Run Monte Carlo" Command="{Binding MonteCarloCommand}" />
           <Button Content="Variable Effort Example" Command="{Binding VariableEffortCommand}" />

@@ -1,6 +1,6 @@
-# Simulation Model v0.3 — Capacity Availability and Work Supply
+# Simulation Model v0.4 — Stage-specific Productivity Multipliers v1
 
-Current semantics are v0.3, retaining Development Collaboration Model v1 allocation. See [availability, supply and status](CAPACITY_AVAILABILITY.md) for the new semantics and compatibility. Historical Step 2–13 measured examples and linked validation reports describe their original v0.1 runs; current collaboration measurements are in [Development Collaboration Model v1](DEVELOPMENT_COLLABORATION.md).
+Current semantics are v0.4, adding independent stage productivity while retaining Development Collaboration Model v1 allocation. See [Stage-specific Productivity Multipliers v1](STAGE_PRODUCTIVITY.md) for formulas and verification. See [availability, supply and status](CAPACITY_AVAILABILITY.md) for the new semantics and compatibility. Historical Step 2–13 measured examples and linked validation reports describe their original v0.1 runs; current collaboration measurements are in [Development Collaboration Model v1](DEVELOPMENT_COLLABORATION.md).
 
 ## Purpose and scope
 
@@ -13,7 +13,7 @@ This document describes the current implementation. It supersedes the earlier in
 - **Team**: DeveloperCount, TesterCount, DeveloperCapacityPerDay and TesterCapacityPerDay. Both per-person capacity defaults are 1.0. The computed totals are nominal capacity per working day.
 - **WorkItem**: string Id and Name; independent DevelopmentEffort, CodeReviewEffort and TestingEffort; corresponding remaining efforts; dependency IDs; State; CreatedDay; DevelopmentStartedDay, DevelopmentCompletedDay, CodeReviewStartedDay, CodeReviewCompletedDay, TestingStartedDay, TestingCompletedDay and DoneDay.
 - **SimulationScenario**: Name, SimulationDays, one Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit and an ordered collection of WorkItems.
-- **SimulationResult**: aggregate measures, immutable WorkItemResult records and daily snapshots. Every result retains its ordered transition history. Daily item snapshots include state, remaining efforts and actual work consumed in each stage.
+- **SimulationResult**: aggregate measures, immutable WorkItemResult records and daily snapshots. Every result retains its ordered transition history. Daily item snapshots include state, remaining efforts and effective work and consumed capacity in each stage.
 
 Configuration properties on WorkItem are read-only. Remaining efforts equal initial efforts at construction. Execution state and timestamps have private setters, and internal domain methods enforce the next legal transition. UI code cannot assign an arbitrary state. Dependencies are defensively copied into a read-only collection.
 
@@ -23,6 +23,8 @@ Simulation.Core uses only .NET libraries. Simulation.Application generates reque
 
 ## Resources and capacity
 
+Normal Live uses nominal capacity 1.0 per person/day, so **people × availability → available capacity**. Consumed capacity × stage productivity produces effective work (with Development collaboration efficiency where applicable). Per-person scaling remains an Advanced parameter for legacy/custom scenarios and is preserved on load. See [Capacity UX Simplification](CAPACITY_UX_SIMPLIFICATION.md).
+
 ```text
 Developer pool/day = DeveloperCount × DeveloperCapacityPerDay × DeveloperAvailability
 Tester pool/day    = TesterCount × TesterCapacityPerDay × TesterAvailability
@@ -30,17 +32,18 @@ Tester pool/day    = TesterCount × TesterCapacityPerDay × TesterAvailability
 
 Capacity is an abstract work unit, **not hours**. There are two resource types. Code review, rework and development consume the **same** developer pool; testing consumes only the tester pool. DeveloperCapacityPolicy allocates that pool in order: CodeReview, Rework, Development. Unused capacity does not carry forward.
 
-Code Review, Rework and Testing retain their per-item daily allocation:
+Code Review and Testing use their own productivity factor `p`; Rework always uses `p = 1`. Their per-item daily capacity allocation is:
 
 ```text
-min(remaining stage effort, remaining resource pool, 1.0, capacity per person)
+consumed = min(remaining stage effort / p, remaining resource pool, 1.0, capacity per person)
+effective work = consumed × p
 ```
 
-Development uses two passes over the items admitted at day start. First each gets a primary allocation in FIFO order, limited to `min(remaining effort, remaining pool, 1, DeveloperCapacityPerDay)`. Primary capacity produces equal effective effort. Then remaining active items are ordered by remaining Development effort **after primary work**, ascending, with stable FIFO/input order for ties. Each may consume up to `min(remaining effort / 0.5, remaining pool, 1, DeveloperCapacityPerDay)` collaboration capacity, producing half as much effective effort. Collaboration requires at least two developers in the team.
+Development uses two passes over the items admitted at day start. First each gets a primary allocation in FIFO order, limited to `min(remaining effort / DevelopmentProductivity, remaining pool, 1, DeveloperCapacityPerDay)`. Primary work equals capacity × DevelopmentProductivity. Then remaining active items are ordered by remaining Development effort **after primary work**, ascending, with stable FIFO/input order for ties. Each may consume up to `min(remaining effort / (0.5 × DevelopmentProductivity), remaining pool, 1, DeveloperCapacityPerDay)` collaboration capacity, producing capacity × 0.5 × DevelopmentProductivity effective work. Collaboration requires at least two developers in the team.
 
-Thus a Development item can consume at most 2 capacity units and receive at most 1.5 effective effort per day. Every active item has a primary opportunity before any collaboration. Fractional leftovers remain available to other eligible active items during that day. All admissions still precede all work; completion does not admit replacement backlog work midway through a day.
+Thus a Development item can consume at most 2 capacity units and receive at most 1.5 × DevelopmentProductivity effective effort per day. Every active item has a primary opportunity before any collaboration. Fractional leftovers remain available to other eligible active items during that day. All admissions still precede all work; completion does not admit replacement backlog work midway through a day.
 
-This is a pooled model, without named individuals or tracking authors/reviewers. Development WIP counts active items, not contributors. Per-person capacity below 1 limits each contribution; values above 1 increase the pool but not either contribution cap. With two developers at capacity 0.4, one active item can consume 0.8 and receive 0.6 effective effort. With only one developer, no second contribution is available.
+This is a pooled model, without named individuals or tracking authors/reviewers. Development WIP counts active items, not contributors. Per-person capacity below 1 limits each contribution; values above 1 increase the pool but not either contribution cap. At default productivity 1x, two developers at capacity 0.4 allow one active item to consume 0.8 and receive 0.6 effective work. With only one developer, no second contribution is available.
 
 The 50% second-contribution efficiency is an explicit simulation assumption, not a claim about real-world pair-programming productivity. See [Development collaboration](DEVELOPMENT_COLLABORATION.md) for concepts, worked examples, compatibility and verification.
 
@@ -135,7 +138,7 @@ Cycle validation uses an iterative topological traversal, avoiding recursion on 
 
 WipPolicy is the single admission/occupancy policy boundary:
 
-| Limit | States counted in v0.3 |
+| Limit | States counted in v0.4 |
 |---|---|
 | DevelopmentWipLimit | Development only |
 | CodeReviewWipLimit | CodeReview only |
@@ -249,7 +252,7 @@ u < c : a + (b-a) × sqrt(u × c)
 else  : b - (b-a) × sqrt((1-u) × (1-c))
 ```
 
-The final value is clamped to `[a,b]` against numerical residue. Actual effort is not rounded to whole days. The existing daily allocator still applies at most 1 unit per item/day and at most one stage per interval. Fractional work may therefore leave unused capacity or occupy a whole working interval, exactly as before.
+The final value is clamped to `[a,b]` against numerical residue. Actual effort is not rounded to whole days. The daily allocator caps each contribution at 1 consumed capacity unit (Development may receive two contributions with collaboration efficiency) and at most one stage per interval. Fractional work may therefore leave unused capacity or occupy a whole working interval, exactly as before.
 
 Each stage uses separate distribution parameters. Successive PRNG draws represent uncorrelated effort samples across items/stages; no shared latent size factor is modeled. Switching a stage from Fixed to Triangular changes random-stream consumption and can change subsequent stages' draws at the same seed. The reproducibility guarantee concerns the same complete configuration, not paired common draws after configuration changes.
 
@@ -496,11 +499,11 @@ Execution date and identity intentionally differ between reruns; reproducibility
 
 ## Simulation Model Version
 
-`Simulation.Core.SimulationModel.Version` is **"0.3"**, independently of the assembly/application version. It adds Capacity Availability and Work Supply while retaining Development Collaboration Model v1. Scenario/experiment files, Live sessions, result records and CSV provenance carry the version. Model 0.2 documents load with backward-compatible defaults; original Live version provenance and all historical ledgers are retained. Model 0.1 remains rejected because its Development allocation differs. Editing a version label cannot migrate a saved timeline. JSON schema remains 1. See [compatibility verification](CAPACITY_AVAILABILITY.md).
+`Simulation.Core.SimulationModel.Version` is **"0.4"**, independently of the assembly/application version. It adds independent Development, Code Review and Testing productivity while retaining Capacity Availability, Work Supply and Development Collaboration Model v1. Scenario/experiment files, Live sessions, result records and CSV provenance carry the version. Model 0.2 and 0.3 documents load with productivity 1x/1x/1x; original Live version provenance and all historical ledgers are retained. Model 0.1 remains rejected because its Development allocation differs. Editing a version label cannot migrate a saved timeline. JSON schema remains 1. See [compatibility verification](CAPACITY_AVAILABILITY.md).
 
 ## Scenario and experiment persistence
 
-Persistence belongs in Simulation.Infrastructure, which now implements ExperimentJson and ComparisonCsv. UI references Infrastructure for file operations; Core remains free of UI, JSON and filesystem dependencies. The configuration JSON envelope has SchemaVersion=1, SimulationModelVersion="0.3", DocumentKind="Scenario" or "Experiment", and the corresponding payload. All existing SimulationRequest settings, including fixed fallbacks, distribution parameters, dormant defect configuration and configured seeds, are retained. Effort objects have explicit Kind="Fixed"/"Triangular" and their numerical fields. There is no CLR type-name activation.
+Persistence belongs in Simulation.Infrastructure, which now implements ExperimentJson and ComparisonCsv. UI references Infrastructure for file operations; Core remains free of UI, JSON and filesystem dependencies. The configuration JSON envelope has SchemaVersion=1, SimulationModelVersion="0.4", DocumentKind="Scenario" or "Experiment", and the corresponding payload. All existing SimulationRequest settings, including fixed fallbacks, distribution parameters, dormant defect configuration and configured seeds, are retained. Effort objects have explicit Kind="Fixed"/"Triangular" and their numerical fields. There is no CLR type-name activation.
 
 Loading validates schema/model/kind, scenario settings, unique IDs, reference membership and supported distributions. Unknown properties and distribution kinds are rejected. Experiment loading preserves identities and creates a read-only scenario collection. Importing a standalone scenario into the current collection assigns a fresh identity to avoid collisions. Files are human-readable UTF-8 JSON, limited to 5 MB on read. Writes use a sibling temporary file followed by replacement. Native file pickers handle location selection and overwrite prompting; no database or automatic background save is introduced.
 

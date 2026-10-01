@@ -4,7 +4,7 @@ Live is the default application entry and primary evolving simulation timeline. 
 
 ## Using Live
 
-The application opens **Live**. Choose **Live Flow Demo**, then **Start**. The compact setup exposes developers, testers, Development/Testing WIP and new work per day. Work effort and Quality have their own collapsed sections. More settings contains initial backlog, arrival mode, capacities, review/rework WIP, seed, safety limit and rolling window. Baseline, Variable Effort Example and Defects & Rework Example are also available starting points. Choosing one copies its existing configuration into the Live setup; it does not modify the normal Run setup.
+The application opens **Live**. Choose **Live Flow Demo**, then **Start**. The compact setup exposes developers, testers, developer/tester availability, independent Development/Code Review/Testing productivity, Development/Testing WIP and Work Supply. Normal nominal capacity is 1.0 per person/day. Work effort and Quality have their own collapsed sections. More settings contains initial backlog, arrival mode, review/rework WIP, seed, safety limit and rolling window. Baseline, Variable Effort Example and Defects & Rework Example are also available starting points. Choosing one copies its existing configuration into the Live setup; it does not modify the normal Run setup.
 
 Live Flow Demo starts with **zero initial items**, 5 developers, 2 testers, capacities 1/1, WIP 5/3/3/3, fixed development/review/testing effort 5/1/2, defects off, 0.8 new items/day, seed 12345. Baseline instead retains its 30 initial items; arrivals are additional when Continuous is selected. Fixed Backlog ignores the arrival rate.
 
@@ -58,7 +58,7 @@ At displayed Day 100, Apply Changes records `{Day: 100, Before, After, Label}` a
 
 Reducing an active WIP limit never ejects items. A board can show **5 / 3**; admissions wait until occupancy is below 3. Reducing developer/tester counts similarly leaves states intact. These decisions remain in the existing WIP and capacity policies.
 
-The edit panel exposes counts, capacities, all four active WIP limits and arrival rate. More things to change exposes defect enablement/probabilities and rework distributions. Initial effort distributions are configured before starting; this UI does not edit already-created work. Quality values remain configurable while defects are off. Optional labels have no simulation effect. A no-op edit creates no intervention or chart marker and says that no parameters changed.
+The edit panel exposes people counts, availability, independent stage productivity, all four active WIP limits and work supply/rate. Per-person nominal scaling is not a normal Live intervention. More things to change exposes defect enablement/probabilities and rework distributions. Initial effort distributions are configured before starting; this UI does not edit already-created work. Quality values remain configurable while defects are off. Optional labels have no simulation effect. A no-op edit creates no intervention or chart marker and says that no parameters changed.
 
 The Changes section records exact configurations and presents readable differences. Queue-history markers are placed at intervention boundary days; pointing at a marker shows day, optional label and differences (including multiple changes on the same day). Their presence makes no causal claim.
 
@@ -150,3 +150,7 @@ The Team Performance area now includes a single-metric trend chart with independ
 ## Model 0.3 additions
 
 Live now has 100%-default developer/tester Availability, Fixed rate / Always available Work Supply, and a compact Status band. Availability scales the daily capacity pool; contributions retain their existing caps. New available-capacity trend series use historical ledgers. Model 0.2 Live sessions load compatibly with their original history and supply mode. See [exact semantics, persistence and verification](CAPACITY_AVAILABILITY.md).
+
+## Capacity UX Simplification
+
+Normal Live setup and Change use people, availability and independent stage productivity. Per-person capacity editors are only in Advanced scenario settings. Existing saved custom values remain unchanged through load, normal interventions, checkpoints and save, with a read-only notice in expanded Configuration. Runtime used/available capacity, utilization and trends remain available. See [compatibility and native verification](CAPACITY_UX_SIMPLIFICATION.md).

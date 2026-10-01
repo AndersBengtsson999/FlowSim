@@ -144,7 +144,8 @@ public sealed class WorkItem
 
     internal void ApplyWork(double work, int day, double? consumedCapacity = null)
     {
-        if (!double.IsFinite(work) || work < 0 || work > 1 || work > RemainingEffort)
+        if (!double.IsFinite(work) || work < 0 || work > RemainingEffort
+            || !double.IsFinite(consumedCapacity ?? work) || (consumedCapacity ?? work) < 0 || (consumedCapacity ?? work) > 1)
             throw new InvalidOperationException("Invalid work allocation.");
         if (work > 0) events.Add(new(day, Id, WorkItemEventType.CapacityApplied, State, State, work, ConsumedCapacity: consumedCapacity));
         switch (State)

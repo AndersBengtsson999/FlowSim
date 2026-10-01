@@ -4,12 +4,21 @@ namespace Simulation.UI.ViewModels;
 
 public static class FlowPresentation
 {
+    public static string Productivity(double value) => value.ToString(value < .01 || value >= 1e12 ? "G" : "0.00###############", System.Globalization.CultureInfo.InvariantCulture) + "x";
+    public const string DeveloperCountHelp = "Number of developers contributing to the shared developer capacity pool.";
+    public const string TesterCountHelp = "Number of testers contributing to the tester capacity pool.";
+    public const string DeveloperAvailabilityHelp = "Percentage of nominal developer capacity available for simulation work. Range 0–100%.";
+    public const string TesterAvailabilityHelp = "Percentage of nominal tester capacity available for Testing. Range 0–100%.";
+    public const string DevelopmentProductivityHelp = "Effective Development work per consumed Development capacity unit; collaboration also applies its existing efficiency.";
+    public const string CodeReviewProductivityHelp = "Effective Code Review work per consumed Code Review capacity unit.";
+    public const string TestingProductivityHelp = "Effective Testing work per consumed tester capacity unit.";
+    public const string AdvancedCapacityHelp = "Advanced scaling of nominal capacity per person. Normal simulations use 1.0.";
     public const string DevelopmentWipHelp = "Limits active Work Items, not developers. Spare developer capacity can collaborate on active Development items.";
     public static IReadOnlyList<MetricRow> DevelopmentAllocations(DailySnapshot? day) => day is null ? [] : day.Items
         .Where(w => w.StateDuringDay == WorkItemStatus.Development)
         .Select(w => new MetricRow(w.Id + (w.State == WorkItemStatus.Development ? " · active" : " · completed Development"),
             $"Remaining {w.RemainingDevelopmentEffort:0.###} · Primary {w.PrimaryDevelopmentCapacity:0.###} · Collaboration {w.CollaborationDevelopmentCapacity:0.###}\nCapacity used {w.UsedDevelopmentCapacity:0.###} · Effective work {w.DevelopmentWork:0.###}",
-            "Selected day's allocation. Primary capacity is 100% effective; collaboration capacity is 50% effective. Remaining effort is measured at day end.")).ToArray();
+            "Selected day's allocation. Primary work equals consumed capacity × Development Productivity; collaboration also applies 50% efficiency. Remaining effort is measured at day end.")).ToArray();
 
     public static IReadOnlyList<FlowStateRow> Rows(DailySnapshot d, SessionConfiguration? configuration = null, bool rework = false)
     {
@@ -30,6 +39,17 @@ public static class FlowPresentation
             rows.Add(new("Rework", d.ReworkCount, Active("Returns to Code Review", d.ReworkCount, configuration?.Quality.ReworkWipLimit), "#E8F1F7", "↩"));
         }
         var itemsByState = d.Items.Where(w => w.CreatedDay <= d.Day).ToLookup(w => w.State);
-        return rows.Select(row => row with { Items = itemsByState[row.State].ToArray() }).ToArray();
+        return rows.Select(row => row with {
+            Items = itemsByState[row.State].ToArray(),
+            WipLimit = row.State switch {
+                WorkItemStatus.Development => configuration?.DevelopmentWipLimit,
+                WorkItemStatus.CodeReview => configuration?.CodeReviewWipLimit,
+                WorkItemStatus.Testing => configuration?.TestingWipLimit,
+                WorkItemStatus.Rework => configuration?.Quality.ReworkWipLimit,
+                _ => null
+            },
+            DevelopmentCapacityUsed = d.UsedDevelopmentCapacity,
+            EffectiveDevelopmentWork = d.DevelopmentWork
+        }).ToArray();
     }
 }

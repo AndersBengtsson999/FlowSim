@@ -160,7 +160,7 @@ public sealed class AvailabilitySupplyTests
         Assert.Equal("75%", b["Tester Availability"]); Assert.Equal("Fixed 0.8/day", a["Work Supply"]); Assert.Equal("Always available", b["Work Supply"]);
         var legacyScenario = ExperimentJson.LoadScenario(Fixture("model02-scenario.json"));
         var legacyExperiment = new Experiment(Guid.NewGuid(), "Legacy", "", new[] { legacyScenario }, legacyScenario.Id, new(), "0.2");
-        var legacyJson = ExperimentJson.SaveExperiment(legacyExperiment).Replace("\"0.3\"", "\"0.2\"");
+        var legacyJson = ExperimentJson.SaveExperiment(legacyExperiment).Replace("\"0.4\"", "\"0.2\"");
         Assert.Equal(1, ExperimentJson.LoadExperiment(legacyJson).Scenarios[0].Configuration.DeveloperAvailability);
     }
 

@@ -28,6 +28,9 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     public string NumberOfTesters { get; set; } = "";
     public string DeveloperAvailability { get; set; } = "100";
     public string TesterAvailability { get; set; } = "100";
+    public string DevelopmentProductivity { get; set; } = "1.00";
+    public string CodeReviewProductivity { get; set; } = "1.00";
+    public string TestingProductivity { get; set; } = "1.00";
     public IReadOnlyList<WorkArrivalMode> WorkSupplyModes { get; } = Enum.GetValues<WorkArrivalMode>();
     private WorkArrivalMode workSupplyMode = WorkArrivalMode.FixedBacklog;
     public WorkArrivalMode WorkSupplyMode { get => workSupplyMode; set { workSupplyMode = value; NotifyAll(); } }
@@ -197,6 +200,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         configuredName = BaselineScenario.CreateRequest().Name;
         var baseline = BaselineScenario.Create();
         var effort = baseline.WorkItems[0];
+        DevelopmentProductivity = CodeReviewProductivity = TestingProductivity = "1.00";
         DeveloperAvailability = "100"; TesterAvailability = "100"; WorkSupplyMode = WorkArrivalMode.FixedBacklog; WorkSupplyRate = "0.8";
         NumberOfDevelopers = baseline.Team.DeveloperCount.ToString(CultureInfo.InvariantCulture);
         NumberOfTesters = baseline.Team.TesterCount.ToString(CultureInfo.InvariantCulture);
@@ -245,6 +249,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         string N(double n) => n.ToString(CultureInfo.InvariantCulture);
         NumberOfDevelopers = N(request.DeveloperCount); NumberOfTesters = N(request.TesterCount);
         DeveloperAvailability = N(request.DeveloperAvailability * 100); TesterAvailability = N(request.TesterAvailability * 100);
+        DevelopmentProductivity = N(request.Productivity.Development); CodeReviewProductivity = N(request.Productivity.CodeReview); TestingProductivity = N(request.Productivity.Testing);
         WorkSupplyMode = request.ArrivalMode; WorkSupplyRate = request.WorkItemsPerDay.ToString(CultureInfo.InvariantCulture);
         DeveloperCapacity = N(request.DeveloperCapacityPerDay); TesterCapacity = N(request.TesterCapacityPerDay);
         DevelopmentWipLimit = N(request.DevelopmentWipLimit); CodeReviewWipLimit = N(request.CodeReviewWipLimit); TestingWipLimit = N(request.TestingWipLimit);
@@ -347,6 +352,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         Name = configuredName,
         DeveloperCount = Integer(NumberOfDevelopers, "Developers"),
         TesterCount = Integer(NumberOfTesters, "Testers"),
+        Productivity = new(Number(DevelopmentProductivity, "Development Productivity"), Number(CodeReviewProductivity, "Code Review Productivity"), Number(TestingProductivity, "Testing Productivity")),
         DeveloperAvailability = Number(DeveloperAvailability, "Developer Availability (%)") / 100,
         TesterAvailability = Number(TesterAvailability, "Tester Availability (%)") / 100,
         ArrivalMode = WorkSupplyMode, WorkItemsPerDay = decimal.Parse(WorkSupplyRate.Replace(',', '.'), CultureInfo.InvariantCulture),
@@ -399,6 +405,25 @@ public sealed record FlowStateRow(string Name, int Count, string Kind, string Ba
     public event PropertyChangedEventHandler? PropertyChanged;
     private bool isExpanded;
     public WorkItemStatus State => Enum.Parse<WorkItemStatus>(Name.Replace(" ", ""), ignoreCase: true);
+    public int? WipLimit { get; init; }
+    public bool HasWipLimit => WipLimit.HasValue;
+    public int WipMaximum => WipLimit ?? 1;
+    public string WipText => WipLimit is { } limit ? $"{Count} / {limit}" : "";
+    public bool IsWaiting => State is WorkItemStatus.WaitingForCodeReview or WorkItemStatus.WaitingForTesting or WorkItemStatus.WaitingForRework;
+    public bool IsCompleted => State == WorkItemStatus.Done;
+    public bool IsDevelopment => State == WorkItemStatus.Development;
+    public bool IsNotDevelopment => !IsDevelopment;
+    public double DevelopmentCapacityUsed { get; init; }
+    public double EffectiveDevelopmentWork { get; init; }
+    public string SupportingText => State switch {
+        WorkItemStatus.Development => "Active items",
+        WorkItemStatus.CodeReview => "Shared developer pool",
+        WorkItemStatus.Testing => "Tester capacity",
+        WorkItemStatus.Rework => "Returns to Code Review",
+        WorkItemStatus.WaitingForRework => "Queue · feedback from inspections",
+        _ when IsWaiting => "Queue · awaiting admission",
+        _ => Kind
+    };
     public IReadOnlyList<WorkItemDaySnapshot> Items { get; init; } = [];
     public IReadOnlyList<WorkItemDaySnapshot> VisibleItems => IsExpanded ? Items : [];
     public bool IsEmpty => Items.Count == 0;

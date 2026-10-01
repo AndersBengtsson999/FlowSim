@@ -53,7 +53,7 @@ public sealed class VerificationApp : Avalonia.Application
                     Check(vm.Live.Session.Days.All(x => x.DevelopmentWip <= wip && x.ReviewWip <= 3 && x.TestingWip <= 3), name + " WIP limits");
                     if (work == "Always available") Check(vm.Live.Session.Days.All(x => x.BacklogCount == 0), name + " lazy supply");
                     await Task.Delay(100);
-                    Check(window.GetVisualDescendants().OfType<TextBlock>().Any(t => t.Text == vm.StatusCapacity), "Rendered capacity binding");
+                    Check(vm.StatusSecondaryGroups.All(g => window.GetVisualDescendants().OfType<TextBlock>().Any(t => t.Text == g.Value)), "Rendered grouped status bindings");
                     Console.WriteLine(name + ": " + vm.StatusDelivery + " | " + vm.StatusCapacity + " | " + vm.StatusQueues);
                     Save(window, name);
                 }

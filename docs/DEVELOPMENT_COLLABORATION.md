@@ -2,6 +2,8 @@
 
 Introduced in Simulation Model **0.2**, after Step 13. Technical Debt is not started. Code Review, Rework and Testing retain their previous allocation rules.
 
+The numerical examples and legacy ledger identities below use default productivity 1x. Model 0.3 additionally scales nominal pools by Capacity Availability; model 0.4 multiplies primary and collaboration work by Development Productivity without changing the two-pass allocation rules. See [current stage formulas](STAGE_PRODUCTIVITY.md).
+
 ## Concepts and assumptions
 
 - **Developer Capacity** is the available pool per day: developer count × configured capacity per person. Units are abstract capacity, not hours.

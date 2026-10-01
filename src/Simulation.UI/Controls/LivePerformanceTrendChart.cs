@@ -30,11 +30,14 @@ public sealed class LivePerformanceTrendChart : Control
         if (Series is not { Points.Count: > 0 } series) { Label(context, "No completed simulated days yet.", new(Plot.Left, Plot.Top)); return; }
         var max = Math.Max(1, series.Points.Max(p => p.Value ?? 0));
         double Y(double value) => Plot.Bottom - value / max * Plot.Height;
-        context.DrawLine(new Pen(Brushes.LightGray, 1), Plot.BottomLeft, Plot.BottomRight);
+        var gridPen = new Pen(Brush.Parse("#E4EAEE"), 1);
+        context.DrawLine(gridPen, Plot.BottomLeft, Plot.BottomRight);
+        context.DrawLine(gridPen, Plot.TopLeft, Plot.TopRight);
+        context.DrawLine(gridPen, new(Plot.Left, Plot.Center.Y), new(Plot.Right, Plot.Center.Y));
         Label(context, max.ToString("0.##"), new(0, Plot.Top)); Label(context, "0", new(20, Plot.Bottom - 12));
         Label(context, $"Day {Start}", new(Plot.Left, Plot.Bottom + 7));
         if (Last > Start) Label(context, $"Day {Last}", new(Plot.Right - 65, Plot.Bottom + 7));
-        var pen = new Pen(Brush.Parse("#246B91"), 1.8);
+        var pen = new Pen(Brush.Parse("#326D84"), 1.8);
         var bucket = Math.Max(1, (int)Math.Ceiling(series.Points.Count / Plot.Width));
         Point? previous = null;
         for (var i = 0; i < series.Points.Count; i += bucket)
@@ -59,7 +62,7 @@ public sealed class LivePerformanceTrendChart : Control
         foreach (var marker in series.Interventions)
         {
             var selected = marker.Day == SelectedDay;
-            context.DrawLine(new Pen(Brushes.SlateGray, selected ? 2.5 : 1, DashStyle.Dash), new(X(marker.Day), Plot.Top), new(X(marker.Day), Plot.Bottom));
+            context.DrawLine(new Pen(Brushes.SlateGray, selected ? 2 : 1, DashStyle.Dash), new(X(marker.Day), Plot.Top), new(X(marker.Day), Plot.Bottom));
         }
         if (series.Points.All(p => p.Value is null)) Label(context, "No defined values in this range.", new(Plot.Left + 8, Plot.Top + 10));
     }
@@ -80,5 +83,5 @@ public sealed class LivePerformanceTrendChart : Control
         ToolTip.SetTip(this, text);
     }
     private static void Label(DrawingContext context, string text, Point point) => context.DrawText(new FormattedText(text,
-        CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Inter"), 11, Brushes.SlateGray), point);
+        CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Inter"), 12, Brush.Parse("#61717E")), point);
 }

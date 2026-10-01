@@ -1,0 +1,4 @@
+Days 101–120: Dev capacity 59, work 88.125; Review capacity 41, work 41; Test capacity 63, work 63; completed 21; average review queue 1.2; average test queue 1.
+Days 121–140: Dev capacity 62.846, work 93.255; Review capacity 37.154, work 48.3; Test capacity 68, work 68; completed 21; average review queue 1.2; average test queue 1.
+Days 141–160: Dev capacity 63.615, work 95.423; Review capacity 36.385, work 47.3; Test capacity 52.286, work 73.2; completed 21; average review queue 1.2; average test queue 1.
+PASS: actual native setup and Change textbox bindings/buttons, independent 100/120/140 interventions, history, trend markers, visible Before/After boundaries, laptop/narrow board, persistence and checkpoint replay.

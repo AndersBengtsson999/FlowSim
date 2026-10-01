@@ -18,6 +18,8 @@ public sealed class SimulationEngine
         IReadOnlyDictionary<string, WorkItem> byId, DefectPolicy defects, int day)
     {
         var team = scenario.Team;
+        var productivity = scenario.Productivity;
+        var explicitCapacity = productivity != StageProductivity.Default;
         bool Blocked(WorkItem item) => item.Dependencies.Any(id => byId[id].State != WorkItemStatus.Done);
         IEnumerable<WorkItem> Fifo(WorkItemStatus state, WorkItemStatus stage) => items
             .Where(w => w.State == state).OrderBy(w => w.QueueEnteredDay(stage));
@@ -49,15 +51,24 @@ public sealed class SimulationEngine
         var work = new Dictionary<string, double>(StringComparer.Ordinal);
         var workedStage = new Dictionary<string, WorkItemStatus>(StringComparer.Ordinal);
 
-        double Allocate(WorkItemStatus stage, double perPersonCapacity, ref double pool)
+        var capacity = new Dictionary<string, double>(StringComparer.Ordinal);
+        // Clamp effective work to remaining effort to avoid floating-point overshoot on completion.
+        static (double Consumed, double Effective) Contribution(double remaining, double limit, double factor)
+        {
+            if (factor == 0) return (0, 0); // Underflow of collaboration efficiency at subnormal productivity.
+            var consumed = Math.Min(remaining / factor, limit);
+            return (consumed, Math.Min(remaining, consumed * factor));
+        }
+        double Allocate(WorkItemStatus stage, double perPersonCapacity, double factor, ref double pool)
         {
             double total = 0;
             foreach (var item in Fifo(stage, stage))
             {
-                // One person at a time, and a hard upper bound of 1 unit/item/day.
-                var amount = Math.Min(item.RemainingEffort, Math.Min(pool, Math.Min(1, perPersonCapacity)));
-                item.ApplyWork(amount, day);
-                pool = Math.Max(0, pool - amount);
+                // One person at a time; the existing 1 unit/item/day limit caps capacity, not effective work.
+                var (consumed, amount) = Contribution(item.RemainingEffort, Math.Min(pool, Math.Min(1, perPersonCapacity)), factor);
+                item.ApplyWork(amount, day, factor == 1 ? null : consumed);
+                pool = Math.Max(0, pool - consumed);
+                capacity[item.Id] = consumed;
                 total += amount;
                 work[item.Id] = amount;
                 workedStage[item.Id] = stage;
@@ -67,8 +78,8 @@ public sealed class SimulationEngine
         }
 
         // The global priority is unchanged. Collaboration belongs only to Development.
-        var reviewWork = Allocate(WorkItemStatus.CodeReview, team.DeveloperCapacityPerDay, ref devRemaining);
-        var reworkWork = Allocate(WorkItemStatus.Rework, team.DeveloperCapacityPerDay, ref devRemaining);
+        var reviewWork = Allocate(WorkItemStatus.CodeReview, team.DeveloperCapacityPerDay, productivity.CodeReview, ref devRemaining);
+        var reworkWork = Allocate(WorkItemStatus.Rework, team.DeveloperCapacityPerDay, 1, ref devRemaining);
         var developmentItems = Fifo(WorkItemStatus.Development, WorkItemStatus.Development).ToArray();
         var collaboration = new Dictionary<string, double>(StringComparer.Ordinal);
         var contributionLimit = Math.Min(1, team.DeveloperCapacityPerDay);
@@ -76,9 +87,10 @@ public sealed class SimulationEngine
         // Cover every admitted item in FIFO order before a second contribution is considered.
         foreach (var item in developmentItems)
         {
-            var primary = Math.Min(item.RemainingDevelopmentEffort, Math.Min(devRemaining, contributionLimit));
-            item.ApplyWork(primary, day);
-            devRemaining = Math.Max(0, devRemaining - primary);
+            var (consumed, primary) = Contribution(item.RemainingDevelopmentEffort, Math.Min(devRemaining, contributionLimit), productivity.Development);
+            item.ApplyWork(primary, day, productivity.Development == 1 ? null : consumed);
+            capacity[item.Id] = consumed;
+            devRemaining = Math.Max(0, devRemaining - consumed);
             developmentWork += primary;
             work[item.Id] = primary; workedStage[item.Id] = WorkItemStatus.Development;
             if (item.RemainingDevelopmentEffort == 0) item.CompleteStage(day + 1, defects);
@@ -87,8 +99,8 @@ public sealed class SimulationEngine
         foreach (var item in developmentItems.Where(w => w.State == WorkItemStatus.Development)
                      .OrderBy(w => w.RemainingDevelopmentEffort))
         {
-            var consumed = Math.Min(item.RemainingDevelopmentEffort / 0.5, Math.Min(devRemaining, team.DeveloperCount >= 2 ? contributionLimit : 0));
-            var effective = consumed * 0.5;
+            var (consumed, effective) = Contribution(item.RemainingDevelopmentEffort, Math.Min(devRemaining, team.DeveloperCount >= 2 ? contributionLimit : 0), 0.5 * productivity.Development);
+            capacity[item.Id] += consumed;
             item.ApplyWork(effective, day, consumed);
             devRemaining = Math.Max(0, devRemaining - consumed);
             collaboration[item.Id] = consumed;
@@ -96,14 +108,19 @@ public sealed class SimulationEngine
             developmentWork += effective; work[item.Id] += effective;
             if (item.RemainingDevelopmentEffort == 0) item.CompleteStage(day + 1, defects);
         }
-        var testingWork = Allocate(WorkItemStatus.Testing, team.TesterCapacityPerDay, ref testRemaining);
+        var testingWork = Allocate(WorkItemStatus.Testing, team.TesterCapacityPerDay, productivity.Testing, ref testRemaining);
         double Used(WorkItem item, WorkItemStatus stage) =>
             workedStage.TryGetValue(item.Id, out var actual) && actual == stage ? work[item.Id] : 0;
+        double Consumed(WorkItem item, WorkItemStatus stage) =>
+            workedStage.TryGetValue(item.Id, out var actual) && actual == stage ? capacity[item.Id] : 0;
         var snapshots = items.Select(w => new WorkItemDaySnapshot(w.Id, w.State,
             w.RemainingDevelopmentEffort, w.RemainingCodeReviewEffort, w.RemainingTestingEffort,
             Used(w, WorkItemStatus.Development), Used(w, WorkItemStatus.CodeReview), Used(w, WorkItemStatus.Testing),
-            w.CreatedDay, statesDuringDay[w.Id], blockedIds.Contains(w.Id), Used(w, WorkItemStatus.Rework), w.RemainingReworkEffort, collaboration.GetValueOrDefault(w.Id))).ToArray();
+            w.CreatedDay, statesDuringDay[w.Id], blockedIds.Contains(w.Id), Used(w, WorkItemStatus.Rework), w.RemainingReworkEffort, collaboration.GetValueOrDefault(w.Id))
+            { ConsumedCapacity = explicitCapacity ? new(Consumed(w, WorkItemStatus.Development), Consumed(w, WorkItemStatus.CodeReview), Consumed(w, WorkItemStatus.Testing)) : null }).ToArray();
         return new DailySnapshot(day, devWip, reviewWip, testWip, blocked, unfinished,
-            developmentWork, reviewWork, testingWork, Array.AsReadOnly(snapshots), team.AvailableDeveloperCapacity, team.AvailableTesterCapacity, reworkWork, reworkWip, collaborationCapacity);
+            developmentWork, reviewWork, testingWork, Array.AsReadOnly(snapshots), team.AvailableDeveloperCapacity, team.AvailableTesterCapacity, reworkWork, reworkWip, collaborationCapacity)
+        { ConsumedCapacity = explicitCapacity ? new(items.Sum(w => Consumed(w, WorkItemStatus.Development)),
+            items.Sum(w => Consumed(w, WorkItemStatus.CodeReview)), items.Sum(w => Consumed(w, WorkItemStatus.Testing))) : null };
     }
 }
