@@ -13,6 +13,11 @@ public static class ScenarioValidator
         if (scenario.Quality is null) Fail("Quality settings are required.");
         scenario.Quality!.Validate();
         var team = scenario.Team!;
+        if (!double.IsFinite(team.DeveloperAvailability) || team.DeveloperAvailability < 0 || team.DeveloperAvailability > 1
+            || !double.IsFinite(team.TesterAvailability) || team.TesterAvailability < 0 || team.TesterAvailability > 1)
+            Fail("Availability must be between 0% and 100%.");
+        if (!Enum.IsDefined(scenario.ArrivalMode) || scenario.WorkItemsPerDay < 0 || scenario.WorkItemsPerDay > 2000)
+            Fail("Invalid Work Supply mode or rate.");
         if (team.DeveloperCount < 0 || team.TesterCount < 0) Fail("Resource counts cannot be negative.");
         if (!NonnegativeFinite(team.DeveloperCapacityPerDay) || !NonnegativeFinite(team.TesterCapacityPerDay)
             || !double.IsFinite(team.TotalDeveloperCapacity) || !double.IsFinite(team.TotalTesterCapacity))

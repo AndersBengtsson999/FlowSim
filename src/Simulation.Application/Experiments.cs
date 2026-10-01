@@ -21,7 +21,7 @@ public sealed record Experiment(Guid Id, string Name, string Description, IReadO
     }
     public void Validate()
     {
-        if (SimulationModelVersion != SimulationModel.Version) throw new ScenarioValidationException($"Unsupported simulation model version '{SimulationModelVersion}'. Expected {SimulationModel.Version}; no automatic migration is performed.");
+        if (!SimulationModel.CanLoad(SimulationModelVersion)) throw new ScenarioValidationException($"Unsupported simulation model version '{SimulationModelVersion}'. Expected {SimulationModel.Version}; no automatic migration is performed.");
         if (Id == Guid.Empty || string.IsNullOrWhiteSpace(Name) || Description is null)
             throw new ScenarioValidationException("An experiment requires an identity, name and description (which may be empty).");
         if (Scenarios is null || Scenarios.Count is < 1 or > 20 || Scenarios.Any(s => s is null || s.Id == Guid.Empty || s.Configuration is null)

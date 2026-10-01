@@ -5,7 +5,7 @@ namespace Simulation.Application;
 public enum LiveTrendMetric
 {
     Throughput, CycleTime, AverageWip, ReviewQueue, TestingQueue, ReworkQueue,
-    DeveloperUtilization, TesterUtilization, DevelopmentCapacity, DevelopmentWork
+    DeveloperUtilization, TesterUtilization, DevelopmentCapacity, DevelopmentWork, AvailableDevelopers, AvailableTesters
 }
 public sealed record LiveTrendMetricOption(LiveTrendMetric Metric, string Name, string Unit, bool Rolling);
 public sealed record LiveTrendPoint(int Day, double? Value);
@@ -24,7 +24,9 @@ public static class LivePerformanceTrend
         new(LiveTrendMetric.DeveloperUtilization, "Developer Utilization", "%", true),
         new(LiveTrendMetric.TesterUtilization, "Tester Utilization", "%", true),
         new(LiveTrendMetric.DevelopmentCapacity, "Development Capacity Used", "capacity units / day", false),
-        new(LiveTrendMetric.DevelopmentWork, "Effective Development Work", "effort units / day", false)
+        new(LiveTrendMetric.DevelopmentWork, "Effective Development Work", "effort units / day", false),
+        new(LiveTrendMetric.AvailableDevelopers, "Available Developer Capacity", "capacity units / day", false),
+        new(LiveTrendMetric.AvailableTesters, "Available Tester Capacity", "capacity units / day", false)
     });
 
     public static LiveTrendSeries Project(SimulationSession session, LiveTrendMetric metric, int window = 20, int? range = 20)
@@ -42,6 +44,8 @@ public static class LivePerformanceTrend
                 LiveTrendMetric.TestingQueue => d.WaitingForTestingCount,
                 LiveTrendMetric.ReworkQueue => d.WaitingForReworkCount,
                 LiveTrendMetric.DevelopmentCapacity => d.UsedDevelopmentCapacity,
+                LiveTrendMetric.AvailableDevelopers => d.AvailableDeveloperCapacity,
+                LiveTrendMetric.AvailableTesters => d.AvailableTesterCapacity,
                 _ => d.DevelopmentWork
             })).ToArray();
             return new(daily, markers);

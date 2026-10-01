@@ -62,10 +62,17 @@
    <Setter Property="FontSize" Value="25" />
    <Setter Property="FontWeight" Value="SemiBold" />
   </Style>
+  <Style Selector="Grid#Workspace"><Setter Property="Margin" Value="28"/></Style>
+  <Style Selector="TextBlock#ApplicationTitle"><Setter Property="FontSize" Value="28"/><Setter Property="Margin" Value="0,0,0,20"/></Style>
+  <Style Selector="Grid#NavigationRow"><Setter Property="Margin" Value="0,0,0,16"/></Style>
+  <Style Selector="Grid#Workspace.compactLive"><Setter Property="Margin" Value="16"/></Style>
+  <Style Selector="Grid.compactLive TextBlock#ApplicationTitle"><Setter Property="FontSize" Value="18"/><Setter Property="Margin" Value="0,0,0,6"/></Style>
+  <Style Selector="Grid.compactLive Grid#NavigationRow"><Setter Property="Margin" Value="0,0,0,4"/></Style>
+  <Style Selector="Grid.compactLive Grid#NavigationRow Button"><Setter Property="Padding" Value="12,6"/></Style>
  </Window.Styles>
- <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" Margin="28" DataContext="{Binding Simple}" x:DataType="vm:SimpleWorkflowViewModel">
-  <TextBlock Text="Software Development Simulation" FontSize="28" FontWeight="Bold" Foreground="#173B50" Margin="0,0,0,20" />
-  <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+ <Grid Name="Workspace" Classes.compactLive="{Binding LiveVisible}" RowDefinitions="Auto,Auto,Auto,*,Auto" DataContext="{Binding Simple}" x:DataType="vm:SimpleWorkflowViewModel">
+  <TextBlock Name="ApplicationTitle" Text="Software Development Simulation" FontWeight="Bold" Foreground="#173B50" />
+  <Grid Name="NavigationRow" Grid.Row="1" ColumnDefinitions="*,Auto">
    <WrapPanel Name="PrimaryNavigation">
     <Button Content="Live" Command="{Binding OpenLiveCommand}" Classes.primary="{Binding LiveVisible}" AutomationProperties.Name="Navigate Live" />
     <Button Content="Analyze" Command="{Binding OpenAnalyzeCommand}" Classes.primary="{Binding AnalyzeVisible}" AutomationProperties.Name="Navigate Analyze" />

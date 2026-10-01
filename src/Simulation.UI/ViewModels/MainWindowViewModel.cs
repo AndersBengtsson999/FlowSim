@@ -26,6 +26,13 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     // Inputs are parsed together on Run. Reset uses the same baseline factory as the engine demonstrations.
     public string NumberOfDevelopers { get; set; } = "";
     public string NumberOfTesters { get; set; } = "";
+    public string DeveloperAvailability { get; set; } = "100";
+    public string TesterAvailability { get; set; } = "100";
+    public IReadOnlyList<WorkArrivalMode> WorkSupplyModes { get; } = Enum.GetValues<WorkArrivalMode>();
+    private WorkArrivalMode workSupplyMode = WorkArrivalMode.FixedBacklog;
+    public WorkArrivalMode WorkSupplyMode { get => workSupplyMode; set { workSupplyMode = value; NotifyAll(); } }
+    public bool FixedRateSupply => WorkSupplyMode == WorkArrivalMode.ContinuousArrival;
+    public string WorkSupplyRate { get; set; } = "0.8";
     public string DeveloperCapacity { get; set; } = "";
     public string TesterCapacity { get; set; } = "";
     public string DevelopmentWipLimit { get; set; } = "";
@@ -190,6 +197,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         configuredName = BaselineScenario.CreateRequest().Name;
         var baseline = BaselineScenario.Create();
         var effort = baseline.WorkItems[0];
+        DeveloperAvailability = "100"; TesterAvailability = "100"; WorkSupplyMode = WorkArrivalMode.FixedBacklog; WorkSupplyRate = "0.8";
         NumberOfDevelopers = baseline.Team.DeveloperCount.ToString(CultureInfo.InvariantCulture);
         NumberOfTesters = baseline.Team.TesterCount.ToString(CultureInfo.InvariantCulture);
         DeveloperCapacity = baseline.Team.DeveloperCapacityPerDay.ToString(CultureInfo.InvariantCulture);
@@ -236,6 +244,8 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         configuredName = request.Name;
         string N(double n) => n.ToString(CultureInfo.InvariantCulture);
         NumberOfDevelopers = N(request.DeveloperCount); NumberOfTesters = N(request.TesterCount);
+        DeveloperAvailability = N(request.DeveloperAvailability * 100); TesterAvailability = N(request.TesterAvailability * 100);
+        WorkSupplyMode = request.ArrivalMode; WorkSupplyRate = request.WorkItemsPerDay.ToString(CultureInfo.InvariantCulture);
         DeveloperCapacity = N(request.DeveloperCapacityPerDay); TesterCapacity = N(request.TesterCapacityPerDay);
         DevelopmentWipLimit = N(request.DevelopmentWipLimit); CodeReviewWipLimit = N(request.CodeReviewWipLimit); TestingWipLimit = N(request.TestingWipLimit);
         NumberOfWorkItems = N(request.NumberOfWorkItems); DurationDays = N(request.SimulationDays);
@@ -337,6 +347,9 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         Name = configuredName,
         DeveloperCount = Integer(NumberOfDevelopers, "Developers"),
         TesterCount = Integer(NumberOfTesters, "Testers"),
+        DeveloperAvailability = Number(DeveloperAvailability, "Developer Availability (%)") / 100,
+        TesterAvailability = Number(TesterAvailability, "Tester Availability (%)") / 100,
+        ArrivalMode = WorkSupplyMode, WorkItemsPerDay = decimal.Parse(WorkSupplyRate.Replace(',', '.'), CultureInfo.InvariantCulture),
         DeveloperCapacityPerDay = Number(DeveloperCapacity, "Developer capacity"),
         TesterCapacityPerDay = Number(TesterCapacity, "Tester capacity"),
         DevelopmentWipLimit = Integer(DevelopmentWipLimit, "Development WIP"),
@@ -381,7 +394,28 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
 }
 
 public sealed record MetricRow(string Label, string Value, string Explanation);
-public sealed record FlowStateRow(string Name, int Count, string Kind, string Background, string Arrow);
+public sealed record FlowStateRow(string Name, int Count, string Kind, string Background, string Arrow) : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler? PropertyChanged;
+    private bool isExpanded;
+    public WorkItemStatus State => Enum.Parse<WorkItemStatus>(Name.Replace(" ", ""), ignoreCase: true);
+    public IReadOnlyList<WorkItemDaySnapshot> Items { get; init; } = [];
+    public IReadOnlyList<WorkItemDaySnapshot> VisibleItems => IsExpanded ? Items : [];
+    public bool IsEmpty => Items.Count == 0;
+    public string DisclosureChevron => IsExpanded ? "⌄" : "›";
+    public bool IsExpanded
+    {
+        get => isExpanded;
+        set
+        {
+            if (isExpanded == value) return;
+            isExpanded = value;
+            PropertyChanged?.Invoke(this, new(nameof(IsExpanded)));
+            PropertyChanged?.Invoke(this, new(nameof(DisclosureChevron)));
+            PropertyChanged?.Invoke(this, new(nameof(VisibleItems)));
+        }
+    }
+}
 
 public sealed record PercentileRow(string Name, string P50, string P75, string P85, string P95, int SampleCount);
 

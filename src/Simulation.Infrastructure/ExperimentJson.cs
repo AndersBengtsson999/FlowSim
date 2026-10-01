@@ -38,13 +38,13 @@ public static class ExperimentJson
         ValidateHeader(document.SchemaVersion, document.SimulationModelVersion, document.DocumentKind, "Experiment");
         if (document.Experiment is null) throw new JsonException("Experiment is required.");
         document.Experiment.Validate();
-        return document.Experiment with { Scenarios = Array.AsReadOnly(document.Experiment.Scenarios.ToArray()) };
+        return document.Experiment with { SimulationModelVersion = SimulationModel.Version, Scenarios = Array.AsReadOnly(document.Experiment.Scenarios.ToArray()) };
     }
     public static string ConfigurationSnapshot(SimulationRequest request) => JsonSerializer.Serialize(request, Options);
     private static void ValidateHeader(int schema, string model, string kind, string expected)
     {
         if (schema != SchemaVersion) throw new JsonException($"Unsupported SchemaVersion {schema}; expected {SchemaVersion}.");
-        if (model != SimulationModel.Version) throw new JsonException($"Unsupported SimulationModelVersion '{model}'; expected {SimulationModel.Version}.");
+        if (!SimulationModel.CanLoad(model)) throw new JsonException($"Unsupported SimulationModelVersion '{model}'; expected {SimulationModel.Version}.");
         if (kind != expected) throw new JsonException($"Expected a {expected} document.");
     }
     public static async Task<string> ReadAsync(string path)

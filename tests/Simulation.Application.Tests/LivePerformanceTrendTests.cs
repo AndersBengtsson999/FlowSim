@@ -52,7 +52,7 @@ public sealed class LivePerformanceTrendTests
             var d = live.Session.Days[p.Day - 1];
             var expected = metric.Metric switch { LiveTrendMetric.ReviewQueue => d.WaitingForCodeReviewCount,
                 LiveTrendMetric.TestingQueue => d.WaitingForTestingCount, LiveTrendMetric.ReworkQueue => d.WaitingForReworkCount,
-                LiveTrendMetric.DevelopmentCapacity => d.UsedDevelopmentCapacity, _ => d.DevelopmentWork };
+                LiveTrendMetric.DevelopmentCapacity => d.UsedDevelopmentCapacity, LiveTrendMetric.AvailableDevelopers => d.AvailableDeveloperCapacity, LiveTrendMetric.AvailableTesters => d.AvailableTesterCapacity, _ => d.DevelopmentWork };
             Assert.Equal(expected, p.Value);
         }
         Assert.Equal(5, LivePerformanceTrend.Project(live.Session, LiveTrendMetric.DevelopmentCapacity, range: null).Points[0].Value);

@@ -1,6 +1,6 @@
-# Simulation Model v0.2 — Development Collaboration Model v1
+# Simulation Model v0.3 — Capacity Availability and Work Supply
 
-Current allocation semantics are v0.2. Historical Step 2–13 measured examples and linked validation reports describe their original v0.1 runs; current collaboration measurements are in [Development Collaboration Model v1](DEVELOPMENT_COLLABORATION.md).
+Current semantics are v0.3, retaining Development Collaboration Model v1 allocation. See [availability, supply and status](CAPACITY_AVAILABILITY.md) for the new semantics and compatibility. Historical Step 2–13 measured examples and linked validation reports describe their original v0.1 runs; current collaboration measurements are in [Development Collaboration Model v1](DEVELOPMENT_COLLABORATION.md).
 
 ## Purpose and scope
 
@@ -24,8 +24,8 @@ Simulation.Core uses only .NET libraries. Simulation.Application generates reque
 ## Resources and capacity
 
 ```text
-Developer pool/day = DeveloperCount × DeveloperCapacityPerDay
-Tester pool/day    = TesterCount × TesterCapacityPerDay
+Developer pool/day = DeveloperCount × DeveloperCapacityPerDay × DeveloperAvailability
+Tester pool/day    = TesterCount × TesterCapacityPerDay × TesterAvailability
 ```
 
 Capacity is an abstract work unit, **not hours**. There are two resource types. Code review, rework and development consume the **same** developer pool; testing consumes only the tester pool. DeveloperCapacityPolicy allocates that pool in order: CodeReview, Rework, Development. Unused capacity does not carry forward.
@@ -44,7 +44,7 @@ This is a pooled model, without named individuals or tracking authors/reviewers.
 
 The 50% second-contribution efficiency is an explicit simulation assumption, not a claim about real-world pair-programming productivity. See [Development collaboration](DEVELOPMENT_COLLABORATION.md) for concepts, worked examples, compatibility and verification.
 
-Nominal Team capacity is kept separate from the daily pool variables in the engine. Future capacity reductions can be introduced at that boundary; meetings, support, absence and similar adjustments are not implemented.
+Nominal Team capacity is kept separate from available capacity. DeveloperAvailability and TesterAvailability default to 1 (100%) and must be finite in [0,1]. They scale the pool, not contribution caps. Meetings, support, absence and individual calendars are not simulated.
 
 ## Explicit efforts
 
@@ -135,7 +135,7 @@ Cycle validation uses an iterative topological traversal, avoiding recursion on 
 
 WipPolicy is the single admission/occupancy policy boundary:
 
-| Limit | States counted in v0.2 |
+| Limit | States counted in v0.3 |
 |---|---|
 | DevelopmentWipLimit | Development only |
 | CodeReviewWipLimit | CodeReview only |
@@ -496,11 +496,11 @@ Execution date and identity intentionally differ between reruns; reproducibility
 
 ## Simulation Model Version
 
-`Simulation.Core.SimulationModel.Version` is **"0.2"**, independently of the assembly/application version. This version introduces Development Collaboration Model v1; v0.1 had the one-unit Development cap. Scenario/experiment files, Live sessions, result records and CSV provenance carry the model version. Existing v0.1 persisted scenarios, experiments and Live sessions are deliberately rejected by the existing version guards. There is no migration or silent reinterpretation. Preserve old files and use the v0.1 implementation for their continuation/results; explicitly recreate configurations under v0.2 for a new experiment. Editing a version label cannot migrate a saved timeline. JSON schema remains 1.
+`Simulation.Core.SimulationModel.Version` is **"0.3"**, independently of the assembly/application version. It adds Capacity Availability and Work Supply while retaining Development Collaboration Model v1. Scenario/experiment files, Live sessions, result records and CSV provenance carry the version. Model 0.2 documents load with backward-compatible defaults; original Live version provenance and all historical ledgers are retained. Model 0.1 remains rejected because its Development allocation differs. Editing a version label cannot migrate a saved timeline. JSON schema remains 1. See [compatibility verification](CAPACITY_AVAILABILITY.md).
 
 ## Scenario and experiment persistence
 
-Persistence belongs in Simulation.Infrastructure, which now implements ExperimentJson and ComparisonCsv. UI references Infrastructure for file operations; Core remains free of UI, JSON and filesystem dependencies. The configuration JSON envelope has SchemaVersion=1, SimulationModelVersion="0.2", DocumentKind="Scenario" or "Experiment", and the corresponding payload. All existing SimulationRequest settings, including fixed fallbacks, distribution parameters, dormant defect configuration and configured seeds, are retained. Effort objects have explicit Kind="Fixed"/"Triangular" and their numerical fields. There is no CLR type-name activation.
+Persistence belongs in Simulation.Infrastructure, which now implements ExperimentJson and ComparisonCsv. UI references Infrastructure for file operations; Core remains free of UI, JSON and filesystem dependencies. The configuration JSON envelope has SchemaVersion=1, SimulationModelVersion="0.3", DocumentKind="Scenario" or "Experiment", and the corresponding payload. All existing SimulationRequest settings, including fixed fallbacks, distribution parameters, dormant defect configuration and configured seeds, are retained. Effort objects have explicit Kind="Fixed"/"Triangular" and their numerical fields. There is no CLR type-name activation.
 
 Loading validates schema/model/kind, scenario settings, unique IDs, reference membership and supported distributions. Unknown properties and distribution kinds are rejected. Experiment loading preserves identities and creates a read-only scenario collection. Importing a standalone scenario into the current collection assigns a fresh identity to avoid collisions. Files are human-readable UTF-8 JSON, limited to 5 MB on read. Writes use a sibling temporary file followed by replacement. Native file pickers handle location selection and overwrite prompting; no database or automatic background save is introduced.
 
@@ -527,3 +527,7 @@ The fixed Run loop and Live now call the same incremental `SimulationSession.Adv
 Live adds optional continuous work at the **start** of each interval using a decimal fractional accumulator. Existing fixed runs continue with Fixed Backlog. A configuration intervention at displayed Day N takes effect in interval `[N,N+1)`, displayed as Day N+1 when complete; it never rewrites prior events or remaining efforts. Reduced limits/counts preserve existing work. New arrival efforts use their own SplitMix64 stream, and all current random states are retained in checkpoints/files.
 
 Lifetime metrics keep their existing definitions. Live's recent metrics use the last 20 completed intervals by default, or the number actually observed if fewer: completions divided by observed days × 5; mean end-of-day WIP; summed used divided by summed available developer/tester capacity. Zero-day aggregates and zero-capacity utilization are defined as zero. Current WIP and Completed remain latest occupancy and cumulative completion counts. Charts and metrics report observations without automatic recommendations or causal interpretations.
+
+## Work supply in model 0.3
+
+Fixed backlog remains supported. Fixed rate retains the existing decimal arrival accumulator. Always available generates only enough items at day start to fill Development admission slots after counting eligible existing backlog. It uses the same seeded arrival generator and does not change admission, WIP, priority or collaboration rules. Availability and supply interventions recorded on Day N apply on Day N+1. See [full semantics and verification](CAPACITY_AVAILABILITY.md).

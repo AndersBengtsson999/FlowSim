@@ -9,6 +9,10 @@ public enum WorkItemStatus
 public sealed record Team(int DeveloperCount = 5, int TesterCount = 2,
     double DeveloperCapacityPerDay = 1, double TesterCapacityPerDay = 1)
 {
+    public double DeveloperAvailability { get; init; } = 1;
+    public double TesterAvailability { get; init; } = 1;
+    public double AvailableDeveloperCapacity => TotalDeveloperCapacity * DeveloperAvailability;
+    public double AvailableTesterCapacity => TotalTesterCapacity * TesterAvailability;
     public double TotalDeveloperCapacity => DeveloperCount * DeveloperCapacityPerDay;
     public double TotalTesterCapacity => TesterCount * TesterCapacityPerDay;
 }
@@ -18,6 +22,11 @@ public sealed record SimulationScenario(string Name, int SimulationDays, Team Te
     IReadOnlyList<WorkItem> WorkItems, int RandomSeed = 12345)
 {
     public DefectSettings Quality { get; init; } = new();
+    public WorkArrivalMode ArrivalMode { get; init; } = WorkArrivalMode.FixedBacklog;
+    public decimal WorkItemsPerDay { get; init; } = 0.8m;
+    public IEffortDistribution DevelopmentArrivalEffort { get; init; } = new FixedEffort(5);
+    public IEffortDistribution CodeReviewArrivalEffort { get; init; } = new FixedEffort(1);
+    public IEffortDistribution TestingArrivalEffort { get; init; } = new FixedEffort(2);
 }
 
 public sealed record StateTransition(WorkItemStatus From, WorkItemStatus To, int Day);

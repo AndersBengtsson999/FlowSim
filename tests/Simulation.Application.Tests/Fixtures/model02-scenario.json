@@ -1,0 +1,46 @@
+{
+  "SchemaVersion": 1,
+  "SimulationModelVersion": "0.2",
+  "DocumentKind": "Scenario",
+  "Scenario": {
+    "Id": "49f0c21f-f824-4eca-a2f3-a43912ddabe9",
+    "Configuration": {
+      "Name": "Live Flow Demo",
+      "DeveloperCount": 5,
+      "TesterCount": 2,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 100,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "Quality": {
+        "Enabled": true,
+        "CodeReviewDefectProbability": 0.2,
+        "TestingDefectProbability": 0.2,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {
+          "Kind": "Fixed",
+          "Effort": 1
+        },
+        "TestingReworkEffortDistribution": {
+          "Kind": "Fixed",
+          "Effort": 2
+        }
+      },
+      "DevelopmentDistribution": {
+        "Kind": "Triangular",
+        "Minimum": 1,
+        "MostLikely": 3,
+        "Maximum": 7
+      },
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  }
+}

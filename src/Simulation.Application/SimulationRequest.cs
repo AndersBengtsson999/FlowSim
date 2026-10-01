@@ -10,6 +10,10 @@ public sealed record SimulationRequest
     public int TesterCount { get; init; } = 2;
     public double DeveloperCapacityPerDay { get; init; } = 1;
     public double TesterCapacityPerDay { get; init; } = 1;
+    public double DeveloperAvailability { get; init; } = 1;
+    public double TesterAvailability { get; init; } = 1;
+    public WorkArrivalMode ArrivalMode { get; init; } = WorkArrivalMode.FixedBacklog;
+    public decimal WorkItemsPerDay { get; init; } = 0.8m;
     public int DevelopmentWipLimit { get; init; } = 5;
     public int CodeReviewWipLimit { get; init; } = 3;
     public int TestingWipLimit { get; init; } = 3;
@@ -35,9 +39,10 @@ public sealed record SimulationRequest
         var review = CodeReviewDistribution ?? new FixedEffort(CodeReviewEffort);
         var testing = TestingDistribution ?? new FixedEffort(TestingEffort);
         var scenario = new SimulationScenario(Name, SimulationDays,
-            new Team(DeveloperCount, TesterCount, DeveloperCapacityPerDay, TesterCapacityPerDay),
+            new Team(DeveloperCount, TesterCount, DeveloperCapacityPerDay, TesterCapacityPerDay) { DeveloperAvailability = DeveloperAvailability, TesterAvailability = TesterAvailability },
             DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit,
-            EffortGenerator.Generate(NumberOfWorkItems, development, review, testing, RandomSeed), RandomSeed) { Quality = Quality };
+            EffortGenerator.Generate(NumberOfWorkItems, development, review, testing, RandomSeed), RandomSeed) { Quality = Quality, ArrivalMode = ArrivalMode, WorkItemsPerDay = WorkItemsPerDay,
+                DevelopmentArrivalEffort = development, CodeReviewArrivalEffort = review, TestingArrivalEffort = testing };
         ScenarioValidator.Validate(scenario);
         return scenario;
     }

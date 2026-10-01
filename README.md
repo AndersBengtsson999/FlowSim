@@ -2,7 +2,7 @@
 
 An Avalonia desktop simulator for exploring software delivery using capacity, independent stage effort, queues, dependencies and WIP. This is a simulation tool, not a project-management application.
 
-The current implementation is **Simulation Model v0.2 — Development Collaboration Model v1**, following Step 13 — Live Team Performance, including Simple Mode and Live simulation. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
+The current implementation is **Simulation Model v0.3 — Capacity Availability and Work Supply**, following Step 13 — Live Team Performance, including Simple Mode and Live simulation. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
 
 ## Build and run on macOS
 
@@ -144,7 +144,7 @@ Open **Analyze → Experiments**, duplicate Baseline, rename the alternative, an
 
 **Run Monte Carlo Comparison** defaults to 500 runs per scenario. Common Random Numbers defaults on and uses the comparison seed sequence across scenarios. The ordinary table shows distributions and differences of P50s; a separate table shows the distribution of signed differences per paired run. Disabled common seeds use each scenario's configured seed and omit pairing.
 
-Save/load scenarios and experiments using human-readable JSON (SchemaVersion 1, SimulationModelVersion 0.2). Export current comparison results to CSV with values, deltas, percentiles, full configuration snapshots and run provenance. JSON saves configurations only; no database or result-history archive is introduced.
+Save/load scenarios and experiments using human-readable JSON (SchemaVersion 1, SimulationModelVersion 0.3; compatible loading of model 0.2). Export current comparison results to CSV with values, deltas, percentiles, full configuration snapshots and run provenance. JSON saves configurations only; no database or result-history archive is introduced.
 
 See [the experiment workflow](docs/EXPERIMENTS.md), [exact comparison semantics](docs/SIMULATION_MODEL.md#scenario-comparison) and [measured comparison results](docs/COMPARISON_RESULTS.md). Core execution rules are unchanged; its only new file declares the explicit model-version constant. Technical Debt remains out of scope.
 
@@ -187,7 +187,7 @@ Final [Before & After boundary verification](docs/LIVE_BOUNDARY_VERIFICATION.md)
 
 [Model, worked examples and verification](docs/DEVELOPMENT_COLLABORATION.md) documents primary-first allocation, Closest-to-Done collaboration, fractional reuse, consumed-capacity utilization, Flow Board details and the deliberate v0.1 persistence incompatibility. Earlier verification counts and screenshots above describe their historical steps. Technical Debt has not been started.
 
-Current v0.2 verification: **313 tests pass; Release build has 0 warnings and 0 errors**. Five native Avalonia WIP scenarios passed; results and screenshots are linked in the model report.
+Historical v0.2 collaboration verification: **313 tests pass; Release build has 0 warnings and 0 errors**. Five native Avalonia WIP scenarios passed; results and screenshots are linked in the model report.
 
 ## Live Performance Trend
 
@@ -198,3 +198,7 @@ Trend verification: **327 tests pass; Release build has 0 warnings and 0 errors*
 ## Live-first UX verification
 
 Current navigation is **Live | Analyze | Advanced**, with Live selected on launch. Compare/Explore/Experiments are grouped under Analyze; the new secondary **Run to Day** control continues Live deterministically. **336 tests pass; Release build has 0 warnings and 0 errors.** See [workflow, retained legacy code and native verification](docs/LIVE_FIRST_UX.md).
+
+Capacity Availability defaults to 100% and scales each team pool before allocation. Live supports Fixed rate and lazy Always available work supply, with compact Live Status and historical available-capacity trend series. See [implementation and compatibility](docs/CAPACITY_AVAILABILITY.md) and [native scenarios A–G](docs/verification/capacity-availability/RESULTS.md). Development Collaboration Model v1 remains unchanged.
+
+Live now uses a compact status/toolbar, collapsible configuration and full-width Flow Board followed directly by Performance Trend. Team Performance and Before/After remain available through expanders. See [layout, window-size validation and screenshots](docs/COMPACT_LIVE_LAYOUT.md).

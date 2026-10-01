@@ -24,8 +24,18 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     public LiveSimulation? Live { get; private set; }
     public IReadOnlyList<string> Presets { get; } = ["Live Flow Demo", "Baseline", "Variable Effort Example", "Defects & Rework Example"];
     public string Preset { get => preset; set { if (HasSession || !Presets.Contains(value)) return; preset = value; Setup.LoadConfiguration(value switch { "Baseline" => BaselineScenario.CreateRequest(), "Variable Effort Example" => BaselineScenario.VariableEffortExample(), "Defects & Rework Example" => BaselineScenario.DefectsAndReworkExample(), _ => LiveSimulation.Demo }); Notify(); } }
-    public IReadOnlyList<string> ArrivalModes { get; } = ["Continuous", "Fixed Backlog"];
-    public string ArrivalMode { get; set; } = "Continuous";
+    public IReadOnlyList<string> WorkSupplyChoices { get; } = ["Fixed rate", "Always available"];
+    public IReadOnlyList<string> ArrivalModes { get; } = ["Fixed rate", "Fixed Backlog", "Always available"];
+    private string arrivalMode = "Continuous", draftSupply = "Continuous";
+    public string ArrivalMode { get => arrivalMode; set { arrivalMode = value; Notify(); } }
+    public string WorkSupply { get => arrivalMode == "Always available" ? "Always available" : "Fixed rate"; set { ArrivalMode = value == "Always available" ? value : "Continuous"; } }
+    public bool FixedBacklog { get => arrivalMode == "Fixed Backlog"; set { ArrivalMode = value ? "Fixed Backlog" : "Continuous"; } }
+    public bool SupplySelectorEnabled => !FixedBacklog;
+    public bool ShowArrivalRate => arrivalMode == "Continuous";
+    public string WorkSupplyHelp => FixedBacklog ? "Only the initial backlog is supplied." : WorkSupply == "Always available" ? "Work is available when a Development slot can pull it. WIP and capacity still constrain flow." : "Work enters at the configured average rate.";
+    public string DraftSupply { get => draftSupply; set { draftSupply = value; Notify(); } }
+    public bool ShowDraftArrivalRate => draftSupply is "Continuous" or "Fixed rate";
+    private static WorkArrivalMode SupplyMode(string value) => value == "Always available" ? WorkArrivalMode.AlwaysAvailable : value == "Fixed Backlog" ? WorkArrivalMode.FixedBacklog : WorkArrivalMode.ContinuousArrival;
     public string ArrivalRate { get; set; } = "0.8";
     public string DraftArrivalRate { get; set; } = "0.8";
     public string ChangeLabel { get; set; } = "";
@@ -55,6 +65,12 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     public IReadOnlyList<double> Speeds { get; } = [0.5, 1, 2, 5, 10];
     public double Speed { get => speed; set { if (!Speeds.Contains(value)) return; speed = value; timer.Interval = TimeSpan.FromSeconds(1 / speed); Notify(); } }
     public bool HasSession => Live is not null;
+    private bool setupExpanded = true;
+    public bool SetupExpanded { get => setupExpanded; set { setupExpanded = value; Notify(); } }
+    public string ConfigurationSummary => Live is not { } live ? "Setup / Configuration" :
+        $"Configuration · {live.Session.Configuration.Team.DeveloperCount} Dev · {live.Session.Configuration.Team.TesterCount} Test · WIP {live.Session.Configuration.DevelopmentWipLimit}/{live.Session.Configuration.CodeReviewWipLimit}/{live.Session.Configuration.TestingWipLimit} · {LiveStatusProjection.Supply(live.Session.Configuration)} · Availability {live.Session.Configuration.Team.DeveloperAvailability:P0} / {live.Session.Configuration.Team.TesterAvailability:P0}";
+    public string ConfigurationDetails => Live is not { } live ? "" :
+        $"WIP: Development / Code Review / Testing. Nominal capacity per person: Dev {live.Session.Configuration.Team.DeveloperCapacityPerDay:0.###}, Test {live.Session.Configuration.Team.TesterCapacityPerDay:0.###}. Rework WIP {live.Session.Configuration.Quality.ReworkWipLimit}. Defects {(live.Session.Configuration.Quality.Enabled ? "enabled" : "disabled")}. Seed {live.Session.RandomSeed}. Use Change for an intervention; it takes effect on the next day.";
     public bool SetupVisible => !HasSession;
     private bool fastAdvancing, stopFastAdvance;
     public string TargetDay { get; set; } = "100";
@@ -65,6 +81,17 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     public bool IsEditing => editing;
     public bool CanChange => HasSession && !fastAdvancing && !editing && !stopped;
     public int Day => Live?.Session.CurrentDay ?? 0;
+    public LiveStatusSnapshot? LiveStatus { get; private set; }
+    private static string Arrow(double? slope)
+    {
+        var text = LivePerformancePresentation.Trend(slope);
+        return text.StartsWith("Rising") ? "↑" : text.StartsWith("Falling") ? "↓" : text.StartsWith("Stable") ? "→" : "";
+    }
+    private static string CapacityNumber(double? value) => value is null ? "—" : value.Value.ToString("0.###");
+    public string StatusDelivery => LiveStatus is not { } s ? "" : $"Day {s.Day} · Done {s.Done} · WIP {s.Wip} {Arrow(Performance?.WipTrend)} | Recent {RollingWindow}d: Throughput {(Performance?.AvailableDays > 0 ? $"{Performance.Throughput:0.0}" : "—")} / 5d · Cycle Time {LivePerformancePresentation.Number(Performance?.CycleTime)} d";
+    public string StatusCapacity => LiveStatus is not { } s ? "" : $"Day {s.Day} capacity · Dev {CapacityNumber(s.DeveloperUsed)} / {CapacityNumber(s.DeveloperAvailable)} · {LivePerformancePresentation.Percent(s.DeveloperUtilization)} | Test {CapacityNumber(s.TesterUsed)} / {CapacityNumber(s.TesterAvailable)} · {LivePerformancePresentation.Percent(s.TesterUtilization)}";
+    public string StatusQueues => LiveStatus is not { } s ? "" : $"Queues · Review {s.ReviewQueue} {Arrow(Performance?.Review.Trend)} · Testing {s.TestingQueue} {Arrow(Performance?.Testing.Trend)}" + (ShowRework ? $" · Rework {s.ReworkQueue} {Arrow(Performance?.Rework.Trend)}" : "") + $" | Work: {s.WorkSupply}";
+    public string LatestIntervention => Live?.Session.Changes.LastOrDefault() is { } c ? $"Last change · Day {c.Day} · {Describe(c)} · effective Day {c.Day + 1}" : "";
     public string DayLabel => $"Day {Day}";
     public string Status => status;
     public string WindowLabel => Performance is null ? $"Last {RollingWindow} days" : $"{RollingWindow}-day window · {LivePerformancePresentation.Period(Performance)}";
@@ -159,8 +186,8 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         var limit = Positive(SafetyLimit, "Safety Limit");
         var setup = Setup.CaptureSetup();
         setup = setup with { Quality = ReadQuality(Setup) };
-        Live = LiveSimulation.Start(setup, ArrivalMode == "Continuous" ? WorkArrivalMode.ContinuousArrival : WorkArrivalMode.FixedBacklog, Rate(ArrivalRate));
-        Live.SafetyLimit = limit; Live.RollingWindow = RollingWindow;
+        Live = LiveSimulation.Start(setup, SupplyMode(ArrivalMode), Rate(ArrivalRate));
+        Live.SafetyLimit = limit; Live.RollingWindow = RollingWindow; setupExpanded = false;
         stopped = false; queueHistory.Clear(); Refresh(); Resume();
     }
     public void Pause() { stopFastAdvance = true; running = false; timer.Stop(); if (HasSession) status = "Paused."; Notify(); }
@@ -200,7 +227,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         if (Live.Step()) { AppendHistory(); Refresh(); }
         if (Live.LimitReached) { Pause(); status = "Live simulation safety limit reached."; Notify(); }
     });
-    public void Reset() { Pause(); Live = null; stopped = false; editing = false; queueHistory.Clear(); Flow = []; Metrics = []; Details = ""; SelectedCheckpoint = null; selectedFlow = null; selectedIntervention = null; RefreshPerformance(); status = "Ready to start."; Notify(); }
+    public void Reset() { Pause(); Live = null; setupExpanded = true; stopped = false; editing = false; queueHistory.Clear(); Flow = []; Metrics = []; Details = ""; SelectedCheckpoint = null; selectedFlow = null; selectedIntervention = null; RefreshPerformance(); status = "Ready to start."; Notify(); }
     public void BeginChange()
     {
         if (!CanChange) return;
@@ -208,19 +235,22 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         var c = Live!.Session.Configuration;
         Draft.LoadConfiguration(new SimulationRequest { DeveloperCount = c.Team.DeveloperCount, TesterCount = c.Team.TesterCount,
             DeveloperCapacityPerDay = c.Team.DeveloperCapacityPerDay, TesterCapacityPerDay = c.Team.TesterCapacityPerDay,
+            DeveloperAvailability = c.Team.DeveloperAvailability, TesterAvailability = c.Team.TesterAvailability,
             DevelopmentWipLimit = c.DevelopmentWipLimit, CodeReviewWipLimit = c.CodeReviewWipLimit, TestingWipLimit = c.TestingWipLimit,
             Quality = c.Quality, NumberOfWorkItems = 0 });
+        draftSupply = c.ArrivalMode == WorkArrivalMode.AlwaysAvailable ? "Always available" : c.ArrivalMode == WorkArrivalMode.FixedBacklog ? "Fixed Backlog" : "Fixed rate";
         DraftArrivalRate = c.WorkItemsPerDay.ToString(CultureInfo.InvariantCulture); ChangeLabel = "";
         SimpleChangeField F(string name, Func<string> get, Action<string> set) => new(name, get(), get, set);
         ChangeFields = [F("Developers", () => Draft.NumberOfDevelopers, v => Draft.NumberOfDevelopers = v),
             F("Testers", () => Draft.NumberOfTesters, v => Draft.NumberOfTesters = v),
+            F("Developer Availability (%)", () => Draft.DeveloperAvailability, v => Draft.DeveloperAvailability = v),
+            F("Tester Availability (%)", () => Draft.TesterAvailability, v => Draft.TesterAvailability = v),
             F("Developer Capacity", () => Draft.DeveloperCapacity, v => Draft.DeveloperCapacity = v),
             F("Tester Capacity", () => Draft.TesterCapacity, v => Draft.TesterCapacity = v),
             F("Development WIP", () => Draft.DevelopmentWipLimit, v => Draft.DevelopmentWipLimit = v),
             F("Code Review WIP", () => Draft.CodeReviewWipLimit, v => Draft.CodeReviewWipLimit = v),
             F("Testing WIP", () => Draft.TestingWipLimit, v => Draft.TestingWipLimit = v),
-            F("Rework WIP", () => Draft.ReworkWipLimit, v => Draft.ReworkWipLimit = v),
-            F("New Work / day", () => DraftArrivalRate, v => DraftArrivalRate = v)];
+            F("Rework WIP", () => Draft.ReworkWipLimit, v => Draft.ReworkWipLimit = v)];
         status = "Paused while editing. Changes apply from the next simulated day."; Notify();
     }
     public void ApplyChanges()
@@ -229,14 +259,14 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         var r = Draft.CaptureSetup();
         var quality = ReadQuality(Draft);
         var previousChanges = Live.Session.Changes.Count;
-        Live.Session.ApplyChanges(Live.Session.Configuration with { Team = new(r.DeveloperCount, r.TesterCount, r.DeveloperCapacityPerDay, r.TesterCapacityPerDay),
+        Live.Session.ApplyChanges(Live.Session.Configuration with { Team = new(r.DeveloperCount, r.TesterCount, r.DeveloperCapacityPerDay, r.TesterCapacityPerDay) { DeveloperAvailability = r.DeveloperAvailability, TesterAvailability = r.TesterAvailability },
             DevelopmentWipLimit = r.DevelopmentWipLimit, CodeReviewWipLimit = r.CodeReviewWipLimit, TestingWipLimit = r.TestingWipLimit,
-            Quality = quality, WorkItemsPerDay = Rate(DraftArrivalRate) }, ChangeLabel);
+            Quality = quality, ArrivalMode = SupplyMode(DraftSupply), WorkItemsPerDay = Rate(DraftArrivalRate) }, ChangeLabel);
         if (Live.Session.Changes.Count > previousChanges) selectedIntervention = Live.Session.Changes[^1];
         editing = false; status = Live.Session.Changes.Count == previousChanges ? "No parameters changed. Resume when ready." : $"Changes recorded at Day {Day}; effective Day {Day + 1}. Resume when ready."; Refresh();
     }
     public void Load(LiveSimulation live)
-    { Pause(); Live = live; stopped = false; editing = false; rollingWindow = live.RollingWindow; SafetyLimit = live.SafetyLimit.ToString(); SelectedCheckpoint = null; selectedFlow = null; Details = ""; RebuildHistory(); Refresh(); status = "Live simulation opened. Resume when ready."; Notify(); }
+    { Pause(); Live = live; setupExpanded = false; stopped = false; editing = false; rollingWindow = live.RollingWindow; SafetyLimit = live.SafetyLimit.ToString(); SelectedCheckpoint = null; selectedFlow = null; Details = ""; RebuildHistory(); Refresh(); status = "Live simulation opened. Resume when ready."; Notify(); }
     public void NotifyStatus(string message) { status = message; Notify(); }
     private void RebuildHistory() { queueHistory.Clear(); if (Live is not null) foreach (var d in Live.Session.Days) queueHistory.Add(Point(d)); }
     private static LiveQueuePoint Point(DailySnapshot d) => new(d.Day + 1, d.WaitingForCodeReviewCount, d.WaitingForTestingCount, d.WaitingForReworkCount);
@@ -245,12 +275,15 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     {
         if (Live is null) return;
         var d = Live.CurrentSnapshot;
+        var expanded = Flow.Where(row => row.IsExpanded).Select(row => row.State).ToHashSet();
         Flow = FlowPresentation.Rows(d, Live.Session.Configuration, ShowRework);
+        foreach (var row in Flow) row.IsExpanded = expanded.Contains(row.State);
         RefreshPerformance();
         Notify();
     }
     private void RefreshPerformance()
     {
+        LiveStatus = Live is null ? null : LiveStatusProjection.From(Live.Session);
         var changes = Live?.Session.Changes ?? [];
         if (!Interventions.SequenceEqual(changes)) Interventions = changes.ToArray();
         Performance = Live is null ? null : LivePerformance.Rolling(Live.Session, RollingWindow);
@@ -287,8 +320,11 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         void Add<T>(string label, T a, T b) { if (!Equals(a, b)) parts.Add($"{label} {a} → {b}"); }
         Add("Developers", c.Before.Team.DeveloperCount, c.After.Team.DeveloperCount); Add("Testers", c.Before.Team.TesterCount, c.After.Team.TesterCount);
         Add("Developer Capacity", c.Before.Team.DeveloperCapacityPerDay, c.After.Team.DeveloperCapacityPerDay); Add("Tester Capacity", c.Before.Team.TesterCapacityPerDay, c.After.Team.TesterCapacityPerDay);
+        Add("Developer Availability", $"{c.Before.Team.DeveloperAvailability:P0}", $"{c.After.Team.DeveloperAvailability:P0}");
+        Add("Tester Availability", $"{c.Before.Team.TesterAvailability:P0}", $"{c.After.Team.TesterAvailability:P0}");
+        Add("Work Supply", LiveStatusProjection.Supply(c.Before), LiveStatusProjection.Supply(c.After));
         Add("Development WIP", c.Before.DevelopmentWipLimit, c.After.DevelopmentWipLimit); Add("Code Review WIP", c.Before.CodeReviewWipLimit, c.After.CodeReviewWipLimit); Add("Testing WIP", c.Before.TestingWipLimit, c.After.TestingWipLimit); Add("Rework WIP", c.Before.Quality.ReworkWipLimit, c.After.Quality.ReworkWipLimit);
-        Add("New Work / day", c.Before.WorkItemsPerDay, c.After.WorkItemsPerDay); Add("Defects", c.Before.Quality.Enabled, c.After.Quality.Enabled);
+        Add("Defects", c.Before.Quality.Enabled, c.After.Quality.Enabled);
         Add("Review defect probability", c.Before.Quality.CodeReviewDefectProbability, c.After.Quality.CodeReviewDefectProbability); Add("Testing defect probability", c.Before.Quality.TestingDefectProbability, c.After.Quality.TestingDefectProbability);
         string Effort(IEffortDistribution d) => d switch { FixedEffort f => $"Fixed {f.Effort:0.###}", TriangularEffort t => $"Triangular {t.Minimum:0.###} / {t.MostLikely:0.###} / {t.Maximum:0.###}", _ => "Custom" };
         Add("Review rework effort", Effort(c.Before.Quality.CodeReviewReworkEffortDistribution), Effort(c.After.Quality.CodeReviewReworkEffortDistribution)); Add("Testing rework effort", Effort(c.Before.Quality.TestingReworkEffortDistribution), Effort(c.After.Quality.TestingReworkEffortDistribution));

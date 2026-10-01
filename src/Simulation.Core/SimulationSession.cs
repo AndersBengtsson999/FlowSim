@@ -1,6 +1,6 @@
 namespace Simulation.Core;
 
-public enum WorkArrivalMode { FixedBacklog, ContinuousArrival }
+public enum WorkArrivalMode { FixedBacklog, ContinuousArrival, AlwaysAvailable }
 
 public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5,
     int CodeReviewWipLimit = 3, int TestingWipLimit = 3)
@@ -66,7 +66,8 @@ public sealed class SimulationSession
         ScenarioValidator.Validate(scenario);
         Name = scenario.Name; RandomSeed = scenario.RandomSeed;
         Configuration = configuration ?? new(scenario.Team, scenario.DevelopmentWipLimit, scenario.CodeReviewWipLimit,
-            scenario.TestingWipLimit) { Quality = scenario.Quality };
+            scenario.TestingWipLimit) { Quality = scenario.Quality, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
+                DevelopmentEffort = scenario.DevelopmentArrivalEffort, CodeReviewEffort = scenario.CodeReviewArrivalEffort, TestingEffort = scenario.TestingArrivalEffort };
         Configuration.Validate(); InitialConfiguration = Configuration;
         items = scenario.WorkItems.Select(w => w.CopyForRun()).ToList();
         byId = items.ToDictionary(w => w.Id, StringComparer.Ordinal);
@@ -98,14 +99,17 @@ public sealed class SimulationSession
             accumulator += Configuration.WorkItemsPerDay;
             while (accumulator >= 1)
             {
-                string id;
-                do { id = $"LIVE-{nextId++}"; } while (byId.ContainsKey(id));
-                var item = new WorkItem(id, $"Live story {id[5..]}", Configuration.DevelopmentEffort.Sample(arrivalRandom),
-                    Configuration.CodeReviewEffort.Sample(arrivalRandom), Configuration.TestingEffort.Sample(arrivalRandom), createdDay: CurrentDay);
-                if (new[] { item.DevelopmentEffort, item.CodeReviewEffort, item.TestingEffort }.Any(e => !double.IsFinite(e) || e < 0))
-                    throw new ScenarioValidationException("Arrival effort must be finite and nonnegative.");
-                items.Add(item); byId.Add(id, item); accumulator -= 1;
+                GenerateArrival(); accumulator -= 1;
             }
+        }
+        if (Configuration.ArrivalMode == WorkArrivalMode.AlwaysAvailable)
+        {
+            // Pull only enough to fill free Development slots; existing eligible backlog goes first.
+            var active = items.Count(w => w.State == WorkItemStatus.Development);
+            var eligible = items.Count(w => w.State == WorkItemStatus.Backlog && w.CreatedDay <= CurrentDay
+                && w.Dependencies.All(id => byId[id].State == WorkItemStatus.Done));
+            var needed = Math.Max(0, Configuration.DevelopmentWipLimit - active - eligible);
+            for (var i = 0; i < needed; i++) GenerateArrival();
         }
         var day = SimulationEngine.AdvanceOneDay(Configuration.Scenario(Name, CurrentDay + 1, items, RandomSeed),
             items, byId, defects, CurrentDay);
@@ -118,6 +122,17 @@ public sealed class SimulationSession
         day = day with { Items = Array.AsReadOnly(observations) };
         days.Add(day);
         return day;
+    }
+
+    private void GenerateArrival()
+    {
+        string id;
+        do { id = $"LIVE-{nextId++}"; } while (byId.ContainsKey(id));
+        var item = new WorkItem(id, $"Live story {id[5..]}", Configuration.DevelopmentEffort.Sample(arrivalRandom),
+            Configuration.CodeReviewEffort.Sample(arrivalRandom), Configuration.TestingEffort.Sample(arrivalRandom), createdDay: CurrentDay);
+        if (new[] { item.DevelopmentEffort, item.CodeReviewEffort, item.TestingEffort }.Any(e => !double.IsFinite(e) || e < 0))
+            throw new ScenarioValidationException("Arrival effort must be finite and nonnegative.");
+        items.Add(item); byId.Add(id, item);
     }
 
     public void ApplyChanges(SessionConfiguration configuration, string? label = null)

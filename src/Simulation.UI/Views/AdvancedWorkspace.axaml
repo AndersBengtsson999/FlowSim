@@ -45,6 +45,14 @@
          </WrapPanel>
         </StackPanel>
         <Button Content="Run Baseline" Command="{Binding RunBaselineCommand}" HorizontalAlignment="Left" Background="#176A78" Foreground="White" />
+        <Expander Header="Availability and work supply" HorizontalAlignment="Stretch"><StackPanel Spacing="8">
+         <TextBlock Text="Availability is the percentage of nominal capacity available to this workflow." Classes="note"/>
+         <TextBlock Text="Developer Availability (%)"/><TextBox Text="{Binding DeveloperAvailability, Mode=TwoWay}"/>
+         <TextBlock Text="Tester Availability (%)"/><TextBox Text="{Binding TesterAvailability, Mode=TwoWay}"/>
+         <TextBlock Text="Work supply · FixedBacklog / ContinuousArrival (fixed rate) / AlwaysAvailable" Classes="note"/>
+         <ComboBox ItemsSource="{Binding WorkSupplyModes}" SelectedItem="{Binding WorkSupplyMode, Mode=TwoWay}"/>
+         <TextBlock Text="Items/day · used only by ContinuousArrival" Classes="note"/><TextBox Text="{Binding WorkSupplyRate, Mode=TwoWay}" IsEnabled="{Binding FixedRateSupply}"/>
+        </StackPanel></Expander>
         <TextBlock Text="Configure one scenario. Run the baseline, change one parameter, and run again to explore its effect." Classes="note" />
         <Grid ColumnDefinitions="*,18,*" RowDefinitions="Auto,18,Auto" IsEnabled="{Binding CanEdit}">
          <Border Grid.Column="0" Grid.Row="0" Classes="card">

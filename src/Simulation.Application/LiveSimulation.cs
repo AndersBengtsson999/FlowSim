@@ -23,11 +23,12 @@ public sealed record QueueInspection(int Count, int OldestDays, IReadOnlyList<st
 
 public sealed record LiveCheckpoint(Guid Id, string Label, SimulationSessionState State);
 public sealed record LiveSessionDocument(int SchemaVersion, string SimulationModelVersion, SimulationSessionState State,
-    IReadOnlyList<LiveCheckpoint> Checkpoints, int SafetyLimit = 10000, int RollingWindow = 20);
+    IReadOnlyList<LiveCheckpoint> Checkpoints, int SafetyLimit = 10000, int RollingWindow = 20, string? OriginalModelVersion = null);
 
 /// <summary>Session/checkpoint lifecycle and analysis; playback belongs to the UI.</summary>
 public sealed class LiveSimulation
 {
+    public string OriginalModelVersion { get; private set; } = SimulationModel.Version;
     private readonly List<LiveCheckpoint> checkpoints = [];
     public SimulationSession Session { get; private set; }
     private int safetyLimit = 10000, rollingWindow = 20;
@@ -58,14 +59,14 @@ public sealed class LiveSimulation
     }
     public void RestoreCheckpoint(Guid id) => Session = SimulationSession.Restore(checkpoints.Single(c => c.Id == id).State);
     public void DeleteCheckpoint(Guid id) => checkpoints.RemoveAll(c => c.Id == id);
-    public LiveSessionDocument Capture() => new(1, SimulationModel.Version, Session.Capture(), checkpoints.ToArray(), SafetyLimit, RollingWindow);
+    public LiveSessionDocument Capture() => new(1, SimulationModel.Version, Session.Capture(), checkpoints.ToArray(), SafetyLimit, RollingWindow, OriginalModelVersion);
     public static LiveSimulation Restore(LiveSessionDocument document)
     {
-        if (document.SchemaVersion != 1 || document.SimulationModelVersion != SimulationModel.Version)
+        if (document.SchemaVersion != 1 || !SimulationModel.CanLoad(document.SimulationModelVersion))
             throw new ScenarioValidationException("Unsupported Live session schema or simulation model version.");
         if (document.SafetyLimit <= 0 || document.RollingWindow <= 0)
             throw new ScenarioValidationException("Safety limit and rolling window must be positive.");
-        var live = new LiveSimulation(SimulationSession.Restore(document.State)) { SafetyLimit = document.SafetyLimit, RollingWindow = document.RollingWindow };
+        var live = new LiveSimulation(SimulationSession.Restore(document.State)) { SafetyLimit = document.SafetyLimit, RollingWindow = document.RollingWindow, OriginalModelVersion = document.OriginalModelVersion ?? document.SimulationModelVersion };
         foreach (var checkpoint in document.Checkpoints)
         {
             var copy = checkpoint with { State = SimulationSession.Restore(checkpoint.State).Capture() };
@@ -76,7 +77,7 @@ public sealed class LiveSimulation
     }
     public static LiveSimulation Start(SimulationRequest request, WorkArrivalMode arrivalMode = WorkArrivalMode.ContinuousArrival, decimal rate = 0.8m)
     {
-        var config = new SessionConfiguration(new(request.DeveloperCount, request.TesterCount, request.DeveloperCapacityPerDay, request.TesterCapacityPerDay),
+        var config = new SessionConfiguration(new(request.DeveloperCount, request.TesterCount, request.DeveloperCapacityPerDay, request.TesterCapacityPerDay) { DeveloperAvailability = request.DeveloperAvailability, TesterAvailability = request.TesterAvailability },
             request.DevelopmentWipLimit, request.CodeReviewWipLimit, request.TestingWipLimit)
         {
             Quality = request.Quality, ArrivalMode = arrivalMode, WorkItemsPerDay = rate,

@@ -19,6 +19,8 @@ public static class ScenarioParameters
             ["Name"] = s.Name, ["Simulation Days"] = s.SimulationDays.ToString(), ["Work Items"] = s.NumberOfWorkItems.ToString(),
             ["Developers"] = s.DeveloperCount.ToString(), ["Testers"] = s.TesterCount.ToString(),
             ["Developer Capacity / Day"] = N(s.DeveloperCapacityPerDay), ["Tester Capacity / Day"] = N(s.TesterCapacityPerDay),
+            ["Developer Availability"] = N(s.DeveloperAvailability * 100) + "%", ["Tester Availability"] = N(s.TesterAvailability * 100) + "%",
+            ["Work Supply"] = s.ArrivalMode == WorkArrivalMode.AlwaysAvailable ? "Always available" : s.ArrivalMode == WorkArrivalMode.FixedBacklog ? "Fixed backlog" : $"Fixed {s.WorkItemsPerDay.ToString(System.Globalization.CultureInfo.InvariantCulture)}/day",
             ["Development WIP"] = s.DevelopmentWipLimit.ToString(), ["Code Review WIP"] = s.CodeReviewWipLimit.ToString(),
             ["Testing WIP"] = s.TestingWipLimit.ToString(), ["Rework WIP"] = s.Quality.ReworkWipLimit.ToString(),
             ["Development Effort"] = E(s.DevelopmentDistribution, s.DevelopmentEffort),

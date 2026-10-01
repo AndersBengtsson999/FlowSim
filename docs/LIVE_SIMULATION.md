@@ -32,7 +32,7 @@ The daily order remains:
 4. Allocate tester capacity to Testing.
 5. Record end-of-day states, actual work and capacities; increment the completed-day count.
 
-All admissions precede work. A completion cannot receive another stage's capacity in the same day. Generated items have no dependencies; existing dependencies remain intact. Development now uses the shared model v0.2 primary/collaboration passes; Review, Rework and Testing retain `min(1, per-person capacity)` per item/day. Each Development contribution has that cap, with the second 50% effective. Team pool remains count × per-person capacity. See [Development Collaboration Model v1](DEVELOPMENT_COLLABORATION.md).
+All admissions precede work. A completion cannot receive another stage's capacity in the same day. Generated items have no dependencies; existing dependencies remain intact. Development now uses the shared model v0.2 primary/collaboration passes; Review, Rework and Testing retain `min(1, per-person capacity)` per item/day. Each Development contribution has that cap, with the second 50% effective. In model 0.3 the team pool is count × per-person capacity × availability (default 100%). See [Development Collaboration Model v1](DEVELOPMENT_COLLABORATION.md).
 
 Core has no Avalonia, clock, file, JSON or persistence dependency. Application owns Live lifecycle, checkpoints and rolling analysis. Infrastructure owns the versioned JSON representation and atomic file replacement. UI owns playback scheduling, forms, chart rendering and file pickers; no work allocation or rolling-metric formulas live in ViewModels.
 
@@ -146,3 +146,7 @@ No project dependencies or solution architecture were replaced. There is no expl
 ## Live Performance Trend
 
 The Team Performance area now includes a single-metric trend chart with independent visible-range and existing rolling-window controls. Daily queues and consumed/effective Development work use authoritative snapshots; rolling throughput, cycle time, Average WIP and utilization match Step 13. Interventions remain at recorded Day N, effective N+1, with the Before/After selection highlighted. See [Live Performance Trend](LIVE_PERFORMANCE_TREND.md) for full definitions, lifecycle behavior, rendering and native validation.
+
+## Model 0.3 additions
+
+Live now has 100%-default developer/tester Availability, Fixed rate / Always available Work Supply, and a compact Status band. Availability scales the daily capacity pool; contributions retain their existing caps. New available-capacity trend series use historical ledgers. Model 0.2 Live sessions load compatibly with their original history and supply mode. See [exact semantics, persistence and verification](CAPACITY_AVAILABILITY.md).

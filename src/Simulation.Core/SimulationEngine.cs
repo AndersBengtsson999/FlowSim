@@ -44,8 +44,8 @@ public sealed class SimulationEngine
         var devWip = WipPolicy.Count(items, WorkItemStatus.Development);
         var reviewWip = WipPolicy.Count(items, WorkItemStatus.CodeReview);
         var testWip = WipPolicy.Count(items, WorkItemStatus.Testing);
-        var devRemaining = team.TotalDeveloperCapacity;
-        var testRemaining = team.TotalTesterCapacity;
+        var devRemaining = team.AvailableDeveloperCapacity;
+        var testRemaining = team.AvailableTesterCapacity;
         var work = new Dictionary<string, double>(StringComparer.Ordinal);
         var workedStage = new Dictionary<string, WorkItemStatus>(StringComparer.Ordinal);
 
@@ -104,6 +104,6 @@ public sealed class SimulationEngine
             Used(w, WorkItemStatus.Development), Used(w, WorkItemStatus.CodeReview), Used(w, WorkItemStatus.Testing),
             w.CreatedDay, statesDuringDay[w.Id], blockedIds.Contains(w.Id), Used(w, WorkItemStatus.Rework), w.RemainingReworkEffort, collaboration.GetValueOrDefault(w.Id))).ToArray();
         return new DailySnapshot(day, devWip, reviewWip, testWip, blocked, unfinished,
-            developmentWork, reviewWork, testingWork, Array.AsReadOnly(snapshots), team.TotalDeveloperCapacity, team.TotalTesterCapacity, reworkWork, reworkWip, collaborationCapacity);
+            developmentWork, reviewWork, testingWork, Array.AsReadOnly(snapshots), team.AvailableDeveloperCapacity, team.AvailableTesterCapacity, reworkWork, reworkWip, collaborationCapacity);
     }
 }

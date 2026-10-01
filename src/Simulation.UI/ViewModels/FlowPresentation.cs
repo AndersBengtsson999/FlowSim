@@ -29,6 +29,7 @@ public static class FlowPresentation
             rows.Add(new("Waiting for Rework", d.WaitingForReworkCount, "QUEUE · feedback from inspections", "#FFF2D8", "↓"));
             rows.Add(new("Rework", d.ReworkCount, Active("Returns to Code Review", d.ReworkCount, configuration?.Quality.ReworkWipLimit), "#E8F1F7", "↩"));
         }
-        return rows;
+        var itemsByState = d.Items.Where(w => w.CreatedDay <= d.Day).ToLookup(w => w.State);
+        return rows.Select(row => row with { Items = itemsByState[row.State].ToArray() }).ToArray();
     }
 }

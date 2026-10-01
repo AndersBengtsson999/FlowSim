@@ -8,7 +8,7 @@ public sealed record TeamParameters(int Developers, int Testers, double Develope
 {
     public SimulationScenario ApplyTo(SimulationScenario scenario) => scenario with
     {
-        Team = new Team(Developers, Testers, DeveloperCapacity, TesterCapacity),
+        Team = scenario.Team with { DeveloperCount = Developers, TesterCount = Testers, DeveloperCapacityPerDay = DeveloperCapacity, TesterCapacityPerDay = TesterCapacity },
         DevelopmentWipLimit = DevelopmentWipLimit,
         CodeReviewWipLimit = CodeReviewWipLimit,
         TestingWipLimit = TestingWipLimit
