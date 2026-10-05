@@ -26,6 +26,12 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     // Inputs are parsed together on Run. Reset uses the same baseline factory as the engine demonstrations.
     public string NumberOfDevelopers { get; set; } = "";
     public string NumberOfTesters { get; set; } = "";
+    public string ShortcutRate { get; set; } = "0";
+    public string ShortcutEffortReduction { get; set; } = "30";
+    public string DebtTolerance { get; set; } = "10";
+    public string DebtRepayment { get; set; } = "0";
+    public string DebtCreationFactor { get; set; } = "1";
+    private double debtImpactFactor = 1;
     public string DeveloperAvailability { get; set; } = "100";
     public string TesterAvailability { get; set; } = "100";
     public string DevelopmentProductivity { get; set; } = "1.00";
@@ -92,7 +98,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         Metric("Total Rework Count", r.TotalReworkCount, "Rework episodes admitted to the active Rework stage; includes incomplete episodes, excludes defects still waiting for admission.", "0"),
         Metric("Total Rework Effort", r.TotalReworkEffort, "Developer capacity actually consumed by Rework across all items, including incomplete items. Not merely assigned effort.", suffix: " units"),
         Metric("Average Rework Effort / Completed Item", r.AverageReworkEffortPerCompletedItem, "Actual Rework effort averaged over Done items only; 0 if none are Done.", suffix: " units"),
-        Metric("Rework Developer Capacity Share", r.ReworkDeveloperCapacityShare, "Rework capacity divided by total USED developer capacity (Development + Code Review + Rework). Not divided by available capacity.", "P1"),
+        Metric("Rework Developer Capacity Share", r.ReworkDeveloperCapacityShare, "Rework capacity divided by total USED developer capacity (Development + Code Review + Rework + Technical Debt Work). Not divided by available capacity.", "P1"),
         Metric("Average Code Review Attempts", r.AverageCodeReviewAttempts, "Started Code Review attempts per created item, including incomplete attempts and items with zero attempts."),
         Metric("Average Testing Attempts", r.AverageTestingAttempts, "Started Testing attempts per created item, including incomplete attempts and items with zero attempts.")
     ];
@@ -145,7 +151,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     public DailySnapshot? SelectedSnapshot => HasResults ? Days[selectedDay - 1] : null;
     public string DayLabel => HasResults ? $"End of simulated day {SelectedDay} of {LastDay}" : "Run a simulation to inspect its days.";
     public string CapacityDetail => SelectedSnapshot is not { } d ? "" :
-        $"Selected day: developers {d.UsedDeveloperCapacity:0.##} / {d.AvailableDeveloperCapacity:0.##} units used; testers {d.UsedTesterCapacity:0.##} / {d.AvailableTesterCapacity:0.##} units used.";
+        $"Selected day: developers {d.UsedDeveloperCapacity:0.##} / {d.AvailableDeveloperCapacity:0.##} units used (Review {d.UsedReviewCapacity:0.##}, Rework {d.UsedReworkDeveloperCapacity:0.##}, Debt Work {d.UsedDebtRepaymentCapacity:0.##}, Development {d.UsedDevelopmentCapacity:0.##}); testers {d.UsedTesterCapacity:0.##} / {d.AvailableTesterCapacity:0.##} units used.";
     public IReadOnlyList<MetricRow> DevelopmentAllocations => FlowPresentation.DevelopmentAllocations(SelectedSnapshot);
     public IReadOnlyList<FlowStateRow> FlowStates => SelectedSnapshot is not { } d ? [] : FlowPresentation.Rows(d);
     public IReadOnlyList<MetricRow> Metrics => result is not { } r ? [] :
@@ -200,6 +206,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         configuredName = BaselineScenario.CreateRequest().Name;
         var baseline = BaselineScenario.Create();
         var effort = baseline.WorkItems[0];
+        ShortcutRate = DebtRepayment = "0"; ShortcutEffortReduction = "30"; DebtTolerance = "10"; DebtCreationFactor = "1"; debtImpactFactor = 1;
         DevelopmentProductivity = CodeReviewProductivity = TestingProductivity = "1.00";
         DeveloperAvailability = "100"; TesterAvailability = "100"; WorkSupplyMode = WorkArrivalMode.FixedBacklog; WorkSupplyRate = "0.8";
         NumberOfDevelopers = baseline.Team.DeveloperCount.ToString(CultureInfo.InvariantCulture);
@@ -250,6 +257,9 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         NumberOfDevelopers = N(request.DeveloperCount); NumberOfTesters = N(request.TesterCount);
         DeveloperAvailability = N(request.DeveloperAvailability * 100); TesterAvailability = N(request.TesterAvailability * 100);
         DevelopmentProductivity = N(request.Productivity.Development); CodeReviewProductivity = N(request.Productivity.CodeReview); TestingProductivity = N(request.Productivity.Testing);
+        ShortcutRate = N(request.Debt.ShortcutRate * 100); ShortcutEffortReduction = N(request.Debt.ShortcutEffortReduction * 100);
+        DebtTolerance = N(request.Debt.Tolerance * 100); DebtRepayment = N(request.Debt.Repayment * 100);
+        DebtCreationFactor = request.Debt.CreationFactor.ToString("R", CultureInfo.InvariantCulture); debtImpactFactor = request.Debt.ImpactFactor;
         WorkSupplyMode = request.ArrivalMode; WorkSupplyRate = request.WorkItemsPerDay.ToString(CultureInfo.InvariantCulture);
         DeveloperCapacity = N(request.DeveloperCapacityPerDay); TesterCapacity = N(request.TesterCapacityPerDay);
         DevelopmentWipLimit = N(request.DevelopmentWipLimit); CodeReviewWipLimit = N(request.CodeReviewWipLimit); TestingWipLimit = N(request.TestingWipLimit);
@@ -352,6 +362,10 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         Name = configuredName,
         DeveloperCount = Integer(NumberOfDevelopers, "Developers"),
         TesterCount = Integer(NumberOfTesters, "Testers"),
+        Debt = new() { ShortcutRate = Number(ShortcutRate, "Shortcut Rate (%)") / 100,
+            ShortcutEffortReduction = Number(ShortcutEffortReduction, "Shortcut Effort Reduction (%)") / 100,
+            Tolerance = Number(DebtTolerance, "Debt Tolerance (%)") / 100, Repayment = Number(DebtRepayment, "Debt Repayment (%)") / 100,
+            CreationFactor = Number(DebtCreationFactor, "Debt Creation Factor"), ImpactFactor = debtImpactFactor },
         Productivity = new(Number(DevelopmentProductivity, "Development Productivity"), Number(CodeReviewProductivity, "Code Review Productivity"), Number(TestingProductivity, "Testing Productivity")),
         DeveloperAvailability = Number(DeveloperAvailability, "Developer Availability (%)") / 100,
         TesterAvailability = Number(TesterAvailability, "Tester Availability (%)") / 100,

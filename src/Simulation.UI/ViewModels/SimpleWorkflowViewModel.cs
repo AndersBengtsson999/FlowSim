@@ -3,12 +3,42 @@ using Simulation.Application;
 
 namespace Simulation.UI.ViewModels;
 
-public sealed class SimpleChangeField(string label, string current, Func<string> read, Action<string> write, string help = "")
+public enum ChangeNumberKind { Number, Integer }
+
+public sealed record ChangeFieldGroup(string Title, IReadOnlyList<SimpleChangeField> Fields);
+
+public sealed class SimpleChangeField(string label, string current, Func<string> read, Action<string> write,
+    string help = "", ChangeNumberKind kind = ChangeNumberKind.Number) : INotifyPropertyChanged
 {
     public string Label { get; } = label;
     public string Current { get; } = current;
-    public string Value { get => read(); set => write(value); }
+    public string Unit => Label.EndsWith(" (%)") ? "%" : Label.EndsWith(" (x)") ? "x" : "";
+    public string DisplayLabel => Unit.Length == 0 ? Label : Label[..^4];
+    public string CurrentDisplay => Current + (Unit.Length == 0 ? "" : " " + Unit);
+    public string Value
+    {
+        get => read();
+        set
+        {
+            write(value);
+            PropertyChanged?.Invoke(this, new(nameof(Value)));
+            PropertyChanged?.Invoke(this, new(nameof(IsChanged)));
+        }
+    }
+    public bool IsChanged
+    {
+        get
+        {
+            if (kind == ChangeNumberKind.Integer)
+                return !int.TryParse(Current, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var a)
+                    || !int.TryParse(Value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var b) || a != b;
+            return !Number(Current, out var x) || !Number(Value, out var y) || x != y;
+        }
+    }
+    private static bool Number(string text, out double value) => double.TryParse(text.Replace(',', '.'),
+        System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out value) && double.IsFinite(value);
     public string Help { get; } = help;
+    public event PropertyChangedEventHandler? PropertyChanged;
 }
 
 /// <summary>Question-oriented navigation and orchestration; all numerical work stays in existing application services.</summary>

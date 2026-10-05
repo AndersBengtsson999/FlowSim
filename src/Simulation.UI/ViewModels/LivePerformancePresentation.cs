@@ -1,4 +1,5 @@
 using Simulation.Application;
+using Simulation.Core;
 
 namespace Simulation.UI.ViewModels;
 
@@ -8,6 +9,10 @@ public static class LivePerformancePresentation
 {
     public static string Number(double? value) => value.HasValue ? $"{value:0.0}" : "Unavailable";
     public static string Percent(double? value) => value.HasValue ? $"{value:P0}" : "Unavailable";
+    public static string CostDetails(DeliveryCost? cost) => cost is not { IsComplete: true }
+        ? "Delivery cost unavailable: no completed items or incomplete historical capacity tracking."
+        : $"Completed items in the selected period; full lifecycle capacity units / item.\nDevelopment {cost.Development:0.##}\nCode Review {cost.CodeReview:0.##}\nRework {cost.Rework:0.##}\nTesting {cost.Testing:0.##}\nTotal {cost.Total:0.##}\nDebt repayment is excluded. Relative capacity, not financial cost.";
+
     public static string Trend(double? slope) => slope is not double value ? "Unavailable · needs 3 days"
         : Math.Abs(value) < .05 ? $"Stable ({value:+0.000;-0.000;0.000} items/day)"
         : $"{(value > 0 ? "Rising" : "Falling")} ({value:+0.000;-0.000;0.000} items/day)";
@@ -17,7 +22,8 @@ public static class LivePerformancePresentation
 
     public static IReadOnlyList<MetricRow> Delivery(PerformancePeriod p) =>
     [new("Recent Throughput", p.AvailableDays == 0 ? "Unavailable" : $"{p.Throughput:0.0} items / 5 days", "Completions in the period / observed days × 5."),
-     new("Recent Cycle Time", Number(p.CycleTime) + (p.CycleTime.HasValue ? " days" : ""), "Items completed in the period; full DevelopmentStartedDay to DoneDay, including time before the period.")];
+     new("Recent Cycle Time", Number(p.CycleTime) + (p.CycleTime.HasValue ? " days" : ""), "Items completed in the period; full DevelopmentStartedDay to DoneDay, including time before the period."),
+     new("Relative Delivery Cost / Done Item", Number(p.DeliveryCostPerDoneItem), CostDetails(p.AverageDeliveryCost))];
 
     public static IReadOnlyList<MetricRow> Flow(PerformancePeriod p, bool rework)
     {
@@ -56,6 +62,7 @@ public static class LivePerformancePresentation
         }
         Add("Throughput · items / 5 days", a.Throughput, b.Throughput);
         Add("Cycle Time · days", a.CycleTime, b.CycleTime);
+        Add("Delivery Cost / Done Item · capacity units", a.DeliveryCostPerDoneItem, b.DeliveryCostPerDoneItem);
         Add("Average WIP · items", a.AverageWip, b.AverageWip);
         Add("Average Code Review queue", a.Review.Average, b.Review.Average);
         Add("Average Testing queue", a.Testing.Average, b.Testing.Average);
@@ -66,6 +73,11 @@ public static class LivePerformancePresentation
         {
             Add("Defects", a.Defects, b.Defects);
             Add("Rework Capacity", a.ReworkCapacity, b.ReworkCapacity, true);
+        }
+        if (a.DebtRelevant || b.DebtRelevant)
+        {
+            Add("Technical Debt Ratio · period end", a.EndDebtRatio, b.EndDebtRatio, true);
+            Add("Debt Overhead · period end", a.EndDebtOverhead, b.EndDebtOverhead, true);
         }
         return rows;
     }

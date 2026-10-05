@@ -2,9 +2,23 @@
  <UserControl.Styles>
   <Style Selector="ListBox#LiveFlow ListBoxItem"><Setter Property="Padding" Value="0"/><Setter Property="Margin" Value="0"/><Setter Property="MinHeight" Value="0"/></Style>
   <Style Selector="Button"><Setter Property="Padding" Value="10,6"/><Setter Property="Margin" Value="0,0,6,0"/></Style>
+  <Style Selector="Border.interventionRow:focus-within"><Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}"/></Style>
   <Style Selector="Border.card"><Setter Property="Padding" Value="10"/></Style>
  </UserControl.Styles>
  <UserControl.Resources>
+  <vm:DeliveryCostDetails x:Key="DeliveryCostDetails"/>
+  <vm:InterventionPresentation x:Key="InterventionDescription"/>
+  <DataTemplate x:Key="InterventionRow" x:DataType="vm:SimpleChangeField">
+   <Border Classes="interventionRow" Padding="6,3" CornerRadius="4">
+    <Grid ColumnDefinitions="*,84,86,24,65">
+     <TextBlock Text="{Binding DisplayLabel}" ToolTip.Tip="{Binding Help}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,12,0"/>
+     <TextBlock Grid.Column="1" Text="{Binding CurrentDisplay}" Opacity="0.7" VerticalAlignment="Center" AutomationProperties.Name="{Binding Label, StringFormat='Current {0}'}"/>
+     <TextBox Grid.Column="2" Text="{Binding Value, Mode=TwoWay}" AutomationProperties.Name="{Binding Label}" ToolTip.Tip="{Binding Help}"/>
+     <TextBlock Grid.Column="3" Text="{Binding Unit}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+     <TextBlock Grid.Column="4" Text="Changed" IsVisible="{Binding IsChanged}" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" Margin="4,0,0,0" AutomationProperties.Name="{Binding Label, StringFormat='Changed: {0}'}"/>
+    </Grid>
+   </Border>
+  </DataTemplate>
   <DataTemplate x:Key="StatusGroup" x:DataType="vm:MetricRow">
    <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,1,18,1" ToolTip.Tip="{Binding Explanation}">
     <TextBlock Text="{Binding Label}" Classes="metricLabel" VerticalAlignment="Center"/>
@@ -42,7 +56,8 @@
       <ItemsControl.ItemTemplate><DataTemplate x:DataType="core:WorkItemDaySnapshot">
        <Border Classes="embeddedItem" Width="260">
         <StackPanel Spacing="2">
-         <TextBlock Text="{Binding Id}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+         <TextBlock Text="{Binding Id}" FontWeight="SemiBold" TextWrapping="Wrap" ToolTip.Tip="{Binding DeliveryCost, Converter={StaticResource DeliveryCostDetails}}"/>
+         <TextBlock Text="{Binding ImplementationSummary}" FontSize="11" TextWrapping="Wrap"/>
          <WrapPanel ToolTip.Tip="Remaining effort: Development / Code Review / Testing / Rework. Values are from the latest completed day.">
           <TextBlock Text="{Binding RemainingDevelopmentEffort, StringFormat='Dev {0:0.##}'}" Margin="0,0,8,0"/>
           <TextBlock Text="{Binding RemainingCodeReviewEffort, StringFormat='Review {0:0.##}'}" Margin="0,0,8,0"/>
@@ -114,6 +129,7 @@
 <Grid IsVisible="{Binding ShowArrivalRate}" ColumnDefinitions="*,100"><TextBlock Text="New work · items / day" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding ArrivalRate, Mode=TwoWay}" AutomationProperties.Name="Live New work · items / day" /></Grid>
 
    <Expander Header="Work · effort per item" HorizontalAlignment="Stretch"><views:EffortSettingsView DataContext="{Binding Setup}" /></Expander>
+   <Expander Header="Technical Debt" HorizontalAlignment="Stretch"><views:DebtSettingsView DataContext="{Binding Setup}" /></Expander>
    <Expander Header="Quality · defects and rework" HorizontalAlignment="Stretch"><views:LiveQualityView DataContext="{Binding Setup}" /></Expander>
    <Expander Header="More settings" HorizontalAlignment="Stretch">
     <StackPanel Spacing="12">
@@ -133,14 +149,22 @@
    </StackPanel>
   </Expander>
   <StackPanel IsVisible="{Binding HasSession}" Spacing="8">
-     <Border IsVisible="{Binding IsEditing}" Classes="card">
+     <Border IsVisible="{Binding IsEditing}" Classes="card" Width="600" MaxWidth="600" HorizontalAlignment="Left">
       <StackPanel Spacing="8">
        <TextBlock Text="Paused · Change something" Classes="section" />
-       <TextBlock Text="{x:Static vm:FlowPresentation.DevelopmentWipHelp}" Classes="note"/>
-       <Grid ColumnDefinitions="*,80,100"><TextBlock Grid.Column="1" Text="CURRENT"/><TextBlock Grid.Column="2" Text="TRY"/></Grid>
-       <ItemsControl ItemsSource="{Binding ChangeFields}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:SimpleChangeField">
-        <Grid ColumnDefinitions="*,80,100" Margin="0,3"><TextBlock Text="{Binding Label}" ToolTip.Tip="{Binding Help}" VerticalAlignment="Center"/><TextBlock Grid.Column="1" Text="{Binding Current}" VerticalAlignment="Center"/><TextBox Grid.Column="2" Text="{Binding Value, Mode=TwoWay}" AutomationProperties.Name="{Binding Label}" ToolTip.Tip="{Binding Help}"/></Grid>
+       <TextBlock Text="Current is read-only. Edit Try; changes take effect on the next simulated day." Classes="note" TextWrapping="Wrap"/>
+       <ItemsControl ItemsSource="{Binding ChangeGroups}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:ChangeFieldGroup">
+        <StackPanel Spacing="2" Margin="0,10,0,3">
+         <TextBlock Text="{Binding Title}" FontWeight="SemiBold" Margin="6,0,0,4"/>
+         <Grid ColumnDefinitions="*,84,86,24,65" Margin="6,0,6,2"><TextBlock Text="PARAMETER" FontSize="10" Opacity="0.65"/><TextBlock Grid.Column="1" Text="CURRENT" FontSize="10" Opacity="0.65"/><TextBlock Grid.Column="2" Text="TRY" FontSize="10"/></Grid>
+         <ItemsControl ItemsSource="{Binding Fields}" ItemTemplate="{StaticResource InterventionRow}"/>
+        </StackPanel>
        </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+       <Expander Header="Advanced · Technical Debt" HorizontalAlignment="Stretch">
+        <StackPanel Spacing="6"><TextBlock Text="Calibration assumption: debt created per unit of shortcut effort saved. Applies to future Development starts." Classes="note" TextWrapping="Wrap"/>
+         <ItemsControl ItemsSource="{Binding AdvancedDebtChanges}" ItemTemplate="{StaticResource InterventionRow}"/>
+        </StackPanel>
+       </Expander>
        <TextBlock Text="Optional label"/><TextBox Text="{Binding ChangeLabel, Mode=TwoWay}" MaxLength="100" AutomationProperties.Name="Change label" />
        <TextBlock Text="Work supply"/>
        <ComboBox ItemsSource="{Binding ArrivalModes}" SelectedItem="{Binding DraftSupply, Mode=TwoWay}" AutomationProperties.Name="Change Work supply"/>
@@ -149,6 +173,10 @@
        <WrapPanel><Button Content="Apply Changes" Command="{Binding ApplyCommand}" Classes="primary"/><Button Content="Cancel" Command="{Binding CancelChangeCommand}" /></WrapPanel>
       </StackPanel>
      </Border>
+   <StackPanel IsVisible="{Binding DebtVisible}" Spacing="0" Margin="4,0" ToolTip.Tip="{Binding DebtDetails}">
+    <Grid ColumnDefinitions="*,Auto"><TextBlock Text="{Binding DebtText}" FontSize="12" TextWrapping="Wrap" VerticalAlignment="Center"/><Button Grid.Column="1" Content="Details" Padding="5,0" MinHeight="20" Margin="8,0,0,0"><Button.Flyout><Flyout><TextBlock Text="{Binding DebtDetails}" TextWrapping="Wrap" MaxWidth="500"/></Flyout></Button.Flyout></Button></Grid>
+    <charts:TechnicalDebtBar State="{Binding DebtBar}" Height="32" AutomationProperties.Name="{Binding DebtText}"/>
+   </StackPanel>
    <Grid ColumnDefinitions="*,Auto"><TextBlock Text="Flow Board" Classes="liveSection"/><TextBlock Grid.Column="1" Text="Work Items" Classes="note" Margin="0,0,30,0"/></Grid>
    <ListBox Name="LiveFlow" ItemsSource="{Binding Flow}" SelectedItem="{Binding SelectedFlow, Mode=TwoWay}" ItemTemplate="{StaticResource FlowRow}" Background="Transparent" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
      <Border Classes="card"><StackPanel Spacing="8">
@@ -210,7 +238,7 @@
     <StackPanel Spacing="10">
      <TextBlock Text="Uses the selected Team Performance window. A change recorded on Day N takes effect on Day N+1." Classes="note"/>
      <ComboBox ItemsSource="{Binding Interventions}" SelectedItem="{Binding SelectedIntervention, Mode=TwoWay}" HorizontalAlignment="Stretch" AutomationProperties.Name="Compare intervention">
-      <ComboBox.ItemTemplate><DataTemplate x:DataType="core:ConfigurationChange"><StackPanel Orientation="Horizontal" Spacing="8"><TextBlock Text="{Binding Day, StringFormat='Day {0}'}"/><TextBlock Text="{Binding Label}"/></StackPanel></DataTemplate></ComboBox.ItemTemplate>
+      <ComboBox.ItemTemplate><DataTemplate x:DataType="core:ConfigurationChange"><TextBlock Text="{Binding Converter={StaticResource InterventionDescription}}" TextWrapping="Wrap"/></DataTemplate></ComboBox.ItemTemplate>
      </ComboBox>
      <TextBlock Text="{Binding BeforePeriod}"/>
      <TextBlock Text="{Binding AfterPeriod}"/>

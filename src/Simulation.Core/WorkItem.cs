@@ -13,7 +13,14 @@ public sealed class WorkItem
     public double RemainingReworkEffort { get; private set; }
     public string Id { get; }
     public string Name { get; }
+    public DeliveryCost DeliveryCost { get; private set; } = new();
     public double DevelopmentEffort { get; }
+    public DevelopmentPlan? DevelopmentPlan { get; private set; }
+    internal void SetDevelopmentPlan(DevelopmentPlan? plan)
+    {
+        DevelopmentPlan = plan;
+        RemainingDevelopmentEffort = plan?.FinalEffort ?? DevelopmentEffort;
+    }
     public double CodeReviewEffort { get; }
     public double TestingEffort { get; }
     public double RemainingDevelopmentEffort { get; private set; }
@@ -51,13 +58,14 @@ public sealed class WorkItem
         RemainingTestingEffort, RemainingReworkEffort, currentReworkEffort, reviewQueueDay, testingQueueDay,
         reworkQueueDay, DevelopmentStartedDay, DevelopmentCompletedDay, CodeReviewStartedDay,
         CodeReviewCompletedDay, TestingStartedDay, TestingCompletedDay, DoneDay,
-        transitions.ToArray(), events.ToArray(), attempts.ToArray());
+        transitions.ToArray(), events.ToArray(), attempts.ToArray()) { DevelopmentPlan = DevelopmentPlan, DeliveryCost = DeliveryCost };
 
     internal static WorkItem Restore(WorkItemState s)
     {
         var w = new WorkItem(s.Id, s.Name, s.DevelopmentEffort, s.CodeReviewEffort, s.TestingEffort, s.Dependencies, s.CreatedDay)
         {
-            State = s.State, RemainingDevelopmentEffort = s.RemainingDevelopmentEffort,
+            DeliveryCost = s.DeliveryCost ?? new(IsComplete: s.State == WorkItemStatus.Backlog && s.DevelopmentStartedDay is null && !s.Events.Any(e => e.EventType == WorkItemEventType.CapacityApplied)),
+            DevelopmentPlan = s.DevelopmentPlan, State = s.State, RemainingDevelopmentEffort = s.RemainingDevelopmentEffort,
             RemainingCodeReviewEffort = s.RemainingCodeReviewEffort, RemainingTestingEffort = s.RemainingTestingEffort,
             RemainingReworkEffort = s.RemainingReworkEffort, currentReworkEffort = s.CurrentReworkEffort,
             reviewQueueDay = s.ReviewQueueDay, testingQueueDay = s.TestingQueueDay, reworkQueueDay = s.ReworkQueueDay,
@@ -147,13 +155,14 @@ public sealed class WorkItem
         if (!double.IsFinite(work) || work < 0 || work > RemainingEffort
             || !double.IsFinite(consumedCapacity ?? work) || (consumedCapacity ?? work) < 0 || (consumedCapacity ?? work) > 1)
             throw new InvalidOperationException("Invalid work allocation.");
+        DeliveryCost = DeliveryCost.Add(State, consumedCapacity ?? work);
         if (work > 0) events.Add(new(day, Id, WorkItemEventType.CapacityApplied, State, State, work, ConsumedCapacity: consumedCapacity));
         switch (State)
         {
             case WorkItemStatus.Rework:
                 RemainingReworkEffort = Subtract(RemainingReworkEffort, work, currentReworkEffort); break;
             case WorkItemStatus.Development:
-                RemainingDevelopmentEffort = Subtract(RemainingDevelopmentEffort, work, DevelopmentEffort); break;
+                RemainingDevelopmentEffort = Subtract(RemainingDevelopmentEffort, work, DevelopmentPlan?.FinalEffort ?? DevelopmentEffort); break;
             case WorkItemStatus.CodeReview:
                 RemainingCodeReviewEffort = Subtract(RemainingCodeReviewEffort, work, CodeReviewEffort); break;
             case WorkItemStatus.Testing:

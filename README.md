@@ -2,7 +2,7 @@
 
 An Avalonia desktop simulator for exploring software delivery using capacity, independent stage effort, queues, dependencies and WIP. This is a simulation tool, not a project-management application.
 
-The current implementation is **Simulation Model v0.4 — Stage-specific Productivity Multipliers v1**, following Step 13 — Live Team Performance, including Simple Mode and Live simulation. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
+The current implementation is **Simulation Model v0.5 — Technical Debt v1**, following Step 13 — Live Team Performance, including Simple Mode and Live simulation. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
 
 ## Build and run on macOS
 
@@ -51,7 +51,7 @@ Backlog → Development → WaitingForCodeReview → CodeReview
         → WaitingForTesting → Testing → Done
 ```
 
-Code Review, Rework and Development share one developer pool, served in that order. Testing has a separate tester pool. Development gives each active item primary capacity before allocating collaboration to the closest-to-done items. Each item can consume up to 2 capacity units for up to 1.5 effective effort. Review, Rework and Testing retain their one-unit caps. All allocations are bounded by per-person capacity, remaining work and the shared pool. Capacity is not hours.
+Code Review, Rework and Development share one developer pool, served in that order. Testing has a separate tester pool. Development gives each active item primary capacity before allocating collaboration to the closest-to-done items. Each item can consume up to 2 capacity units for up to 1.5 × Development Productivity effective effort. Debt repayment uses remaining capacity after Review and Rework, before Development. Review, Rework and Testing retain their one-unit caps. All allocations are bounded by per-person capacity, remaining work and the shared pool. Capacity is not hours.
 
 Four WIP limits count only their active state; waiting queues do not occupy active slots. FIFO ties follow scenario item order. All dependencies must be Done before development admission. Invalid and circular dependencies are rejected.
 
@@ -135,7 +135,7 @@ Open **Sensitivity**, choose a base scenario and parameter, edit the comma-separ
 
 The entire Core implementation remains unchanged. Analysis services live in Application and the new tab has its own ViewModel and drawing control. No third-party package was added. A warm-up window is not proof of steady state; completed-item times retain their full lifetimes and exclude unfinished items.
 
-Read [the definitions](docs/SIMULATION_MODEL.md#model-validation) and [the detailed validation report](docs/VALIDATION_RESULTS.md) before interpreting plateaus, lead time or WIP saturation. The report includes measured sweeps, extreme comparisons, deterministic Monte Carlo verification and limitations. Technical Debt has not been implemented.
+Read [the definitions](docs/SIMULATION_MODEL.md#model-validation) and [the detailed validation report](docs/VALIDATION_RESULTS.md) before interpreting plateaus, lead time or WIP saturation. The report includes measured sweeps, extreme comparisons, deterministic Monte Carlo verification and limitations. Technical Debt v1 is documented separately in [its model and verification report](docs/TECHNICAL_DEBT.md).
 
 
 ## Scenario comparison and experiments (Step 9)
@@ -144,9 +144,9 @@ Open **Analyze → Experiments**, duplicate Baseline, rename the alternative, an
 
 **Run Monte Carlo Comparison** defaults to 500 runs per scenario. Common Random Numbers defaults on and uses the comparison seed sequence across scenarios. The ordinary table shows distributions and differences of P50s; a separate table shows the distribution of signed differences per paired run. Disabled common seeds use each scenario's configured seed and omit pairing.
 
-Save/load scenarios and experiments using human-readable JSON (SchemaVersion 1, SimulationModelVersion 0.4; compatible loading of models 0.2 and 0.3). Export current comparison results to CSV with values, deltas, percentiles, full configuration snapshots and run provenance. JSON saves configurations only; no database or result-history archive is introduced.
+Save/load scenarios and experiments using human-readable JSON (SchemaVersion 1, SimulationModelVersion 0.5; compatible loading of models 0.2, 0.3 and 0.4). Export current comparison results to CSV with values, deltas, percentiles, full configuration snapshots and run provenance. JSON saves configurations only; no database or result-history archive is introduced.
 
-See [the experiment workflow](docs/EXPERIMENTS.md), [exact comparison semantics](docs/SIMULATION_MODEL.md#scenario-comparison) and [measured comparison results](docs/COMPARISON_RESULTS.md). Core execution rules are unchanged; its only new file declares the explicit model-version constant. Technical Debt remains out of scope.
+See [the experiment workflow](docs/EXPERIMENTS.md), [exact comparison semantics](docs/SIMULATION_MODEL.md#scenario-comparison) and [measured comparison results](docs/COMPARISON_RESULTS.md). The original experiment step did not change Core execution rules. Current Technical Debt configuration participates in the same comparison workflow.
 
 ## Simplified workflow (Step 11)
 
@@ -185,7 +185,7 @@ Final [Before & After boundary verification](docs/LIVE_BOUNDARY_VERIFICATION.md)
 
 ## Development Collaboration Model v1
 
-[Model, worked examples and verification](docs/DEVELOPMENT_COLLABORATION.md) documents primary-first allocation, Closest-to-Done collaboration, fractional reuse, consumed-capacity utilization, Flow Board details and the deliberate v0.1 persistence incompatibility. Earlier verification counts and screenshots above describe their historical steps. Technical Debt has not been started.
+[Model, worked examples and verification](docs/DEVELOPMENT_COLLABORATION.md) documents primary-first allocation, Closest-to-Done collaboration, fractional reuse, consumed-capacity utilization, Flow Board details and the deliberate v0.1 persistence incompatibility. Earlier verification counts and screenshots above describe their historical steps. Technical Debt v1 is now available; see [the full model and verification](docs/TECHNICAL_DEBT.md).
 
 Historical v0.2 collaboration verification: **313 tests pass; Release build has 0 warnings and 0 errors**. Five native Avalonia WIP scenarios passed; results and screenshots are linked in the model report.
 
@@ -208,3 +208,11 @@ Live visual polish refines the existing Fluent UI with grouped status values, to
 Independent Development, Code Review and Testing productivity, capacity accounting, compatibility and native verification: [Stage-specific Productivity Multipliers v1](docs/STAGE_PRODUCTIVITY.md).
 
 Normal Live configuration uses people, availability and productivity; per-person nominal scaling is retained only in Advanced and saved configurations. See [Capacity UX Simplification](docs/CAPACITY_UX_SIMPLIFICATION.md).
+
+## Technical Debt v1
+
+Explicit shortcuts reduce Development effort and create system-level debt on Development completion. Debt above configured tolerance increases effort for future starts. Optional repayment uses remaining developer capacity after Review and Rework. Live includes compact configuration, a debt bar, daily debt trends and checkpoint persistence. Default zero-debt behavior matches model 0.4. See [formulas, lifecycle, compatibility and verification](docs/TECHNICAL_DEBT.md).
+
+## Relative Delivery Cost v1
+
+Live now shows **Cost/Item**: actual Development, Code Review, Rework and Testing capacity consumed over the full lifecycle of items completed in the selected period. The existing tooltip, Performance Trend and Before/After show details. Debt repayment remains system-level and is excluded. This is a relative capacity measure, not financial cost. See [definitions, compatibility and verification](docs/RELATIVE_DELIVERY_COST.md).

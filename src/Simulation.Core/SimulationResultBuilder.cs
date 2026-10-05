@@ -35,6 +35,8 @@ internal static class SimulationResultBuilder
                 t.TestingWaiting, t.Blocked, w.RemainingDevelopmentEffort, w.RemainingCodeReviewEffort,
                 w.RemainingTestingEffort, Array.AsReadOnly(w.Transitions.ToArray()), w.DevelopmentEffort, w.CodeReviewEffort, w.TestingEffort)
             {
+                DeliveryCost = w.DeliveryCost,
+                DevelopmentPlan = w.DevelopmentPlan,
                 Events = Array.AsReadOnly(w.Events.ToArray()),
                 InspectionAttempts = Array.AsReadOnly(w.InspectionAttempts.ToArray()),
                 CodeReviewDefectsFound = w.Events.Count(e => e.EventType == WorkItemEventType.DefectFound && e.DefectSource == DefectSource.CodeReview),

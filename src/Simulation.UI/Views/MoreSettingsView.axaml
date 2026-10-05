@@ -144,7 +144,8 @@
     </Border>
    </StackPanel>
   </Expander>
-  <Expander Header="Advanced · capacity, seeds and examples" HorizontalAlignment="Stretch">
+  <Expander Header="Technical Debt" HorizontalAlignment="Stretch"><views:DebtSettingsView /></Expander>
+        <Expander Header="Advanced · capacity, seeds and examples" HorizontalAlignment="Stretch">
    <StackPanel Spacing="10">
     <Grid ColumnDefinitions="*,110">
      <StackPanel Margin="0,0,14,0">

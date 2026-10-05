@@ -1,0 +1,65 @@
+{
+  "SchemaVersion": 1,
+  "SimulationModelVersion": "0.4",
+  "DocumentKind": "Scenario",
+  "Scenario": {
+    "Id": "f9a64fa8-045d-40dd-ae99-61e64c1b285b",
+    "Configuration": {
+      "Name": "Live Flow Demo",
+      "DeveloperCount": 5,
+      "TesterCount": 2,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 0.85,
+      "TesterAvailability": 0.75,
+      "ArrivalMode": "FixedBacklog",
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 3,
+      "CodeReviewWipLimit": 2,
+      "TestingWipLimit": 2,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 100,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1.3,
+        "Testing": 1.4
+      },
+      "Quality": {
+        "Enabled": true,
+        "CodeReviewDefectProbability": 0.15,
+        "TestingDefectProbability": 0.2,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {
+          "Kind": "Fixed",
+          "Effort": 1
+        },
+        "TestingReworkEffortDistribution": {
+          "Kind": "Fixed",
+          "Effort": 2
+        }
+      },
+      "DevelopmentDistribution": {
+        "Kind": "Triangular",
+        "Minimum": 0.3,
+        "MostLikely": 2,
+        "Maximum": 6
+      },
+      "CodeReviewDistribution": {
+        "Kind": "Triangular",
+        "Minimum": 0.1,
+        "MostLikely": 0.7,
+        "Maximum": 2
+      },
+      "TestingDistribution": {
+        "Kind": "Triangular",
+        "Minimum": 0.2,
+        "MostLikely": 1,
+        "Maximum": 3
+      }
+    }
+  }
+}

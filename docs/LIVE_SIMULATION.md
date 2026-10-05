@@ -28,7 +28,7 @@ The daily order remains:
 
 1. Generate this day's continuous arrivals, if selected.
 2. Observe dependency blocking; admit eligible Backlog, review queue, test queue and rework queue items under the corresponding active WIP policy.
-3. Allocate the shared developer pool in **Code Review → Rework → Development** order.
+3. Allocate the shared developer pool in **Code Review → Rework → optional Debt Repayment → Development** order.
 4. Allocate tester capacity to Testing.
 5. Record end-of-day states, actual work and capacities; increment the completed-day count.
 
@@ -134,7 +134,7 @@ Modified:
 - UI: `MainWindowViewModel.cs` delegates the same flow rows to shared presentation; `SimpleWorkflowViewModel.cs` adds Live navigation and pauses when leaving; `MainWindow.axaml` adds the Live page/Home entry.
 - `README.md`, `docs/SIMULATION_MODEL.md` link/document the new mode.
 
-No project dependencies or solution architecture were replaced. There is no explicit AI model, technical debt, multiple-team model, Live Monte Carlo or other later-step feature.
+No project dependencies or solution architecture were replaced. There is no explicit AI model, multiple-team model or Live Monte Carlo. Technical Debt v1 was subsequently added as described below.
 
 ## Screenshots from native macOS validation
 
@@ -154,3 +154,17 @@ Live now has 100%-default developer/tester Availability, Fixed rate / Always ava
 ## Capacity UX Simplification
 
 Normal Live setup and Change use people, availability and independent stage productivity. Per-person capacity editors are only in Advanced scenario settings. Existing saved custom values remain unchanged through load, normal interventions, checkpoints and save, with a read-only notice in expanded Configuration. Runtime used/available capacity, utilization and trends remain available. See [compatibility and native verification](CAPACITY_UX_SIMPLIFICATION.md).
+
+## Technical Debt v1
+
+Configuration includes four compact percentage controls: Shortcut Rate, Shortcut Effort Reduction, Debt Tolerance and Debt Repayment. Changes recorded on Day N affect processing on Day N+1; active items retain their fixed Development plan. The current bar reflects the configured tolerance for future starts immediately, while historical day observations remain unchanged.
+
+A compact bar above Flow Board shows ratio, tolerance, future-start overhead and configured repayment. Details shows absolute debt, original completed scope and the latest Review/Rework/Development/Debt Work capacity breakdown. Green/yellow are within configured tolerance; red indicates excess above tolerance. The scale adjusts to show the current value. The bar is hidden for the unused default feature and remains visible after debt has been repaid if the session contains debt history.
+
+Performance Trend offers actual daily Technical Debt Ratio, absolute Technical Debt and Debt Overhead, without rolling averaging. Before/After adds explicitly labeled period-end ratio and overhead when debt is relevant; all existing period boundaries remain unchanged. Checkpoints and Live JSON include debt state, immutable item plans and random continuation. See [full formulas, defaults, compatibility and native verification](TECHNICAL_DEBT.md).
+
+The [compact intervention editor](INTERVENTION_EDITOR.md) groups parameters in a left-aligned Current/Try table, with adjacent units, full-row focus highlighting and numeric changed-state labels. Debt Creation Factor is separately available under Advanced · Technical Debt and remains captured at Development start.
+
+Optional intervention labels provide context in Latest change, Performance Trend marker tooltips, the Changes list and the Before/After selector alongside factual parameter changes. Labels are trimmed, optional metadata and do not affect execution. See [label verification](INTERVENTION_LABELS.md).
+
+Relative Delivery Cost v1 adds **Cost/Item** to the existing compact status row, with component averages in its tooltip, a selectable **Delivery Cost / Done Item** trend and a Before/After row. Completion dates select the period population; full lifecycle consumed capacity supplies the cost. Older items lacking full cost tracking show unavailable. See [cost measurement and compatibility](RELATIVE_DELIVERY_COST.md).

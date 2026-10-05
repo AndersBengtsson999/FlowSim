@@ -5,6 +5,7 @@ public enum WorkArrivalMode { FixedBacklog, ContinuousArrival, AlwaysAvailable }
 public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5,
     int CodeReviewWipLimit = 3, int TestingWipLimit = 3)
 {
+    public TechnicalDebtSettings Debt { get; init; } = new();
     public StageProductivity Productivity { get; init; } = new();
     public DefectSettings Quality { get; init; } = new();
     public WorkArrivalMode ArrivalMode { get; init; } = WorkArrivalMode.FixedBacklog;
@@ -21,7 +22,7 @@ public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5
             throw new ScenarioValidationException("All three arrival effort distributions are required.");
     }
     internal SimulationScenario Scenario(string name, int days, IReadOnlyList<WorkItem> items, int seed) =>
-        new(name, days, Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit, items, seed) { Quality = Quality, Productivity = Productivity };
+        new(name, days, Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit, items, seed) { Quality = Quality, Productivity = Productivity, Debt = Debt };
 }
 
 public sealed record ConfigurationChange(int Day, string? Label, SessionConfiguration Before, SessionConfiguration After);
@@ -31,14 +32,21 @@ public sealed record WorkItemState(string Id, string Name, double DevelopmentEff
     double RemainingReworkEffort, double CurrentReworkEffort, int ReviewQueueDay, int TestingQueueDay, int ReworkQueueDay,
     int? DevelopmentStartedDay, int? DevelopmentCompletedDay, int? CodeReviewStartedDay, int? CodeReviewCompletedDay,
     int? TestingStartedDay, int? TestingCompletedDay, int? DoneDay,
-    IReadOnlyList<StateTransition> Transitions, IReadOnlyList<WorkItemEvent> Events, IReadOnlyList<InspectionAttempt> Attempts);
+    IReadOnlyList<StateTransition> Transitions, IReadOnlyList<WorkItemEvent> Events, IReadOnlyList<InspectionAttempt> Attempts)
+{
+    public DeliveryCost? DeliveryCost { get; init; }
+    public DevelopmentPlan? DevelopmentPlan { get; init; }
+}
 
 // Detached transport data. Restoring never aliases mutable item state or collections from this capture.
 public sealed record SimulationSessionState(string Name, int RandomSeed, int CurrentDay,
     SessionConfiguration InitialConfiguration, SessionConfiguration Configuration,
     IReadOnlyList<WorkItemState> WorkItems, decimal ArrivalAccumulator, long NextWorkItemId,
     ulong ArrivalRandomState, ulong DiscoveryRandomState, ulong ReworkRandomState,
-    IReadOnlyList<DailySnapshot> Days, IReadOnlyList<ConfigurationChange> Changes);
+    IReadOnlyList<DailySnapshot> Days, IReadOnlyList<ConfigurationChange> Changes)
+{
+    public TechnicalDebtState? DebtState { get; init; }
+}
 
 /// <summary>A single evolving timeline. No clocks, UI, serialization or external services.</summary>
 public sealed class SimulationSession
@@ -49,6 +57,8 @@ public sealed class SimulationSession
     private readonly Dictionary<string, WorkItemDaySnapshot> latestObservations = new(StringComparer.Ordinal);
     private readonly List<ConfigurationChange> changes = [];
     private readonly DefectPolicy defects;
+    private readonly TechnicalDebtLedger debt;
+    public TechnicalDebtState DebtState => debt.State;
     private SeededRandom arrivalRandom;
     private decimal accumulator;
     private long nextId = 1;
@@ -67,13 +77,14 @@ public sealed class SimulationSession
         ScenarioValidator.Validate(scenario);
         Name = scenario.Name; RandomSeed = scenario.RandomSeed;
         Configuration = configuration ?? new(scenario.Team, scenario.DevelopmentWipLimit, scenario.CodeReviewWipLimit,
-            scenario.TestingWipLimit) { Quality = scenario.Quality, Productivity = scenario.Productivity, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
+            scenario.TestingWipLimit) { Quality = scenario.Quality, Productivity = scenario.Productivity, Debt = scenario.Debt, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
                 DevelopmentEffort = scenario.DevelopmentArrivalEffort, CodeReviewEffort = scenario.CodeReviewArrivalEffort, TestingEffort = scenario.TestingArrivalEffort };
         Configuration.Validate(); InitialConfiguration = Configuration;
         items = scenario.WorkItems.Select(w => w.CopyForRun()).ToList();
         byId = items.ToDictionary(w => w.Id, StringComparer.Ordinal);
         defects = new(Configuration.Quality, RandomSeed);
-        // Separate stable stream: arrivals cannot alter defect/rework draws.
+        debt = new(new());
+        // Existing arrival stream also supplies shortcut decisions; defect/rework streams stay separate.
         arrivalRandom = new(unchecked(RandomSeed ^ (int)0xA771A150));
     }
 
@@ -89,6 +100,9 @@ public sealed class SimulationSession
         changes.AddRange(s.Changes);
         accumulator = s.ArrivalAccumulator; nextId = s.NextWorkItemId;
         arrivalRandom = SeededRandom.Restore(s.ArrivalRandomState);
+        debt = new(s.DebtState ?? new(0, items.Where(w => w.DevelopmentCompletedDay.HasValue).Sum(w => w.DevelopmentEffort)));
+        debt.State.Validate();
+        _ = debt.State.Overhead(Configuration.Debt);
         defects = new(Configuration.Quality, RandomSeed);
         defects.RestoreRandom(s.DiscoveryRandomState, s.ReworkRandomState);
     }
@@ -113,7 +127,7 @@ public sealed class SimulationSession
             for (var i = 0; i < needed; i++) GenerateArrival();
         }
         var day = SimulationEngine.AdvanceOneDay(Configuration.Scenario(Name, CurrentDay + 1, items, RandomSeed),
-            items, byId, defects, CurrentDay);
+            items, byId, defects, CurrentDay, debt, arrivalRandom);
         // Reuse unchanged immutable observations (especially finished items) across days.
         var observations = day.Items.Select(w =>
         {
@@ -139,6 +153,7 @@ public sealed class SimulationSession
     public void ApplyChanges(SessionConfiguration configuration, string? label = null)
     {
         configuration.Validate();
+        _ = DebtState.Overhead(configuration.Debt);
         if (label?.Length > 100) throw new ScenarioValidationException("Change label must be at most 100 characters.");
         if (configuration == Configuration) return;
         changes.Add(new(CurrentDay, string.IsNullOrWhiteSpace(label) ? null : label.Trim(), Configuration, configuration));
@@ -151,13 +166,14 @@ public sealed class SimulationSession
     public SimulationSessionState Capture() => new(Name, RandomSeed, CurrentDay, InitialConfiguration, Configuration,
         items.Select(w => w.Capture()).ToArray(), accumulator, nextId, arrivalRandom.State,
         defects.RandomState.Discovery, defects.RandomState.Rework,
-        days.Select(d => d with { Items = Array.AsReadOnly(d.Items.ToArray()) }).ToArray(), changes.ToArray());
+        days.Select(d => d with { Items = Array.AsReadOnly(d.Items.ToArray()) }).ToArray(), changes.ToArray()) { DebtState = DebtState };
     public static SimulationSession Restore(SimulationSessionState state) => new(state);
 
     private static void ValidateState(SimulationSessionState s)
     {
         ArgumentNullException.ThrowIfNull(s);
         s.InitialConfiguration.Validate(); s.Configuration.Validate();
+        s.DebtState?.Validate();
         if (s.CurrentDay < 0 || s.Days.Count != s.CurrentDay || s.ArrivalAccumulator < 0 || s.ArrivalAccumulator >= 1 || s.NextWorkItemId < 1)
             throw new ScenarioValidationException("Invalid day count or arrival continuation state.");
         var fresh = s.WorkItems.Select(w => new WorkItem(w.Id, w.Name, w.DevelopmentEffort, w.CodeReviewEffort, w.TestingEffort, w.Dependencies, w.CreatedDay)).ToArray();
@@ -167,6 +183,11 @@ public sealed class SimulationSession
         foreach (var w in s.WorkItems)
             if (!Enum.IsDefined(w.State) || new[] { w.RemainingDevelopmentEffort, w.RemainingCodeReviewEffort, w.RemainingTestingEffort, w.RemainingReworkEffort, w.CurrentReworkEffort }.Any(v => !double.IsFinite(v) || v < 0))
                 throw new ScenarioValidationException($"Invalid execution state: {w.Id}.");
+        foreach (var w in s.WorkItems) w.DeliveryCost?.Validate();
+        foreach (var w in s.WorkItems)
+            if (w.DevelopmentPlan is { } p && (p.BaseEffort != w.DevelopmentEffort
+                || new[] { p.BaseEffort, p.DebtRatioAtStart, p.Overhead, p.EffortWithDebt, p.FinalEffort, p.SavedEffort, p.DebtToCreate }.Any(v => !double.IsFinite(v) || v < 0)))
+                throw new ScenarioValidationException($"Invalid locked Development plan: {w.Id}.");
         foreach (var c in s.Changes)
         {
             if (c.Day < 0 || c.Day > s.CurrentDay) throw new ScenarioValidationException("Invalid intervention day.");

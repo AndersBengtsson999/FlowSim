@@ -1,0 +1,42 @@
+baseline: Full lifecycle capacity units / item.
+Development 5
+Code Review 1
+Rework 0
+Testing 2
+Total 8
+Debt repayment is excluded. Relative capacity, not financial cost.
+Completed LIVE-1: Dev 5, Review 1, Rework 0, Test 2, Total 8
+Completed LIVE-2: Dev 5, Review 1, Rework 0, Test 2, Total 8
+Completed LIVE-3: Dev 5, Review 1, Rework 0, Test 2, Total 8
+productivity: Full lifecycle capacity units / item.
+Development 2,5
+Code Review 1
+Rework 0
+Testing 2
+Total 5,5
+Debt repayment is excluded. Relative capacity, not financial cost.
+rework: Full lifecycle capacity units / item.
+Development 5
+Code Review 1,33
+Rework 0,33
+Testing 2
+Total 8,67
+Debt repayment is excluded. Relative capacity, not financial cost.
+collaboration: Full lifecycle capacity units / item.
+Development 6
+Code Review 1
+Rework 0
+Testing 2
+Total 9
+Debt repayment is excluded. Relative capacity, not financial cost.
+repayment: Full lifecycle capacity units / item.
+Development 4,57
+Code Review 1
+Rework 0
+Testing 2
+Total 7,57
+Debt repayment is excluded. Relative capacity, not financial cost.
+Repayment: total developer+tester use 253,675; item costs 237,093; system repayment 16,583.
+Width 1280: chart Y with/without Cost = 632/632; height 210.
+Width 960: chart Y with/without Cost = 632/632; height 210.
+PASS native: baseline completed items, productivity, rework, collaboration, debt repayment exclusion, item/aggregate breakdowns, selected trend, Before/After and unchanged chart position/height.

@@ -11,6 +11,11 @@ public sealed record PerformancePeriod(int FirstDay, int LastDay, int AvailableD
     double? DeveloperUtilization, double? TesterUtilization, int Defects, double? ReworkCapacity,
     bool QualityRelevant)
 {
+    public DeliveryCost? AverageDeliveryCost { get; init; }
+    public double? DeliveryCostPerDoneItem => AverageDeliveryCost?.Total;
+    public double EndDebtRatio { get; init; }
+    public double EndDebtOverhead { get; init; }
+    public bool DebtRelevant { get; init; }
     public bool IsComplete => AvailableDays == ExpectedDays;
 }
 
@@ -60,7 +65,17 @@ public static class LivePerformance
             Ratio(used, days.Sum(d => d.AvailableDeveloperCapacity)),
             Ratio(days.Sum(d => d.UsedTesterCapacity), days.Sum(d => d.AvailableTesterCapacity)),
             defects, Ratio(days.Sum(d => d.UsedReworkDeveloperCapacity), used),
-            quality || defects > 0 || days.Any(d => d.UsedReworkDeveloperCapacity > 0 || d.WaitingForReworkCount > 0 || d.ReworkCount > 0));
+            quality || defects > 0 || days.Any(d => d.UsedReworkDeveloperCapacity > 0 || d.WaitingForReworkCount > 0 || d.ReworkCount > 0))
+        { AverageDeliveryCost = AverageCost(completed), EndDebtRatio = days.LastOrDefault()?.Debt?.State.Ratio ?? 0, EndDebtOverhead = days.LastOrDefault()?.Debt?.Overhead ?? 0,
+          DebtRelevant = days.Any(d => d.Debt is { } debt && (debt.State.Amount > 0 || debt.Created > 0 || debt.RepaymentCapacity > 0)) };
+    }
+
+    private static DeliveryCost? AverageCost(IReadOnlyList<WorkItem> completed)
+    {
+        // Do not silently average only the known subset of a completion cohort.
+        if (completed.Count == 0 || completed.Any(w => !w.DeliveryCost.IsComplete)) return null;
+        return new(completed.Average(w => w.DeliveryCost.Development), completed.Average(w => w.DeliveryCost.CodeReview),
+            completed.Average(w => w.DeliveryCost.Rework), completed.Average(w => w.DeliveryCost.Testing));
     }
 
     public static double? Slope(IEnumerable<(double Day, double Value)> observations)

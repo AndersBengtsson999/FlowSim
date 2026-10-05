@@ -21,6 +21,7 @@ public sealed record SimulationScenario(string Name, int SimulationDays, Team Te
     int DevelopmentWipLimit, int CodeReviewWipLimit, int TestingWipLimit,
     IReadOnlyList<WorkItem> WorkItems, int RandomSeed = 12345)
 {
+    public TechnicalDebtSettings Debt { get; init; } = new();
     public StageProductivity Productivity { get; init; } = new();
     public DefectSettings Quality { get; init; } = new();
     public WorkArrivalMode ArrivalMode { get; init; } = WorkArrivalMode.FixedBacklog;
@@ -38,6 +39,9 @@ public sealed record WorkItemDaySnapshot(string Id, WorkItemStatus State,
     int CreatedDay, WorkItemStatus StateDuringDay, bool DependencyBlocked,
     double ReworkWork = 0, double RemainingReworkEffort = 0, double CollaborationDevelopmentCapacity = 0)
 {
+    public DeliveryCost? DeliveryCost { get; init; }
+    public DevelopmentPlan? DevelopmentPlan { get; init; }
+    public string ImplementationSummary => DevelopmentPlan is { } p ? $"{(p.IsShortcut ? "Shortcut" : "Normal")} · Base {p.BaseEffort:0.##} · Start overhead {p.Overhead:P1} · Final {p.FinalEffort:0.##} · Saved {p.SavedEffort:0.##}" : "";
     // Absent in pre-0.4 history: work then implied capacity at productivity 1x.
     public StageCapacity? ConsumedCapacity { get; init; }
     public double PrimaryDevelopmentCapacity => ConsumedCapacity is null ? DevelopmentWork - 0.5 * CollaborationDevelopmentCapacity : ConsumedCapacity.Development - CollaborationDevelopmentCapacity;
@@ -51,6 +55,8 @@ public sealed record DailySnapshot(int Day, int DevelopmentWip, int ReviewWip, i
     double AvailableDeveloperCapacity, double AvailableTesterCapacity,
     double UsedReworkDeveloperCapacity = 0, int ReworkWip = 0, double CollaborationDevelopmentCapacity = 0)
 {
+    public DebtObservation? Debt { get; init; }
+    public double UsedDebtRepaymentCapacity => Debt?.RepaymentCapacity ?? 0;
     public int Wip => DevelopmentWip + ReviewWip + TestingWip + ReworkWip;
     private int Count(WorkItemStatus state) => Items.Count(w => w.CreatedDay <= Day && w.State == state);
     public int BacklogCount => Count(WorkItemStatus.Backlog);
@@ -68,7 +74,7 @@ public sealed record DailySnapshot(int Day, int DevelopmentWip, int ReviewWip, i
     public double PrimaryDevelopmentCapacity => ConsumedCapacity is null ? DevelopmentWork - 0.5 * CollaborationDevelopmentCapacity : ConsumedCapacity.Development - CollaborationDevelopmentCapacity;
     public double UsedDevelopmentCapacity => ConsumedCapacity?.Development ?? (DevelopmentWork + 0.5 * CollaborationDevelopmentCapacity);
     public double UsedReviewCapacity => ConsumedCapacity?.CodeReview ?? ReviewWork;
-    public double UsedDeveloperCapacity => UsedDevelopmentCapacity + UsedReviewCapacity + UsedReworkDeveloperCapacity;
+    public double UsedDeveloperCapacity => UsedDevelopmentCapacity + UsedReviewCapacity + UsedReworkDeveloperCapacity + UsedDebtRepaymentCapacity;
     public double UsedTesterCapacity => ConsumedCapacity?.Testing ?? TestingWork;
 }
 

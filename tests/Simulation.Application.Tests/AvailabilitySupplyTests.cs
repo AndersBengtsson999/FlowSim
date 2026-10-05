@@ -160,7 +160,7 @@ public sealed class AvailabilitySupplyTests
         Assert.Equal("75%", b["Tester Availability"]); Assert.Equal("Fixed 0.8/day", a["Work Supply"]); Assert.Equal("Always available", b["Work Supply"]);
         var legacyScenario = ExperimentJson.LoadScenario(Fixture("model02-scenario.json"));
         var legacyExperiment = new Experiment(Guid.NewGuid(), "Legacy", "", new[] { legacyScenario }, legacyScenario.Id, new(), "0.2");
-        var legacyJson = ExperimentJson.SaveExperiment(legacyExperiment).Replace("\"0.4\"", "\"0.2\"");
+        var legacyJson = ExperimentJson.SaveExperiment(legacyExperiment).Replace("\"0.5\"", "\"0.2\"");
         Assert.Equal(1, ExperimentJson.LoadExperiment(legacyJson).Scenarios[0].Configuration.DeveloperAvailability);
     }
 
@@ -175,7 +175,7 @@ public sealed class AvailabilitySupplyTests
         Assert.Equal(WorkArrivalMode.ContinuousArrival, live.Session.Configuration.ArrivalMode);
         var history = Json(live.Session.Days); Days(live, 15);
         var expected = JsonSerializer.Deserialize<SimulationResult>(Fixture("model02-result-day30.json"))! with { SimulationModelVersion = SimulationModel.Version };
-        Assert.Equal(Json(expected), Json(live.Session.GetResult()));
+        Assert.Equal(LegacyObservationJson.Serialize(expected), LegacyObservationJson.Serialize(live.Session.GetResult()));
         Assert.Equal(history, Json(live.Session.Days.Take(15).ToArray()));
         Assert.Equal("0.2", LiveSessionJson.Load(LiveSessionJson.Save(live)).OriginalModelVersion);
     }

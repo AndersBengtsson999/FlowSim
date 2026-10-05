@@ -20,11 +20,11 @@ public sealed class StageProductivityIntegrationTests
         Assert.Equal("0.3",live.OriginalModelVersion);Assert.Equal(StageProductivity.Default,live.Session.Configuration.Productivity);
         var history=Json(live.Session.Days);Until(live,60);
         var expected=JsonSerializer.Deserialize<SimulationResult>(Fixture($"model03-{mode}-result-day60.json"))! with {SimulationModelVersion=SimulationModel.Version};
-        Assert.Equal(Json(expected),Json(live.Session.GetResult()));Assert.Equal(history,Json(live.Session.Days.Take(30).ToArray()));
+        Assert.Equal(LegacyObservationJson.Serialize(expected),LegacyObservationJson.Serialize(live.Session.GetResult()));Assert.Equal(history,Json(live.Session.Days.Take(30).ToArray()));
         var config=ExperimentJson.LoadScenario(Fixture("model03-scenario.json")).Configuration;
         Assert.Equal(StageProductivity.Default,config.Productivity);
         var fresh=LiveSimulation.Start(config with { Productivity=new(1,1,1) },Enum.Parse<WorkArrivalMode>(mode));Until(fresh,60);
-        Assert.Equal(Json(expected),Json(fresh.Session.GetResult()));
+        Assert.Equal(LegacyObservationJson.Serialize(expected),LegacyObservationJson.Serialize(fresh.Session.GetResult()));
     }
     [Fact]
     public void IndependentDay100120140InterventionsKeepHistoryEffortAndRandomStateAndReplayExactly()
@@ -81,7 +81,7 @@ public sealed class StageProductivityIntegrationTests
         var baseline=new ScenarioDefinition(Guid.NewGuid(),Request);var changed=new ScenarioDefinition(Guid.NewGuid(),Request with{Productivity=new(1.5,1.2,1.4)});
         Assert.Equal(changed,ExperimentJson.LoadScenario(ExperimentJson.SaveScenario(changed)));
         var e=new Experiment(Guid.NewGuid(),"Productivity","User assumptions",new[]{baseline,changed},baseline.Id,new());
-        var loaded=ExperimentJson.LoadExperiment(ExperimentJson.SaveExperiment(e));Assert.Equal(changed,loaded.Scenarios[1]);Assert.Equal("0.4",loaded.SimulationModelVersion);
+        var loaded=ExperimentJson.LoadExperiment(ExperimentJson.SaveExperiment(e));Assert.Equal(changed,loaded.Scenarios[1]);Assert.Equal("0.5",loaded.SimulationModelVersion);
         var a=ScenarioParameters.Describe(baseline.Configuration);var b=ScenarioParameters.Describe(changed.Configuration);
         Assert.Equal(new[]{"Code Review Productivity","Development Productivity","Testing Productivity"},a.Keys.Where(k=>a[k]!=b[k]).Order().ToArray());
         var live=LiveSimulation.Start(changed.Configuration,WorkArrivalMode.AlwaysAvailable);Until(live,25);live.CreateCheckpoint("Non-default");

@@ -1,0 +1,13 @@
+A-baseline: day 100; debt 0; scope 410; ratio 0; tolerance 0.1; overhead 0.
+B-build-debt: day 220; debt 49.504; scope 940; ratio 0.0527; tolerance 0.05; overhead 0.0027.
+C-within-tolerance: day 240; debt 60.008; scope 1035; ratio 0.058; tolerance 0.5; overhead 0.
+D-above-tolerance: day 260; debt 70.884; scope 1120; ratio 0.0633; tolerance 0.01; overhead 0.0533.
+D-shortcut-items: day 260; debt 70.884; scope 1120; ratio 0.0633; tolerance 0.01; overhead 0.0533.
+E-F-repayment: day 261; debt 69.084; scope 1130; ratio 0.0611; tolerance 0.01; overhead 0.0511.
+Repayment detail: Debt 69,084 effort · Developed scope 1130. Latest day capacity: Review 1, Rework 0, Development 2,8, Debt Work 1,2; debt removed 1,8. Green/yellow: within configured tolerance, zero overhead. Red: excess above tolerance adds effort to future starts. Scale 0–7,3 %.
+E-debt-exhausted: day 360; debt 0; scope 1635; ratio 0; tolerance 0.01; overhead 0.
+Board bottom 591; size 1280, 800; rework False
+Board bottom 606; size 960, 720; rework False
+Board bottom 661; size 1280, 800; rework True
+Board bottom 661; size 960, 720; rework True
+PASS native A–G: baseline, shortcuts/debt, zero overhead within tolerance, excess overhead on future starts, repayment/productivity/capacity, exact save/checkpoint replay, bar/details/daily trend/Before-After and compact layouts.

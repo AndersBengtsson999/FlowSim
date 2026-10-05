@@ -79,7 +79,7 @@ public sealed class LivePerformanceTrendChart : Control
         var day = Math.Clamp((int)Math.Round(Start + (x - Plot.Left) * Math.Max(1, Last - Start) / Plot.Width), First, Last);
         var text = DescribeAtDay(day);
         var markers = series.Interventions.Where(c => Math.Abs(X(c.Day) - x) <= 7);
-        foreach (var marker in markers) text += $"\nDay {marker.Day} — {LiveViewModel.Describe(marker)}\nEffective Day {marker.Day + 1}; timing does not establish causality.";
+        foreach (var marker in markers) text += "\n" + InterventionPresentation.Marker(marker);
         ToolTip.SetTip(this, text);
     }
     private static void Label(DrawingContext context, string text, Point point) => context.DrawText(new FormattedText(text,

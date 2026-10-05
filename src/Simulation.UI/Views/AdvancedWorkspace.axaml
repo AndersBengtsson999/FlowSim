@@ -227,6 +227,7 @@
           </Border>
          </StackPanel>
         </Expander>
+        <Expander Header="Technical Debt" HorizontalAlignment="Stretch"><views:DebtSettingsView /></Expander>
         <Expander Header="Advanced · capacity, seeds and examples" HorizontalAlignment="Stretch">
          <StackPanel Spacing="10">
           <Grid ColumnDefinitions="*,110">
@@ -498,7 +499,7 @@
              <TextBlock Grid.Column="7" Text="Active Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
              <TextBlock Grid.Column="8" Text="Waiting Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
              <TextBlock Grid.Column="9" Text="Blocked Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
-             <TextBlock Grid.Column="10" Text="Development Effort" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
+             <TextBlock Grid.Column="10" Text="Base Development Effort" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
              <TextBlock Grid.Column="11" Text="Code Review Effort" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
              <TextBlock Grid.Column="12" Text="Testing Effort" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
              <TextBlock Grid.Column="13" Text="Defects Found" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />

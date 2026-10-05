@@ -1,0 +1,15 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" x:Class="Simulation.UI.Views.DebtSettingsView" x:DataType="vm:MainWindowViewModel">
+ <StackPanel Spacing="8">
+  <TextBlock Text="Scenario assumptions. Shortcuts reduce effort at Development start and create debt on completion. Only debt above tolerance adds effort to future starts." TextWrapping="Wrap" Classes="note"/>
+  <Grid ColumnDefinitions="*,100"><TextBlock Text="Shortcut Rate (%)" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding ShortcutRate, Mode=TwoWay}" AutomationProperties.Name="Shortcut Rate (%)" ToolTip.Tip="Probability at Development start. 0% creates no new shortcut debt."/></Grid>
+  <Grid ColumnDefinitions="*,100"><TextBlock Text="Shortcut Effort Reduction (%)" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding ShortcutEffortReduction, Mode=TwoWay}" AutomationProperties.Name="Shortcut Effort Reduction (%)" ToolTip.Tip="Reduction applied after debt overhead. Existing active effort stays fixed."/></Grid>
+  <Grid ColumnDefinitions="*,100"><TextBlock Text="Debt Tolerance (%)" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding DebtTolerance, Mode=TwoWay}" AutomationProperties.Name="Debt Tolerance (%)" ToolTip.Tip="At or below this debt/scope ratio, overhead is zero. A scenario assumption."/></Grid>
+  <Grid ColumnDefinitions="*,100"><TextBlock Text="Debt Repayment (%)" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding DebtRepayment, Mode=TwoWay}" AutomationProperties.Name="Debt Repayment (%)" ToolTip.Tip="Share of developer capacity after Review/Rework. Uses Development Productivity, without collaboration. Unused capacity returns to Development."/></Grid>
+  <Expander Header="Advanced · Technical Debt" HorizontalAlignment="Stretch">
+   <StackPanel Spacing="6">
+    <TextBlock Text="Debt Creation Factor is a scenario calibration assumption: debt per unit of shortcut effort saved. Locked at Development start. Existing debt and active plans stay unchanged." Classes="note" TextWrapping="Wrap"/>
+    <Grid ColumnDefinitions="*,100,24"><TextBlock Text="Debt Creation Factor" VerticalAlignment="Center" TextWrapping="Wrap"/><TextBox Grid.Column="1" Text="{Binding DebtCreationFactor, Mode=TwoWay}" AutomationProperties.Name="Debt Creation Factor (x)"/><TextBlock Grid.Column="2" Text="x" Margin="6,0,0,0" VerticalAlignment="Center"/></Grid>
+   </StackPanel>
+  </Expander>
+ </StackPanel>
+</UserControl>

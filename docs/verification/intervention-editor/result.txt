@@ -1,0 +1,3 @@
+Width 960: panel 600, label/current/try gap bounded, focus and changed labels visible.
+Width 720: panel 600, label/current/try gap bounded, focus and changed labels visible.
+PASS: native Current/Try grouping, units, focus, changed/reset, multiple changes, Advanced factor, Apply, desktop/narrow layouts and theme-aware row highlight.

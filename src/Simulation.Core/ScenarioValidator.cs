@@ -14,6 +14,8 @@ public static class ScenarioValidator
         scenario.Quality!.Validate();
         if (scenario.Productivity is null) Fail("Stage productivity is required.");
         scenario.Productivity!.Validate();
+        if (scenario.Debt is null) Fail("Technical Debt settings are required.");
+        scenario.Debt!.Validate();
         var team = scenario.Team!;
         if (!double.IsFinite(team.DeveloperAvailability) || team.DeveloperAvailability < 0 || team.DeveloperAvailability > 1
             || !double.IsFinite(team.TesterAvailability) || team.TesterAvailability < 0 || team.TesterAvailability > 1)

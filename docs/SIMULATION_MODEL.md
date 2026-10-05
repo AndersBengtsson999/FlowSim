@@ -1,6 +1,6 @@
-# Simulation Model v0.4 — Stage-specific Productivity Multipliers v1
+# Simulation Model v0.5 — Technical Debt v1
 
-Current semantics are v0.4, adding independent stage productivity while retaining Development Collaboration Model v1 allocation. See [Stage-specific Productivity Multipliers v1](STAGE_PRODUCTIVITY.md) for formulas and verification. See [availability, supply and status](CAPACITY_AVAILABILITY.md) for the new semantics and compatibility. Historical Step 2–13 measured examples and linked validation reports describe their original v0.1 runs; current collaboration measurements are in [Development Collaboration Model v1](DEVELOPMENT_COLLABORATION.md).
+Current semantics are v0.5, adding explicit shortcuts, system-level debt and optional repayment while retaining stage productivity and Development Collaboration Model v1 allocation. See [Technical Debt v1](TECHNICAL_DEBT.md) for the full lifecycle, formulas and verification. See [Stage-specific Productivity Multipliers v1](STAGE_PRODUCTIVITY.md) for formulas and verification. See [availability, supply and status](CAPACITY_AVAILABILITY.md) for the new semantics and compatibility. Historical Step 2–13 measured examples and linked validation reports describe their original v0.1 runs; current collaboration measurements are in [Development Collaboration Model v1](DEVELOPMENT_COLLABORATION.md).
 
 ## Purpose and scope
 
@@ -30,7 +30,7 @@ Developer pool/day = DeveloperCount × DeveloperCapacityPerDay × DeveloperAvail
 Tester pool/day    = TesterCount × TesterCapacityPerDay × TesterAvailability
 ```
 
-Capacity is an abstract work unit, **not hours**. There are two resource types. Code review, rework and development consume the **same** developer pool; testing consumes only the tester pool. DeveloperCapacityPolicy allocates that pool in order: CodeReview, Rework, Development. Unused capacity does not carry forward.
+Capacity is an abstract work unit, **not hours**. There are two resource types. Code review, rework and development consume the **same** developer pool; testing consumes only the tester pool. The pool is allocated in order: CodeReview, Rework, then optional debt repayment and Development. Repayment consumes only the capacity needed to remove existing debt, within its configured fraction of the remaining pool. Unused capacity does not carry forward.
 
 Code Review and Testing use their own productivity factor `p`; Rework always uses `p = 1`. Their per-item daily capacity allocation is:
 
@@ -82,11 +82,11 @@ The smallest time unit is one working day. Day `d` is the interval `[d, d+1)`. T
 The implementation deliberately uses a conservative day-boundary interpretation of the conceptual workflow:
 
 1. At day start, count created unfinished items and dependency-blocked backlog items.
-2. Admit eligible Backlog items into Development in FIFO order while its WIP policy permits. Dependencies are evaluated using the state at this boundary.
+2. Admit eligible Backlog items into Development in FIFO order while its WIP policy permits; freeze debt overhead and the once-only shortcut decision at this admission. Dependencies are evaluated using the state at this boundary.
 3. Admit existing WaitingForCodeReview items into CodeReview, and existing WaitingForTesting items into Testing, each in FIFO order while its WIP policy permits. Admit WaitingForRework into Rework under its own WIP limit.
 4. Sample the four active occupancies and initialize that day's developer and tester pools.
 5. Allocate developer capacity to active CodeReview items in FIFO order. At completion, inspect for a defect: transition to WaitingForTesting on success or WaitingForRework on failure at time `d+1`.
-6. Allocate the remaining developer pool to active Rework items, then Development primary work in FIFO order and collaboration in stable Closest-to-Done order. Completed rework or development transitions to WaitingForCodeReview at time `d+1`.
+6. Allocate the remaining developer pool to active Rework items, then optional system-level debt repayment, then Development primary work in FIFO order and collaboration in stable Closest-to-Done order. Completed rework or development transitions to WaitingForCodeReview at time `d+1`. Original Development completion adds base scope exactly once and creates any stored shortcut debt.
 7. Allocate tester capacity to active Testing items in FIFO order. At completion, inspect for a defect: transition to Done on success or WaitingForRework on failure at time `d+1`.
 8. Record end-of-day states, remaining efforts, work consumption and transitions.
 
@@ -117,7 +117,7 @@ There are no priority classes and no random tie-breaking.
 - Rework admission/allocation: earliest current rework-queue entry first.
 - Equal timestamps: original scenario collection order, maintained by stable ordering. IDs are not used to assign priority.
 
-CodeReview → Rework → Development precedence is the resource-order policy. FIFO applies to primary Development, Review, Rework and Testing. Development collaboration uses lowest remaining effort first after the primary pass, with FIFO ties. A partially served item retains its queue position.
+CodeReview → Rework precedence is retained; remaining capacity serves optional debt repayment and then Development. FIFO applies to primary Development, Review, Rework and Testing. Development collaboration uses lowest remaining effort first after the primary pass, with FIFO ties. A partially served item retains its queue position.
 
 ## Dependencies and validation
 
@@ -138,7 +138,7 @@ Cycle validation uses an iterative topological traversal, avoiding recursion on 
 
 WipPolicy is the single admission/occupancy policy boundary:
 
-| Limit | States counted in v0.4 |
+| Limit | States counted in v0.5 |
 |---|---|
 | DevelopmentWipLimit | Development only |
 | CodeReviewWipLimit | CodeReview only |
@@ -175,7 +175,7 @@ Day `d` represents `[d,d+1)`. Admission is stamped `d`, completion `d+1`; subtra
 | AverageWip | Arithmetic mean of daily TotalWip across the entire horizon |
 | MaximumWaitingForCodeReviewQueue / MaximumWaitingForTestingQueue | Maximum corresponding **end-of-day** queue count; not a within-day peak |
 | AvailableDeveloperCapacity / AvailableTesterCapacity | Nominal team pool for that day, even if there is no work |
-| UsedDeveloperCapacity / UsedTesterCapacity | Consumed Development capacity + review + rework capacity / testing capacity for that day |
+| UsedDeveloperCapacity / UsedTesterCapacity | Consumed Development + review + rework + debt repayment capacity / testing capacity for that day |
 | DeveloperUtilization / TesterUtilization | Sum of corresponding used capacity divided by sum of available capacity over all simulated days; 0 when available capacity is 0 |
 
 Every daily snapshot exposes all nine end-of-day state counts, TotalWip, available/used resource capacities, stage work and detailed item observations. Items not yet created are excluded from daily counts and elapsed-time accumulation. Incomplete items retain observed active, queue and blocked times but have no completed lead/cycle time.
@@ -213,7 +213,7 @@ The engine uses no wall clock, unordered allocation or parallel scheduling. Step
 
 The previous incremental model’s random ordering, generic size/complexity effort derivation, sprint/release modeling, priorities and random dependencies remain absent. Step 6 introduces explicit effort distributions and a separate Monte Carlo result model; it does not restore those older rules.
 
-No separate bug backlog, escaped production defects, technical debt, UX/PO/requirements roles, expedite classes, interruptions, support work, meetings, sickness, individual skill/productivity profiles, specialists, pairing, multiple teams, hardware dependencies, release trains, compliance/CRA, DevOps or AI simulation is implemented. The chart UI is presentation, not a modeled UX resource.
+No separate bug backlog, escaped production defects, UX/PO/requirements roles, expedite classes, interruptions, support work, meetings, sickness, individual skill/productivity profiles, specialists, pairing, multiple teams, hardware dependencies, release trains, compliance/CRA, DevOps or AI simulation is implemented. The chart UI is presentation, not a modeled UX resource.
 
 The historical reference-experiment document predates this version and is explicitly marked as superseded. Its old numerical expectations must not be used as v0.1 acceptance tests without re-derivation.
 
@@ -223,7 +223,7 @@ The Step 5 presentation changes did not modify the engine or metrics. Step 6 add
 
 - **Scenario** groups simulation length/workload, team capacity, active WIP limits and effort. Text and tooltips explain every field. Construction and Reset to Baseline both read the existing `BaselineScenario.Create()` factory, whose configuration comes from SimulationRequest defaults.
 - **Flow** shows all seven state counts for one end-of-day snapshot. Active and waiting states differ by text as well as colour. UI day 1 selects `Days[0]`; the last UI day selects `Days[SimulationDays-1]`. Changing this selection never executes the engine. The first day is selected after a run.
-- **Charts** show TotalWip, both waiting queue counts, and used versus available developer/tester capacity. Lines connect daily observations, not intra-day estimates. Developer usage includes consumed Development, Code Review and Rework capacity. There is no automatic classification, smoothing or new aggregation.
+- **Charts** show TotalWip, both waiting queue counts, and used versus available developer/tester capacity. Lines connect daily observations, not intra-day estimates. Developer usage includes consumed Development, Code Review, Rework and debt repayment capacity. There is no automatic classification, smoothing or new aggregation.
 - **Results** contains twelve explained summary metrics and a read-only Work Items table. Time averages are completed-only working days; utilization uses percentage formatting. Dates in the item table remain the domain's zero-based boundary timestamps. Incomplete lead/cycle times remain blank.
 
 Results remain the last completed run when scenario fields are edited. A new run clears/replaces them; reset clears results and returns to Scenario. No full scenario comparison/history, editing of results, sorting/filtering, export, individual stage WIP series or charting dependency is added. Monte Carlo in Step 6 has its own aggregate tab. Scroll areas keep the interface usable at smaller window sizes.
@@ -339,7 +339,7 @@ First review/testing start timestamps are retained. Their completion timestamps 
 
 ## Rework Capacity
 
-CodeReview → Rework → Development share one developer pool in that priority order. Rework retains its one-unit per-item/day cap (also limited by per-person capacity) and its own active-only WIP limit. WaitingForRework does not consume that limit. All admissions precede work, so defects cannot trigger same-day rework. Daily snapshots expose WaitingForReworkCount, ReworkCount, ReworkWip and UsedReworkDeveloperCapacity. TotalWip includes both new states; developer utilization includes consumed rework.
+CodeReview → Rework retain priority in one developer pool; optional debt repayment now precedes Development in the remaining pool. Rework retains its one-unit per-item/day cap (also limited by per-person capacity) and its own active-only WIP limit. WaitingForRework does not consume that limit. All admissions precede work, so defects cannot trigger same-day rework. Daily snapshots expose WaitingForReworkCount, ReworkCount, ReworkWip and UsedReworkDeveloperCapacity. TotalWip includes both new states; developer utilization includes consumed rework.
 
 ## Quality Metrics
 
@@ -499,11 +499,11 @@ Execution date and identity intentionally differ between reruns; reproducibility
 
 ## Simulation Model Version
 
-`Simulation.Core.SimulationModel.Version` is **"0.4"**, independently of the assembly/application version. It adds independent Development, Code Review and Testing productivity while retaining Capacity Availability, Work Supply and Development Collaboration Model v1. Scenario/experiment files, Live sessions, result records and CSV provenance carry the version. Model 0.2 and 0.3 documents load with productivity 1x/1x/1x; original Live version provenance and all historical ledgers are retained. Model 0.1 remains rejected because its Development allocation differs. Editing a version label cannot migrate a saved timeline. JSON schema remains 1. See [compatibility verification](CAPACITY_AVAILABILITY.md).
+`Simulation.Core.SimulationModel.Version` is **"0.5"**, independently of the assembly/application version. It adds Technical Debt v1 while retaining stage productivity, Capacity Availability, Work Supply and Development Collaboration Model v1. Scenario/experiment files, Live sessions, result records and CSV provenance carry the version. Model 0.2 and 0.3 documents load with productivity 1x/1x/1x. Models 0.2–0.4 load with zero debt and default debt configuration, recovering current scope from original Development completions without inventing historical debt; original Live version provenance and all historical ledgers are retained. Model 0.1 remains rejected because its Development allocation differs. Editing a version label cannot migrate a saved timeline. JSON schema remains 1. See [compatibility verification](CAPACITY_AVAILABILITY.md).
 
 ## Scenario and experiment persistence
 
-Persistence belongs in Simulation.Infrastructure, which now implements ExperimentJson and ComparisonCsv. UI references Infrastructure for file operations; Core remains free of UI, JSON and filesystem dependencies. The configuration JSON envelope has SchemaVersion=1, SimulationModelVersion="0.4", DocumentKind="Scenario" or "Experiment", and the corresponding payload. All existing SimulationRequest settings, including fixed fallbacks, distribution parameters, dormant defect configuration and configured seeds, are retained. Effort objects have explicit Kind="Fixed"/"Triangular" and their numerical fields. There is no CLR type-name activation.
+Persistence belongs in Simulation.Infrastructure, which now implements ExperimentJson and ComparisonCsv. UI references Infrastructure for file operations; Core remains free of UI, JSON and filesystem dependencies. The configuration JSON envelope has SchemaVersion=1, SimulationModelVersion="0.5", DocumentKind="Scenario" or "Experiment", and the corresponding payload. All existing SimulationRequest settings, including fixed fallbacks, distribution parameters, dormant defect configuration and configured seeds, are retained. Effort objects have explicit Kind="Fixed"/"Triangular" and their numerical fields. There is no CLR type-name activation.
 
 Loading validates schema/model/kind, scenario settings, unique IDs, reference membership and supported distributions. Unknown properties and distribution kinds are rejected. Experiment loading preserves identities and creates a read-only scenario collection. Importing a standalone scenario into the current collection assigns a fresh identity to avoid collisions. Files are human-readable UTF-8 JSON, limited to 5 MB on read. Writes use a sibling temporary file followed by replacement. Native file pickers handle location selection and overwrite prompting; no database or automatic background save is introduced.
 
@@ -534,3 +534,7 @@ Lifetime metrics keep their existing definitions. Live's recent metrics use the 
 ## Work supply in model 0.3
 
 Fixed backlog remains supported. Fixed rate retains the existing decimal arrival accumulator. Always available generates only enough items at day start to fill Development admission slots after counting eligible existing backlog. It uses the same seeded arrival generator and does not change admission, WIP, priority or collaboration rules. Availability and supply interventions recorded on Day N apply on Day N+1. See [full semantics and verification](CAPACITY_AVAILABILITY.md).
+
+## Relative Delivery Cost v1 — observational measurement
+
+`WorkItem.ApplyWork` records each validated raw capacity contribution into cumulative Development, Code Review, Rework or Testing cost. Collaboration counts both contributors' raw consumption; debt repayment is excluded because it is system work. These counters do not influence execution. Cost/Done Item averages full lifecycle cost for the same completion-date cohort as Cycle Time. Optional persisted fields preserve current model 0.5/schema 1 compatibility; missing historical lifetime tracking is explicitly unavailable. See [full definition and verification](RELATIVE_DELIVERY_COST.md).

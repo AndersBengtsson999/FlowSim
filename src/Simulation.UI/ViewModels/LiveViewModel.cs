@@ -72,11 +72,17 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     public string ConfigurationHeading => HasSession ? "Configuration" : "Setup / Configuration";
     public string ConfigurationValues => HasSession ? " · " + ConfigurationSummary["Configuration · ".Length..] : "";
     public string ConfigurationDetails => Live is not { } live ? "" :
-        $"Productivity: Development {FlowPresentation.Productivity(live.Session.Configuration.Productivity.Development)} · Code Review {FlowPresentation.Productivity(live.Session.Configuration.Productivity.CodeReview)} · Testing {FlowPresentation.Productivity(live.Session.Configuration.Productivity.Testing)}. WIP: Development / Code Review / Testing. Rework WIP {live.Session.Configuration.Quality.ReworkWipLimit}. Defects {(live.Session.Configuration.Quality.Enabled ? "enabled" : "disabled")}. Seed {live.Session.RandomSeed}. Use Change for an intervention; it takes effect on the next day." + CustomCapacityNotice;
+        $"Productivity: Development {FlowPresentation.Productivity(live.Session.Configuration.Productivity.Development)} · Code Review {FlowPresentation.Productivity(live.Session.Configuration.Productivity.CodeReview)} · Testing {FlowPresentation.Productivity(live.Session.Configuration.Productivity.Testing)}. WIP: Development / Code Review / Testing. Rework WIP {live.Session.Configuration.Quality.ReworkWipLimit}. Defects {(live.Session.Configuration.Quality.Enabled ? "enabled" : "disabled")}. Seed {live.Session.RandomSeed}. Use Change for an intervention; it takes effect on the next day. Shortcuts {live.Session.Configuration.Debt.ShortcutRate:P0}; reduction {live.Session.Configuration.Debt.ShortcutEffortReduction:P0}; debt tolerance {live.Session.Configuration.Debt.Tolerance:P0}; repayment {live.Session.Configuration.Debt.Repayment:P0}." + CustomCapacityNotice;
     public string CustomCapacityNotice => Live is { } live &&
         (live.Session.Configuration.Team.DeveloperCapacityPerDay != 1 || live.Session.Configuration.Team.TesterCapacityPerDay != 1)
         ? $" Advanced nominal scaling retained: Developer Capacity per Person / Day {live.Session.Configuration.Team.DeveloperCapacityPerDay:G}; Tester Capacity per Person / Day {live.Session.Configuration.Team.TesterCapacityPerDay:G}. Available capacity includes these saved factors."
         : "";
+    public bool DebtVisible => Live is { } live && (live.Session.Configuration.Debt.ShortcutRate > 0 || live.Session.Configuration.Debt.Repayment > 0
+        || live.Session.DebtState.Amount > 0 || live.Session.Days.Any(d => d.Debt is { Created: > 0 }));
+    public DebtBarState DebtBar => DebtBarState.From(Live?.Session.DebtState ?? new(), Live?.Session.Configuration.Debt ?? new());
+    public string DebtText => $"Technical Debt: {DebtBar.Ratio:P1} · Tolerance: {DebtBar.Tolerance:P1} · Development Overhead: +{DebtBar.Overhead:P1} · Repayment: {Live?.Session.Configuration.Debt.Repayment ?? 0:P0}";
+    public string DebtDetails => Live is not { } live ? "" :
+        $"Debt {live.Session.DebtState.Amount:0.###} effort · Developed scope {live.Session.DebtState.CumulativeDevelopmentScope:0.###}. Latest day capacity: Review {live.CurrentSnapshot.UsedReviewCapacity:0.###}, Rework {live.CurrentSnapshot.UsedReworkDeveloperCapacity:0.###}, Development {live.CurrentSnapshot.UsedDevelopmentCapacity:0.###}, Debt Work {live.CurrentSnapshot.UsedDebtRepaymentCapacity:0.###}; debt removed {live.CurrentSnapshot.Debt?.Repaid ?? 0:0.###}. Green/yellow: within configured tolerance, zero overhead. Red: excess above tolerance adds effort to future starts. Scale 0–{DebtBar.ScaleMaximum:P1}.";
     public bool SetupVisible => !HasSession;
     private bool fastAdvancing, stopFastAdvance;
     public string TargetDay { get; set; } = "100";
@@ -99,7 +105,8 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         new("Done", s.Done.ToString(), "Completed Work Items."),
         new("WIP", $"{s.Wip} {Arrow(Performance?.WipTrend)}", "Current started unfinished items. Arrow is the existing neutral OLS trend."),
         new($"Throughput · {RollingWindow}d", Performance?.AvailableDays > 0 ? $"{Performance.Throughput:0.0} / 5d" : "—", "Completions per five days in the selected rolling window."),
-        new($"Cycle time · {RollingWindow}d", LivePerformancePresentation.Number(Performance?.CycleTime) + (Performance?.CycleTime is null ? "" : "d"), "Full cycle time for items completed in the selected rolling window.")
+        new($"Cycle time · {RollingWindow}d", LivePerformancePresentation.Number(Performance?.CycleTime) + (Performance?.CycleTime is null ? "" : "d"), "Full cycle time for items completed in the selected rolling window."),
+        new("Cost/Item", Performance?.DeliveryCostPerDoneItem is { } cost ? cost.ToString("0.0") : "—", LivePerformancePresentation.CostDetails(Performance?.AverageDeliveryCost))
     ];
     public IReadOnlyList<MetricRow> StatusSecondaryGroups => LiveStatus is not { } s ? [] : [
         new("Dev", $"{CapacityNumber(s.DeveloperUsed)} / {CapacityNumber(s.DeveloperAvailable)} · {LivePerformancePresentation.Percent(s.DeveloperUtilization)}", $"Day {s.Day}: used / available capacity · utilization. Normally available = people × availability. Saved advanced nominal scaling is preserved when present."),
@@ -112,7 +119,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     public string StatusDelivery => LiveStatus is not { } s ? "" : $"Day {s.Day} · Done {s.Done} · WIP {s.Wip} {Arrow(Performance?.WipTrend)} | Recent {RollingWindow}d: Throughput {(Performance?.AvailableDays > 0 ? $"{Performance.Throughput:0.0}" : "—")} / 5d · Cycle Time {LivePerformancePresentation.Number(Performance?.CycleTime)} d";
     public string StatusCapacity => LiveStatus is not { } s ? "" : $"Day {s.Day} capacity · Dev {CapacityNumber(s.DeveloperUsed)} / {CapacityNumber(s.DeveloperAvailable)} · {LivePerformancePresentation.Percent(s.DeveloperUtilization)} | Test {CapacityNumber(s.TesterUsed)} / {CapacityNumber(s.TesterAvailable)} · {LivePerformancePresentation.Percent(s.TesterUtilization)}";
     public string StatusQueues => LiveStatus is not { } s ? "" : $"Queues · Review {s.ReviewQueue} {Arrow(Performance?.Review.Trend)} · Testing {s.TestingQueue} {Arrow(Performance?.Testing.Trend)}" + (ShowRework ? $" · Rework {s.ReworkQueue} {Arrow(Performance?.Rework.Trend)}" : "") + $" | Work: {s.WorkSupply}";
-    public string LatestIntervention => Live?.Session.Changes.LastOrDefault() is { } c ? $"Last change · Day {c.Day} · {Describe(c)} · effective Day {c.Day + 1}" : "";
+    public string LatestIntervention => Live?.Session.Changes.LastOrDefault() is { } c ? InterventionPresentation.Latest(c) : "";
     public string DayLabel => $"Day {Day}";
     public string Status => status;
     public string WindowLabel => Performance is null ? $"Last {RollingWindow} days" : $"{RollingWindow}-day window · {LivePerformancePresentation.Period(Performance)}";
@@ -165,6 +172,8 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     public IReadOnlyList<CheckpointRow> Checkpoints => Live?.Checkpoints.Select(c => new CheckpointRow(c.Id, $"Day {c.State.CurrentDay} — {c.Label}")).ToArray() ?? [];
     public CheckpointRow? SelectedCheckpoint { get; set; }
     public IReadOnlyList<SimpleChangeField> ChangeFields { get; private set; } = [];
+    public IReadOnlyList<ChangeFieldGroup> ChangeGroups { get; private set; } = [];
+    public IReadOnlyList<SimpleChangeField> AdvancedDebtChanges { get; private set; } = [];
     public string CurrentQuality => Live is null ? "" : $"Current: defects {(Live.Session.Configuration.Quality.Enabled ? "on" : "off")}; review {Live.Session.Configuration.Quality.CodeReviewDefectProbability:P0}; testing {Live.Session.Configuration.Quality.TestingDefectProbability:P0}.";
     public RelayCommand StartCommand { get; }
     public RelayCommand PauseCommand { get; }
@@ -258,10 +267,10 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
             DeveloperCapacityPerDay = c.Team.DeveloperCapacityPerDay, TesterCapacityPerDay = c.Team.TesterCapacityPerDay,
             DeveloperAvailability = c.Team.DeveloperAvailability, TesterAvailability = c.Team.TesterAvailability,
             DevelopmentWipLimit = c.DevelopmentWipLimit, CodeReviewWipLimit = c.CodeReviewWipLimit, TestingWipLimit = c.TestingWipLimit,
-            Productivity = c.Productivity, Quality = c.Quality, NumberOfWorkItems = 0 });
+            Productivity = c.Productivity, Debt = c.Debt, Quality = c.Quality, NumberOfWorkItems = 0 });
         draftSupply = c.ArrivalMode == WorkArrivalMode.AlwaysAvailable ? "Always available" : c.ArrivalMode == WorkArrivalMode.FixedBacklog ? "Fixed Backlog" : "Fixed rate";
         DraftArrivalRate = c.WorkItemsPerDay.ToString(CultureInfo.InvariantCulture); ChangeLabel = "";
-        SimpleChangeField F(string name, Func<string> get, Action<string> set, string help = "") => new(name, get(), get, set, help);
+        SimpleChangeField F(string name, Func<string> get, Action<string> set, string help = "") => new(name, get(), get, set, help, name is "Developers" or "Testers" || name.EndsWith(" WIP") ? ChangeNumberKind.Integer : ChangeNumberKind.Number);
         ChangeFields = [F("Developers", () => Draft.NumberOfDevelopers, v => Draft.NumberOfDevelopers = v, FlowPresentation.DeveloperCountHelp),
             F("Testers", () => Draft.NumberOfTesters, v => Draft.NumberOfTesters = v, FlowPresentation.TesterCountHelp),
             F("Developer Availability (%)", () => Draft.DeveloperAvailability, v => Draft.DeveloperAvailability = v, FlowPresentation.DeveloperAvailabilityHelp),
@@ -269,10 +278,20 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
             F("Development Productivity (x)", () => Draft.DevelopmentProductivity, v => Draft.DevelopmentProductivity = v, FlowPresentation.DevelopmentProductivityHelp),
             F("Code Review Productivity (x)", () => Draft.CodeReviewProductivity, v => Draft.CodeReviewProductivity = v, FlowPresentation.CodeReviewProductivityHelp),
             F("Testing Productivity (x)", () => Draft.TestingProductivity, v => Draft.TestingProductivity = v, FlowPresentation.TestingProductivityHelp),
+            F("Shortcut Rate (%)", () => Draft.ShortcutRate, v => Draft.ShortcutRate = v, "Probability at a new Development start. Existing choices stay fixed."),
+            F("Shortcut Effort Reduction (%)", () => Draft.ShortcutEffortReduction, v => Draft.ShortcutEffortReduction = v, "Reduction after debt overhead; saved effort creates debt on Development completion."),
+            F("Debt Tolerance (%)", () => Draft.DebtTolerance, v => Draft.DebtTolerance = v, "Ratio at or below tolerance adds no effort. Applies to future Development starts."),
+            F("Debt Repayment (%)", () => Draft.DebtRepayment, v => Draft.DebtRepayment = v, "Share of developer capacity remaining after Review and Rework. Unused allocation returns to Development."),
             F("Development WIP", () => Draft.DevelopmentWipLimit, v => Draft.DevelopmentWipLimit = v),
             F("Code Review WIP", () => Draft.CodeReviewWipLimit, v => Draft.CodeReviewWipLimit = v),
             F("Testing WIP", () => Draft.TestingWipLimit, v => Draft.TestingWipLimit = v),
             F("Rework WIP", () => Draft.ReworkWipLimit, v => Draft.ReworkWipLimit = v)];
+        ChangeGroups = [new("Team & Capacity", ChangeFields.Take(4).ToArray()),
+            new("Productivity", ChangeFields.Skip(4).Take(3).ToArray()),
+            new("Technical Debt", ChangeFields.Skip(7).Take(4).ToArray()),
+            new("WIP", ChangeFields.Skip(11).ToArray())];
+        AdvancedDebtChanges = [F("Debt Creation Factor (x)", () => Draft.DebtCreationFactor, v => Draft.DebtCreationFactor = v,
+            "Debt per unit of shortcut effort saved. A scenario calibration assumption. Locked at Development start; existing debt and active plans stay unchanged.")];
         status = "Paused while editing. Changes apply from the next simulated day."; Notify();
     }
     public void ApplyChanges()
@@ -283,7 +302,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         var previousChanges = Live.Session.Changes.Count;
         Live.Session.ApplyChanges(Live.Session.Configuration with { Team = new(r.DeveloperCount, r.TesterCount, r.DeveloperCapacityPerDay, r.TesterCapacityPerDay) { DeveloperAvailability = r.DeveloperAvailability, TesterAvailability = r.TesterAvailability },
             DevelopmentWipLimit = r.DevelopmentWipLimit, CodeReviewWipLimit = r.CodeReviewWipLimit, TestingWipLimit = r.TestingWipLimit,
-            Productivity = r.Productivity, Quality = quality, ArrivalMode = SupplyMode(DraftSupply), WorkItemsPerDay = Rate(DraftArrivalRate) }, ChangeLabel);
+            Productivity = r.Productivity, Debt = r.Debt, Quality = quality, ArrivalMode = SupplyMode(DraftSupply), WorkItemsPerDay = Rate(DraftArrivalRate) }, ChangeLabel);
         if (Live.Session.Changes.Count > previousChanges) selectedIntervention = Live.Session.Changes[^1];
         editing = false; status = Live.Session.Changes.Count == previousChanges ? "No parameters changed. Resume when ready." : $"Changes recorded at Day {Day}; effective Day {Day + 1}. Resume when ready."; Refresh();
     }
@@ -336,7 +355,9 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     private static decimal Rate(string text) => decimal.TryParse(text.Replace(',', '.'), NumberStyles.Number, CultureInfo.InvariantCulture, out var r) ? r : throw new ArgumentException("New Work / day: enter a number.");
     private static int Positive(string text, string name) => int.TryParse(text, out var value) && value > 0 ? value : throw new ArgumentException($"{name} must be positive.");
     public static string Human(WorkItemStatus state) => state switch { WorkItemStatus.WaitingForCodeReview => "Waiting for Code Review", WorkItemStatus.WaitingForTesting => "Waiting for Testing", WorkItemStatus.CodeReview => "Code Review", WorkItemStatus.WaitingForRework => "Waiting for Rework", _ => state.ToString() };
-    public static string Describe(ConfigurationChange c)
+    public static string Describe(ConfigurationChange c) =>
+        (string.IsNullOrWhiteSpace(c.Label) ? "" : c.Label.Trim() + " · ") + DescribeParameters(c);
+    public static string DescribeParameters(ConfigurationChange c)
     {
         var parts = new List<string>();
         void Add<T>(string label, T a, T b) { if (!Equals(a, b)) parts.Add($"{label} {a} → {b}"); }
@@ -347,13 +368,19 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         Add("Development Productivity", FlowPresentation.Productivity(c.Before.Productivity.Development), FlowPresentation.Productivity(c.After.Productivity.Development));
         Add("Code Review Productivity", FlowPresentation.Productivity(c.Before.Productivity.CodeReview), FlowPresentation.Productivity(c.After.Productivity.CodeReview));
         Add("Testing Productivity", FlowPresentation.Productivity(c.Before.Productivity.Testing), FlowPresentation.Productivity(c.After.Productivity.Testing));
+        Add("Shortcut Rate", $"{c.Before.Debt.ShortcutRate:P1}", $"{c.After.Debt.ShortcutRate:P1}");
+        Add("Shortcut Effort Reduction", $"{c.Before.Debt.ShortcutEffortReduction:P1}", $"{c.After.Debt.ShortcutEffortReduction:P1}");
+        Add("Debt Tolerance", $"{c.Before.Debt.Tolerance:P1}", $"{c.After.Debt.Tolerance:P1}");
+        Add("Debt Repayment", $"{c.Before.Debt.Repayment:P1}", $"{c.After.Debt.Repayment:P1}");
+        Add("Debt Creation Factor", c.Before.Debt.CreationFactor, c.After.Debt.CreationFactor);
+        Add("Debt Impact Factor", c.Before.Debt.ImpactFactor, c.After.Debt.ImpactFactor);
         Add("Work Supply", LiveStatusProjection.Supply(c.Before), LiveStatusProjection.Supply(c.After));
         Add("Development WIP", c.Before.DevelopmentWipLimit, c.After.DevelopmentWipLimit); Add("Code Review WIP", c.Before.CodeReviewWipLimit, c.After.CodeReviewWipLimit); Add("Testing WIP", c.Before.TestingWipLimit, c.After.TestingWipLimit); Add("Rework WIP", c.Before.Quality.ReworkWipLimit, c.After.Quality.ReworkWipLimit);
         Add("Defects", c.Before.Quality.Enabled, c.After.Quality.Enabled);
         Add("Review defect probability", c.Before.Quality.CodeReviewDefectProbability, c.After.Quality.CodeReviewDefectProbability); Add("Testing defect probability", c.Before.Quality.TestingDefectProbability, c.After.Quality.TestingDefectProbability);
         string Effort(IEffortDistribution d) => d switch { FixedEffort f => $"Fixed {f.Effort:0.###}", TriangularEffort t => $"Triangular {t.Minimum:0.###} / {t.MostLikely:0.###} / {t.Maximum:0.###}", _ => "Custom" };
         Add("Review rework effort", Effort(c.Before.Quality.CodeReviewReworkEffortDistribution), Effort(c.After.Quality.CodeReviewReworkEffortDistribution)); Add("Testing rework effort", Effort(c.Before.Quality.TestingReworkEffortDistribution), Effort(c.After.Quality.TestingReworkEffortDistribution));
-        return (c.Label is null ? "" : c.Label + " · ") + string.Join("; ", parts);
+        return string.Join("; ", parts);
     }
     private void Notify()
     {

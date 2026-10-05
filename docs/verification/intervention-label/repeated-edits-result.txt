@@ -1,0 +1,7 @@
+Marker tooltip: Day 100: 4,25 items / 5 days
+Day 100
+Stop shortcuts
+Shortcut Rate 50,0 % → 0,0 %
+Effective Day 101; timing does not establish causality.
+PASS repeated edits: five new labels captured, stored and rendered after labeled/unlabeled edits and resume/pause.
+PASS: native input → stored trimmed label → latest status, actual marker hover, Before/After selection; unlabeled change remains clean.

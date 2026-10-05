@@ -1,0 +1,12 @@
+using Simulation.Core;
+using System.Text.Json;
+var s = new SimulationSession(new SimulationScenario("Before delivery cost", 80, new Team(5, 3) { DeveloperAvailability=.8, TesterAvailability=.9 }, 3, 2, 2, [], 12345) {
+ ArrivalMode=WorkArrivalMode.AlwaysAvailable, Productivity=new(1.5,1.2,1.3),
+ DevelopmentArrivalEffort=new TriangularEffort(1,4,7), CodeReviewArrivalEffort=new FixedEffort(1),TestingArrivalEffort=new FixedEffort(2),
+ Debt=new(){ShortcutRate=.4,ShortcutEffortReduction=.3,Tolerance=.05,Repayment=.2},
+ Quality=new(){Enabled=true,CodeReviewDefectProbability=.15,TestingDefectProbability=.2}
+});
+for(int i=0;i<80;i++)s.AdvanceOneDay();
+File.WriteAllText("/Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/tests/Simulation.Application.Tests/Fixtures/pre-cost-state.json",JsonSerializer.Serialize(s.Capture()));
+File.WriteAllText("/Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/tests/Simulation.Application.Tests/Fixtures/pre-cost-result.json",JsonSerializer.Serialize(s.GetResult()));
+Console.WriteLine("Captured genuine pre-measurement model, including debt, quality, productivity and random continuation.");
