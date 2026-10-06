@@ -48,6 +48,8 @@ public static class FlowPresentation
                 WorkItemStatus.Rework => configuration?.Quality.ReworkWipLimit,
                 _ => null
             },
+            SpecialistWorkWaiting = d.SpecialistWorkWaiting,
+            ShowSkills = configuration?.Skills is { } skills && (skills.Specialists > 0 || skills.SpecialistWorkRate > 0) || d.Items.Any(w => w.RequiresSpecialist),
             DevelopmentCapacityUsed = d.UsedDevelopmentCapacity,
             EffectiveDevelopmentWork = d.DevelopmentWork
         }).ToArray();

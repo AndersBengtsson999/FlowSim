@@ -11,6 +11,8 @@ public sealed record PerformancePeriod(int FirstDay, int LastDay, int AvailableD
     double? DeveloperUtilization, double? TesterUtilization, int Defects, double? ReworkCapacity,
     bool QualityRelevant)
 {
+    public SystemCost? ConsumedSystemCapacity { get; init; }
+    public double? SystemCostPerDoneItem => Completed > 0 ? ConsumedSystemCapacity?.Total / Completed : null;
     public DeliveryCost? AverageDeliveryCost { get; init; }
     public double? DeliveryCostPerDoneItem => AverageDeliveryCost?.Total;
     public double EndDebtRatio { get; init; }
@@ -66,7 +68,7 @@ public static class LivePerformance
             Ratio(days.Sum(d => d.UsedTesterCapacity), days.Sum(d => d.AvailableTesterCapacity)),
             defects, Ratio(days.Sum(d => d.UsedReworkDeveloperCapacity), used),
             quality || defects > 0 || days.Any(d => d.UsedReworkDeveloperCapacity > 0 || d.WaitingForReworkCount > 0 || d.ReworkCount > 0))
-        { AverageDeliveryCost = AverageCost(completed), EndDebtRatio = days.LastOrDefault()?.Debt?.State.Ratio ?? 0, EndDebtOverhead = days.LastOrDefault()?.Debt?.Overhead ?? 0,
+        { ConsumedSystemCapacity = SystemCost.Sum(days, session), AverageDeliveryCost = AverageCost(completed), EndDebtRatio = days.LastOrDefault()?.Debt?.State.Ratio ?? 0, EndDebtOverhead = days.LastOrDefault()?.Debt?.Overhead ?? 0,
           DebtRelevant = days.Any(d => d.Debt is { } debt && (debt.State.Amount > 0 || debt.Created > 0 || debt.RepaymentCapacity > 0)) };
     }
 

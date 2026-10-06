@@ -39,7 +39,7 @@ public sealed class LiveSimulation
     public RollingMetrics Recent => RollingMetrics.From(Session.Days, RollingWindow);
     public DailySnapshot CurrentSnapshot => Session.Days.LastOrDefault() ?? new DailySnapshot(0, 0, 0, 0, 0, 0, 0, 0, 0,
         Session.WorkItems.Select(w => new WorkItemDaySnapshot(w.Id, w.State, w.RemainingDevelopmentEffort,
-            w.RemainingCodeReviewEffort, w.RemainingTestingEffort, 0, 0, 0, w.CreatedDay, w.State, false)).ToArray(), 0, 0);
+            w.RemainingCodeReviewEffort, w.RemainingTestingEffort, 0, 0, 0, w.CreatedDay, w.State, false) { RequiresSpecialist = w.RequiresSpecialist }).ToArray(), 0, 0);
     public QueueInspection Inspect(WorkItemStatus state)
     {
         var items = Session.WorkItems.Where(w => w.State == state && w.CreatedDay <= Math.Max(0, Session.CurrentDay - 1)).ToArray();
@@ -80,7 +80,7 @@ public sealed class LiveSimulation
         var config = new SessionConfiguration(new(request.DeveloperCount, request.TesterCount, request.DeveloperCapacityPerDay, request.TesterCapacityPerDay) { DeveloperAvailability = request.DeveloperAvailability, TesterAvailability = request.TesterAvailability },
             request.DevelopmentWipLimit, request.CodeReviewWipLimit, request.TestingWipLimit)
         {
-            Quality = request.Quality, Productivity = request.Productivity, Debt = request.Debt, ArrivalMode = arrivalMode, WorkItemsPerDay = rate,
+            Skills = request.Skills, Quality = request.Quality, Productivity = request.Productivity, Debt = request.Debt, ArrivalMode = arrivalMode, WorkItemsPerDay = rate,
             DevelopmentEffort = request.DevelopmentDistribution ?? new FixedEffort(request.DevelopmentEffort),
             CodeReviewEffort = request.CodeReviewDistribution ?? new FixedEffort(request.CodeReviewEffort),
             TestingEffort = request.TestingDistribution ?? new FixedEffort(request.TestingEffort)

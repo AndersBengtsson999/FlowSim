@@ -1,0 +1,16 @@
+{
+  "DebtCreatedAfterStop": 7.7294838887352615,
+  "LastDebtCreationDay": 204,
+  "StopScope": 735,
+  "RepaymentStartScope": 1350,
+  "PayoffDay": 845,
+  "PayoffOpeningDebt": 0.7049183888204311,
+  "PayoffMaximumAllocation": 1,
+  "PayoffConsumed": 0.7049183888204311,
+  "PayoffDevelopmentConsumed": 3.295081611179569,
+  "PayoffReviewConsumed": 1,
+  "PostPayoffMaximumCohortStartOverhead": 0,
+  "PostPayoffCohortExtraDevelopmentCapacity": 0.43142391607704234,
+  "PostPayoffCohortCount": 41,
+  "FasterDevelopmentWindowCollaborationCapacity": 4.8125
+}

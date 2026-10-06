@@ -89,7 +89,8 @@ public sealed class DeliveryCostIntegrationTests
             foreach(var pair in new[]{("pre-cost-state.json",JsonSerializer.Serialize(s.Capture())),("pre-cost-result.json",JsonSerializer.Serialize(s.GetResult()))})
             {
                 var expected=JsonNode.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"Fixtures",pair.Item1)))!;
-                var actual=JsonNode.Parse(pair.Item2)!;RemoveCost(actual);
+                var actual=JsonNode.Parse(pair.Item2)!;RemoveCost(actual); SkillsCompatibility.RemoveNewFields(actual);
+                if (actual is JsonObject result && result.ContainsKey("SimulationModelVersion")) result["SimulationModelVersion"] = "0.5";
                 Assert.True(JsonNode.DeepEquals(expected,actual),pair.Item1+": all pre-existing fields, including random streams and debt, must match exactly.");
             }
         }

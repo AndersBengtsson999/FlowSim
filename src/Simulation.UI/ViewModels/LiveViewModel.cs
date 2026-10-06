@@ -72,7 +72,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     public string ConfigurationHeading => HasSession ? "Configuration" : "Setup / Configuration";
     public string ConfigurationValues => HasSession ? " · " + ConfigurationSummary["Configuration · ".Length..] : "";
     public string ConfigurationDetails => Live is not { } live ? "" :
-        $"Productivity: Development {FlowPresentation.Productivity(live.Session.Configuration.Productivity.Development)} · Code Review {FlowPresentation.Productivity(live.Session.Configuration.Productivity.CodeReview)} · Testing {FlowPresentation.Productivity(live.Session.Configuration.Productivity.Testing)}. WIP: Development / Code Review / Testing. Rework WIP {live.Session.Configuration.Quality.ReworkWipLimit}. Defects {(live.Session.Configuration.Quality.Enabled ? "enabled" : "disabled")}. Seed {live.Session.RandomSeed}. Use Change for an intervention; it takes effect on the next day. Shortcuts {live.Session.Configuration.Debt.ShortcutRate:P0}; reduction {live.Session.Configuration.Debt.ShortcutEffortReduction:P0}; debt tolerance {live.Session.Configuration.Debt.Tolerance:P0}; repayment {live.Session.Configuration.Debt.Repayment:P0}." + CustomCapacityNotice;
+        $"Productivity: Development {FlowPresentation.Productivity(live.Session.Configuration.Productivity.Development)} · Code Review {FlowPresentation.Productivity(live.Session.Configuration.Productivity.CodeReview)} · Testing {FlowPresentation.Productivity(live.Session.Configuration.Productivity.Testing)}. WIP: Development / Code Review / Testing. Rework WIP {live.Session.Configuration.Quality.ReworkWipLimit}. Defects {(live.Session.Configuration.Quality.Enabled ? "enabled" : "disabled")}. Seed {live.Session.RandomSeed}. Use Change for an intervention; it takes effect on the next day. Shortcuts {live.Session.Configuration.Debt.ShortcutRate:P0}; reduction {live.Session.Configuration.Debt.ShortcutEffortReduction:P0}; debt tolerance {live.Session.Configuration.Debt.Tolerance:P0}; repayment {live.Session.Configuration.Debt.Repayment:P0}." + $" Specialists: {live.Session.Configuration.Skills.Specialists} of {live.Session.Configuration.Team.DeveloperCount} developers; Specialist Work Rate {live.Session.Configuration.Skills.SpecialistWorkRate:P0}." + CustomCapacityNotice;
     public string CustomCapacityNotice => Live is { } live &&
         (live.Session.Configuration.Team.DeveloperCapacityPerDay != 1 || live.Session.Configuration.Team.TesterCapacityPerDay != 1)
         ? $" Advanced nominal scaling retained: Developer Capacity per Person / Day {live.Session.Configuration.Team.DeveloperCapacityPerDay:G}; Tester Capacity per Person / Day {live.Session.Configuration.Team.TesterCapacityPerDay:G}. Available capacity includes these saved factors."
@@ -106,7 +106,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         new("WIP", $"{s.Wip} {Arrow(Performance?.WipTrend)}", "Current started unfinished items. Arrow is the existing neutral OLS trend."),
         new($"Throughput · {RollingWindow}d", Performance?.AvailableDays > 0 ? $"{Performance.Throughput:0.0} / 5d" : "—", "Completions per five days in the selected rolling window."),
         new($"Cycle time · {RollingWindow}d", LivePerformancePresentation.Number(Performance?.CycleTime) + (Performance?.CycleTime is null ? "" : "d"), "Full cycle time for items completed in the selected rolling window."),
-        new("Cost/Item", Performance?.DeliveryCostPerDoneItem is { } cost ? cost.ToString("0.0") : "—", LivePerformancePresentation.CostDetails(Performance?.AverageDeliveryCost))
+        new("Cost/Item", Performance?.DeliveryCostPerDoneItem is { } cost ? cost.ToString("0.0") : "—", LivePerformancePresentation.PeriodCostDetails(Performance))
     ];
     public IReadOnlyList<MetricRow> StatusSecondaryGroups => LiveStatus is not { } s ? [] : [
         new("Dev", $"{CapacityNumber(s.DeveloperUsed)} / {CapacityNumber(s.DeveloperAvailable)} · {LivePerformancePresentation.Percent(s.DeveloperUtilization)}", $"Day {s.Day}: used / available capacity · utilization. Normally available = people × availability. Saved advanced nominal scaling is preserved when present."),
@@ -267,11 +267,13 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
             DeveloperCapacityPerDay = c.Team.DeveloperCapacityPerDay, TesterCapacityPerDay = c.Team.TesterCapacityPerDay,
             DeveloperAvailability = c.Team.DeveloperAvailability, TesterAvailability = c.Team.TesterAvailability,
             DevelopmentWipLimit = c.DevelopmentWipLimit, CodeReviewWipLimit = c.CodeReviewWipLimit, TestingWipLimit = c.TestingWipLimit,
-            Productivity = c.Productivity, Debt = c.Debt, Quality = c.Quality, NumberOfWorkItems = 0 });
+            Skills = c.Skills, Productivity = c.Productivity, Debt = c.Debt, Quality = c.Quality, NumberOfWorkItems = 0 });
         draftSupply = c.ArrivalMode == WorkArrivalMode.AlwaysAvailable ? "Always available" : c.ArrivalMode == WorkArrivalMode.FixedBacklog ? "Fixed Backlog" : "Fixed rate";
         DraftArrivalRate = c.WorkItemsPerDay.ToString(CultureInfo.InvariantCulture); ChangeLabel = "";
-        SimpleChangeField F(string name, Func<string> get, Action<string> set, string help = "") => new(name, get(), get, set, help, name is "Developers" or "Testers" || name.EndsWith(" WIP") ? ChangeNumberKind.Integer : ChangeNumberKind.Number);
+        SimpleChangeField F(string name, Func<string> get, Action<string> set, string help = "") => new(name, get(), get, set, help, name is "Developers" or "Testers" or "Specialists" || name.EndsWith(" WIP") ? ChangeNumberKind.Integer : ChangeNumberKind.Number);
         ChangeFields = [F("Developers", () => Draft.NumberOfDevelopers, v => Draft.NumberOfDevelopers = v, FlowPresentation.DeveloperCountHelp),
+            F("Specialists", () => Draft.Specialists, v => Draft.Specialists = v, "Subset of Developers; total developer capacity does not increase."),
+            F("Specialist Work Rate (%)", () => Draft.SpecialistWorkRate, v => Draft.SpecialistWorkRate = v, "Future workload classifications only; existing items retain their requirement."),
             F("Testers", () => Draft.NumberOfTesters, v => Draft.NumberOfTesters = v, FlowPresentation.TesterCountHelp),
             F("Developer Availability (%)", () => Draft.DeveloperAvailability, v => Draft.DeveloperAvailability = v, FlowPresentation.DeveloperAvailabilityHelp),
             F("Tester Availability (%)", () => Draft.TesterAvailability, v => Draft.TesterAvailability = v, FlowPresentation.TesterAvailabilityHelp),
@@ -286,10 +288,10 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
             F("Code Review WIP", () => Draft.CodeReviewWipLimit, v => Draft.CodeReviewWipLimit = v),
             F("Testing WIP", () => Draft.TestingWipLimit, v => Draft.TestingWipLimit = v),
             F("Rework WIP", () => Draft.ReworkWipLimit, v => Draft.ReworkWipLimit = v)];
-        ChangeGroups = [new("Team & Capacity", ChangeFields.Take(4).ToArray()),
-            new("Productivity", ChangeFields.Skip(4).Take(3).ToArray()),
-            new("Technical Debt", ChangeFields.Skip(7).Take(4).ToArray()),
-            new("WIP", ChangeFields.Skip(11).ToArray())];
+        ChangeGroups = [new("Team & Capacity", ChangeFields.Take(6).ToArray()),
+            new("Productivity", ChangeFields.Skip(6).Take(3).ToArray()),
+            new("Technical Debt", ChangeFields.Skip(9).Take(4).ToArray()),
+            new("WIP", ChangeFields.Skip(13).ToArray())];
         AdvancedDebtChanges = [F("Debt Creation Factor (x)", () => Draft.DebtCreationFactor, v => Draft.DebtCreationFactor = v,
             "Debt per unit of shortcut effort saved. A scenario calibration assumption. Locked at Development start; existing debt and active plans stay unchanged.")];
         status = "Paused while editing. Changes apply from the next simulated day."; Notify();
@@ -302,7 +304,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         var previousChanges = Live.Session.Changes.Count;
         Live.Session.ApplyChanges(Live.Session.Configuration with { Team = new(r.DeveloperCount, r.TesterCount, r.DeveloperCapacityPerDay, r.TesterCapacityPerDay) { DeveloperAvailability = r.DeveloperAvailability, TesterAvailability = r.TesterAvailability },
             DevelopmentWipLimit = r.DevelopmentWipLimit, CodeReviewWipLimit = r.CodeReviewWipLimit, TestingWipLimit = r.TestingWipLimit,
-            Productivity = r.Productivity, Debt = r.Debt, Quality = quality, ArrivalMode = SupplyMode(DraftSupply), WorkItemsPerDay = Rate(DraftArrivalRate) }, ChangeLabel);
+            Skills = r.Skills, Productivity = r.Productivity, Debt = r.Debt, Quality = quality, ArrivalMode = SupplyMode(DraftSupply), WorkItemsPerDay = Rate(DraftArrivalRate) }, ChangeLabel);
         if (Live.Session.Changes.Count > previousChanges) selectedIntervention = Live.Session.Changes[^1];
         editing = false; status = Live.Session.Changes.Count == previousChanges ? "No parameters changed. Resume when ready." : $"Changes recorded at Day {Day}; effective Day {Day + 1}. Resume when ready."; Refresh();
     }
@@ -365,6 +367,8 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         Add("Developer Capacity per Person / Day", c.Before.Team.DeveloperCapacityPerDay, c.After.Team.DeveloperCapacityPerDay); Add("Tester Capacity per Person / Day", c.Before.Team.TesterCapacityPerDay, c.After.Team.TesterCapacityPerDay);
         Add("Developer Availability", $"{c.Before.Team.DeveloperAvailability:P0}", $"{c.After.Team.DeveloperAvailability:P0}");
         Add("Tester Availability", $"{c.Before.Team.TesterAvailability:P0}", $"{c.After.Team.TesterAvailability:P0}");
+        Add("Specialists", c.Before.Skills.Specialists, c.After.Skills.Specialists);
+        Add("Specialist Work Rate", $"{c.Before.Skills.SpecialistWorkRate:P1}", $"{c.After.Skills.SpecialistWorkRate:P1}");
         Add("Development Productivity", FlowPresentation.Productivity(c.Before.Productivity.Development), FlowPresentation.Productivity(c.After.Productivity.Development));
         Add("Code Review Productivity", FlowPresentation.Productivity(c.Before.Productivity.CodeReview), FlowPresentation.Productivity(c.After.Productivity.CodeReview));
         Add("Testing Productivity", FlowPresentation.Productivity(c.Before.Productivity.Testing), FlowPresentation.Productivity(c.After.Productivity.Testing));

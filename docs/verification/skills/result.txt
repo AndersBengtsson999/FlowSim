@@ -1,0 +1,5 @@
+{"Scenario":"Before: Specialists 1","Day":200,"FirstDay":151,"LastDay":200,"Done":102,"DoneInPeriod":28,"Throughput":2.8,"CycleTime":12.892857142857142,"AverageWip":6.18,"CurrentWip":6,"DeveloperUtilization":0.7475999999999999,"TesterUtilization":0.56,"SpecialistWorkWaiting":0,"AverageSpecialistWaiting":1.92,"MaxSpecialistWaiting":4,"DeliveryCostPerDoneItem":8.677678571428572,"SystemCostPerDoneItem":8.674999999999999}
+Width 1280: chart Y 572, height 210, unchanged from Skills disabled.
+Width 960: chart Y 572, height 210, unchanged from Skills disabled.
+{"Scenario":"After: Specialists 2","Day":400,"FirstDay":351,"LastDay":400,"Done":250,"DoneInPeriod":40,"Throughput":4,"CycleTime":9.5,"AverageWip":6.78,"CurrentWip":7,"DeveloperUtilization":0.9885812499999999,"TesterUtilization":0.8,"SpecialistWorkWaiting":0,"AverageSpecialistWaiting":0.22,"MaxSpecialistWaiting":2,"DeliveryCostPerDoneItem":8.2496875,"SystemCostPerDoneItem":8.178632812499998}
+PASS native configuration, bound Change + label, specialist item markers, waiting trend and preserved chart density.

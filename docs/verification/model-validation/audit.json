@@ -1,0 +1,36 @@
+{
+  "Audits": [
+    {
+      "DaysChecked": 200,
+      "ItemObservationsChecked": 17335,
+      "RepaymentDays": 0,
+      "FractionalPayoffDays": 0,
+      "ZeroDebtDaysAfterRepayment": 0
+    },
+    {
+      "DaysChecked": 200,
+      "ItemObservationsChecked": 28666,
+      "RepaymentDays": 0,
+      "FractionalPayoffDays": 0,
+      "ZeroDebtDaysAfterRepayment": 0
+    },
+    {
+      "DaysChecked": 895,
+      "ItemObservationsChecked": 268193,
+      "RepaymentDays": 445,
+      "FractionalPayoffDays": 1,
+      "ZeroDebtDaysAfterRepayment": 50
+    }
+  ],
+  "Fingerprints": [
+    "A0E697E4F754642560F2EB0399AD500B07C0FCB9F8C04805078F69E29EABC915",
+    "7D81EB43736CC14DF1E31912FDAF52AC2A03F3B2C94E43A8EF762FA0CADC33E1",
+    "FC7372AE19023A459B7B890C8748D21CAA0F2FAE362932B3E34AC8089B52E2D6"
+  ],
+  "RepeatedFingerprints": [
+    "A0E697E4F754642560F2EB0399AD500B07C0FCB9F8C04805078F69E29EABC915",
+    "7D81EB43736CC14DF1E31912FDAF52AC2A03F3B2C94E43A8EF762FA0CADC33E1",
+    "FC7372AE19023A459B7B890C8748D21CAA0F2FAE362932B3E34AC8089B52E2D6"
+  ],
+  "MetricProjectionReadOnly": true
+}

@@ -42,8 +42,9 @@
       </StackPanel>
       <TextBlock Grid.Column="2" Text="{Binding SupportingText}" Classes="liveSecondary" IsVisible="{Binding IsNotDevelopment}" VerticalAlignment="Center" TextWrapping="Wrap"/>
       <WrapPanel Grid.Column="2" IsVisible="{Binding IsDevelopment}" VerticalAlignment="Center">
-       <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,18,0" ToolTip.Tip="Development capacity consumed, including full collaboration consumption. Code Review and Rework also draw from the shared developer pool."><TextBlock Text="Capacity used" Classes="metricLabel"/><TextBlock Text="{Binding DevelopmentCapacityUsed, StringFormat='{}{0:0.##}'}" Classes="metricValue"/></StackPanel>
-       <StackPanel Orientation="Horizontal" Spacing="5" ToolTip.Tip="Actual Development effort reduction. Collaboration produces 50% effective work per consumed capacity unit."><TextBlock Text="Effective work" Classes="metricLabel"/><TextBlock Text="{Binding EffectiveDevelopmentWork, StringFormat='{}{0:0.##}'}" Classes="metricValue"/></StackPanel>
+       <StackPanel Orientation="Horizontal" Spacing="5" Margin="0,0,18,0" ToolTip.Tip="Development capacity consumed, including full collaboration consumption. Code Review and Rework also draw from the shared developer pool."><TextBlock Text="{Binding DevelopmentCapacityLabel}" Classes="metricLabel"/><TextBlock Text="{Binding DevelopmentCapacityUsed, StringFormat='{}{0:0.##}'}" Classes="metricValue"/></StackPanel>
+       <StackPanel Orientation="Horizontal" Spacing="5" ToolTip.Tip="Actual Development effort reduction. Collaboration produces 50% effective work per consumed capacity unit."><TextBlock Text="{Binding DevelopmentWorkLabel}" Classes="metricLabel"/><TextBlock Text="{Binding EffectiveDevelopmentWork, StringFormat='{}{0:0.##}'}" Classes="metricValue"/></StackPanel>
+       <TextBlock IsVisible="{Binding ShowSkills}" Text="{Binding SpecialistWorkWaiting, StringFormat='Specialist waiting: {0}'}" Margin="10,0,0,0" ToolTip.Tip="Active Specialist Development items with remaining effort and no Development capacity received during the latest day. Excludes backlog waiting for WIP/dependencies and all later stages."/>
       </WrapPanel>
       <TextBlock Grid.Column="3" Text="{Binding Count}" Classes="metricValue" HorizontalAlignment="Right" VerticalAlignment="Center" ToolTip.Tip="Work Items"/>
       <TextBlock Grid.Column="4" Text="{Binding DisclosureChevron}" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Center"/>
@@ -57,6 +58,7 @@
        <Border Classes="embeddedItem" Width="260">
         <StackPanel Spacing="2">
          <TextBlock Text="{Binding Id}" FontWeight="SemiBold" TextWrapping="Wrap" ToolTip.Tip="{Binding DeliveryCost, Converter={StaticResource DeliveryCostDetails}}"/>
+         <TextBlock Text="{Binding SkillMarker}" IsVisible="{Binding RequiresSpecialist}" FontSize="11"/>
          <TextBlock Text="{Binding ImplementationSummary}" FontSize="11" TextWrapping="Wrap"/>
          <WrapPanel ToolTip.Tip="Remaining effort: Development / Code Review / Testing / Rework. Values are from the latest completed day.">
           <TextBlock Text="{Binding RemainingDevelopmentEffort, StringFormat='Dev {0:0.##}'}" Margin="0,0,8,0"/>
@@ -115,6 +117,8 @@
     <StackPanel Spacing="10">
      <TextBlock Text="TEAM" Classes="section" />
 <Grid ColumnDefinitions="*,100"><TextBlock Text="Developers" ToolTip.Tip="{x:Static vm:FlowPresentation.DeveloperCountHelp}" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.NumberOfDevelopers, Mode=TwoWay}" AutomationProperties.Name="Live Developers" /></Grid>
+<Grid ColumnDefinitions="*,100"><TextBlock Text="Specialists · of Developers" VerticalAlignment="Center" ToolTip.Tip="Subset of the total Developer count; does not add capacity."/><TextBox Grid.Column="1" Text="{Binding Setup.Specialists, Mode=TwoWay}" AutomationProperties.Name="Live Specialists"/></Grid>
+<Grid ColumnDefinitions="*,100"><TextBlock Text="Specialist Work (%)" VerticalAlignment="Center" ToolTip.Tip="Probability for each new workload item. Classification is retained."/><TextBox Grid.Column="1" Text="{Binding Setup.SpecialistWorkRate, Mode=TwoWay}" AutomationProperties.Name="Live Specialist Work Rate"/></Grid>
 <Grid ColumnDefinitions="*,100"><TextBlock Text="Testers" ToolTip.Tip="{x:Static vm:FlowPresentation.TesterCountHelp}" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.NumberOfTesters, Mode=TwoWay}" AutomationProperties.Name="Live Testers" /></Grid>
 <TextBlock Text="AVAILABILITY" Classes="note" Margin="0,4,0,0"/>
 <Grid ColumnDefinitions="*,100"><TextBlock Text="Developer Availability (%)" VerticalAlignment="Center" ToolTip.Tip="{x:Static vm:FlowPresentation.DeveloperAvailabilityHelp}"/><TextBox Grid.Column="1" Text="{Binding Setup.DeveloperAvailability, Mode=TwoWay}" AutomationProperties.Name="Developer Availability (%)" /></Grid>

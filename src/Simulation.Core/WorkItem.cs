@@ -13,6 +13,8 @@ public sealed class WorkItem
     public double RemainingReworkEffort { get; private set; }
     public string Id { get; }
     public string Name { get; }
+    public bool RequiresSpecialist { get; private set; }
+    internal void ClassifyDevelopment(bool requiresSpecialist) => RequiresSpecialist = requiresSpecialist;
     public DeliveryCost DeliveryCost { get; private set; } = new();
     public double DevelopmentEffort { get; }
     public DevelopmentPlan? DevelopmentPlan { get; private set; }
@@ -58,12 +60,13 @@ public sealed class WorkItem
         RemainingTestingEffort, RemainingReworkEffort, currentReworkEffort, reviewQueueDay, testingQueueDay,
         reworkQueueDay, DevelopmentStartedDay, DevelopmentCompletedDay, CodeReviewStartedDay,
         CodeReviewCompletedDay, TestingStartedDay, TestingCompletedDay, DoneDay,
-        transitions.ToArray(), events.ToArray(), attempts.ToArray()) { DevelopmentPlan = DevelopmentPlan, DeliveryCost = DeliveryCost };
+        transitions.ToArray(), events.ToArray(), attempts.ToArray()) { RequiresSpecialist = RequiresSpecialist, DevelopmentPlan = DevelopmentPlan, DeliveryCost = DeliveryCost };
 
     internal static WorkItem Restore(WorkItemState s)
     {
         var w = new WorkItem(s.Id, s.Name, s.DevelopmentEffort, s.CodeReviewEffort, s.TestingEffort, s.Dependencies, s.CreatedDay)
         {
+            RequiresSpecialist = s.RequiresSpecialist,
             DeliveryCost = s.DeliveryCost ?? new(IsComplete: s.State == WorkItemStatus.Backlog && s.DevelopmentStartedDay is null && !s.Events.Any(e => e.EventType == WorkItemEventType.CapacityApplied)),
             DevelopmentPlan = s.DevelopmentPlan, State = s.State, RemainingDevelopmentEffort = s.RemainingDevelopmentEffort,
             RemainingCodeReviewEffort = s.RemainingCodeReviewEffort, RemainingTestingEffort = s.RemainingTestingEffort,

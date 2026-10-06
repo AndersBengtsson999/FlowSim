@@ -1,6 +1,6 @@
-# Simulation Model v0.5 — Technical Debt v1
+# Simulation Model v0.6 — Skills & Specialists v1
 
-Current semantics are v0.5, adding explicit shortcuts, system-level debt and optional repayment while retaining stage productivity and Development Collaboration Model v1 allocation. See [Technical Debt v1](TECHNICAL_DEBT.md) for the full lifecycle, formulas and verification. See [Stage-specific Productivity Multipliers v1](STAGE_PRODUCTIVITY.md) for formulas and verification. See [availability, supply and status](CAPACITY_AVAILABILITY.md) for the new semantics and compatibility. Historical Step 2–13 measured examples and linked validation reports describe their original v0.1 runs; current collaboration measurements are in [Development Collaboration Model v1](DEVELOPMENT_COLLABORATION.md).
+Current semantics are v0.6, adding one Development specialist capability while retaining the existing Technical Debt, productivity and collaboration mechanics. See [Skills & Specialists v1](SKILLS_SPECIALISTS.md) for classification, eligible capacity, allocation, persistence and verified baseline compatibility. See [Technical Debt v1](TECHNICAL_DEBT.md) for the full lifecycle, formulas and verification. See [Stage-specific Productivity Multipliers v1](STAGE_PRODUCTIVITY.md) for formulas and verification. See [availability, supply and status](CAPACITY_AVAILABILITY.md) for the new semantics and compatibility. Historical Step 2–13 measured examples and linked validation reports describe their original v0.1 runs; current collaboration measurements are in [Development Collaboration Model v1](DEVELOPMENT_COLLABORATION.md).
 
 ## Purpose and scope
 
@@ -39,7 +39,7 @@ consumed = min(remaining stage effort / p, remaining resource pool, 1.0, capacit
 effective work = consumed × p
 ```
 
-Development uses two passes over the items admitted at day start. First each gets a primary allocation in FIFO order, limited to `min(remaining effort / DevelopmentProductivity, remaining pool, 1, DeveloperCapacityPerDay)`. Primary work equals capacity × DevelopmentProductivity. Then remaining active items are ordered by remaining Development effort **after primary work**, ascending, with stable FIFO/input order for ties. Each may consume up to `min(remaining effort / (0.5 × DevelopmentProductivity), remaining pool, 1, DeveloperCapacityPerDay)` collaboration capacity, producing capacity × 0.5 × DevelopmentProductivity effective work. Collaboration requires at least two developers in the team.
+With no active specialist requirement, Development uses two passes over the items admitted at day start. With specialist requirements, the same contribution limits and collaboration efficiency apply to eligible capacity with specialist preference; the exact order is documented in [Skills & Specialists](SKILLS_SPECIALISTS.md). First each gets a primary allocation in FIFO order, limited to `min(remaining effort / DevelopmentProductivity, remaining pool, 1, DeveloperCapacityPerDay)`. Primary work equals capacity × DevelopmentProductivity. Then remaining active items are ordered by remaining Development effort **after primary work**, ascending, with stable FIFO/input order for ties. Each may consume up to `min(remaining effort / (0.5 × DevelopmentProductivity), remaining pool, 1, DeveloperCapacityPerDay)` collaboration capacity, producing capacity × 0.5 × DevelopmentProductivity effective work. Collaboration requires at least two developers in the team.
 
 Thus a Development item can consume at most 2 capacity units and receive at most 1.5 × DevelopmentProductivity effective effort per day. Every active item has a primary opportunity before any collaboration. Fractional leftovers remain available to other eligible active items during that day. All admissions still precede all work; completion does not admit replacement backlog work midway through a day.
 
@@ -138,7 +138,7 @@ Cycle validation uses an iterative topological traversal, avoiding recursion on 
 
 WipPolicy is the single admission/occupancy policy boundary:
 
-| Limit | States counted in v0.5 |
+| Limit | States counted in v0.6 |
 |---|---|
 | DevelopmentWipLimit | Development only |
 | CodeReviewWipLimit | CodeReview only |
@@ -499,11 +499,11 @@ Execution date and identity intentionally differ between reruns; reproducibility
 
 ## Simulation Model Version
 
-`Simulation.Core.SimulationModel.Version` is **"0.5"**, independently of the assembly/application version. It adds Technical Debt v1 while retaining stage productivity, Capacity Availability, Work Supply and Development Collaboration Model v1. Scenario/experiment files, Live sessions, result records and CSV provenance carry the version. Model 0.2 and 0.3 documents load with productivity 1x/1x/1x. Models 0.2–0.4 load with zero debt and default debt configuration, recovering current scope from original Development completions without inventing historical debt; original Live version provenance and all historical ledgers are retained. Model 0.1 remains rejected because its Development allocation differs. Editing a version label cannot migrate a saved timeline. JSON schema remains 1. See [compatibility verification](CAPACITY_AVAILABILITY.md).
+`Simulation.Core.SimulationModel.Version` is **"0.6"**, independently of the assembly/application version. It adds Skills & Specialists v1 (Development only) while retaining Technical Debt, stage productivity, Capacity Availability, Work Supply and Development Collaboration Model v1. Scenario/experiment files, Live sessions, result records and CSV provenance carry the version. Model 0.2 and 0.3 documents load with productivity 1x/1x/1x. Models 0.2–0.4 load with zero debt and default debt configuration, recovering current scope from original Development completions without inventing historical debt; original Live version provenance and all historical ledgers are retained. Model 0.1 remains rejected because its Development allocation differs. Editing a version label cannot migrate a saved timeline. JSON schema remains 1. See [compatibility verification](CAPACITY_AVAILABILITY.md).
 
 ## Scenario and experiment persistence
 
-Persistence belongs in Simulation.Infrastructure, which now implements ExperimentJson and ComparisonCsv. UI references Infrastructure for file operations; Core remains free of UI, JSON and filesystem dependencies. The configuration JSON envelope has SchemaVersion=1, SimulationModelVersion="0.5", DocumentKind="Scenario" or "Experiment", and the corresponding payload. All existing SimulationRequest settings, including fixed fallbacks, distribution parameters, dormant defect configuration and configured seeds, are retained. Effort objects have explicit Kind="Fixed"/"Triangular" and their numerical fields. There is no CLR type-name activation.
+Persistence belongs in Simulation.Infrastructure, which now implements ExperimentJson and ComparisonCsv. UI references Infrastructure for file operations; Core remains free of UI, JSON and filesystem dependencies. The configuration JSON envelope has SchemaVersion=1, SimulationModelVersion="0.6", DocumentKind="Scenario" or "Experiment", and the corresponding payload. All existing SimulationRequest settings, including fixed fallbacks, distribution parameters, dormant defect configuration and configured seeds, are retained. Effort objects have explicit Kind="Fixed"/"Triangular" and their numerical fields. There is no CLR type-name activation.
 
 Loading validates schema/model/kind, scenario settings, unique IDs, reference membership and supported distributions. Unknown properties and distribution kinds are rejected. Experiment loading preserves identities and creates a read-only scenario collection. Importing a standalone scenario into the current collection assigns a fresh identity to avoid collisions. Files are human-readable UTF-8 JSON, limited to 5 MB on read. Writes use a sibling temporary file followed by replacement. Native file pickers handle location selection and overwrite prompting; no database or automatic background save is introduced.
 

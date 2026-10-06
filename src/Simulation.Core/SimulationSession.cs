@@ -5,6 +5,7 @@ public enum WorkArrivalMode { FixedBacklog, ContinuousArrival, AlwaysAvailable }
 public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5,
     int CodeReviewWipLimit = 3, int TestingWipLimit = 3)
 {
+    public SkillSettings Skills { get; init; } = new();
     public TechnicalDebtSettings Debt { get; init; } = new();
     public StageProductivity Productivity { get; init; } = new();
     public DefectSettings Quality { get; init; } = new();
@@ -22,7 +23,7 @@ public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5
             throw new ScenarioValidationException("All three arrival effort distributions are required.");
     }
     internal SimulationScenario Scenario(string name, int days, IReadOnlyList<WorkItem> items, int seed) =>
-        new(name, days, Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit, items, seed) { Quality = Quality, Productivity = Productivity, Debt = Debt };
+        new(name, days, Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit, items, seed) { Quality = Quality, Productivity = Productivity, Debt = Debt, Skills = Skills };
 }
 
 public sealed record ConfigurationChange(int Day, string? Label, SessionConfiguration Before, SessionConfiguration After);
@@ -34,6 +35,7 @@ public sealed record WorkItemState(string Id, string Name, double DevelopmentEff
     int? TestingStartedDay, int? TestingCompletedDay, int? DoneDay,
     IReadOnlyList<StateTransition> Transitions, IReadOnlyList<WorkItemEvent> Events, IReadOnlyList<InspectionAttempt> Attempts)
 {
+    public bool RequiresSpecialist { get; init; }
     public DeliveryCost? DeliveryCost { get; init; }
     public DevelopmentPlan? DevelopmentPlan { get; init; }
 }
@@ -45,6 +47,7 @@ public sealed record SimulationSessionState(string Name, int RandomSeed, int Cur
     ulong ArrivalRandomState, ulong DiscoveryRandomState, ulong ReworkRandomState,
     IReadOnlyList<DailySnapshot> Days, IReadOnlyList<ConfigurationChange> Changes)
 {
+    public ulong? SkillRandomState { get; init; }
     public TechnicalDebtState? DebtState { get; init; }
 }
 
@@ -60,6 +63,7 @@ public sealed class SimulationSession
     private readonly TechnicalDebtLedger debt;
     public TechnicalDebtState DebtState => debt.State;
     private SeededRandom arrivalRandom;
+    private SeededRandom skillRandom;
     private decimal accumulator;
     private long nextId = 1;
     public string Name { get; }
@@ -77,7 +81,7 @@ public sealed class SimulationSession
         ScenarioValidator.Validate(scenario);
         Name = scenario.Name; RandomSeed = scenario.RandomSeed;
         Configuration = configuration ?? new(scenario.Team, scenario.DevelopmentWipLimit, scenario.CodeReviewWipLimit,
-            scenario.TestingWipLimit) { Quality = scenario.Quality, Productivity = scenario.Productivity, Debt = scenario.Debt, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
+            scenario.TestingWipLimit) { Skills = scenario.Skills, Quality = scenario.Quality, Productivity = scenario.Productivity, Debt = scenario.Debt, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
                 DevelopmentEffort = scenario.DevelopmentArrivalEffort, CodeReviewEffort = scenario.CodeReviewArrivalEffort, TestingEffort = scenario.TestingArrivalEffort };
         Configuration.Validate(); InitialConfiguration = Configuration;
         items = scenario.WorkItems.Select(w => w.CopyForRun()).ToList();
@@ -86,6 +90,8 @@ public sealed class SimulationSession
         debt = new(new());
         // Existing arrival stream also supplies shortcut decisions; defect/rework streams stay separate.
         arrivalRandom = new(unchecked(RandomSeed ^ (int)0xA771A150));
+        skillRandom = new(unchecked(RandomSeed ^ (int)0x5A11C0DE));
+        foreach (var item in items) Classify(item);
     }
 
     private SimulationSession(SimulationSessionState s)
@@ -100,6 +106,7 @@ public sealed class SimulationSession
         changes.AddRange(s.Changes);
         accumulator = s.ArrivalAccumulator; nextId = s.NextWorkItemId;
         arrivalRandom = SeededRandom.Restore(s.ArrivalRandomState);
+        skillRandom = s.SkillRandomState is { } state ? SeededRandom.Restore(state) : new(unchecked(RandomSeed ^ (int)0x5A11C0DE));
         debt = new(s.DebtState ?? new(0, items.Where(w => w.DevelopmentCompletedDay.HasValue).Sum(w => w.DevelopmentEffort)));
         debt.State.Validate();
         _ = debt.State.Overhead(Configuration.Debt);
@@ -147,7 +154,14 @@ public sealed class SimulationSession
             Configuration.CodeReviewEffort.Sample(arrivalRandom), Configuration.TestingEffort.Sample(arrivalRandom), createdDay: CurrentDay);
         if (new[] { item.DevelopmentEffort, item.CodeReviewEffort, item.TestingEffort }.Any(e => !double.IsFinite(e) || e < 0))
             throw new ScenarioValidationException("Arrival effort must be finite and nonnegative.");
+        Classify(item);
         items.Add(item); byId.Add(id, item);
+    }
+
+    private void Classify(WorkItem item)
+    {
+        var rate = Configuration.Skills.SpecialistWorkRate;
+        item.ClassifyDevelopment(rate == 1 || (rate > 0 && skillRandom.NextUnitDouble() < rate));
     }
 
     public void ApplyChanges(SessionConfiguration configuration, string? label = null)
@@ -166,7 +180,7 @@ public sealed class SimulationSession
     public SimulationSessionState Capture() => new(Name, RandomSeed, CurrentDay, InitialConfiguration, Configuration,
         items.Select(w => w.Capture()).ToArray(), accumulator, nextId, arrivalRandom.State,
         defects.RandomState.Discovery, defects.RandomState.Rework,
-        days.Select(d => d with { Items = Array.AsReadOnly(d.Items.ToArray()) }).ToArray(), changes.ToArray()) { DebtState = DebtState };
+        days.Select(d => d with { Items = Array.AsReadOnly(d.Items.ToArray()) }).ToArray(), changes.ToArray()) { DebtState = DebtState, SkillRandomState = skillRandom.State };
     public static SimulationSession Restore(SimulationSessionState state) => new(state);
 
     private static void ValidateState(SimulationSessionState s)

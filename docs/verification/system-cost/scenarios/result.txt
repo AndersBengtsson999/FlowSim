@@ -1,0 +1,4 @@
+{"Scenario":"Baseline","FirstDay":151,"LastDay":200,"Completed":42,"DeliveryCostPerDoneItem":8,"SystemCostPerDoneItem":7.9523809523809526,"ConsumedSystemCapacity":{"Development":208,"CodeReview":42,"Rework":0,"Testing":84,"DebtRepayment":0,"Total":334}}
+{"Scenario":"Development 2x","FirstDay":151,"LastDay":200,"Completed":50,"DeliveryCostPerDoneItem":5.530625000000001,"SystemCostPerDoneItem":6.97875,"ConsumedSystemCapacity":{"Development":177.9375,"CodeReview":71,"Rework":0,"Testing":100,"DebtRepayment":0,"Total":348.9375}}
+{"Scenario":"Repayment 25%","FirstDay":401,"LastDay":450,"Completed":28,"DeliveryCostPerDoneItem":9.224279376878584,"SystemCostPerDoneItem":10.892857142857142,"ConsumedSystemCapacity":{"Development":166.5,"CodeReview":28,"Rework":0,"Testing":55,"DebtRepayment":55.5,"Total":305}}
+PASS: all three full simulation states exactly match archived pre-System-Cost fingerprints.

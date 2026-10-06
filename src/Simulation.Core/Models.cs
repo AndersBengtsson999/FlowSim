@@ -21,6 +21,7 @@ public sealed record SimulationScenario(string Name, int SimulationDays, Team Te
     int DevelopmentWipLimit, int CodeReviewWipLimit, int TestingWipLimit,
     IReadOnlyList<WorkItem> WorkItems, int RandomSeed = 12345)
 {
+    public SkillSettings Skills { get; init; } = new();
     public TechnicalDebtSettings Debt { get; init; } = new();
     public StageProductivity Productivity { get; init; } = new();
     public DefectSettings Quality { get; init; } = new();
@@ -39,6 +40,8 @@ public sealed record WorkItemDaySnapshot(string Id, WorkItemStatus State,
     int CreatedDay, WorkItemStatus StateDuringDay, bool DependencyBlocked,
     double ReworkWork = 0, double RemainingReworkEffort = 0, double CollaborationDevelopmentCapacity = 0)
 {
+    public bool RequiresSpecialist { get; init; }
+    public string SkillMarker => RequiresSpecialist ? "Specialist Development" : "";
     public DeliveryCost? DeliveryCost { get; init; }
     public DevelopmentPlan? DevelopmentPlan { get; init; }
     public string ImplementationSummary => DevelopmentPlan is { } p ? $"{(p.IsShortcut ? "Shortcut" : "Normal")} · Base {p.BaseEffort:0.##} · Start overhead {p.Overhead:P1} · Final {p.FinalEffort:0.##} · Saved {p.SavedEffort:0.##}" : "";
@@ -55,6 +58,8 @@ public sealed record DailySnapshot(int Day, int DevelopmentWip, int ReviewWip, i
     double AvailableDeveloperCapacity, double AvailableTesterCapacity,
     double UsedReworkDeveloperCapacity = 0, int ReworkWip = 0, double CollaborationDevelopmentCapacity = 0)
 {
+    // Active Development at day end with positive remaining effort and no raw Development capacity received that day.
+    public int SpecialistWorkWaiting { get; init; }
     public DebtObservation? Debt { get; init; }
     public double UsedDebtRepaymentCapacity => Debt?.RepaymentCapacity ?? 0;
     public int Wip => DevelopmentWip + ReviewWip + TestingWip + ReworkWip;

@@ -24,6 +24,8 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 
     // Inputs are parsed together on Run. Reset uses the same baseline factory as the engine demonstrations.
+    public string Specialists { get; set; } = "0";
+    public string SpecialistWorkRate { get; set; } = "0";
     public string NumberOfDevelopers { get; set; } = "";
     public string NumberOfTesters { get; set; } = "";
     public string ShortcutRate { get; set; } = "0";
@@ -206,6 +208,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         configuredName = BaselineScenario.CreateRequest().Name;
         var baseline = BaselineScenario.Create();
         var effort = baseline.WorkItems[0];
+        Specialists = SpecialistWorkRate = "0";
         ShortcutRate = DebtRepayment = "0"; ShortcutEffortReduction = "30"; DebtTolerance = "10"; DebtCreationFactor = "1"; debtImpactFactor = 1;
         DevelopmentProductivity = CodeReviewProductivity = TestingProductivity = "1.00";
         DeveloperAvailability = "100"; TesterAvailability = "100"; WorkSupplyMode = WorkArrivalMode.FixedBacklog; WorkSupplyRate = "0.8";
@@ -254,6 +257,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         if (isBusy) throw new InvalidOperationException("Wait for the running simulation before editing a comparison scenario.");
         configuredName = request.Name;
         string N(double n) => n.ToString(CultureInfo.InvariantCulture);
+        Specialists = N(request.Skills.Specialists); SpecialistWorkRate = N(request.Skills.SpecialistWorkRate * 100);
         NumberOfDevelopers = N(request.DeveloperCount); NumberOfTesters = N(request.TesterCount);
         DeveloperAvailability = N(request.DeveloperAvailability * 100); TesterAvailability = N(request.TesterAvailability * 100);
         DevelopmentProductivity = N(request.Productivity.Development); CodeReviewProductivity = N(request.Productivity.CodeReview); TestingProductivity = N(request.Productivity.Testing);
@@ -360,6 +364,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     private SimulationRequest ReadRequest() => new()
     {
         Name = configuredName,
+        Skills = new(Integer(Specialists, "Specialists"), Number(SpecialistWorkRate, "Specialist Work Rate (%)") / 100),
         DeveloperCount = Integer(NumberOfDevelopers, "Developers"),
         TesterCount = Integer(NumberOfTesters, "Testers"),
         Debt = new() { ShortcutRate = Number(ShortcutRate, "Shortcut Rate (%)") / 100,
@@ -427,6 +432,10 @@ public sealed record FlowStateRow(string Name, int Count, string Kind, string Ba
     public bool IsCompleted => State == WorkItemStatus.Done;
     public bool IsDevelopment => State == WorkItemStatus.Development;
     public bool IsNotDevelopment => !IsDevelopment;
+    public int SpecialistWorkWaiting { get; init; }
+    public bool ShowSkills { get; init; }
+    public string DevelopmentCapacityLabel => ShowSkills ? "Used" : "Capacity used";
+    public string DevelopmentWorkLabel => ShowSkills ? "Work" : "Effective work";
     public double DevelopmentCapacityUsed { get; init; }
     public double EffectiveDevelopmentWork { get; init; }
     public string SupportingText => State switch {

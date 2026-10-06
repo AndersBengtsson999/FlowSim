@@ -20,6 +20,8 @@ public static class ScenarioParameters
             ["Developers"] = s.DeveloperCount.ToString(), ["Testers"] = s.TesterCount.ToString(),
             ["Developer Capacity / Day"] = N(s.DeveloperCapacityPerDay), ["Tester Capacity / Day"] = N(s.TesterCapacityPerDay),
             ["Developer Availability"] = N(s.DeveloperAvailability * 100) + "%", ["Tester Availability"] = N(s.TesterAvailability * 100) + "%",
+            ["Specialists"] = N(s.Skills.Specialists),
+            ["Specialist Work Rate"] = N(s.Skills.SpecialistWorkRate * 100) + "%",
             ["Development Productivity"] = N(s.Productivity.Development) + "x",
             ["Code Review Productivity"] = N(s.Productivity.CodeReview) + "x",
             ["Testing Productivity"] = N(s.Productivity.Testing) + "x",

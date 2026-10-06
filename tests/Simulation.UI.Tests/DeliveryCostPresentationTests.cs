@@ -12,9 +12,14 @@ public sealed class DeliveryCostPresentationTests
         for(var i=0;i<50;i++)vm.Step();
         var row=vm.StatusPrimaryGroups.Single(r=>r.Label=="Cost/Item");
         Assert.NotEqual("—",row.Value);Assert.Contains("Development",row.Explanation);Assert.Contains("Debt repayment is excluded",row.Explanation);
+        Assert.Contains("System Cost / Done",row.Explanation);
+        Assert.DoesNotContain(vm.StatusPrimaryGroups,r=>r.Label.StartsWith("System"));
+        vm.TrendMetric=vm.TrendMetrics.Single(m=>m.Metric==LiveTrendMetric.SystemCost);
+        Assert.Equal("capacity units / done item",vm.TrendMetric.Unit);
         vm.TrendMetric=vm.TrendMetrics.Single(m=>m.Metric==LiveTrendMetric.DeliveryCost);
         Assert.Equal("capacity units / item",vm.TrendMetric.Unit);
         vm.BeginChange();vm.Draft.DevelopmentProductivity="2";vm.ApplyChanges();for(var i=0;i<20;i++)vm.Step();
+        Assert.Contains(vm.ComparisonRows,r=>r.Metric=="System Cost / Done Item · capacity units");
         Assert.Contains(vm.ComparisonRows,r=>r.Metric=="Delivery Cost / Done Item · capacity units");
         Assert.Contains(LivePerformancePresentation.Delivery(vm.Performance!),r=>r.Label=="Relative Delivery Cost / Done Item");
     }

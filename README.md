@@ -216,3 +216,9 @@ Explicit shortcuts reduce Development effort and create system-level debt on Dev
 ## Relative Delivery Cost v1
 
 Live now shows **Cost/Item**: actual Development, Code Review, Rework and Testing capacity consumed over the full lifecycle of items completed in the selected period. The existing tooltip, Performance Trend and Before/After show details. Debt repayment remains system-level and is excluded. This is a relative capacity measure, not financial cost. See [definitions, compatibility and verification](docs/RELATIVE_DELIVERY_COST.md).
+
+The [end-to-end interaction validation](docs/MODEL_INTERACTION_VALIDATION.md) reports four controlled scenarios covering productivity, flow, utilization, debt, repayment and delivery cost, with exact inputs, deterministic replay and daily conservation checks. No production changes were required.
+
+System Cost / Done Item: period-based capacity including debt repayment, alongside lifecycle Delivery Cost. See [definition and verification](docs/SYSTEM_COST.md).
+
+Skills & Specialists v1 (model 0.6): one Development capability, shared capacity/WIP, waiting trend, Live interventions and backward-compatible persistence. See [semantics and verification](docs/SKILLS_SPECIALISTS.md).

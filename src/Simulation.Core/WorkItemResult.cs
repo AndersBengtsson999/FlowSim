@@ -10,6 +10,7 @@ public sealed record WorkItemResult(string Id, string Name, WorkItemStatus Final
     IReadOnlyList<StateTransition> Transitions,
     double DevelopmentEffort, double CodeReviewEffort, double TestingEffort)
 {
+    public bool RequiresSpecialist { get; init; }
     public DeliveryCost? DeliveryCost { get; init; }
     public DevelopmentPlan? DevelopmentPlan { get; init; }
     public IReadOnlyList<WorkItemEvent> Events { get; init; } = Array.Empty<WorkItemEvent>();
