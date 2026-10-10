@@ -43,9 +43,9 @@ public sealed class InterventionEditorTests
     public void GroupsKeepEveryExistingBindingAndCalibrationSeparate()
     {
         using var vm = new LiveViewModel(); vm.Start(); vm.Pause(); vm.BeginChange();
-        Assert.Equal(new[] { "Team & Capacity", "Productivity", "Technical Debt", "WIP" }, vm.ChangeGroups.Select(g => g.Title));
+        Assert.Equal(new[] { "Team & Capacity", "Productivity", "Technical Debt", "WIP", "Dependencies" }, vm.ChangeGroups.Select(g => g.Title));
         Assert.Equal(vm.ChangeFields, vm.ChangeGroups.SelectMany(g => g.Fields));
-        Assert.Equal(17, vm.ChangeFields.Count);
+        Assert.Equal(19, vm.ChangeFields.Count);
         var values = new[] { "7", "2", "40", "4", "80", "90", "1.5", "1.2", "2", "20", "50", "15", "30", "8", "6", "4", "2" };
         for (var i = 0; i < values.Length; i++) vm.ChangeFields[i].Value = values[i];
         vm.AdvancedDebtChanges.Single().Value = "2.0";

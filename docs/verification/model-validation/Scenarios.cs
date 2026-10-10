@@ -49,7 +49,7 @@ public static class Scenarios
     public static Observation Observe(LiveSimulation live,string name)
     {
         var s=live.Session;var p=LivePerformance.Rolling(s,Window);var d=s.Days.Last();var days=s.Days.Where(x=>x.Day+1>=p.FirstDay).ToArray();
-        return new(name,s.CurrentDay,p.FirstDay,p.LastDay,s.WorkItems.Count(w=>w.State==WorkItemStatus.Done),p.Completed,
+        return new(name,s.CurrentDay,p.FirstDay,p.LastDay,s.WorkItems.Count(w=>w.State.IsDelivered()),p.Completed,
             p.Throughput,p.CycleTime,p.AverageWip,d.TotalWip,p.Review.Average,p.Review.Current,p.Testing.Average,p.Testing.Current,
             p.DeveloperUtilization,p.TesterUtilization,s.DebtState.Amount,s.DebtState.Ratio,s.DebtState.Overhead(s.Configuration.Debt),
             p.DeliveryCostPerDoneItem,p.AverageDeliveryCost,days.Sum(x=>x.UsedDevelopmentCapacity),days.Sum(x=>x.DevelopmentWork),

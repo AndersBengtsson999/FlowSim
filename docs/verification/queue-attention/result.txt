@@ -1,0 +1,87 @@
+baseline: Waiting for Code Review: QueueAttention { Count = 2, Scale = 3, ScaleName = Code Review WIP limit, Slope = −0,005263157894736845, RelativeSize = 0,6666666666666666, TrendText = Stable (-0,005 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 2 →, Detail = 2 items waiting
+Trend: Stable (-0,005 items/day)
+Relative queue: 0,7× normalization scale (3). Reference: Code Review WIP limit = 3.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+baseline: Waiting for Testing: QueueAttention { Count = 0, Scale = 3, ScaleName = Testing WIP limit, Slope = −0,011278195488721804, RelativeSize = 0, TrendText = Stable (-0,011 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 0 →, Detail = 0 items waiting
+Trend: Stable (-0,011 items/day)
+Relative queue: 0,0× normalization scale (3). Reference: Testing WIP limit = 3.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+baseline: Ready for Release: QueueAttention { Count = 0, Scale = 5, ScaleName = Development WIP limit (unlimited release), Slope = 0, RelativeSize = 0, TrendText = Stable (0,000 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 0 →, Detail = 0 items waiting
+Trend: Stable (0,000 items/day)
+Relative queue: 0,0× normalization scale (5). Reference: Development WIP limit (unlimited release) = 5.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+baseline: chart Y=559, height=210
+testing: Waiting for Code Review: QueueAttention { Count = 2, Scale = 3, ScaleName = Code Review WIP limit, Slope = −0,005263157894736845, RelativeSize = 0,6666666666666666, TrendText = Stable (-0,005 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 2 →, Detail = 2 items waiting
+Trend: Stable (-0,005 items/day)
+Relative queue: 0,7× normalization scale (3). Reference: Code Review WIP limit = 3.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+testing: Waiting for Testing: QueueAttention { Count = 68, Scale = 3, ScaleName = Testing WIP limit, Slope = 0,7255639097744361, RelativeSize = 22,666666666666668, TrendText = Rising (+0,726 items/day), Arrow = ↑, State = Strong, Attention = False, Strong = True, Label = Strong accumulation, Summary = 68 ↑, Detail = 68 items waiting · Strong accumulation
+Trend: Rising (+0,726 items/day)
+Relative queue: 22,7× normalization scale (3). Reference: Testing WIP limit = 3.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+testing: Ready for Release: QueueAttention { Count = 0, Scale = 5, ScaleName = Development WIP limit (unlimited release), Slope = 0, RelativeSize = 0, TrendText = Stable (0,000 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 0 →, Detail = 0 items waiting
+Trend: Stable (0,000 items/day)
+Relative queue: 0,0× normalization scale (5). Reference: Development WIP limit (unlimited release) = 5.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+testing: chart Y=559, height=210
+Recovery: QueueAttention { Count = 28, Scale = 30, ScaleName = Testing WIP limit, Slope = −1,4766917293233082, RelativeSize = 0,9333333333333333, TrendText = Falling (-1,477 items/day), Arrow = ↓, State = Neutral, Attention = False, Strong = False, Label = , Summary = 28 ↓, Detail = 28 items waiting
+Trend: Falling (-1,477 items/day)
+Relative queue: 0,9× normalization scale (30). Reference: Testing WIP limit = 30.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+release: Waiting for Code Review: QueueAttention { Count = 2, Scale = 3, ScaleName = Code Review WIP limit, Slope = −0,005263157894736845, RelativeSize = 0,6666666666666666, TrendText = Stable (-0,005 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 2 →, Detail = 2 items waiting
+Trend: Stable (-0,005 items/day)
+Relative queue: 0,7× normalization scale (3). Reference: Code Review WIP limit = 3.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+release: Waiting for Testing: QueueAttention { Count = 0, Scale = 3, ScaleName = Testing WIP limit, Slope = −0,011278195488721804, RelativeSize = 0, TrendText = Stable (-0,011 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 0 →, Detail = 0 items waiting
+Trend: Stable (-0,011 items/day)
+Relative queue: 0,0× normalization scale (3). Reference: Testing WIP limit = 3.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+release: Ready for Release: QueueAttention { Count = 60, Scale = 0,2, ScaleName = configured release items/day, Slope = 0,6300751879699248, RelativeSize = 60, TrendText = Rising (+0,630 items/day), Arrow = ↑, State = Strong, Attention = False, Strong = True, Label = Strong accumulation, Summary = 60 ↑, Detail = 60 items waiting · Strong accumulation
+Trend: Rising (+0,630 items/day)
+Relative queue: 60,0× normalization scale (1). Reference: configured release items/day = 0,2. Normalization uses a minimum of 1 to avoid division by zero or fractional amplification.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+release: chart Y=559, height=210
+specialists: Development: QueueAttention { Count = 4, Scale = 1, ScaleName = specialists, Slope = −0,01578947368421053, RelativeSize = 4, TrendText = Stable (-0,016 items/day), Arrow = →, State = Strong, Attention = False, Strong = True, Label = Strong accumulation, Summary = 4 →, Detail = 4 items waiting · Strong accumulation
+Trend: Stable (-0,016 items/day)
+Relative queue: 4,0× normalization scale (1). Reference: specialists = 1.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+specialists: Waiting for Code Review: QueueAttention { Count = 0, Scale = 3, ScaleName = Code Review WIP limit, Slope = 0,004511278195488723, RelativeSize = 0, TrendText = Stable (+0,005 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 0 →, Detail = 0 items waiting
+Trend: Stable (+0,005 items/day)
+Relative queue: 0,0× normalization scale (3). Reference: Code Review WIP limit = 3.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+specialists: Waiting for Testing: QueueAttention { Count = 1, Scale = 3, ScaleName = Testing WIP limit, Slope = 0,010526315789473684, RelativeSize = 0,3333333333333333, TrendText = Stable (+0,011 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 1 →, Detail = 1 items waiting
+Trend: Stable (+0,011 items/day)
+Relative queue: 0,3× normalization scale (3). Reference: Testing WIP limit = 3.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+specialists: Ready for Release: QueueAttention { Count = 0, Scale = 5, ScaleName = Development WIP limit (unlimited release), Slope = 0, RelativeSize = 0, TrendText = Stable (0,000 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 0 →, Detail = 0 items waiting
+Trend: Stable (0,000 items/day)
+Relative queue: 0,0× normalization scale (5). Reference: Development WIP limit (unlimited release) = 5.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+specialists: chart Y=559, height=210
+attention: Waiting for Code Review: QueueAttention { Count = 2, Scale = 3, ScaleName = Code Review WIP limit, Slope = −0,005263157894736845, RelativeSize = 0,6666666666666666, TrendText = Stable (-0,005 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 2 →, Detail = 2 items waiting
+Trend: Stable (-0,005 items/day)
+Relative queue: 0,7× normalization scale (3). Reference: Code Review WIP limit = 3.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+attention: Waiting for Testing: QueueAttention { Count = 41, Scale = 30, ScaleName = Testing WIP limit, Slope = 0,7255639097744361, RelativeSize = 1,3666666666666667, TrendText = Rising (+0,726 items/day), Arrow = ↑, State = Attention, Attention = True, Strong = False, Label = Accumulating, Summary = 41 ↑, Detail = 41 items waiting · Accumulating
+Trend: Rising (+0,726 items/day)
+Relative queue: 1,4× normalization scale (30). Reference: Testing WIP limit = 30.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+attention: Ready for Release: QueueAttention { Count = 0, Scale = 5, ScaleName = Development WIP limit (unlimited release), Slope = 0, RelativeSize = 0, TrendText = Stable (0,000 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 0 →, Detail = 0 items waiting
+Trend: Stable (0,000 items/day)
+Relative queue: 0,0× normalization scale (5). Reference: Development WIP limit (unlimited release) = 5.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+attention: chart Y=559, height=210
+multiple: Waiting for Code Review: QueueAttention { Count = 2, Scale = 3, ScaleName = Code Review WIP limit, Slope = −0,005263157894736845, RelativeSize = 0,6666666666666666, TrendText = Stable (-0,005 items/day), Arrow = →, State = Neutral, Attention = False, Strong = False, Label = , Summary = 2 →, Detail = 2 items waiting
+Trend: Stable (-0,005 items/day)
+Relative queue: 0,7× normalization scale (3). Reference: Code Review WIP limit = 3.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+multiple: Waiting for Testing: QueueAttention { Count = 68, Scale = 3, ScaleName = Testing WIP limit, Slope = 0,7255639097744361, RelativeSize = 22,666666666666668, TrendText = Rising (+0,726 items/day), Arrow = ↑, State = Strong, Attention = False, Strong = True, Label = Strong accumulation, Summary = 68 ↑, Detail = 68 items waiting · Strong accumulation
+Trend: Rising (+0,726 items/day)
+Relative queue: 22,7× normalization scale (3). Reference: Testing WIP limit = 3.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+multiple: Ready for Release: QueueAttention { Count = 9, Scale = 0, ScaleName = configured release items/day, Slope = 0,11278195488721804, RelativeSize = 9, TrendText = Rising (+0,113 items/day), Arrow = ↑, State = Strong, Attention = False, Strong = True, Label = Strong accumulation, Summary = 9 ↑, Detail = 9 items waiting · Strong accumulation
+Trend: Rising (+0,113 items/day)
+Relative queue: 9,0× normalization scale (1). Reference: configured release items/day = 0. Normalization uses a minimum of 1 to avoid division by zero or fractional amplification.
+OLS uses the selected performance window. Attention: ≥2×, or ≥1× and increasing. Strong: ≥4×, or ≥2× and increasing. Expand or collapse Work Items with Enter/Space. }
+multiple: chart Y=559, height=210
+PASS baseline, testing, release, specialists, recovery, multiple queues and chart density.

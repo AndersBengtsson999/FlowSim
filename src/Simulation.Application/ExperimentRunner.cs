@@ -40,7 +40,7 @@ public static class ResultAnalysis
     private static ScenarioReport AnalyzeBase(SimulationResult result)
     {
         var horizon = result.Days.Count;
-        var unfinished = result.WorkItems.Where(w => w.CreatedDay < horizon && w.State != WorkItemStatus.Done).ToArray();
+        var unfinished = result.WorkItems.Where(w => w.CreatedDay < horizon && !w.State.IsDelivered()).ToArray();
         // Dependency-blocked at the horizon is supplied separately by the scenario-aware overload.
         var history = result.Days.Select(d => new StatusPoint(d.Day + 1,
             d.BacklogCount, d.DevelopmentCount, d.CodeReviewCount, d.TestingCount, d.DoneCount,
@@ -66,7 +66,7 @@ public static class ResultAnalysis
     public static ScenarioReport Analyze(SimulationResult result, SimulationScenario scenario)
     {
         var report = AnalyzeBase(result);
-        var done = result.WorkItems.Where(w => w.State == WorkItemStatus.Done).Select(w => w.Id).ToHashSet();
+        var done = result.WorkItems.Where(w => w.State.IsDelivered()).Select(w => w.Id).ToHashSet();
         var blockedIds = scenario.WorkItems.Where(w => w.Dependencies.Any(id => !done.Contains(id)))
             .Select(w => w.Id).ToHashSet();
         var blocked = result.WorkItems.Count(w => w.CreatedDay < scenario.SimulationDays

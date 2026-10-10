@@ -28,7 +28,7 @@ public sealed class LiveVisualPresentationTests
         var before = JsonSerializer.Serialize(vm.Live!.Capture());
         var a = vm.StatusPrimaryGroups; var b = vm.StatusSecondaryGroups;
         Assert.Equal("100", a.Single(g => g.Label == "Day").Value);
-        Assert.Equal(vm.LiveStatus!.Done.ToString(), a.Single(g => g.Label == "Done").Value);
+        Assert.Equal(vm.LiveStatus!.Done.ToString(), a.Single(g => g.Label == "Released").Value);
         Assert.Contains(LivePerformancePresentation.Percent(vm.LiveStatus.DeveloperUtilization), b.Single(g => g.Label == "Dev").Value);
         Assert.Contains("Unavailable", b.Single(g => g.Label == "Test").Value);
         Assert.Equal("Always available", b.Single(g => g.Label == "Work").Value);

@@ -5,7 +5,7 @@ namespace Simulation.Application;
 public enum LiveTrendMetric
 {
     Throughput, CycleTime, AverageWip, ReviewQueue, TestingQueue, ReworkQueue,
-    DeveloperUtilization, TesterUtilization, DevelopmentCapacity, DevelopmentWork, AvailableDevelopers, AvailableTesters, TechnicalDebtRatio, TechnicalDebt, DebtOverhead, DeliveryCost, SystemCost, SpecialistWorkWaiting
+    DeveloperUtilization, TesterUtilization, DevelopmentCapacity, DevelopmentWork, AvailableDevelopers, AvailableTesters, TechnicalDebtRatio, TechnicalDebt, DebtOverhead, DeliveryCost, SystemCost, SpecialistWorkWaiting, CompletionRate, DevelopmentCycleTime, ReleaseWaitTime, ReadyForRelease, WaitingForDependency
 }
 public sealed record LiveTrendMetricOption(LiveTrendMetric Metric, string Name, string Unit, bool Rolling);
 public sealed record LiveTrendPoint(int Day, double? Value);
@@ -16,11 +16,16 @@ public static class LivePerformanceTrend
 {
     public static IReadOnlyList<LiveTrendMetricOption> Metrics { get; } = Array.AsReadOnly(new[] {
         new LiveTrendMetricOption(LiveTrendMetric.Throughput, "Throughput / 5 days", "items / 5 days", true),
-        new(LiveTrendMetric.CycleTime, "Cycle Time", "simulated days", true),
-        new(LiveTrendMetric.DeliveryCost, "Delivery Cost / Done Item", "capacity units / item", true),
-        new(LiveTrendMetric.SystemCost, "System Cost / Done", "capacity units / done item", true),
+        new(LiveTrendMetric.CycleTime, "Delivery Cycle Time", "simulated days", true),
+        new(LiveTrendMetric.DeliveryCost, "Delivery Work Cost / Item", "capacity units / item", true),
+        new(LiveTrendMetric.SystemCost, "System Cost / Released Item", "capacity units / released item", true),
         new(LiveTrendMetric.AverageWip, "Average WIP", "items", true),
         new(LiveTrendMetric.SpecialistWorkWaiting, "Specialist Work Waiting", "items", false),
+        new(LiveTrendMetric.CompletionRate, "Completion Rate / 5 days", "items / 5 days", true),
+        new(LiveTrendMetric.DevelopmentCycleTime, "Development Cycle Time", "simulated days", true),
+        new(LiveTrendMetric.ReleaseWaitTime, "Release Wait Time", "simulated days", true),
+        new(LiveTrendMetric.WaitingForDependency, "Waiting for Dependency", "items", false),
+        new(LiveTrendMetric.ReadyForRelease, "Ready for Release", "items", false),
         new(LiveTrendMetric.ReviewQueue, "Waiting for Code Review", "items", false),
         new(LiveTrendMetric.TestingQueue, "Waiting for Testing", "items", false),
         new(LiveTrendMetric.ReworkQueue, "Waiting for Rework", "items", false),
@@ -47,6 +52,8 @@ public static class LivePerformanceTrend
         {
             var daily = days.Skip(first - 1).Select(d => new LiveTrendPoint(d.Day + 1, metric switch {
                 LiveTrendMetric.SpecialistWorkWaiting => d.SpecialistWorkWaiting,
+                LiveTrendMetric.WaitingForDependency => d.WaitingForDependencyCount,
+                LiveTrendMetric.ReadyForRelease => d.ReadyForReleaseCount,
                 LiveTrendMetric.ReviewQueue => d.WaitingForCodeReviewCount,
                 LiveTrendMetric.TestingQueue => d.WaitingForTestingCount,
                 LiveTrendMetric.ReworkQueue => d.WaitingForReworkCount,
@@ -62,13 +69,20 @@ public static class LivePerformanceTrend
         }
         var completed = new int[count + 1]; var cycles = new double[count + 1];
         var costs = new double[count + 1]; var unknownCosts = new int[count + 1];
-        if (metric is LiveTrendMetric.Throughput or LiveTrendMetric.CycleTime or LiveTrendMetric.DeliveryCost or LiveTrendMetric.SystemCost)
-            foreach (var item in session.WorkItems)
-                if (item.DoneDay is { } done && done > 0 && done <= count)
-                {
-                    completed[done]++; cycles[done] += done - item.DevelopmentStartedDay!.Value;
-                    if (item.DeliveryCost.IsComplete) costs[done] += item.DeliveryCost.Total; else unknownCosts[done]++;
-                }
+        var workCompleted = new int[count + 1]; var developmentCycles = new double[count + 1]; var releaseWait = new double[count + 1];
+        foreach (var item in session.WorkItems)
+        {
+            if (item.DoneDay is { } done && done > 0 && done <= count)
+            {
+                completed[done]++; cycles[done] += done - item.DevelopmentStartedDay!.Value;
+                releaseWait[done] += done - item.WorkCompletedDay!.Value;
+            }
+            if (item.WorkCompletedDay is { } ready && ready > 0 && ready <= count)
+            {
+                workCompleted[ready]++; developmentCycles[ready] += ready - item.DevelopmentStartedDay!.Value;
+                if (item.DeliveryCost.IsComplete) costs[ready] += item.DeliveryCost.Total; else unknownCosts[ready]++;
+            }
+        }
         var points = new List<LiveTrendPoint>(count - first + 1);
         var usedDev = new double[count + 1]; var availableDev = new double[count + 1];
         var usedTest = new double[count + 1]; var availableTest = new double[count + 1]; var wip = new double[count + 1];
@@ -86,6 +100,7 @@ public static class LivePerformanceTrend
             availableTest[i + 1] = availableTest[i] + d.AvailableTesterCapacity;
             wip[i + 1] = wip[i] + d.TotalWip;
             completed[i + 1] += completed[i]; cycles[i + 1] += cycles[i];
+            workCompleted[i + 1] += workCompleted[i]; developmentCycles[i + 1] += developmentCycles[i]; releaseWait[i + 1] += releaseWait[i];
             costs[i + 1] += costs[i]; unknownCosts[i + 1] += unknownCosts[i];
         }
         // Prefix differences retain the lookback before the visible range and exact zero-capacity windows.
@@ -93,11 +108,15 @@ public static class LivePerformanceTrend
         {
             var start = Math.Max(0, day - window); var duration = day - start;
             var completions = completed[day] - completed[start];
+            var readyCount = workCompleted[day] - workCompleted[start];
             double Sum(double[] values) => values[day] - values[start];
             double? value = metric switch {
                 LiveTrendMetric.Throughput => 5.0 * completions / duration,
                 LiveTrendMetric.CycleTime => completions == 0 ? null : Sum(cycles) / completions,
-                LiveTrendMetric.DeliveryCost => completions == 0 || unknownCosts[day] != unknownCosts[start] ? null : Sum(costs) / completions,
+                LiveTrendMetric.DeliveryCost => readyCount == 0 || unknownCosts[day] != unknownCosts[start] ? null : Sum(costs) / readyCount,
+                LiveTrendMetric.CompletionRate => 5.0 * readyCount / duration,
+                LiveTrendMetric.DevelopmentCycleTime => readyCount == 0 ? null : Sum(developmentCycles) / readyCount,
+                LiveTrendMetric.ReleaseWaitTime => completions == 0 ? null : Sum(releaseWait) / completions,
                 LiveTrendMetric.SystemCost => completions == 0 || unknownSystemCosts[day] != unknownSystemCosts[start] ? null : (Sum(usedDev) + Sum(usedTest)) / completions,
                 LiveTrendMetric.AverageWip => Sum(wip) / duration,
                 LiveTrendMetric.DeveloperUtilization => Sum(availableDev) > 0 ? 100 * Sum(usedDev) / Sum(availableDev) : null,

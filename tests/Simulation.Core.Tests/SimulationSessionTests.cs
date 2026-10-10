@@ -101,7 +101,7 @@ public sealed class SimulationSessionTests
         Assert.Equal(history, JsonSerializer.Serialize(s.WorkItems[0].Events));
         s.AdvanceOneDay(); Assert.Equal(WorkItemStatus.WaitingForRework, s.WorkItems[0].State);
         s.ApplyChanges(s.Configuration with { Quality = s.Configuration.Quality with { CodeReviewDefectProbability = 0 } });
-        Days(s, 10); Assert.Equal(WorkItemStatus.Done, s.WorkItems[0].State);
+        Days(s, 10); Assert.Equal(WorkItemStatus.Released, s.WorkItems[0].State);
         Assert.Single(s.WorkItems[0].Events, e => e.EventType == WorkItemEventType.DefectFound);
     }
     [Fact]

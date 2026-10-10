@@ -10,6 +10,9 @@ public sealed record WorkItemResult(string Id, string Name, WorkItemStatus Final
     IReadOnlyList<StateTransition> Transitions,
     double DevelopmentEffort, double CodeReviewEffort, double TestingEffort)
 {
+    public ResidualDependency? ResidualDependency { get; init; }
+    public int? ReadyForReleaseDay { get; init; }
+    public int? ReleasedDay { get; init; }
     public bool RequiresSpecialist { get; init; }
     public DeliveryCost? DeliveryCost { get; init; }
     public DevelopmentPlan? DevelopmentPlan { get; init; }
@@ -33,5 +36,7 @@ public sealed record WorkItemResult(string Id, string Name, WorkItemStatus Final
     public WorkItemStatus State => FinalState;
     public int? LeadTime => DoneDay - CreatedDay;
     public int? CycleTime => DoneDay - DevelopmentStartedDay;
-    public int WaitingTime => WaitingForCodeReviewTime + WaitingForTestingTime + WaitingForReworkTime;
+    public int? DevelopmentCycleTime => (ReadyForReleaseDay ?? DoneDay) - DevelopmentStartedDay;
+    public int? ReleaseWaitTime => DoneDay - (ReadyForReleaseDay ?? DoneDay);
+    public int WaitingTime => (ReleaseWaitTime ?? 0) + WaitingForCodeReviewTime + WaitingForTestingTime + WaitingForReworkTime;
 }

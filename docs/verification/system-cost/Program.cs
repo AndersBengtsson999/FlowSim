@@ -36,12 +36,12 @@ public sealed class SystemCostApp : Avalonia.Application
                 var scroll=view.GetVisualDescendants().OfType<ScrollViewer>().Single(s=>s.Name=="LiveScroll");
                 await Run(baseline,"baseline");
                 var cost=vm.Performance!.AverageDeliveryCost!;Check(cost==new DeliveryCost(5,1,0,2),"Baseline exact lifecycle breakdown");
-                foreach(var item in vm.Live!.Session.WorkItems.Where(w=>w.State==WorkItemStatus.Done).Take(3))
+                foreach(var item in vm.Live!.Session.WorkItems.Where(w=>w.State==WorkItemStatus.Released).Take(3))
                     Console.WriteLine($"Completed {item.Id}: Dev {item.DeliveryCost.Development}, Review {item.DeliveryCost.CodeReview}, Rework {item.DeliveryCost.Rework}, Test {item.DeliveryCost.Testing}, Total {item.DeliveryCost.Total}");
-                vm.Flow.Single(r=>r.State==WorkItemStatus.Done).IsExpanded=true;await Task.Delay(100);
+                vm.Flow.Single(r=>r.State==WorkItemStatus.Released).IsExpanded=true;await Task.Delay(100);
                 var itemText=view.GetVisualDescendants().OfType<TextBlock>().First(t=>t.Text?.StartsWith("LIVE-")==true && ToolTip.GetTip(t)?.ToString()?.Contains("Observed item capacity")==true);
                 Check(ToolTip.GetTip(itemText)!.ToString()!.Contains("Total"),"Completed item tooltip breakdown");
-                vm.Flow.Single(r=>r.State==WorkItemStatus.Done).IsExpanded=false;
+                vm.Flow.Single(r=>r.State==WorkItemStatus.Released).IsExpanded=false;
                 await Run(baseline with{Productivity=new(2,1,1)},"productivity");
                 Check(vm.Performance!.AverageDeliveryCost==new DeliveryCost(2.5,1,0,2),"Productivity reduces consumed cost to 2.5/5.5");
                 await Run(baseline with{Quality=new(){Enabled=true,CodeReviewDefectProbability=.4,TestingDefectProbability=.2}},"rework");
@@ -65,7 +65,7 @@ public sealed class SystemCostApp : Avalonia.Application
                     var label=view.GetVisualDescendants().OfType<TextBlock>().Single(t=>t.Text=="Cost/Item");
                     var group=label.GetVisualAncestors().OfType<StackPanel>().First();
                     Check(ToolTip.GetTip(group)?.ToString()?.Contains("Development")==true,"Aggregate tooltip uses same completion cohort");
-                    Check(ToolTip.GetTip(group)!.ToString()!.Contains("System Cost / Done"), "System cost in tooltip");
+                    Check(ToolTip.GetTip(group)!.ToString()!.Contains("System Cost / Released Item"), "System cost in tooltip");
                     var withCost=chart.TranslatePoint(default,window)!.Value.Y;var height=chart.Bounds.Height;
                     group.IsVisible=false;window.UpdateLayout();var withoutCost=chart.TranslatePoint(default,window)!.Value.Y;
                     group.IsVisible=true;window.UpdateLayout();
@@ -78,8 +78,8 @@ public sealed class SystemCostApp : Avalonia.Application
                 vm.TargetDay="120";await vm.RunToDayAsync();
                 var comparison=view.GetVisualDescendants().OfType<Expander>().Single(e=>e.Header?.ToString()=="Before & After an intervention");
                 comparison.IsExpanded=true;await Task.Delay(150);comparison.BringIntoView();await Task.Delay(100);Save(window,"before-after");
-                Check(vm.ComparisonRows.Any(r=>r.Metric.StartsWith("Delivery Cost / Done Item")),"Before/After cost row");
-                Check(vm.ComparisonRows.Any(r=>r.Metric.StartsWith("System Cost / Done Item")),"Before/After system cost row");
+                Check(vm.ComparisonRows.Any(r=>r.Metric.StartsWith("Delivery Work Cost / Item")),"Before/After cost row");
+                Check(vm.ComparisonRows.Any(r=>r.Metric.StartsWith("System Cost / Released Item")),"Before/After system cost row");
                 Console.WriteLine("PASS native: baseline completed items, productivity, rework, collaboration, debt repayment exclusion, item/aggregate breakdowns, selected trend, Before/After and unchanged chart position/height.");
                 vm.Dispose();desktop.Shutdown(0);
                 async Task Run(SimulationRequest request,string name)

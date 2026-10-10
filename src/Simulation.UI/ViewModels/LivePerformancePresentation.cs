@@ -11,13 +11,13 @@ public static class LivePerformancePresentation
     public static string Percent(double? value) => value.HasValue ? $"{value:P0}" : "Unavailable";
     public static string CostDetails(DeliveryCost? cost) => cost is not { IsComplete: true }
         ? "Delivery cost unavailable: no completed items or incomplete historical capacity tracking."
-        : $"Completed items in the selected period; full lifecycle capacity units / item.\nDevelopment {cost.Development:0.##}\nCode Review {cost.CodeReview:0.##}\nRework {cost.Rework:0.##}\nTesting {cost.Testing:0.##}\nTotal {cost.Total:0.##}\nDebt repayment is excluded. Relative capacity, not financial cost.";
+        : $"Items reaching Ready for Release in the selected period; full lifecycle capacity units / item.\nDevelopment {cost.Development:0.##}\nCode Review {cost.CodeReview:0.##}\nRework {cost.Rework:0.##}\nTesting {cost.Testing:0.##}\nTotal {cost.Total:0.##}\nDebt repayment is excluded. Relative capacity, not financial cost.";
 
     public static string PeriodCostDetails(PerformancePeriod? period) =>
-        $"Delivery Cost / Item: {Number(period?.DeliveryCostPerDoneItem)}\nSystem Cost / Done: {Number(period?.SystemCostPerDoneItem)}\n"
+        $"Delivery Work Cost / Item: {Number(period?.DeliveryCostPerDoneItem)}\nSystem Cost / Released Item: {Number(period?.SystemCostPerDoneItem)}\n"
         + CostDetails(period?.AverageDeliveryCost)
         + (period?.ConsumedSystemCapacity is { } system
-            ? $"\nSystem capacity in selected period (includes unfinished work):\nDevelopment {system.Development:0.##} · Code Review {system.CodeReview:0.##} · Rework {system.Rework:0.##}\nTesting {system.Testing:0.##} · Debt Repayment {system.DebtRepayment:0.##}\nTotal {system.Total:0.##} / {period.Completed} Done. Debt repayment is included only in System Cost."
+            ? $"\nSystem capacity in selected period (includes unfinished work):\nDevelopment {system.Development:0.##} · Code Review {system.CodeReview:0.##} · Rework {system.Rework:0.##}\nTesting {system.Testing:0.##} · Debt Repayment {system.DebtRepayment:0.##}\nTotal {system.Total:0.##} / {period.Completed} Released. Debt repayment is included only in System Cost."
             : "\nSystem cost unavailable: no observed days or incomplete historical capacity tracking.");
 
     public static string Trend(double? slope) => slope is not double value ? "Unavailable · needs 3 days"
@@ -28,10 +28,14 @@ public static class LivePerformancePresentation
         + $" · {p.AvailableDays} of {p.ExpectedDays} days available";
 
     public static IReadOnlyList<MetricRow> Delivery(PerformancePeriod p) =>
-    [new("Recent Throughput", p.AvailableDays == 0 ? "Unavailable" : $"{p.Throughput:0.0} items / 5 days", "Completions in the period / observed days × 5."),
-     new("Recent Cycle Time", Number(p.CycleTime) + (p.CycleTime.HasValue ? " days" : ""), "Items completed in the period; full DevelopmentStartedDay to DoneDay, including time before the period."),
-     new("Relative Delivery Cost / Done Item", Number(p.DeliveryCostPerDoneItem), PeriodCostDetails(p)),
-     new("System Cost / Done Item", Number(p.SystemCostPerDoneItem), PeriodCostDetails(p))];
+    [new("Recent Throughput", p.AvailableDays == 0 ? "Unavailable" : $"{p.Throughput:0.0} items / 5 days", "Items Released in the period / observed days × 5."),
+     new("Delivery Cycle Time", Number(p.CycleTime) + (p.CycleTime.HasValue ? " days" : ""), "Items Released in the period; full Development Start to Released, including release waiting and time before the period."),
+     new("Delivery Work Cost / Item", Number(p.DeliveryCostPerDoneItem), PeriodCostDetails(p)),
+     new("System Cost / Released Item", Number(p.SystemCostPerDoneItem), PeriodCostDetails(p)),
+     new("Completion Rate", p.AvailableDays == 0 ? "Unavailable" : Number(p.CompletionRate) + " / 5 days", "Items reaching Ready for Release in the period / observed days × 5."),
+     new("Development Cycle Time", Number(p.DevelopmentCycleTime), "Items reaching Ready in the period; full Development Start to Ready duration."),
+     new("Release Wait Time", Number(p.ReleaseWaitTime), "Items Released in the period; full Ready to Released duration."),
+     new("Ready for Release", p.AvailableDays == 0 ? "Unavailable" : p.ReadyForRelease.Current.ToString(), "Latest observed end-of-day release queue.")];
 
     public static IReadOnlyList<MetricRow> Flow(PerformancePeriod p, bool rework)
     {
@@ -44,6 +48,7 @@ public static class LivePerformancePresentation
             p.AvailableDays == 0 ? "Unavailable" : $"Now {q.Current} · Avg {q.Average:0.0}\n{Trend(q.Trend)}",
             "Now: latest day. Avg: period average. Trend: OLS slope in items per simulated day."));
         Queue("Waiting for Code Review", p.Review); Queue("Waiting for Testing", p.Testing);
+        if (p.DependenciesRelevant) Queue("Waiting for Dependency", p.WaitingForDependency);
         if (rework) Queue("Waiting for Rework", p.Rework);
         return rows;
     }
@@ -69,9 +74,14 @@ public static class LivePerformancePresentation
                 delta is null ? "Unavailable" : percent ? $"{delta * 100:+0.0;-0.0;0.0} pp" : $"{delta:+0.0;-0.0;0.0}"));
         }
         Add("Throughput · items / 5 days", a.Throughput, b.Throughput);
-        Add("Cycle Time · days", a.CycleTime, b.CycleTime);
-        Add("Delivery Cost / Done Item · capacity units", a.DeliveryCostPerDoneItem, b.DeliveryCostPerDoneItem);
-        Add("System Cost / Done Item · capacity units", a.SystemCostPerDoneItem, b.SystemCostPerDoneItem);
+        Add("Delivery Cycle Time · days", a.CycleTime, b.CycleTime);
+        Add("Delivery Work Cost / Item · capacity units", a.DeliveryCostPerDoneItem, b.DeliveryCostPerDoneItem);
+        Add("System Cost / Released Item · capacity units", a.SystemCostPerDoneItem, b.SystemCostPerDoneItem);
+        Add("Completion Rate · items / 5 days", a.CompletionRate, b.CompletionRate);
+        Add("Development Cycle Time · days", a.DevelopmentCycleTime, b.DevelopmentCycleTime);
+        Add("Release Wait Time · days", a.ReleaseWaitTime, b.ReleaseWaitTime);
+        if (a.DependenciesRelevant || b.DependenciesRelevant) Add("Average Waiting for Dependency", a.WaitingForDependency.Average, b.WaitingForDependency.Average);
+        Add("Average Ready for Release", a.ReadyForRelease.Average, b.ReadyForRelease.Average);
         Add("Average WIP · items", a.AverageWip, b.AverageWip);
         Add("Average Code Review queue", a.Review.Average, b.Review.Average);
         Add("Average Testing queue", a.Testing.Average, b.Testing.Average);

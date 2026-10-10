@@ -91,7 +91,7 @@
         <TextBlock Grid.Column="1" Text="Name" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
         <TextBlock Grid.Column="2" Text="Final State" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
         <TextBlock Grid.Column="3" Text="Development Started" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
-        <TextBlock Grid.Column="4" Text="Done" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
+        <TextBlock Grid.Column="4" Text="Released" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
         <TextBlock Grid.Column="5" Text="Lead Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
         <TextBlock Grid.Column="6" Text="Cycle Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
         <TextBlock Grid.Column="7" Text="Active Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />

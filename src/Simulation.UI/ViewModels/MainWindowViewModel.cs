@@ -24,6 +24,15 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 
     // Inputs are parsed together on Run. Reset uses the same baseline factory as the engine demonstrations.
+    public IReadOnlyList<string> ReleaseModes { get; } = ["Flow-based", "Scheduled"];
+    private string releaseMode = "Flow-based";
+    public string ReleaseMode { get => releaseMode; set { releaseMode = value; NotifyAll(); } }
+    public bool ScheduledRelease => ReleaseMode == "Scheduled";
+    public string ReleaseCapacityUnit => ScheduledRelease ? "items/release" : "items/day";
+    public string ReleaseCapacity { get; set; } = ReleaseSettings.FormatCapacity(int.MaxValue);
+    public string ReleaseInterval { get; set; } = "5";
+    public string DependencyRate { get; set; } = "0";
+    public string DependencyWaitingDays { get; set; } = "0";
     public string Specialists { get; set; } = "0";
     public string SpecialistWorkRate { get; set; } = "0";
     public string NumberOfDevelopers { get; set; } = "";
@@ -99,7 +108,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         Metric("Work Items With Defects", r.WorkItemsWithDefects, "Distinct Work Items with at least one discovered defect, including incomplete items.", "0"),
         Metric("Total Rework Count", r.TotalReworkCount, "Rework episodes admitted to the active Rework stage; includes incomplete episodes, excludes defects still waiting for admission.", "0"),
         Metric("Total Rework Effort", r.TotalReworkEffort, "Developer capacity actually consumed by Rework across all items, including incomplete items. Not merely assigned effort.", suffix: " units"),
-        Metric("Average Rework Effort / Completed Item", r.AverageReworkEffortPerCompletedItem, "Actual Rework effort averaged over Done items only; 0 if none are Done.", suffix: " units"),
+        Metric("Average Rework Effort / Completed Item", r.AverageReworkEffortPerCompletedItem, "Actual Rework effort averaged over Released items (including legacy Done); 0 if none.", suffix: " units"),
         Metric("Rework Developer Capacity Share", r.ReworkDeveloperCapacityShare, "Rework capacity divided by total USED developer capacity (Development + Code Review + Rework + Technical Debt Work). Not divided by available capacity.", "P1"),
         Metric("Average Code Review Attempts", r.AverageCodeReviewAttempts, "Started Code Review attempts per created item, including incomplete attempts and items with zero attempts."),
         Metric("Average Testing Attempts", r.AverageTestingAttempts, "Started Testing attempts per created item, including incomplete attempts and items with zero attempts.")
@@ -158,15 +167,15 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     public IReadOnlyList<FlowStateRow> FlowStates => SelectedSnapshot is not { } d ? [] : FlowPresentation.Rows(d);
     public IReadOnlyList<MetricRow> Metrics => result is not { } r ? [] :
     [
-        Metric("Completed Work Items", r.CompletedWorkItems, "Number of Work Items that reached Done within the simulation horizon.", "0"),
+        Metric("Completed Work Items", r.CompletedWorkItems, "Number of Work Items Released within the horizon, including historical Done.", "0"),
         Metric("Throughput / 5 days", r.ThroughputPerFiveDays, "Average number of Work Items completed per five simulated working days. Includes idle days in the simulation horizon.", "0.000", " items / 5 days"),
-        Metric("Average Lead Time", r.AverageLeadTime, "Elapsed simulated time from when a Work Item enters the system until it reaches Done. Completed items only.", suffix: " working days"),
-        Metric("Average Cycle Time", r.AverageCycleTime, "Elapsed simulated time from Development admission until Done. Completed items only.", suffix: " working days"),
+        Metric("Average Lead Time", r.AverageLeadTime, "Elapsed simulated time from when a Work Item enters the system until Released. Completed items only.", suffix: " working days"),
+        Metric("Average Cycle Time", r.AverageCycleTime, "Elapsed simulated time from Development admission until Released. Completed items only.", suffix: " working days"),
         Metric("Average Active Time", r.AverageActiveTime, "Number of simulated days on which actual work capacity was applied to the Work Item. Each day counts once. Completed items only.", suffix: " working days"),
-        Metric("Average Waiting Time", r.AverageWaitingTime, "Full intervals waiting for Code Review, Testing or Rework admission, after start-of-day admissions. Excludes active-stage stalls and ordinary backlog wait. Completed items only.", suffix: " working days"),
-        Metric("Average Blocked Time", r.AverageBlockedTime, "Time an item could not start because dependencies were not Done. Excludes WIP-only backlog delay. Completed items only.", suffix: " working days"),
-        Metric("Average WIP", r.AverageWip, "Work In Progress: started but not Done items, including all waiting queues. Average of end-of-day counts over the whole simulation.", suffix: " items"),
-        Metric("Developer Utilization", r.DeveloperUtilization, "Share of all available developer capacity consumed by Development, Code Review and Rework. Includes idle days.", "P1"),
+        Metric("Average Waiting Time", r.AverageWaitingTime, "Full intervals waiting for Code Review, Testing or Rework admission, plus Ready-to-Released waiting. Excludes active-stage stalls and ordinary backlog wait. Completed items only.", suffix: " working days"),
+        Metric("Average Blocked Time", r.AverageBlockedTime, "Time an item could not start because dependencies had not reached Ready for Release (legacy Done). Excludes WIP-only backlog delay. Completed items only.", suffix: " working days"),
+        Metric("Average WIP", r.AverageWip, "Work In Progress: started but not Released items, including all waiting queues. Average of end-of-day counts over the whole simulation.", suffix: " items"),
+        Metric("Developer Utilization", r.DeveloperUtilization, "Share of all available developer capacity consumed by Development, Code Review, Rework and Debt Repayment. Release consumes none. Includes idle days.", "P1"),
         Metric("Tester Utilization", r.TesterUtilization, "Share of all available tester capacity consumed by Testing. Includes idle days.", "P1"),
         Metric("Maximum Waiting for Code Review Queue", r.MaximumWaitingForCodeReviewQueue, "Largest end-of-day count in Waiting for Code Review. This is not a within-day peak.", "0", " items"),
         Metric("Maximum Waiting for Testing Queue", r.MaximumWaitingForTestingQueue, "Largest end-of-day count in Waiting for Testing. This is not a within-day peak.", "0", " items")
@@ -208,6 +217,8 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         configuredName = BaselineScenario.CreateRequest().Name;
         var baseline = BaselineScenario.Create();
         var effort = baseline.WorkItems[0];
+        ReleaseMode = "Flow-based"; ReleaseCapacity = ReleaseSettings.FormatCapacity(int.MaxValue); ReleaseInterval = "5";
+        DependencyRate = DependencyWaitingDays = "0";
         Specialists = SpecialistWorkRate = "0";
         ShortcutRate = DebtRepayment = "0"; ShortcutEffortReduction = "30"; DebtTolerance = "10"; DebtCreationFactor = "1"; debtImpactFactor = 1;
         DevelopmentProductivity = CodeReviewProductivity = TestingProductivity = "1.00";
@@ -257,6 +268,8 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         if (isBusy) throw new InvalidOperationException("Wait for the running simulation before editing a comparison scenario.");
         configuredName = request.Name;
         string N(double n) => n.ToString(CultureInfo.InvariantCulture);
+        ReleaseMode = request.Release.Mode == Simulation.Core.ReleaseMode.Scheduled ? "Scheduled" : "Flow-based"; ReleaseCapacity = ReleaseSettings.FormatCapacity(request.Release.Capacity); ReleaseInterval = N(request.Release.Interval);
+        DependencyRate = N(request.ResidualDependencies.Rate * 100); DependencyWaitingDays = N(request.ResidualDependencies.MeanWaitingDays);
         Specialists = N(request.Skills.Specialists); SpecialistWorkRate = N(request.Skills.SpecialistWorkRate * 100);
         NumberOfDevelopers = N(request.DeveloperCount); NumberOfTesters = N(request.TesterCount);
         DeveloperAvailability = N(request.DeveloperAvailability * 100); TesterAvailability = N(request.TesterAvailability * 100);
@@ -364,6 +377,8 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     private SimulationRequest ReadRequest() => new()
     {
         Name = configuredName,
+        Release = new(ReleaseMode == "Scheduled" ? Simulation.Core.ReleaseMode.Scheduled : ReleaseMode == "Flow-based" ? Simulation.Core.ReleaseMode.FlowBased : throw new ScenarioValidationException("Invalid Release Mode."), ParseReleaseCapacity(ReleaseCapacity), Integer(ReleaseInterval, "Release Interval")),
+        ResidualDependencies = new(Number(DependencyRate, "Dependency Rate (%)") / 100, Number(DependencyWaitingDays, "Dependency Waiting Time (days)")),
         Skills = new(Integer(Specialists, "Specialists"), Number(SpecialistWorkRate, "Specialist Work Rate (%)") / 100),
         DeveloperCount = Integer(NumberOfDevelopers, "Developers"),
         TesterCount = Integer(NumberOfTesters, "Testers"),
@@ -400,6 +415,9 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         }
     };
 
+    private static int ParseReleaseCapacity(string text) =>
+        string.Equals(text.Trim(), "Unlimited", StringComparison.OrdinalIgnoreCase) ? int.MaxValue : Integer(text, "Release Capacity");
+
     private static int Integer(string text, string label) =>
         int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var value)
             ? value : throw new ArgumentException($"{label}: enter a whole number.");
@@ -422,14 +440,29 @@ public sealed record MetricRow(string Label, string Value, string Explanation);
 public sealed record FlowStateRow(string Name, int Count, string Kind, string Background, string Arrow) : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler? PropertyChanged;
+    public QueueAttention? Queue { get; init; }
+    public QueueAttention? SpecialistQueue { get; init; }
+    public bool QueueAttention => Queue?.Attention == true;
+    public bool QueueStrong => Queue?.Strong == true;
+    public bool SpecialistAttention => SpecialistQueue?.Attention == true;
+    public bool SpecialistStrong => SpecialistQueue?.Strong == true;
+    public string QueueCountText => Queue?.Summary ?? Count.ToString();
+    public string QueueHelp => Queue?.Detail ?? "Expand or collapse Work Items in this state";
+    public string AccessibleName => Name + ": " + (Queue?.Detail ?? Count.ToString());
+    public string SpecialistText => "Specialist waiting: " + (SpecialistQueue?.Summary ?? SpecialistWorkWaiting.ToString());
+    public string SpecialistHelp => "Active Specialist Development items with remaining effort and no Development capacity received during the latest day. " + SpecialistQueue?.Detail;
     private bool isExpanded;
-    public WorkItemStatus State => Enum.Parse<WorkItemStatus>(Name.Replace(" ", ""), ignoreCase: true);
+    public bool CompactQueueRows { get; init; }
+    public Avalonia.Thickness RowMargin => new(0, CompactQueueRows ? 0 : 1, 0, 1);
+    public double RowMinHeight => CompactQueueRows ? 23 : 27;
+    public bool IsDependencyQueue => Name == "Waiting for Dependency";
+    public WorkItemStatus State => IsDependencyQueue ? WorkItemStatus.Backlog : Enum.Parse<WorkItemStatus>(Name.Replace(" ", ""), ignoreCase: true);
     public int? WipLimit { get; init; }
     public bool HasWipLimit => WipLimit.HasValue;
     public int WipMaximum => WipLimit ?? 1;
     public string WipText => WipLimit is { } limit ? $"{Count} / {limit}" : "";
-    public bool IsWaiting => State is WorkItemStatus.WaitingForCodeReview or WorkItemStatus.WaitingForTesting or WorkItemStatus.WaitingForRework;
-    public bool IsCompleted => State == WorkItemStatus.Done;
+    public bool IsWaiting => IsDependencyQueue || State is WorkItemStatus.WaitingForCodeReview or WorkItemStatus.WaitingForTesting or WorkItemStatus.WaitingForRework or WorkItemStatus.ReadyForRelease;
+    public bool IsCompleted => State.IsDelivered();
     public bool IsDevelopment => State == WorkItemStatus.Development;
     public bool IsNotDevelopment => !IsDevelopment;
     public int SpecialistWorkWaiting { get; init; }
@@ -439,10 +472,12 @@ public sealed record FlowStateRow(string Name, int Count, string Kind, string Ba
     public double DevelopmentCapacityUsed { get; init; }
     public double EffectiveDevelopmentWork { get; init; }
     public string SupportingText => State switch {
+        WorkItemStatus.Backlog when IsDependencyQueue => Kind,
         WorkItemStatus.Development => "Active items",
         WorkItemStatus.CodeReview => "Shared developer pool",
         WorkItemStatus.Testing => "Tester capacity",
         WorkItemStatus.Rework => "Returns to Code Review",
+        WorkItemStatus.ReadyForRelease => Kind,
         WorkItemStatus.WaitingForRework => "Queue · feedback from inspections",
         _ when IsWaiting => "Queue · awaiting admission",
         _ => Kind

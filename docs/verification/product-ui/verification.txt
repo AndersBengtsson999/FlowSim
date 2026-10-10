@@ -1,0 +1,7 @@
+PLUS / XT-inspired UI refresh
+Black header, collapsible yellow navigation, warm neutral workspace, Flow Board stages, metric instruments with compact trends.
+Charts use authoritative LivePerformanceTrend.Project values, selected rolling window, last 20 simulated days, zero-anchored scale and preserved no-data gaps.
+Native verification covers setup, live, interventions (cancel is read-only), compare, scenario run, results, explore, settings, disclosure bindings and separate queue warning colors at 1280x900 and 960x760. Smaller windows scroll vertically; the sidebar can be hidden.
+163 UI tests passed; native verification passed; build has no warnings or errors.
+Core/Application/Infrastructure source hashes match the pre-design experiment snapshot.
+Reproduce: dotnet build docs/verification/product-ui/ProductUi.csproj -c Release -m:1 -nr:false; then dotnet docs/verification/product-ui/bin/Release/net10.0/ProductUi.dll

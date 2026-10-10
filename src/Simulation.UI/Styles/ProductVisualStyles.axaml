@@ -1,0 +1,29 @@
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+ <!-- Product identity is separate from the existing queue severity palette. -->
+ <Style Selector="TextBlock"><Setter Property="Foreground" Value="#20201C"/></Style>
+ <Style Selector="TextBlock.note, TextBlock.liveSecondary, TextBlock.metricLabel"><Setter Property="Foreground" Value="#60605A"/></Style>
+ <Style Selector="TextBlock.section, TextBlock.liveSection"><Setter Property="Foreground" Value="#171714"/></Style>
+ <Style Selector="Border.card, Border.livePanel"><Setter Property="BorderBrush" Value="#DEDED7"/><Setter Property="BorderThickness" Value="1"/><Setter Property="CornerRadius" Value="5"/></Style>
+ <Style Selector="Border.instrument"><Setter Property="Background" Value="White"/><Setter Property="BorderBrush" Value="#DEDED7"/><Setter Property="BorderThickness" Value="1,1,1,3"/><Setter Property="Padding" Value="12,8"/><Setter Property="Margin" Value="0,0,6,6"/><Setter Property="CornerRadius" Value="4"/></Style>
+ <Style Selector="Border.sectionBand"><Setter Property="Background" Value="#FFEB00"/><Setter Property="Padding" Value="12,7"/><Setter Property="CornerRadius" Value="4"/></Style>
+ <Style Selector="Button"><Setter Property="CornerRadius" Value="4"/></Style>
+ <Style Selector="Button.primary, WrapPanel#LiveToolbar Button.primary"><Setter Property="Background" Value="#FFEB00"/><Setter Property="Foreground" Value="#111111"/><Setter Property="FontWeight" Value="SemiBold"/><Setter Property="BorderBrush" Value="#CFBE00"/><Setter Property="BorderThickness" Value="1"/></Style>
+ <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter"><Setter Property="Background" Value="#EADD21"/><Setter Property="Foreground" Value="#111111"/></Style>
+ <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter"><Setter Property="Background" Value="#D4C300"/><Setter Property="Foreground" Value="#111111"/></Style>
+ <Style Selector="Button.sideNav"><Setter Property="HorizontalAlignment" Value="Stretch"/><Setter Property="HorizontalContentAlignment" Value="Left"/><Setter Property="Padding" Value="10,12"/><Setter Property="Margin" Value="0"/><Setter Property="Background" Value="Transparent"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Foreground" Value="#111111"/><Setter Property="FontSize" Value="14"/></Style>
+ <Style Selector="Button.sideNav.selected"><Setter Property="Background" Value="#171714"/><Setter Property="Foreground" Value="White"/><Setter Property="FontWeight" Value="SemiBold"/></Style>
+ <Style Selector="Button.sideNav:pointerover /template/ ContentPresenter#PART_ContentPresenter"><Setter Property="Background" Value="#E2D000"/><Setter Property="Foreground" Value="#111111"/></Style>
+ <Style Selector="Button.sideNav.selected:pointerover /template/ ContentPresenter#PART_ContentPresenter"><Setter Property="Background" Value="#35352E"/><Setter Property="Foreground" Value="White"/></Style>
+ <Style Selector="Button.sideNav:disabled /template/ ContentPresenter#PART_ContentPresenter"><Setter Property="Background" Value="Transparent"/><Setter Property="Foreground" Value="#756D00"/></Style>
+ <Style Selector="Button.headerButton"><Setter Property="Background" Value="Transparent"/><Setter Property="Foreground" Value="White"/><Setter Property="BorderBrush" Value="#55554C"/><Setter Property="BorderThickness" Value="1"/><Setter Property="Margin" Value="0,0,12,0"/><Setter Property="Padding" Value="12,7"/></Style>
+ <Style Selector="Button.headerButton:pointerover /template/ ContentPresenter#PART_ContentPresenter"><Setter Property="Background" Value="#33332D"/><Setter Property="Foreground" Value="White"/></Style>
+ <Style Selector="Button:focus-visible /template/ ContentPresenter#PART_ContentPresenter"><Setter Property="BorderBrush" Value="#156C91"/><Setter Property="BorderThickness" Value="2"/></Style>
+ <Style Selector="ToggleButton.flowDisclosure.active"><Setter Property="Background" Value="#E8EDEB"/></Style>
+ <Style Selector="ToggleButton.flowDisclosure.completed"><Setter Property="Background" Value="#E6F0E9"/></Style>
+ <Style Selector="ToggleButton.flowDisclosure.waiting"><Setter Property="Background" Value="#FFFFFF"/></Style>
+ <Style Selector="ToggleButton.flowDisclosure.queueAttention"><Setter Property="Background" Value="{DynamicResource QueueAttentionBrush}"/></Style>
+ <Style Selector="ToggleButton.flowDisclosure.queueStrong"><Setter Property="Background" Value="{DynamicResource QueueStrongBrush}"/></Style>
+ <Style Selector="ProgressBar.wipGauge"><Setter Property="Foreground" Value="#44695A"/><Setter Property="Background" Value="#C9D6CD"/></Style>
+ <Style Selector="Expander.liveAnalysis /template/ ToggleButton"><Setter Property="Background" Value="#FFEB00"/><Setter Property="Foreground" Value="#111111"/></Style>
+ <Style Selector="Expander#SetupSection"><Setter Property="Background" Value="White"/><Setter Property="BorderBrush" Value="#DEDED7"/></Style>
+</Styles>

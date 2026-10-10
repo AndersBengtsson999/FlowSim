@@ -42,8 +42,8 @@ public sealed class LiveSimulation
             w.RemainingCodeReviewEffort, w.RemainingTestingEffort, 0, 0, 0, w.CreatedDay, w.State, false) { RequiresSpecialist = w.RequiresSpecialist }).ToArray(), 0, 0);
     public QueueInspection Inspect(WorkItemStatus state)
     {
-        var items = Session.WorkItems.Where(w => w.State == state && w.CreatedDay <= Math.Max(0, Session.CurrentDay - 1)).ToArray();
-        var oldest = items.Length == 0 ? 0 : items.Max(w => Session.CurrentDay - (w.Transitions.LastOrDefault(t => t.To == state)?.Day ?? w.CreatedDay));
+        var items = Session.WorkItems.Where(w => (w.State == state || state == WorkItemStatus.Released && w.State == WorkItemStatus.Done) && w.CreatedDay <= Math.Max(0, Session.CurrentDay - 1)).ToArray();
+        var oldest = items.Length == 0 ? 0 : items.Max(w => Session.CurrentDay - (w.State.IsDelivered() ? w.DoneDay ?? w.CreatedDay : w.Transitions.LastOrDefault(t => t.To == state)?.Day ?? w.CreatedDay));
         return new(items.Length, oldest, Array.AsReadOnly(items.Take(8).Select(w => w.Id).ToArray()));
     }
     public LiveSimulation(SimulationSession session) => Session = session;
@@ -80,7 +80,7 @@ public sealed class LiveSimulation
         var config = new SessionConfiguration(new(request.DeveloperCount, request.TesterCount, request.DeveloperCapacityPerDay, request.TesterCapacityPerDay) { DeveloperAvailability = request.DeveloperAvailability, TesterAvailability = request.TesterAvailability },
             request.DevelopmentWipLimit, request.CodeReviewWipLimit, request.TestingWipLimit)
         {
-            Skills = request.Skills, Quality = request.Quality, Productivity = request.Productivity, Debt = request.Debt, ArrivalMode = arrivalMode, WorkItemsPerDay = rate,
+            ResidualDependencies = request.ResidualDependencies, Release = request.Release, Skills = request.Skills, Quality = request.Quality, Productivity = request.Productivity, Debt = request.Debt, ArrivalMode = arrivalMode, WorkItemsPerDay = rate,
             DevelopmentEffort = request.DevelopmentDistribution ?? new FixedEffort(request.DevelopmentEffort),
             CodeReviewEffort = request.CodeReviewDistribution ?? new FixedEffort(request.CodeReviewEffort),
             TestingEffort = request.TestingDistribution ?? new FixedEffort(request.TestingEffort)

@@ -1,0 +1,22 @@
+PASS statistics checks; summary, paired differences, bands, regimes and figures written.
+B − A
+Throughput {'Mean': 0.9, 'CI95Low': 0.9, 'CI95High': 0.9, 'Increase': 30, 'Decrease': 0, 'Unchanged': 0}
+DeliveryWorkCost {'Mean': -2.453125, 'CI95Low': -2.453125, 'CI95High': -2.453125, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0}
+DeliveryCycleTime {'Mean': 75.625854, 'CI95Low': 75.625854, 'CI95High': 75.625854, 'Increase': 30, 'Decrease': 0, 'Unchanged': 0}
+TestingQueue {'Mean': 110.68, 'CI95Low': 110.68, 'CI95High': 110.68, 'Increase': 30, 'Decrease': 0, 'Unchanged': 0}
+SpecialistQueue {'Mean': 0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30}
+DebtRatio {'Mean': 0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30}
+C − A
+Throughput {'Mean': -0.29, 'CI95Low': -0.531866, 'CI95High': -0.048134, 'Increase': 8, 'Decrease': 20, 'Unchanged': 2}
+DeliveryWorkCost {'Mean': -1.848431, 'CI95Low': -1.916235, 'CI95High': -1.780628, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0}
+DeliveryCycleTime {'Mean': 2.5672, 'CI95Low': 2.268165, 'CI95High': 2.866235, 'Increase': 30, 'Decrease': 0, 'Unchanged': 0}
+TestingQueue {'Mean': 0.149333, 'CI95Low': -0.042022, 'CI95High': 0.340688, 'Increase': 14, 'Decrease': 15, 'Unchanged': 1}
+SpecialistQueue {'Mean': 2.065333, 'CI95Low': 1.83222, 'CI95High': 2.298446, 'Increase': 30, 'Decrease': 0, 'Unchanged': 0}
+DebtRatio {'Mean': 0.018478, 'CI95Low': 0.013149, 'CI95High': 0.023807, 'Increase': 25, 'Decrease': 0, 'Unchanged': 5}
+D − C
+Throughput {'Mean': 1.19, 'CI95Low': 0.948134, 'CI95High': 1.431866, 'Increase': 29, 'Decrease': 0, 'Unchanged': 1}
+DeliveryWorkCost {'Mean': -0.225859, 'CI95Low': -0.278604, 'CI95High': -0.173114, 'Increase': 2, 'Decrease': 28, 'Unchanged': 0}
+DeliveryCycleTime {'Mean': 5.59132, 'CI95Low': 4.576027, 'CI95High': 6.606614, 'Increase': 29, 'Decrease': 1, 'Unchanged': 0}
+TestingQueue {'Mean': 7.703333, 'CI95Low': 6.709108, 'CI95High': 8.697559, 'Increase': 30, 'Decrease': 0, 'Unchanged': 0}
+SpecialistQueue {'Mean': -1.730667, 'CI95Low': -1.939836, 'CI95High': -1.521497, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0}
+DebtRatio {'Mean': 0.032741, 'CI95Low': 0.02716, 'CI95High': 0.038321, 'Increase': 29, 'Decrease': 1, 'Unchanged': 0}

@@ -1,0 +1,4 @@
+PASS native A: visible bound queue counts, arrows and rolling period.
+PASS native B: visible bound queue counts, arrows and rolling period.
+PASS native C: visible bound queue counts, arrows and rolling period.
+PASS native D: visible bound queue counts, arrows and rolling period.

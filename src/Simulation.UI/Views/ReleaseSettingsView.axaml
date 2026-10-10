@@ -1,0 +1,9 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" x:Class="Simulation.UI.Views.ReleaseSettingsView" x:DataType="vm:MainWindowViewModel">
+ <StackPanel Spacing="8" Margin="8">
+  <Grid ColumnDefinitions="*,150,110"><TextBlock Text="Release Mode" VerticalAlignment="Center"/><ComboBox HorizontalAlignment="Stretch" Grid.Column="1" ItemsSource="{Binding ReleaseModes}" SelectedItem="{Binding ReleaseMode, Mode=TwoWay}" AutomationProperties.Name="Release Mode"/></Grid>
+  <Grid ColumnDefinitions="*,150,110"><TextBlock Text="Release Capacity" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding ReleaseCapacity, Mode=TwoWay}" AutomationProperties.Name="Release Capacity"/><TextBlock Grid.Column="2" Text="{Binding ReleaseCapacityUnit}" Margin="8,0" VerticalAlignment="Center"/></Grid>
+  <Grid ColumnDefinitions="*,150,110" IsVisible="{Binding ScheduledRelease}"><TextBlock Text="Release Interval" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding ReleaseInterval, Mode=TwoWay}" AutomationProperties.Name="Release Interval"/><TextBlock Grid.Column="2" Text="days" Margin="8,0" VerticalAlignment="Center"/></Grid>
+  <TextBlock Text="Enter a whole number or Unlimited. Set capacity to 0 to pause releases." TextWrapping="Wrap" FontSize="11" Opacity="0.7"/>
+  <TextBlock IsVisible="{Binding ScheduledRelease}" Text="Release days follow the simulation calendar: an interval of 5 means days 5, 10, 15…" TextWrapping="Wrap" FontSize="11" Opacity="0.7"/>
+ </StackPanel>
+</UserControl>

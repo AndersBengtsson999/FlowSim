@@ -168,3 +168,11 @@ The [compact intervention editor](INTERVENTION_EDITOR.md) groups parameters in a
 Optional intervention labels provide context in Latest change, Performance Trend marker tooltips, the Changes list and the Before/After selector alongside factual parameter changes. Labels are trimmed, optional metadata and do not affect execution. See [label verification](INTERVENTION_LABELS.md).
 
 Relative Delivery Cost v1 adds **Cost/Item** to the existing compact status row, with component averages in its tooltip, a selectable **Delivery Cost / Done Item** trend and a Before/After row. Completion dates select the period population; full lifecycle consumed capacity supplies the cost. Older items lacking full cost tracking show unavailable. See [cost measurement and compatibility](RELATIVE_DELIVERY_COST.md).
+
+## Release / Deployment (model 0.7)
+
+Live now ends in Ready for Release → Released. Configure Flow-based items/day or Scheduled items/release and interval in the existing Configuration and Change surfaces. Primary throughput/cycle time follow Released; work-completion metrics follow Ready. No extra chart or permanent release card is added. Legacy Done data is retained as historical delivered output. See [release definitions and verification](RELEASE_DEPLOYMENT.md).
+
+Queue visibility uses read-only normalized size and the existing OLS trend to highlight waiting rows without extra layout height. See [Queue Visibility & Accumulation Highlighting](QUEUE_VISIBILITY.md) for rules and verification.
+
+[Dependencies v1](DEPENDENCIES.md) uses arrival-time assignments and a derived Backlog subset, without consuming active WIP or capacity. Configuration changes affect future arrivals only.

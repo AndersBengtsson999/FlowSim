@@ -38,7 +38,7 @@ public sealed class FlowDisclosureTests
             var current = string.Join(",", vm.Flow.Single(r => r.State == WorkItemStatus.Development).VisibleItems.Select(i => i.Id));
             idsChanged |= day > 0 && previous != current; previous = current;
         }
-        Assert.True(idsChanged); Assert.Equal(9, vm.Flow.Count);
+        Assert.True(idsChanged); Assert.Equal(10, vm.Flow.Count);
     }
 
     [Fact]

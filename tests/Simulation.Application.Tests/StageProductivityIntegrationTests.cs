@@ -81,7 +81,7 @@ public sealed class StageProductivityIntegrationTests
         var baseline=new ScenarioDefinition(Guid.NewGuid(),Request);var changed=new ScenarioDefinition(Guid.NewGuid(),Request with{Productivity=new(1.5,1.2,1.4)});
         Assert.Equal(changed,ExperimentJson.LoadScenario(ExperimentJson.SaveScenario(changed)));
         var e=new Experiment(Guid.NewGuid(),"Productivity","User assumptions",new[]{baseline,changed},baseline.Id,new());
-        var loaded=ExperimentJson.LoadExperiment(ExperimentJson.SaveExperiment(e));Assert.Equal(changed,loaded.Scenarios[1]);Assert.Equal("0.6",loaded.SimulationModelVersion);
+        var loaded=ExperimentJson.LoadExperiment(ExperimentJson.SaveExperiment(e));Assert.Equal(changed,loaded.Scenarios[1]);Assert.Equal("0.8",loaded.SimulationModelVersion);
         var a=ScenarioParameters.Describe(baseline.Configuration);var b=ScenarioParameters.Describe(changed.Configuration);
         Assert.Equal(new[]{"Code Review Productivity","Development Productivity","Testing Productivity"},a.Keys.Where(k=>a[k]!=b[k]).Order().ToArray());
         var live=LiveSimulation.Start(changed.Configuration,WorkArrivalMode.AlwaysAvailable);Until(live,25);live.CreateCheckpoint("Non-default");

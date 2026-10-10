@@ -1,4 +1,4 @@
-<Window xmlns="https://github.com/avaloniaui" xmlns:charts="using:Simulation.UI.Controls" xmlns:views="using:Simulation.UI.Views" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Simulation.UI.Views.MainWindow" x:DataType="vm:MainWindowViewModel" Title="Software Development Simulation" Width="1240" Height="900" MinWidth="960" MinHeight="680" Background="#F3F6FA">
+<Window xmlns="https://github.com/avaloniaui" xmlns:charts="using:Simulation.UI.Controls" xmlns:views="using:Simulation.UI.Views" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Simulation.UI.Views.MainWindow" x:DataType="vm:MainWindowViewModel" Title="Software Development Simulation" Width="1240" Height="900" MinWidth="960" MinHeight="680" Background="#F4F4F0">
  <Window.Resources>
   <vm:PresentationLabels x:Key="HumanLabel" />
   <DataTemplate x:Key="ChangeField" x:DataType="vm:SimpleChangeField">
@@ -9,7 +9,7 @@
    </Grid>
   </DataTemplate>
   <DataTemplate x:Key="ResultCard" x:DataType="vm:MetricRow">
-   <Border Background="White" Padding="22" Margin="0,0,16,16" Width="390" MinHeight="136" CornerRadius="6" ToolTip.Tip="{Binding Explanation}">
+   <Border Background="White" Padding="22" Margin="0,0,16,16" Width="350" MinHeight="136" CornerRadius="6" ToolTip.Tip="{Binding Explanation}">
     <StackPanel Spacing="10">
      <TextBlock Text="{Binding Label}" FontWeight="SemiBold" />
      <TextBlock Text="{Binding Value}" FontSize="23" TextWrapping="Wrap" />
@@ -17,7 +17,7 @@
    </Border>
   </DataTemplate>
   <DataTemplate x:Key="CompareCard" x:DataType="vm:SimpleMetric">
-   <Border Background="White" Padding="18" Margin="0,0,16,16" Width="390" MinHeight="190" CornerRadius="6" ToolTip.Tip="{Binding Explanation}">
+   <Border Background="White" Padding="18" Margin="0,0,16,16" Width="350" MinHeight="190" CornerRadius="6" ToolTip.Tip="{Binding Explanation}">
     <StackPanel Spacing="8">
      <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
      <Grid ColumnDefinitions="*,16,*">
@@ -40,10 +40,6 @@
    <Setter Property="Padding" Value="14,10" />
    <Setter Property="Margin" Value="0,0,8,6" />
   </Style>
-  <Style Selector="Button.primary">
-   <Setter Property="Background" Value="#176A78" />
-   <Setter Property="Foreground" Value="White" />
-  </Style>
   <Style Selector="TextBlock.section">
    <Setter Property="FontSize" Value="18" />
    <Setter Property="FontWeight" Value="SemiBold" />
@@ -62,24 +58,42 @@
    <Setter Property="FontSize" Value="25" />
    <Setter Property="FontWeight" Value="SemiBold" />
   </Style>
-  <Style Selector="Grid#Workspace"><Setter Property="Margin" Value="28"/></Style>
-  <Style Selector="TextBlock#ApplicationTitle"><Setter Property="FontWeight" Value="Bold"/><Setter Property="Foreground" Value="#173B50"/><Setter Property="FontSize" Value="28"/><Setter Property="Margin" Value="0,0,0,20"/></Style>
-  <Style Selector="Grid#NavigationRow"><Setter Property="Margin" Value="0,0,0,16"/></Style>
-  <Style Selector="Grid#Workspace.compactLive"><Setter Property="Margin" Value="16"/></Style>
-  <Style Selector="Grid.compactLive TextBlock#ApplicationTitle"><Setter Property="FontSize" Value="18"/><Setter Property="Margin" Value="0,0,0,6"/></Style>
-  <Style Selector="Grid.compactLive Grid#NavigationRow"><Setter Property="Margin" Value="0,0,0,4"/></Style>
-  <Style Selector="Grid.compactLive Grid#NavigationRow Button"><Setter Property="Padding" Value="12,6"/></Style>
   <StyleInclude Source="/Styles/LiveVisualStyles.axaml"/>
+  <StyleInclude Source="/Styles/ProductVisualStyles.axaml"/>
  </Window.Styles>
- <Grid Name="Workspace" Classes.compactLive="{Binding LiveVisible}" RowDefinitions="Auto,Auto,Auto,*,Auto" DataContext="{Binding Simple}" x:DataType="vm:SimpleWorkflowViewModel">
-  <TextBlock Name="ApplicationTitle" Text="Software Development Simulation" />
-  <Grid Name="NavigationRow" Grid.Row="1" ColumnDefinitions="*,Auto">
-   <WrapPanel Name="PrimaryNavigation">
-    <Button Content="Live" Command="{Binding OpenLiveCommand}" Classes.primary="{Binding LiveVisible}" AutomationProperties.Name="Navigate Live" />
-    <Button Content="Analyze" Command="{Binding OpenAnalyzeCommand}" Classes.primary="{Binding AnalyzeVisible}" AutomationProperties.Name="Navigate Analyze" />
-   </WrapPanel>
-   <Button Grid.Column="1" Content="Advanced" ToolTip.Tip="Specialist settings, reproducibility, uncertainty and diagnostics" Command="{Binding AdvancedCommand}" Classes.primary="{Binding AdvancedVisible}" AutomationProperties.Name="Navigate Advanced" />
-  </Grid>
+ <Grid RowDefinitions="64,*" DataContext="{Binding Simple}" x:DataType="vm:SimpleWorkflowViewModel">
+  <Border Background="#111111" Padding="18,0">
+   <Grid ColumnDefinitions="Auto,*,Auto">
+    <Button Name="NavigationToggle" Content="≡" Click="ToggleNavigation" Classes="headerButton" FontSize="24" ToolTip.Tip="Show or hide navigation" AutomationProperties.Name="Toggle navigation" VerticalAlignment="Center"/>
+    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+     <Border Background="#FFEB00" CornerRadius="3" Padding="8,4"><TextBlock Text="FLOW" Foreground="#111111" FontWeight="Bold" FontSize="18"/></Border>
+     <StackPanel><TextBlock Name="ApplicationTitle" Text="Software Development Simulation" Foreground="White" FontWeight="SemiBold" FontSize="16"/><TextBlock Text="EXPLORE · OBSERVE · IMPROVE" Foreground="#BABABA" FontSize="10" LetterSpacing="2"/></StackPanel>
+    </StackPanel>
+    <Button Grid.Column="2" Content="Help  ?" Classes="headerButton" VerticalAlignment="Center" AutomationProperties.Name="Simulation help">
+     <Button.Flyout><Flyout><StackPanel Spacing="8" MaxWidth="340"><TextBlock Text="Work with the flow" FontWeight="Bold" FontSize="18"/><TextBlock Text="Start a Live session, watch the queues and pause to change your team or working assumptions. Changes take effect on the next simulated day." TextWrapping="Wrap"/><TextBlock Text="Scenarios runs a separate simulation. Compare and Explore help investigate alternatives. Leaving Live pauses the current session." TextWrapping="Wrap"/><TextBlock Text="Yellow identifies controls. Orange and red queue highlights indicate accumulation; inspect their tooltips for the numbers." TextWrapping="Wrap"/></StackPanel></Flyout></Button.Flyout>
+    </Button>
+   </Grid>
+  </Border>
+  <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+   <Border Name="Sidebar" Width="160" Background="#FFEB00" Padding="10,20,10,16">
+    <Grid RowDefinitions="Auto,*,Auto">
+     <StackPanel Name="PrimaryNavigation" Spacing="5">
+      <TextBlock Text="WORKSPACE" FontSize="10" FontWeight="Bold" LetterSpacing="2" Margin="10,0,0,14"/>
+      <Button Content="01   Live" Command="{Binding OpenLiveCommand}" Classes="sideNav" Classes.selected="{Binding LiveVisible}" AutomationProperties.Name="Navigate Live"/>
+      <Button Content="02   Scenarios" Command="{Binding OpenRunCommand}" Classes="sideNav" Classes.selected="{Binding RunVisible}" AutomationProperties.Name="Navigate Scenarios"/>
+      <Button Content="03   Compare" Command="{Binding OpenChangesCommand}" Classes="sideNav" Classes.selected="{Binding AnalyzeCompareVisible}" AutomationProperties.Name="Navigate Compare"/>
+      <Button Content="04   Results" Command="{Binding ResultsCommand}" IsEnabled="{Binding Owner.HasResults}" Classes="sideNav" Classes.selected="{Binding ResultsVisible}" AutomationProperties.Name="Navigate Results"/>
+      <Border Height="1" Background="#C9B900" Margin="10,12"/>
+      <Button Content="Explore" Command="{Binding OpenExploreCommand}" Classes="sideNav" Classes.selected="{Binding ExploreVisible}" AutomationProperties.Name="Navigate Explore"/>
+      <Button Content="Experiments" Command="{Binding OpenExperimentsCommand}" Classes="sideNav" Classes.selected="{Binding ExperimentsVisible}" AutomationProperties.Name="Navigate Experiments"/>
+     </StackPanel>
+     <StackPanel Grid.Row="2" Spacing="12">
+      <Button Content="Settings" Command="{Binding AdvancedCommand}" Classes="sideNav" Classes.selected="{Binding AdvancedVisible}" AutomationProperties.Name="Navigate Advanced" ToolTip.Tip="Advanced settings, reproducibility and diagnostics"/>
+      <TextBlock Text="A model for learning.&#10;Explore the trade-offs." TextWrapping="Wrap" FontSize="11" Margin="10,0" Foreground="#4F4A00"/>
+     </StackPanel>
+    </Grid>
+   </Border>
+   <Grid Name="Workspace" Grid.Column="1" Classes.compactLive="{Binding LiveVisible}" RowDefinitions="0,0,Auto,*,Auto" Margin="18,14">
   <StackPanel Grid.Row="2" IsVisible="{Binding AnalyzeVisible}" Spacing="6" Margin="0,0,0,12">
    <TextBlock Text="Analyze · investigate with independent scenario runs; your Live session stays paused." Classes="note" />
    <WrapPanel>
@@ -90,7 +104,7 @@
   </StackPanel>
   <Grid Grid.Row="3">
    <Grid IsVisible="{Binding LiveVisible}"><views:LiveView DataContext="{Binding Live}" /></Grid>
-   <ScrollViewer IsVisible="{Binding HomeVisible}">
+   <ScrollViewer HorizontalScrollBarVisibility="Auto" IsVisible="{Binding HomeVisible}">
     <StackPanel MaxWidth="820" HorizontalAlignment="Left" Spacing="20" Margin="12,24">
      <TextBlock Text="What do you want to learn?" Classes="page" />
      <TextBlock Text="Explore how capacity, work flow, queues and quality interact in a software development team." TextWrapping="Wrap" FontSize="16" />
@@ -119,7 +133,7 @@
      </StackPanel>
     </StackPanel>
    </ScrollViewer>
-   <ScrollViewer IsVisible="{Binding RunVisible}">
+   <ScrollViewer HorizontalScrollBarVisibility="Auto" IsVisible="{Binding RunVisible}">
     <StackPanel MaxWidth="900" HorizontalAlignment="Left" Spacing="18">
      <TextBlock Text="See how work flows through your team" Classes="page" />
      <StackPanel Orientation="Horizontal" Spacing="12">
@@ -173,7 +187,7 @@
      <Button Content="Run Simulation" Command="{Binding RunCommand}" Classes="primary" HorizontalAlignment="Left" />
     </StackPanel>
    </ScrollViewer>
-   <ScrollViewer IsVisible="{Binding ResultsVisible}">
+   <ScrollViewer HorizontalScrollBarVisibility="Auto" IsVisible="{Binding ResultsVisible}">
     <StackPanel MaxWidth="900" HorizontalAlignment="Left" Spacing="16">
      <TextBlock Text="What happened?" Classes="page" />
      <ItemsControl ItemsSource="{Binding RunCards}" ItemTemplate="{StaticResource ResultCard}">
@@ -196,7 +210,7 @@
     <Button Content="Back to Results" Command="{Binding ResultsCommand}" HorizontalAlignment="Left" />
     <views:ResultFlowView Grid.Row="1" DataContext="{Binding Owner}" />
    </Grid>
-   <ScrollViewer IsVisible="{Binding ChangesVisible}">
+   <ScrollViewer HorizontalScrollBarVisibility="Auto" IsVisible="{Binding ChangesVisible}">
     <StackPanel MaxWidth="900" HorizontalAlignment="Left" Spacing="12">
      <TextBlock Text="Change something and see what happens" Classes="page" />
      <StackPanel Orientation="Horizontal" Spacing="12">
@@ -229,7 +243,7 @@
      <Button Content="Run Comparison" Command="{Binding CompareCommand}" Classes="primary" HorizontalAlignment="Left" />
     </StackPanel>
    </ScrollViewer>
-   <ScrollViewer IsVisible="{Binding ComparisonVisible}">
+   <ScrollViewer HorizontalScrollBarVisibility="Auto" IsVisible="{Binding ComparisonVisible}">
     <StackPanel MaxWidth="900" HorizontalAlignment="Left" Spacing="14">
      <Button Content="Back to Changes" Command="{Binding BackChangesCommand}" HorizontalAlignment="Left" />
      <TextBlock Text="{Binding ChangesTitle}" Classes="page" />
@@ -304,7 +318,7 @@
      <Button Content="Advanced Comparison" Command="{Binding AdvancedPairCommand}" HorizontalAlignment="Left" Background="Transparent" />
     </StackPanel>
    </ScrollViewer>
-   <ScrollViewer IsVisible="{Binding ExploreVisible}">
+   <ScrollViewer HorizontalScrollBarVisibility="Auto" IsVisible="{Binding ExploreVisible}">
     <StackPanel MaxWidth="850" HorizontalAlignment="Left" Spacing="14">
      <TextBlock Text="Explore a parameter" Classes="page" />
      <TextBlock Text="See what happens when one part of the system changes." />
@@ -368,5 +382,7 @@
    <TextBlock Text="{Binding Status}" Classes="note" />
    <Button Content="Cancel" Command="{Binding CancelCommand}" IsVisible="{Binding IsBusy}" HorizontalAlignment="Left" />
   </StackPanel>
+   </Grid>
+  </Grid>
  </Grid>
 </Window>

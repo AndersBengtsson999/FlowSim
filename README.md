@@ -2,7 +2,7 @@
 
 An Avalonia desktop simulator for exploring software delivery using capacity, independent stage effort, queues, dependencies and WIP. This is a simulation tool, not a project-management application.
 
-The current implementation is **Simulation Model v0.5 — Technical Debt v1**, following Step 13 — Live Team Performance, including Simple Mode and Live simulation. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
+The current implementation is **Simulation Model v0.8 — Dependencies v1**, following Step 13 — Live Team Performance, including Simple Mode and Live simulation. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
 
 ## Build and run on macOS
 
@@ -222,3 +222,7 @@ The [end-to-end interaction validation](docs/MODEL_INTERACTION_VALIDATION.md) re
 System Cost / Done Item: period-based capacity including debt repayment, alongside lifecycle Delivery Cost. See [definition and verification](docs/SYSTEM_COST.md).
 
 Skills & Specialists v1 (model 0.6): one Development capability, shared capacity/WIP, waiting trend, Live interventions and backward-compatible persistence. See [semantics and verification](docs/SKILLS_SPECIALISTS.md).
+
+Release / Deployment v1 (model 0.7): Ready for Release → Released, Flow-based/Scheduled capacity, delivery/completion populations and preserved legacy history. See [semantics and validation](docs/RELEASE_DEPLOYMENT.md).
+
+[Dependencies v1](docs/DEPENDENCIES.md) adds seeded residual waiting before Development, with Live configuration, interventions, queue highlighting and trend visibility. Defaults preserve the previous behavior.

@@ -25,22 +25,28 @@ public static class FlowPresentation
         string Active(string description, int count, int? limit) => limit is null ? description : $"{count} / {limit} · {description}";
         var rows = new List<FlowStateRow>
         {
-            new("Backlog", d.BacklogCount, "Not started", "#F1F5F9", "↓"),
+            new("Backlog", d.BacklogCount - d.WaitingForDependencyCount, "Not started", "#F1F5F9", "↓"),
             new("Development", d.DevelopmentCount, Active("active items", d.DevelopmentCount, configuration?.DevelopmentWipLimit) + $"\nCapacity used {d.UsedDevelopmentCapacity:0.##} · Effective work {d.DevelopmentWork:0.##}", "#E8F1F7", "↓"),
             new("Waiting for Code Review", d.WaitingForCodeReviewCount, "QUEUE · awaiting admission", "#FFF2D8", "↓"),
             new("Code Review", d.CodeReviewCount, Active("Active stage · shared developer pool", d.CodeReviewCount, configuration?.CodeReviewWipLimit), "#E8F1F7", "↓"),
             new("Waiting for Testing", d.WaitingForTestingCount, "QUEUE · awaiting admission", "#FFF2D8", "↓"),
             new("Testing", d.TestingCount, Active("Active stage · tester capacity", d.TestingCount, configuration?.TestingWipLimit), "#E8F1F7", "↓"),
-            new("Done", d.DoneCount, "Completed", "#E6F2ED", "")
+            new("Ready for Release", d.ReadyForReleaseCount, configuration?.Release.Description ?? "Awaiting release", "#FFF2D8", "↓"),
+            new("Released", d.DoneCount, "Delivered", "#E6F2ED", "")
         };
         if (rework)
         {
             rows.Add(new("Waiting for Rework", d.WaitingForReworkCount, "QUEUE · feedback from inspections", "#FFF2D8", "↓"));
             rows.Add(new("Rework", d.ReworkCount, Active("Returns to Code Review", d.ReworkCount, configuration?.Quality.ReworkWipLimit), "#E8F1F7", "↩"));
         }
+        bool WaitingDependency(WorkItemDaySnapshot w) => w.State == WorkItemStatus.Backlog && w.CreatedDay <= d.Day && w.ResidualDependency is { } dependency && dependency.ResolutionDay > (long)d.Day + 1;
+        var showDependencies = configuration?.ResidualDependencies.Rate > 0 || d.Items.Any(w => w.ResidualDependency is not null);
+        if (showDependencies)
+            rows.Insert(1, new("Waiting for Dependency", d.WaitingForDependencyCount, "Backlog subset · no active WIP", "#F3F1ED", ""));
         var itemsByState = d.Items.Where(w => w.CreatedDay <= d.Day).ToLookup(w => w.State);
         return rows.Select(row => row with {
-            Items = itemsByState[row.State].ToArray(),
+            CompactQueueRows = showDependencies,
+            Items = row.IsDependencyQueue ? d.Items.Where(WaitingDependency).ToArray() : row.State == WorkItemStatus.Backlog ? itemsByState[row.State].Where(w => !WaitingDependency(w)).ToArray() : row.State == WorkItemStatus.Released ? d.Items.Where(w => w.State.IsDelivered()).ToArray() : itemsByState[row.State].ToArray(),
             WipLimit = row.State switch {
                 WorkItemStatus.Development => configuration?.DevelopmentWipLimit,
                 WorkItemStatus.CodeReview => configuration?.CodeReviewWipLimit,

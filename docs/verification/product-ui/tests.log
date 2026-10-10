@@ -1,0 +1,11 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Simulation.Core -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/src/Simulation.Core/bin/Release/net10.0/Simulation.Core.dll
+  Simulation.Application -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/src/Simulation.Application/bin/Release/net10.0/Simulation.Application.dll
+  Simulation.Infrastructure -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/src/Simulation.Infrastructure/bin/Release/net10.0/Simulation.Infrastructure.dll
+  Simulation.UI -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/src/Simulation.UI/bin/Release/net10.0/Simulation.UI.dll
+  Simulation.UI.Tests -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/tests/Simulation.UI.Tests/bin/Release/net10.0/Simulation.UI.Tests.dll
+Test run for /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/tests/Simulation.UI.Tests/bin/Release/net10.0/Simulation.UI.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   163, Skipped:     0, Total:   163, Duration: 7 s - Simulation.UI.Tests.dll (net10.0)

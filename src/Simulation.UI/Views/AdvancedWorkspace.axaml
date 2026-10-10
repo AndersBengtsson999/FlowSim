@@ -44,7 +44,7 @@
           <Button Content="Discard Scenario Draft" Command="{Binding Compare.DiscardCommand}" />
          </WrapPanel>
         </StackPanel>
-        <Button Content="Run Baseline" Command="{Binding RunBaselineCommand}" HorizontalAlignment="Left" Background="#176A78" Foreground="White" />
+        <Button Content="Run Baseline" Command="{Binding RunBaselineCommand}" HorizontalAlignment="Left" Classes="primary" />
         <Expander Header="Availability and work supply" HorizontalAlignment="Stretch"><StackPanel Spacing="8">
          <TextBlock Text="Availability is the percentage of nominal capacity available to this workflow." Classes="note"/>
          <TextBlock Text="Developer Availability (%)"/><TextBox Text="{Binding DeveloperAvailability, Mode=TwoWay}"/>
@@ -493,7 +493,7 @@
              <TextBlock Grid.Column="1" Text="Name" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
              <TextBlock Grid.Column="2" Text="Final State" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
              <TextBlock Grid.Column="3" Text="Development Started" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
-             <TextBlock Grid.Column="4" Text="Done" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
+             <TextBlock Grid.Column="4" Text="Released" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
              <TextBlock Grid.Column="5" Text="Lead Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
              <TextBlock Grid.Column="6" Text="Cycle Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
              <TextBlock Grid.Column="7" Text="Active Time" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
@@ -663,7 +663,7 @@
   </TabControl>
   <StackPanel Grid.Row="2" Spacing="8" Margin="0,16,0,0" IsVisible="{Binding ShowSimulationActions}">
    <WrapPanel Orientation="Horizontal">
-    <Button Content="Run Simulation" Command="{Binding RunCommand}" Background="#176A78" Foreground="White" />
+    <Button Content="Run Simulation" Command="{Binding RunCommand}" Classes="primary" />
     <Button Content="Cancel" Command="{Binding CancelCommand}" IsVisible="{Binding IsBusy}" />
    </WrapPanel>
    <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Foreground="#B42318" TextWrapping="Wrap" />

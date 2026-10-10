@@ -37,7 +37,7 @@ public sealed class SimulationRunnerTests
         for (var run = 0; run < 5; run++)
             Assert.Equal(JsonSerializer.Serialize(first), JsonSerializer.Serialize(engine.Run(scenario)));
         Assert.Equal(100, first.Days.Count);
-        Assert.Equal(first.WorkItems.Count(w => w.State == WorkItemStatus.Done), first.CompletedWorkItems);
+        Assert.Equal(first.WorkItems.Count(w => w.State == WorkItemStatus.Released), first.CompletedWorkItems);
         Assert.Equal(first.CompletedWorkItems / 100.0, first.Throughput);
         Assert.All(first.Days, d =>
         {

@@ -38,6 +38,7 @@ public sealed class LivePerformanceTrendTests
             var expected = metric.Metric switch {
                 LiveTrendMetric.Throughput => p.Throughput, LiveTrendMetric.CycleTime => p.CycleTime,
                 LiveTrendMetric.DeliveryCost => p.DeliveryCostPerDoneItem,
+                LiveTrendMetric.CompletionRate => p.CompletionRate, LiveTrendMetric.DevelopmentCycleTime => p.DevelopmentCycleTime, LiveTrendMetric.ReleaseWaitTime => p.ReleaseWaitTime,
                 LiveTrendMetric.SystemCost => p.SystemCostPerDoneItem,
                 LiveTrendMetric.AverageWip => p.AverageWip, LiveTrendMetric.DeveloperUtilization => 100 * p.DeveloperUtilization,
                 _ => 100 * p.TesterUtilization };
@@ -52,7 +53,7 @@ public sealed class LivePerformanceTrendTests
         foreach (var p in LivePerformanceTrend.Project(live.Session, metric.Metric, range: null).Points)
         {
             var d = live.Session.Days[p.Day - 1];
-            var expected = metric.Metric switch { LiveTrendMetric.SpecialistWorkWaiting => d.SpecialistWorkWaiting, LiveTrendMetric.ReviewQueue => d.WaitingForCodeReviewCount,
+            var expected = metric.Metric switch { LiveTrendMetric.WaitingForDependency => d.WaitingForDependencyCount, LiveTrendMetric.ReadyForRelease => d.ReadyForReleaseCount, LiveTrendMetric.SpecialistWorkWaiting => d.SpecialistWorkWaiting, LiveTrendMetric.ReviewQueue => d.WaitingForCodeReviewCount,
                 LiveTrendMetric.TestingQueue => d.WaitingForTestingCount, LiveTrendMetric.ReworkQueue => d.WaitingForReworkCount,
                 LiveTrendMetric.DevelopmentCapacity => d.UsedDevelopmentCapacity, LiveTrendMetric.AvailableDevelopers => d.AvailableDeveloperCapacity, LiveTrendMetric.AvailableTesters => d.AvailableTesterCapacity,
                 LiveTrendMetric.TechnicalDebtRatio => 100 * (d.Debt?.State.Ratio ?? 0),

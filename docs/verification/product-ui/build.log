@@ -1,0 +1,14 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Simulation.Core -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/src/Simulation.Core/bin/Release/net10.0/Simulation.Core.dll
+  Simulation.Application -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/src/Simulation.Application/bin/Release/net10.0/Simulation.Application.dll
+  Simulation.Infrastructure -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/src/Simulation.Infrastructure/bin/Release/net10.0/Simulation.Infrastructure.dll
+  Simulation.UI -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/src/Simulation.UI/bin/Release/net10.0/Simulation.UI.dll
+  Validation -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/docs/verification/model-validation-v2/bin/Release/net10.0/Validation.dll
+  ProductUi -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/docs/verification/product-ui/bin/Release/net10.0/ProductUi.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:06.35

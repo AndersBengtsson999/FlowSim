@@ -5,6 +5,8 @@ public enum WorkArrivalMode { FixedBacklog, ContinuousArrival, AlwaysAvailable }
 public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5,
     int CodeReviewWipLimit = 3, int TestingWipLimit = 3)
 {
+    public DependencySettings ResidualDependencies { get; init; } = new();
+    public ReleaseSettings Release { get; init; } = new();
     public SkillSettings Skills { get; init; } = new();
     public TechnicalDebtSettings Debt { get; init; } = new();
     public StageProductivity Productivity { get; init; } = new();
@@ -23,7 +25,7 @@ public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5
             throw new ScenarioValidationException("All three arrival effort distributions are required.");
     }
     internal SimulationScenario Scenario(string name, int days, IReadOnlyList<WorkItem> items, int seed) =>
-        new(name, days, Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit, items, seed) { Quality = Quality, Productivity = Productivity, Debt = Debt, Skills = Skills };
+        new(name, days, Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit, items, seed) { ResidualDependencies = ResidualDependencies, Quality = Quality, Productivity = Productivity, Debt = Debt, Skills = Skills, Release = Release };
 }
 
 public sealed record ConfigurationChange(int Day, string? Label, SessionConfiguration Before, SessionConfiguration After);
@@ -35,6 +37,9 @@ public sealed record WorkItemState(string Id, string Name, double DevelopmentEff
     int? TestingStartedDay, int? TestingCompletedDay, int? DoneDay,
     IReadOnlyList<StateTransition> Transitions, IReadOnlyList<WorkItemEvent> Events, IReadOnlyList<InspectionAttempt> Attempts)
 {
+    public ResidualDependency? ResidualDependency { get; init; }
+    public int? ReadyForReleaseDay { get; init; }
+    public int? ReleasedDay { get; init; }
     public bool RequiresSpecialist { get; init; }
     public DeliveryCost? DeliveryCost { get; init; }
     public DevelopmentPlan? DevelopmentPlan { get; init; }
@@ -47,6 +52,7 @@ public sealed record SimulationSessionState(string Name, int RandomSeed, int Cur
     ulong ArrivalRandomState, ulong DiscoveryRandomState, ulong ReworkRandomState,
     IReadOnlyList<DailySnapshot> Days, IReadOnlyList<ConfigurationChange> Changes)
 {
+    public ulong? DependencyRandomState { get; init; }
     public ulong? SkillRandomState { get; init; }
     public TechnicalDebtState? DebtState { get; init; }
 }
@@ -64,6 +70,7 @@ public sealed class SimulationSession
     public TechnicalDebtState DebtState => debt.State;
     private SeededRandom arrivalRandom;
     private SeededRandom skillRandom;
+    private SeededRandom dependencyRandom;
     private decimal accumulator;
     private long nextId = 1;
     public string Name { get; }
@@ -81,7 +88,7 @@ public sealed class SimulationSession
         ScenarioValidator.Validate(scenario);
         Name = scenario.Name; RandomSeed = scenario.RandomSeed;
         Configuration = configuration ?? new(scenario.Team, scenario.DevelopmentWipLimit, scenario.CodeReviewWipLimit,
-            scenario.TestingWipLimit) { Skills = scenario.Skills, Quality = scenario.Quality, Productivity = scenario.Productivity, Debt = scenario.Debt, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
+            scenario.TestingWipLimit) { ResidualDependencies = scenario.ResidualDependencies, Release = scenario.Release, Skills = scenario.Skills, Quality = scenario.Quality, Productivity = scenario.Productivity, Debt = scenario.Debt, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
                 DevelopmentEffort = scenario.DevelopmentArrivalEffort, CodeReviewEffort = scenario.CodeReviewArrivalEffort, TestingEffort = scenario.TestingArrivalEffort };
         Configuration.Validate(); InitialConfiguration = Configuration;
         items = scenario.WorkItems.Select(w => w.CopyForRun()).ToList();
@@ -90,6 +97,7 @@ public sealed class SimulationSession
         debt = new(new());
         // Existing arrival stream also supplies shortcut decisions; defect/rework streams stay separate.
         arrivalRandom = new(unchecked(RandomSeed ^ (int)0xA771A150));
+        dependencyRandom = new(unchecked(RandomSeed ^ (int)0xD3EED123));
         skillRandom = new(unchecked(RandomSeed ^ (int)0x5A11C0DE));
         foreach (var item in items) Classify(item);
     }
@@ -107,6 +115,7 @@ public sealed class SimulationSession
         accumulator = s.ArrivalAccumulator; nextId = s.NextWorkItemId;
         arrivalRandom = SeededRandom.Restore(s.ArrivalRandomState);
         skillRandom = s.SkillRandomState is { } state ? SeededRandom.Restore(state) : new(unchecked(RandomSeed ^ (int)0x5A11C0DE));
+        dependencyRandom = s.DependencyRandomState is { } dependencyState ? SeededRandom.Restore(dependencyState) : new(unchecked(RandomSeed ^ (int)0xD3EED123));
         debt = new(s.DebtState ?? new(0, items.Where(w => w.DevelopmentCompletedDay.HasValue).Sum(w => w.DevelopmentEffort)));
         debt.State.Validate();
         _ = debt.State.Overhead(Configuration.Debt);
@@ -116,6 +125,9 @@ public sealed class SimulationSession
 
     public DailySnapshot AdvanceOneDay()
     {
+        // Existing/fixed future items are assigned only on their arrival boundary.
+        foreach (var item in items.Where(w => w.CreatedDay == CurrentDay && w.State == WorkItemStatus.Backlog))
+            item.AssignDependency(Configuration.ResidualDependencies.Assign(item.CreatedDay, dependencyRandom));
         if (Configuration.ArrivalMode == WorkArrivalMode.ContinuousArrival)
         {
             accumulator += Configuration.WorkItemsPerDay;
@@ -129,7 +141,7 @@ public sealed class SimulationSession
             // Pull only enough to fill free Development slots; existing eligible backlog goes first.
             var active = items.Count(w => w.State == WorkItemStatus.Development);
             var eligible = items.Count(w => w.State == WorkItemStatus.Backlog && w.CreatedDay <= CurrentDay
-                && w.Dependencies.All(id => byId[id].State == WorkItemStatus.Done));
+                && !w.DependencyUnresolved(CurrentDay) && w.Dependencies.All(id => byId[id].State.IsWorkComplete()));
             var needed = Math.Max(0, Configuration.DevelopmentWipLimit - active - eligible);
             for (var i = 0; i < needed; i++) GenerateArrival();
         }
@@ -155,6 +167,7 @@ public sealed class SimulationSession
         if (new[] { item.DevelopmentEffort, item.CodeReviewEffort, item.TestingEffort }.Any(e => !double.IsFinite(e) || e < 0))
             throw new ScenarioValidationException("Arrival effort must be finite and nonnegative.");
         Classify(item);
+        item.AssignDependency(Configuration.ResidualDependencies.Assign(item.CreatedDay, dependencyRandom));
         items.Add(item); byId.Add(id, item);
     }
 
@@ -180,7 +193,7 @@ public sealed class SimulationSession
     public SimulationSessionState Capture() => new(Name, RandomSeed, CurrentDay, InitialConfiguration, Configuration,
         items.Select(w => w.Capture()).ToArray(), accumulator, nextId, arrivalRandom.State,
         defects.RandomState.Discovery, defects.RandomState.Rework,
-        days.Select(d => d with { Items = Array.AsReadOnly(d.Items.ToArray()) }).ToArray(), changes.ToArray()) { DebtState = DebtState, SkillRandomState = skillRandom.State };
+        days.Select(d => d with { Items = Array.AsReadOnly(d.Items.ToArray()) }).ToArray(), changes.ToArray()) { DependencyRandomState = dependencyRandom.State, DebtState = DebtState, SkillRandomState = skillRandom.State };
     public static SimulationSession Restore(SimulationSessionState state) => new(state);
 
     private static void ValidateState(SimulationSessionState s)
@@ -197,7 +210,17 @@ public sealed class SimulationSession
         foreach (var w in s.WorkItems)
             if (!Enum.IsDefined(w.State) || new[] { w.RemainingDevelopmentEffort, w.RemainingCodeReviewEffort, w.RemainingTestingEffort, w.RemainingReworkEffort, w.CurrentReworkEffort }.Any(v => !double.IsFinite(v) || v < 0))
                 throw new ScenarioValidationException($"Invalid execution state: {w.Id}.");
-        foreach (var w in s.WorkItems) w.DeliveryCost?.Validate();
+        foreach (var w in s.WorkItems)
+        {
+            if (w.ResidualDependency is { } dependency && (dependency.WaitingDays < 0 || dependency.ResolutionDay != (long)w.CreatedDay + dependency.WaitingDays || w.DevelopmentStartedDay is { } start && start < dependency.ResolutionDay))
+                throw new ScenarioValidationException($"Invalid residual dependency: {w.Id}.");
+            w.DeliveryCost?.Validate();
+            if (w.ReadyForReleaseDay is { } ready && (ready < 0 || ready > s.CurrentDay)
+                || w.ReleasedDay is { } released && (released < 0 || released > s.CurrentDay || w.ReadyForReleaseDay is null || released < w.ReadyForReleaseDay || w.DoneDay != released)
+                || w.State == WorkItemStatus.ReadyForRelease && (w.ReadyForReleaseDay is null || w.DoneDay is not null)
+                || w.State == WorkItemStatus.Released && w.ReleasedDay is null)
+                throw new ScenarioValidationException($"Invalid release timestamps: {w.Id}.");
+        }
         foreach (var w in s.WorkItems)
             if (w.DevelopmentPlan is { } p && (p.BaseEffort != w.DevelopmentEffort
                 || new[] { p.BaseEffort, p.DebtRatioAtStart, p.Overhead, p.EffortWithDebt, p.FinalEffort, p.SavedEffort, p.DebtToCreate }.Any(v => !double.IsFinite(v) || v < 0)))

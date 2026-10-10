@@ -52,7 +52,7 @@ public sealed class LivePerformanceViewModelTests
         Assert.Contains("20 of 20", vm.AfterPeriod); Assert.StartsWith("Complete", vm.ComparisonStatus);
         Assert.EndsWith(" pp", vm.ComparisonRows.Single(r => r.Metric == "Tester utilization").Difference);
         Assert.Equal(2, vm.Observations.Split('\n').Length);
-        Assert.Equal(9, vm.ComparisonRows.Count);
+        Assert.Equal(13, vm.ComparisonRows.Count);
         vm.RollingWindow = 10;
         Assert.Equal(10, vm.Performance!.AvailableDays); Assert.Contains("Days 91–100", vm.BeforePeriod);
         Assert.Contains("Days 101–110", vm.AfterPeriod); Assert.Contains("Days 111–120", vm.WindowLabel);

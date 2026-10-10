@@ -21,7 +21,7 @@ public sealed class SimulationEngine
         var team = scenario.Team;
         var productivity = scenario.Productivity;
         var explicitCapacity = productivity != StageProductivity.Default;
-        bool Blocked(WorkItem item) => item.Dependencies.Any(id => byId[id].State != WorkItemStatus.Done);
+        bool Blocked(WorkItem item) => item.DependencyUnresolved(day) || item.Dependencies.Any(id => !byId[id].State.IsWorkComplete());
         IEnumerable<WorkItem> Fifo(WorkItemStatus state, WorkItemStatus stage) => items
             .Where(w => w.State == state).OrderBy(w => w.QueueEnteredDay(stage));
         void Admit(WorkItemStatus waiting, WorkItemStatus active, int currentDay)
@@ -34,7 +34,7 @@ public sealed class SimulationEngine
                 item.Enter(active, currentDay);
             }
         }
-        var unfinished = items.Count(w => w.CreatedDay <= day && w.State != WorkItemStatus.Done);
+        var unfinished = items.Count(w => w.CreatedDay <= day && !w.State.IsDelivered());
         var blocked = items.Count(w => w.CreatedDay <= day && w.State == WorkItemStatus.Backlog && Blocked(w));
         // All admissions precede all work. New completions wait until tomorrow's admission.
         Admit(WorkItemStatus.Backlog, WorkItemStatus.Development, day);
@@ -170,6 +170,11 @@ public sealed class SimulationEngine
                     GiveGeneral(item, true);
         }
         var testingWork = Allocate(WorkItemStatus.Testing, team.TesterCapacityPerDay, productivity.Testing, ref testRemaining);
+        // End-of-day release includes Testing completions at this same boundary: no artificial extra tick.
+        if (scenario.Release.IsOpportunity(day + 1))
+            foreach (var item in items.Where(w => w.State == WorkItemStatus.ReadyForRelease)
+                         .OrderBy(w => w.ReadyForReleaseDay).Take(scenario.Release.Capacity))
+                item.Enter(WorkItemStatus.Released, day + 1);
         double Used(WorkItem item, WorkItemStatus stage) =>
             workedStage.TryGetValue(item.Id, out var actual) && actual == stage ? work[item.Id] : 0;
         double Consumed(WorkItem item, WorkItemStatus stage) =>
@@ -178,7 +183,7 @@ public sealed class SimulationEngine
             w.RemainingDevelopmentEffort, w.RemainingCodeReviewEffort, w.RemainingTestingEffort,
             Used(w, WorkItemStatus.Development), Used(w, WorkItemStatus.CodeReview), Used(w, WorkItemStatus.Testing),
             w.CreatedDay, statesDuringDay[w.Id], blockedIds.Contains(w.Id), Used(w, WorkItemStatus.Rework), w.RemainingReworkEffort, collaboration.GetValueOrDefault(w.Id))
-            { RequiresSpecialist = w.RequiresSpecialist, DeliveryCost = w.DeliveryCost, DevelopmentPlan = w.DevelopmentPlan, ConsumedCapacity = explicitCapacity ? new(Consumed(w, WorkItemStatus.Development), Consumed(w, WorkItemStatus.CodeReview), Consumed(w, WorkItemStatus.Testing)) : null }).ToArray();
+            { ResidualDependency = w.ResidualDependency, RequiresSpecialist = w.RequiresSpecialist, DeliveryCost = w.DeliveryCost, DevelopmentPlan = w.DevelopmentPlan, ConsumedCapacity = explicitCapacity ? new(Consumed(w, WorkItemStatus.Development), Consumed(w, WorkItemStatus.CodeReview), Consumed(w, WorkItemStatus.Testing)) : null }).ToArray();
         return new DailySnapshot(day, devWip, reviewWip, testWip, blocked, unfinished,
             developmentWork, reviewWork, testingWork, Array.AsReadOnly(snapshots), team.AvailableDeveloperCapacity, team.AvailableTesterCapacity, reworkWork, reworkWip, collaborationCapacity)
         { SpecialistWorkWaiting = items.Count(w => w.RequiresSpecialist && w.State == WorkItemStatus.Development && w.RemainingDevelopmentEffort > 0 && Consumed(w, WorkItemStatus.Development) == 0),

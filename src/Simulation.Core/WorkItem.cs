@@ -13,6 +13,9 @@ public sealed class WorkItem
     public double RemainingReworkEffort { get; private set; }
     public string Id { get; }
     public string Name { get; }
+    public ResidualDependency? ResidualDependency { get; private set; }
+    internal void AssignDependency(ResidualDependency? dependency) => ResidualDependency = dependency;
+    public bool DependencyUnresolved(long day) => State == WorkItemStatus.Backlog && CreatedDay <= day && ResidualDependency is { } d && d.ResolutionDay > day;
     public bool RequiresSpecialist { get; private set; }
     internal void ClassifyDevelopment(bool requiresSpecialist) => RequiresSpecialist = requiresSpecialist;
     public DeliveryCost DeliveryCost { get; private set; } = new();
@@ -37,6 +40,9 @@ public sealed class WorkItem
     public int? CodeReviewCompletedDay { get; private set; }
     public int? TestingStartedDay { get; private set; }
     public int? TestingCompletedDay { get; private set; }
+    public int? ReadyForReleaseDay { get; private set; }
+    public int? ReleasedDay { get; private set; }
+    public int? WorkCompletedDay => ReadyForReleaseDay ?? DoneDay; // Legacy Done completed and delivered at the same boundary.
     public int? DoneDay { get; private set; }
     public IReadOnlyList<StateTransition> Transitions => transitions.AsReadOnly();
 
@@ -60,12 +66,13 @@ public sealed class WorkItem
         RemainingTestingEffort, RemainingReworkEffort, currentReworkEffort, reviewQueueDay, testingQueueDay,
         reworkQueueDay, DevelopmentStartedDay, DevelopmentCompletedDay, CodeReviewStartedDay,
         CodeReviewCompletedDay, TestingStartedDay, TestingCompletedDay, DoneDay,
-        transitions.ToArray(), events.ToArray(), attempts.ToArray()) { RequiresSpecialist = RequiresSpecialist, DevelopmentPlan = DevelopmentPlan, DeliveryCost = DeliveryCost };
+        transitions.ToArray(), events.ToArray(), attempts.ToArray()) { ResidualDependency = ResidualDependency, ReadyForReleaseDay = ReadyForReleaseDay, ReleasedDay = ReleasedDay, RequiresSpecialist = RequiresSpecialist, DevelopmentPlan = DevelopmentPlan, DeliveryCost = DeliveryCost };
 
     internal static WorkItem Restore(WorkItemState s)
     {
         var w = new WorkItem(s.Id, s.Name, s.DevelopmentEffort, s.CodeReviewEffort, s.TestingEffort, s.Dependencies, s.CreatedDay)
         {
+            ResidualDependency = s.ResidualDependency, ReadyForReleaseDay = s.ReadyForReleaseDay, ReleasedDay = s.ReleasedDay,
             RequiresSpecialist = s.RequiresSpecialist,
             DeliveryCost = s.DeliveryCost ?? new(IsComplete: s.State == WorkItemStatus.Backlog && s.DevelopmentStartedDay is null && !s.Events.Any(e => e.EventType == WorkItemEventType.CapacityApplied)),
             DevelopmentPlan = s.DevelopmentPlan, State = s.State, RemainingDevelopmentEffort = s.RemainingDevelopmentEffort,
@@ -113,6 +120,8 @@ public sealed class WorkItem
                 RemainingTestingEffort = TestingEffort;
                 StartAttempt(DefectSource.Testing, day); break;
             case WorkItemStatus.WaitingForRework: reworkQueueDay = day; break;
+            case WorkItemStatus.ReadyForRelease: ReadyForReleaseDay = day; break;
+            case WorkItemStatus.Released: ReleasedDay = DoneDay = day; break;
             case WorkItemStatus.Done: DoneDay = day; break;
         }
     }
@@ -141,7 +150,7 @@ public sealed class WorkItem
                 DefectSource: source, RequiredReworkEffort: required));
             Enter(WorkItemStatus.WaitingForRework, day);
         }
-        else Enter(source == DefectSource.CodeReview ? WorkItemStatus.WaitingForTesting : WorkItemStatus.Done, day);
+        else Enter(source == DefectSource.CodeReview ? WorkItemStatus.WaitingForTesting : WorkItemStatus.ReadyForRelease, day);
     }
 
     internal double RemainingEffort => State switch

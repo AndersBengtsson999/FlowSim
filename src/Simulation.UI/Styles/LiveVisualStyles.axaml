@@ -1,5 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
  <Styles.Resources>
+  <SolidColorBrush x:Key="QueueAttentionBrush">#F6EACD</SolidColorBrush>
+  <SolidColorBrush x:Key="QueueStrongBrush">#F1DAD7</SolidColorBrush>
   <SolidColorBrush x:Key="LiveInk">#203440</SolidColorBrush>
   <SolidColorBrush x:Key="LiveMuted">#61717E</SolidColorBrush>
   <SolidColorBrush x:Key="LiveLine">#DDE5EA</SolidColorBrush>
@@ -30,6 +32,16 @@
  <Style Selector="ToggleButton.flowDisclosure:checked /template/ ContentPresenter#PART_ContentPresenter, ToggleButton.flowDisclosure:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
   <Setter Property="Background" Value="{Binding $parent[ToggleButton].Background}"/><Setter Property="Foreground" Value="{StaticResource LiveInk}"/>
  </Style>
+ <Style Selector="ToggleButton.flowDisclosure.queueAttention"><Setter Property="Background" Value="{DynamicResource QueueAttentionBrush}"/></Style>
+ <Style Selector="Border.specialistQueue.queueAttention"><Setter Property="Background" Value="{DynamicResource QueueAttentionBrush}"/></Style>
+ <Style Selector="ToggleButton.flowDisclosure.queueStrong"><Setter Property="Background" Value="{DynamicResource QueueStrongBrush}"/></Style>
+ <Style Selector="Border.specialistQueue.queueStrong"><Setter Property="Background" Value="{DynamicResource QueueStrongBrush}"/></Style>
+ <Style Selector="ToggleButton.flowDisclosure.queueAttention:pointerover /template/ ContentPresenter#PART_ContentPresenter, ToggleButton.flowDisclosure.queueAttention:pressed /template/ ContentPresenter#PART_ContentPresenter"><Setter Property="Background" Value="{DynamicResource QueueAttentionBrush}"/><Setter Property="Foreground" Value="{StaticResource LiveInk}"/></Style>
+ <Style Selector="ToggleButton.flowDisclosure.queueStrong:pointerover /template/ ContentPresenter#PART_ContentPresenter, ToggleButton.flowDisclosure.queueStrong:pressed /template/ ContentPresenter#PART_ContentPresenter"><Setter Property="Background" Value="{DynamicResource QueueStrongBrush}"/><Setter Property="Foreground" Value="{StaticResource LiveInk}"/></Style>
+ <Style Selector="ToggleButton.flowDisclosure.queueAttention TextBlock.liveSecondary, ToggleButton.flowDisclosure.queueStrong TextBlock.liveSecondary"><Setter Property="Foreground" Value="{StaticResource LiveInk}"/></Style>
+ <Style Selector="Border.specialistQueue TextBlock"><Setter Property="Foreground" Value="{StaticResource LiveInk}"/></Style>
+ <Style Selector="ToggleButton.flowDisclosure:focus-visible /template/ ContentPresenter#PART_ContentPresenter"><Setter Property="BorderBrush" Value="{StaticResource LiveInk}"/><Setter Property="BorderThickness" Value="2"/></Style>
+ <Style Selector="Border.specialistQueue:focus-visible"><Setter Property="BorderBrush" Value="{StaticResource LiveInk}"/><Setter Property="BorderThickness" Value="1"/></Style>
  <Style Selector="ProgressBar.wipGauge"><Setter Property="Height" Value="3"/><Setter Property="MinHeight" Value="3"/><Setter Property="Width" Value="76"/><Setter Property="MinWidth" Value="0"/><Setter Property="HorizontalAlignment" Value="Left"/><Setter Property="Foreground" Value="#8198A6"/><Setter Property="Background" Value="#D8E2E8"/></Style>
  <Style Selector="Border.embeddedItem"><Setter Property="BorderBrush" Value="{StaticResource LiveLine}"/><Setter Property="BorderThickness" Value="0,0,0,1"/><Setter Property="Padding" Value="6,4"/><Setter Property="Margin" Value="0,0,12,2"/></Style>
  <Style Selector="ListBox#LiveFlow ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter"><Setter Property="Background" Value="Transparent"/></Style>

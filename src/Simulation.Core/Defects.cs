@@ -68,8 +68,9 @@ internal static class WorkItemFlow
         (WorkItemStatus.WaitingForCodeReview, WorkItemStatus.CodeReview) => true,
         (WorkItemStatus.CodeReview, WorkItemStatus.WaitingForTesting or WorkItemStatus.WaitingForRework) => true,
         (WorkItemStatus.WaitingForTesting, WorkItemStatus.Testing) => true,
-        (WorkItemStatus.Testing, WorkItemStatus.Done or WorkItemStatus.WaitingForRework) => true,
+        (WorkItemStatus.Testing, WorkItemStatus.ReadyForRelease or WorkItemStatus.WaitingForRework) => true,
         (WorkItemStatus.WaitingForRework, WorkItemStatus.Rework) => true,
+        (WorkItemStatus.ReadyForRelease, WorkItemStatus.Released) => true,
         _ => false
     };
 }

@@ -1,0 +1,335 @@
+{
+  "Change": {
+    "Day": 150,
+    "Label": "Recovery assumptions",
+    "Before": {
+      "Team": {
+        "DeveloperCount": 5,
+        "TesterCount": 2,
+        "DeveloperCapacityPerDay": 1,
+        "TesterCapacityPerDay": 1,
+        "DeveloperAvailability": 1,
+        "TesterAvailability": 1,
+        "AvailableDeveloperCapacity": 5,
+        "AvailableTesterCapacity": 2,
+        "TotalDeveloperCapacity": 5,
+        "TotalTesterCapacity": 2
+      },
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 5,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 5 items/release"
+      },
+      "Skills": {
+        "Specialists": 1,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentEffort": {},
+      "CodeReviewEffort": {},
+      "TestingEffort": {}
+    },
+    "After": {
+      "Team": {
+        "DeveloperCount": 5,
+        "TesterCount": 2,
+        "DeveloperCapacityPerDay": 1,
+        "TesterCapacityPerDay": 1,
+        "DeveloperAvailability": 1,
+        "TesterAvailability": 1,
+        "AvailableDeveloperCapacity": 5,
+        "AvailableTesterCapacity": 2,
+        "TotalDeveloperCapacity": 5,
+        "TotalTesterCapacity": 2
+      },
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "ResidualDependencies": {
+        "Rate": 0.1,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 10,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 10 items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentEffort": {},
+      "CodeReviewEffort": {},
+      "TestingEffort": {}
+    }
+  },
+  "Immediate": {
+    "Before": {
+      "FirstDay": 101,
+      "LastDay": 150,
+      "AvailableDays": 50,
+      "ExpectedDays": 50,
+      "Completed": 41,
+      "Throughput": 4.1,
+      "CycleTime": 12.048780487804878,
+      "AverageWip": 8.96,
+      "WipTrend": 0.0679951980792317,
+      "Review": {
+        "Current": 1,
+        "Average": 0.84,
+        "Trend": 0.01171668667466987
+      },
+      "Testing": {
+        "Current": 1,
+        "Average": 1.08,
+        "Trend": 0.014693877551020402
+      },
+      "Rework": {
+        "Current": 0,
+        "Average": 0,
+        "Trend": 0
+      },
+      "DeveloperUtilization": 0.861320888888889,
+      "TesterUtilization": 0.82,
+      "Defects": 0,
+      "ReworkCapacity": 0,
+      "QualityRelevant": false,
+      "WorkCompleted": 41,
+      "CompletionRate": 4.1,
+      "DevelopmentCycleTime": 9.878048780487806,
+      "ReleaseWaitTime": 2.1707317073170733,
+      "WaitingForDependency": {
+        "Current": 0,
+        "Average": 0.68,
+        "Trend": -0.004417767106842737
+      },
+      "DependenciesRelevant": true,
+      "ReadyForRelease": {
+        "Current": 0,
+        "Average": 1.78,
+        "Trend": 0.025402160864345734
+      },
+      "ConsumedSystemCapacity": {
+        "Development": 135.79688888888893,
+        "CodeReview": 43,
+        "Rework": 0,
+        "Testing": 82,
+        "DebtRepayment": 36.533333333333346,
+        "Total": 297.3302222222223
+      },
+      "SystemCostPerReleasedItem": 7.251956639566397,
+      "SystemCostPerDoneItem": 7.251956639566397,
+      "AverageDeliveryCost": {
+        "Development": 3.1375609756097558,
+        "CodeReview": 1,
+        "Rework": 0,
+        "Testing": 2,
+        "IsComplete": true,
+        "Total": 6.137560975609755
+      },
+      "DeliveryWorkCostPerItem": 6.137560975609755,
+      "DeliveryCostPerDoneItem": 6.137560975609755,
+      "EndDebtRatio": 0.007519999999999993,
+      "EndDebtOverhead": 0,
+      "DebtRelevant": true,
+      "IsComplete": true
+    },
+    "After": {
+      "FirstDay": 151,
+      "LastDay": 200,
+      "AvailableDays": 50,
+      "ExpectedDays": 50,
+      "Completed": 50,
+      "Throughput": 5,
+      "CycleTime": 11.48,
+      "AverageWip": 10.5,
+      "WipTrend": 0.031164465786314526,
+      "Review": {
+        "Current": 1,
+        "Average": 1.02,
+        "Trend": -0.0004321728691476592
+      },
+      "Testing": {
+        "Current": 2,
+        "Average": 1.66,
+        "Trend": 0.028475390156062427
+      },
+      "Rework": {
+        "Current": 0,
+        "Average": 0,
+        "Trend": 0
+      },
+      "DeveloperUtilization": 0.9724466666666667,
+      "TesterUtilization": 1,
+      "Defects": 0,
+      "ReworkCapacity": 0,
+      "QualityRelevant": false,
+      "WorkCompleted": 50,
+      "CompletionRate": 5,
+      "DevelopmentCycleTime": 9.48,
+      "ReleaseWaitTime": 2,
+      "WaitingForDependency": {
+        "Current": 0,
+        "Average": 0.7,
+        "Trend": 0.043841536614645855
+      },
+      "DependenciesRelevant": true,
+      "ReadyForRelease": {
+        "Current": 0,
+        "Average": 2,
+        "Trend": 0
+      },
+      "ConsumedSystemCapacity": {
+        "Development": 164.24499999999998,
+        "CodeReview": 51,
+        "Rework": 0,
+        "Testing": 100,
+        "DebtRepayment": 27.866666666666667,
+        "Total": 343.1116666666667
+      },
+      "SystemCostPerReleasedItem": 6.862233333333333,
+      "SystemCostPerDoneItem": 6.862233333333333,
+      "AverageDeliveryCost": {
+        "Development": 3.1969000000000007,
+        "CodeReview": 1,
+        "Rework": 0,
+        "Testing": 2,
+        "IsComplete": true,
+        "Total": 6.196900000000001
+      },
+      "DeliveryWorkCostPerItem": 6.196900000000001,
+      "DeliveryCostPerDoneItem": 6.196900000000001,
+      "EndDebtRatio": 0.003295454545454546,
+      "EndDebtOverhead": 0,
+      "DebtRelevant": true,
+      "IsComplete": true
+    },
+    "OtherInterventions": 0,
+    "DeveloperPercentagePoints": 11.112577777777766,
+    "TesterPercentagePoints": 18.000000000000004
+  },
+  "Post": {
+    "FirstDay": 251,
+    "LastDay": 300,
+    "AvailableDays": 50,
+    "ExpectedDays": 50,
+    "Completed": 50,
+    "Throughput": 5,
+    "CycleTime": 17.22,
+    "AverageWip": 17.18,
+    "WipTrend": 0.07428571428571429,
+    "Review": {
+      "Current": 1,
+      "Average": 1.06,
+      "Trend": 0.0010084033613445365
+    },
+    "Testing": {
+      "Current": 10,
+      "Average": 8.26,
+      "Trend": 0.07899159663865547
+    },
+    "Rework": {
+      "Current": 0,
+      "Average": 0,
+      "Trend": 0
+    },
+    "DeveloperUtilization": 1,
+    "TesterUtilization": 1,
+    "Defects": 0,
+    "ReworkCapacity": 0,
+    "QualityRelevant": false,
+    "WorkCompleted": 50,
+    "CompletionRate": 5,
+    "DevelopmentCycleTime": 15.22,
+    "ReleaseWaitTime": 2,
+    "WaitingForDependency": {
+      "Current": 0,
+      "Average": 0.18,
+      "Trend": 0.009267707082833133
+    },
+    "DependenciesRelevant": true,
+    "ReadyForRelease": {
+      "Current": 0,
+      "Average": 2,
+      "Trend": 0
+    },
+    "ConsumedSystemCapacity": {
+      "Development": 157.60000000000005,
+      "CodeReview": 53,
+      "Rework": 0,
+      "Testing": 100,
+      "DebtRepayment": 39.40000000000001,
+      "Total": 350.00000000000006
+    },
+    "SystemCostPerReleasedItem": 7.000000000000001,
+    "SystemCostPerDoneItem": 7.000000000000001,
+    "AverageDeliveryCost": {
+      "Development": 2.971126041666667,
+      "CodeReview": 1,
+      "Rework": 0,
+      "Testing": 2,
+      "IsComplete": true,
+      "Total": 5.9711260416666665
+    },
+    "DeliveryWorkCostPerItem": 5.9711260416666665,
+    "DeliveryCostPerDoneItem": 5.9711260416666665,
+    "EndDebtRatio": 0.02908450704225353,
+    "EndDebtOverhead": 0,
+    "DebtRelevant": true,
+    "IsComplete": true
+  }
+}

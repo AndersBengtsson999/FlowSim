@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><IsTestProject>true</IsTestProject><IsPackable>false</IsPackable></PropertyGroup>
-  <ItemGroup><Compile Include="../../docs/verification/model-validation/Scenarios.cs" Link="Validation/Scenarios.cs" /><Compile Include="../../docs/verification/model-validation/Audit.cs" Link="Validation/Audit.cs" /></ItemGroup>
+  <ItemGroup><Compile Include="../../docs/verification/model-validation-v2/Validation.cs" Link="Validation/ValidationV2.cs"/><Compile Include="../../docs/verification/release/LegacyReleaseObservation.cs" Link="Validation/LegacyReleaseObservation.cs" /><Compile Include="../../docs/verification/model-validation/Scenarios.cs" Link="Validation/Scenarios.cs" /><Compile Include="../../docs/verification/model-validation/Audit.cs" Link="Validation/Audit.cs" /></ItemGroup>
   <ItemGroup><None Update="Fixtures/*.json" CopyToOutputDirectory="PreserveNewest" /></ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />

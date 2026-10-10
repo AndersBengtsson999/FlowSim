@@ -22,6 +22,7 @@ static string PreSkillsFingerprint(Simulation.Core.SimulationSession session)
 {
     if (session.Configuration.Skills != new Simulation.Core.SkillSettings()) throw new Exception("Expected default Skills");
     var node=JsonNode.Parse(JsonSerializer.Serialize(session.Capture()))!;
+    Simulation.Verification.LegacyReleaseObservation.Normalize(node);
     Remove(node);
     return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(node.ToJsonString())));
     static void Remove(JsonNode node)

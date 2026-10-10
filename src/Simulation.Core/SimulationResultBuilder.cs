@@ -35,7 +35,7 @@ internal static class SimulationResultBuilder
                 t.TestingWaiting, t.Blocked, w.RemainingDevelopmentEffort, w.RemainingCodeReviewEffort,
                 w.RemainingTestingEffort, Array.AsReadOnly(w.Transitions.ToArray()), w.DevelopmentEffort, w.CodeReviewEffort, w.TestingEffort)
             {
-                RequiresSpecialist = w.RequiresSpecialist, DeliveryCost = w.DeliveryCost,
+                ResidualDependency = w.ResidualDependency, ReadyForReleaseDay = w.ReadyForReleaseDay, ReleasedDay = w.ReleasedDay, RequiresSpecialist = w.RequiresSpecialist, DeliveryCost = w.DeliveryCost,
                 DevelopmentPlan = w.DevelopmentPlan,
                 Events = Array.AsReadOnly(w.Events.ToArray()),
                 InspectionAttempts = Array.AsReadOnly(w.InspectionAttempts.ToArray()),
@@ -49,7 +49,7 @@ internal static class SimulationResultBuilder
                 TestingAttempts = w.InspectionAttempts.Count(a => a.Stage == DefectSource.Testing)
             };
         }).ToArray();
-        var completed = results.Where(w => w.FinalState == WorkItemStatus.Done).ToArray();
+        var completed = results.Where(w => w.FinalState.IsDelivered()).ToArray();
         double Mean(Func<WorkItemResult, double> metric) => completed.Select(metric).DefaultIfEmpty(0).Average();
         static double Ratio(double used, double available) => available == 0 ? 0 : used / available;
         var developers = days.Sum(d => d.AvailableDeveloperCapacity);

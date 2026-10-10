@@ -69,7 +69,7 @@ public sealed class SkillsTests
         s.ApplyChanges(s.Configuration with{DevelopmentWipLimit=1});
         Assert.Equal(2,s.WorkItems.Count(w=>w.State==WorkItemStatus.Development));
         for(var i=0;i<10;i++)s.AdvanceOneDay();
-        Assert.Equal(WorkItemStatus.Done,s.WorkItems[2].State);
+        Assert.Equal(WorkItemStatus.Released,s.WorkItems[2].State);
         Assert.All(s.Days.Skip(2),d=>Assert.InRange(d.DevelopmentWip,0,1));
     }
 
@@ -117,7 +117,7 @@ public sealed class SkillsTests
         s.AdvanceOneDay();Assert.Equal(WorkItemStatus.WaitingForRework,s.WorkItems[0].State);
         s.ApplyChanges(s.Configuration with{Quality=new()});
         for(var i=0;i<150;i++)s.AdvanceOneDay();
-        Assert.True(s.WorkItems[0].RequiresSpecialist);Assert.Equal(WorkItemStatus.Done,s.WorkItems[0].State);
+        Assert.True(s.WorkItems[0].RequiresSpecialist);Assert.Equal(WorkItemStatus.Released,s.WorkItems[0].State);
         Assert.Contains(s.Days,d=>d.UsedReworkDeveloperCapacity>0);
         Assert.All(s.Days,d=>Assert.Equal(0,d.SpecialistWorkWaiting));
     }

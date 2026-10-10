@@ -16,6 +16,10 @@ public static class ScenarioValidator
         scenario.Productivity!.Validate();
         if (scenario.Debt is null) Fail("Technical Debt settings are required.");
         scenario.Debt!.Validate();
+        if (scenario.ResidualDependencies is null) Fail("Dependency settings are required.");
+        scenario.ResidualDependencies!.Validate();
+        if (scenario.Release is null) Fail("Release settings are required.");
+        scenario.Release!.Validate();
         var team = scenario.Team!;
         if (scenario.Skills is null) Fail("Skills settings are required.");
         if (!double.IsFinite(team.DeveloperAvailability) || team.DeveloperAvailability < 0 || team.DeveloperAvailability > 1

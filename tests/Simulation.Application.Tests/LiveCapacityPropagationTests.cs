@@ -87,7 +87,7 @@ public sealed class LiveCapacityPropagationTests(ITestOutputHelper output)
         Assert.True(high.Testing.Average > low.Testing.Average);
         Assert.True(high.Completed > low.Completed);
         int Transitions(LiveSimulation l, WorkItemStatus status) => l.Session.WorkItems.SelectMany(w => w.Transitions).Count(t => t.To == status && (status is WorkItemStatus.Development or WorkItemStatus.CodeReview or WorkItemStatus.Testing ? t.Day >= 100 : t.Day > 100));
-        foreach (var stage in new[] { WorkItemStatus.Development, WorkItemStatus.WaitingForCodeReview, WorkItemStatus.CodeReview, WorkItemStatus.WaitingForTesting, WorkItemStatus.Testing, WorkItemStatus.Done })
+        foreach (var stage in new[] { WorkItemStatus.Development, WorkItemStatus.WaitingForCodeReview, WorkItemStatus.CodeReview, WorkItemStatus.WaitingForTesting, WorkItemStatus.Testing, WorkItemStatus.ReadyForRelease, WorkItemStatus.Released })
         {
             var highCount = Transitions(live, stage); var lowCount = Transitions(control, stage);
             output.WriteLine($"Transitions since intervention to {stage}: high={highCount}, low={lowCount}");
@@ -97,7 +97,7 @@ public sealed class LiveCapacityPropagationTests(ITestOutputHelper output)
         Assert.NotEmpty(completedAfter);
         foreach (var item in completedAfter)
         {
-            Assert.Equal(new[] { WorkItemStatus.Development, WorkItemStatus.WaitingForCodeReview, WorkItemStatus.CodeReview, WorkItemStatus.WaitingForTesting, WorkItemStatus.Testing, WorkItemStatus.Done }, item.Transitions.Select(t => t.To));
+            Assert.Equal(new[] { WorkItemStatus.Development, WorkItemStatus.WaitingForCodeReview, WorkItemStatus.CodeReview, WorkItemStatus.WaitingForTesting, WorkItemStatus.Testing, WorkItemStatus.ReadyForRelease, WorkItemStatus.Released }, item.Transitions.Select(t => t.To));
             Assert.True(item.CodeReviewStartedDay >= item.DevelopmentCompletedDay);
             Assert.True(item.TestingStartedDay >= item.CodeReviewCompletedDay);
             Assert.Equal(2, live.Session.Days.SelectMany(d => d.Items).Where(w => w.Id == item.Id).Sum(w => w.TestingWork));

@@ -1,0 +1,14 @@
+  Determining projects to restore...
+  Restored /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/docs/verification/specialist-capacity-v1/Validation.csproj (in 397 ms).
+  4 of 5 projects are up-to-date for restore.
+  Simulation.Core -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/src/Simulation.Core/bin/Release/net10.0/Simulation.Core.dll
+  Simulation.Application -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/src/Simulation.Application/bin/Release/net10.0/Simulation.Application.dll
+  Simulation.Infrastructure -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/src/Simulation.Infrastructure/bin/Release/net10.0/Simulation.Infrastructure.dll
+  Simulation.UI -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/src/Simulation.UI/bin/Release/net10.0/Simulation.UI.dll
+  Validation -> /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/docs/verification/specialist-capacity-v1/bin/Release/net10.0/Validation.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:05.04

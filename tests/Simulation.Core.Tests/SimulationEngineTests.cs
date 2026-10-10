@@ -71,7 +71,7 @@ public sealed class SimulationEngineTests
         var item = result.WorkItems[0];
         WorkItemStatus[] forwardFlow = [WorkItemStatus.Backlog, WorkItemStatus.Development,
             WorkItemStatus.WaitingForCodeReview, WorkItemStatus.CodeReview, WorkItemStatus.WaitingForTesting,
-            WorkItemStatus.Testing, WorkItemStatus.Done];
+            WorkItemStatus.Testing, WorkItemStatus.ReadyForRelease, WorkItemStatus.Released];
         Assert.Equal(forwardFlow.Skip(1), item.Transitions.Select(t => t.To));
         Assert.Equal(forwardFlow.SkipLast(1), item.Transitions.Select(t => t.From));
         Assert.Equal(0, item.DevelopmentStartedDay);
@@ -84,7 +84,7 @@ public sealed class SimulationEngineTests
         Assert.Equal(WorkItemStatus.WaitingForCodeReview, result.Days[3].Items[0].State);
         Assert.Equal(WorkItemStatus.WaitingForTesting, result.Days[4].Items[0].State);
         Assert.Equal(WorkItemStatus.Testing, result.Days[5].Items[0].State);
-        Assert.Equal(WorkItemStatus.Done, result.Days[6].Items[0].State);
+        Assert.Equal(WorkItemStatus.Released, result.Days[6].Items[0].State);
         Assert.Equal(7, result.AverageLeadTime);
         Assert.Equal(7, result.AverageCycleTime);
         Assert.Equal(1.0 / 20, result.Throughput);
@@ -224,7 +224,7 @@ public sealed class SimulationEngineTests
     {
         var result = new SimulationEngine().Run(Scenario(3, new Team(0, 0), [new("A", "A", 0, 0, 0)]));
         Assert.Equal(3, result.WorkItems[0].DoneDay);
-        Assert.Equal(6, result.WorkItems[0].Transitions.Count);
+        Assert.Equal(7, result.WorkItems[0].Transitions.Count);
         Assert.Equal(0, result.DeveloperUtilization);
         Assert.Equal(0, result.TesterUtilization);
     }

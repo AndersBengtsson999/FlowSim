@@ -11,10 +11,21 @@ public sealed record PerformancePeriod(int FirstDay, int LastDay, int AvailableD
     double? DeveloperUtilization, double? TesterUtilization, int Defects, double? ReworkCapacity,
     bool QualityRelevant)
 {
+    public int WorkCompleted { get; init; }
+    public double CompletionRate { get; init; }
+    public double? DevelopmentCycleTime { get; init; }
+    public double? ReleaseWaitTime { get; init; }
+    public QueuePerformance WaitingForDependency { get; init; } = new(0,0,null);
+    public bool DependenciesRelevant { get; init; }
+    public QueuePerformance ReadyForRelease { get; init; } = new(0,0,null);
     public SystemCost? ConsumedSystemCapacity { get; init; }
-    public double? SystemCostPerDoneItem => Completed > 0 ? ConsumedSystemCapacity?.Total / Completed : null;
+    public double? SystemCostPerReleasedItem => Completed > 0 ? ConsumedSystemCapacity?.Total / Completed : null;
+    // Compatibility property names: terminal output is now Released (plus historical Done).
+    public double? SystemCostPerDoneItem => SystemCostPerReleasedItem;
     public DeliveryCost? AverageDeliveryCost { get; init; }
-    public double? DeliveryCostPerDoneItem => AverageDeliveryCost?.Total;
+    public double? DeliveryWorkCostPerItem => AverageDeliveryCost?.Total;
+    // Work completion population, now Ready for Release; never the release cohort.
+    public double? DeliveryCostPerDoneItem => DeliveryWorkCostPerItem;
     public double EndDebtRatio { get; init; }
     public double EndDebtOverhead { get; init; }
     public bool DebtRelevant { get; init; }
@@ -52,6 +63,7 @@ public static class LivePerformance
         if (lastDay < firstDay) throw new ArgumentOutOfRangeException(nameof(lastDay));
         var days = session.Days.Where(d => d.Day + 1 >= firstDay && d.Day + 1 <= lastDay).ToArray();
         var completed = session.WorkItems.Where(w => w.DoneDay >= firstDay && w.DoneDay <= lastDay).ToArray();
+        var workCompleted = session.WorkItems.Where(w => w.WorkCompletedDay >= firstDay && w.WorkCompletedDay <= lastDay).ToArray();
         double Average(Func<DailySnapshot, double> value) => days.Length == 0 ? 0 : days.Average(value);
         double? Trend(Func<DailySnapshot, double> value) => Slope(days.Select(d => ((double)d.Day, value(d))));
         QueuePerformance Queue(Func<DailySnapshot, int> value) => new(days.Length == 0 ? 0 : value(days[^1]), Average(d => value(d)), Trend(d => value(d)));
@@ -68,7 +80,13 @@ public static class LivePerformance
             Ratio(days.Sum(d => d.UsedTesterCapacity), days.Sum(d => d.AvailableTesterCapacity)),
             defects, Ratio(days.Sum(d => d.UsedReworkDeveloperCapacity), used),
             quality || defects > 0 || days.Any(d => d.UsedReworkDeveloperCapacity > 0 || d.WaitingForReworkCount > 0 || d.ReworkCount > 0))
-        { ConsumedSystemCapacity = SystemCost.Sum(days, session), AverageDeliveryCost = AverageCost(completed), EndDebtRatio = days.LastOrDefault()?.Debt?.State.Ratio ?? 0, EndDebtOverhead = days.LastOrDefault()?.Debt?.Overhead ?? 0,
+        { WorkCompleted = workCompleted.Length, CompletionRate = days.Length == 0 ? 0 : 5.0 * workCompleted.Length / days.Length,
+          DevelopmentCycleTime = workCompleted.Length == 0 ? null : workCompleted.Average(w => (double)(w.WorkCompletedDay!.Value - w.DevelopmentStartedDay!.Value)),
+          ReleaseWaitTime = completed.Length == 0 ? null : completed.Average(w => (double)(w.DoneDay!.Value - w.WorkCompletedDay!.Value)),
+          WaitingForDependency = Queue(d => d.WaitingForDependencyCount),
+          DependenciesRelevant = days.Any(d => d.WaitingForDependencyCount > 0 || (session.Changes.LastOrDefault(c => c.Day <= d.Day)?.After ?? session.InitialConfiguration).ResidualDependencies.Rate > 0),
+          ReadyForRelease = Queue(d => d.ReadyForReleaseCount),
+          ConsumedSystemCapacity = SystemCost.Sum(days, session), AverageDeliveryCost = AverageCost(workCompleted), EndDebtRatio = days.LastOrDefault()?.Debt?.State.Ratio ?? 0, EndDebtOverhead = days.LastOrDefault()?.Debt?.Overhead ?? 0,
           DebtRelevant = days.Any(d => d.Debt is { } debt && (debt.State.Amount > 0 || debt.Created > 0 || debt.RepaymentCapacity > 0)) };
     }
 
