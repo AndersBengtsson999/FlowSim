@@ -1,0 +1,4 @@
+30 scene renders: 479 ms; decoded textures: 11; objects: 39
+Fast advance 150→250: 278 ms
+Testing queue: 77; full counts with bounded glyphs.
+PASS Avalonia selector binding, read-only view switching, pending draft, responsive 1280/960 layouts, existing Flow Board, fast advance and large queue grouping.

@@ -1,0 +1,128 @@
+[
+  {
+    "asset": "plant.png",
+    "pixels": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bounds_alpha_gt_1": [
+      301,
+      215,
+      995,
+      994
+    ],
+    "transparent_pixels": 1283700,
+    "partial_alpha_pixels": 288312,
+    "bytes": 541798,
+    "sha256": "07fb6ef6e1d134c16a9e75f927699ecf9682d28c42c3ca278554373f18324ac5"
+  },
+  {
+    "asset": "desk.png",
+    "pixels": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bounds_alpha_gt_1": [
+      0,
+      237,
+      1107,
+      1096
+    ],
+    "transparent_pixels": 1169613,
+    "partial_alpha_pixels": 402028,
+    "bytes": 713415,
+    "sha256": "5c82b40b71b628f826b209add3316659204caee65268a0547c1e1fdc0e187e73"
+  },
+  {
+    "asset": "package.png",
+    "pixels": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bounds_alpha_gt_1": [
+      309,
+      314,
+      944,
+      1004
+    ],
+    "transparent_pixels": 1243273,
+    "partial_alpha_pixels": 328304,
+    "bytes": 545515,
+    "sha256": "c9e52962af54ebff013f69f026d78e18400cb5faf3941121591d2c074638aeef"
+  },
+  {
+    "asset": "developer.png",
+    "pixels": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bounds_alpha_gt_1": [
+      444,
+      93,
+      847,
+      1176
+    ],
+    "transparent_pixels": 1301450,
+    "partial_alpha_pixels": 270422,
+    "bytes": 555865,
+    "sha256": "fe07ceccd7483a805649e92135ce2760c87c545f2253d3c0020b9e9bce5f13a3"
+  },
+  {
+    "asset": "floor.png",
+    "pixels": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bounds_alpha_gt_1": [
+      32,
+      274,
+      1223,
+      1060
+    ],
+    "transparent_pixels": 1072146,
+    "partial_alpha_pixels": 499996,
+    "bytes": 908406,
+    "sha256": "4b547558f09e2530c74ef2261efda1eefcdd89914ad4eda769213b1dd5a99453"
+  },
+  {
+    "asset": "computer.png",
+    "pixels": [
+      1254,
+      1254
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "visible_bounds_alpha_gt_1": [
+      215,
+      201,
+      1000,
+      1127
+    ],
+    "transparent_pixels": 1112429,
+    "partial_alpha_pixels": 459003,
+    "bytes": 829543,
+    "sha256": "a8e253c49aa178551f1988059069a56cd9716a0b3eeaeb376e19c9bbd18e7c66"
+  }
+]

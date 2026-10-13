@@ -1,0 +1,110 @@
+[
+  {
+    "asset": "chair.png",
+    "dimensions": [
+      1254,
+      1254
+    ],
+    "alpha_min_max": [
+      0,
+      255
+    ],
+    "sha256": "6c7a20f7056ba9f25d6312ab85ad68d6cf0f7b6d1d121b9250875af9f0008591"
+  },
+  {
+    "asset": "computer.png",
+    "dimensions": [
+      1254,
+      1254
+    ],
+    "alpha_min_max": [
+      0,
+      255
+    ],
+    "sha256": "a8e253c49aa178551f1988059069a56cd9716a0b3eeaeb376e19c9bbd18e7c66"
+  },
+  {
+    "asset": "desk.png",
+    "dimensions": [
+      1254,
+      1254
+    ],
+    "alpha_min_max": [
+      0,
+      255
+    ],
+    "sha256": "5c82b40b71b628f826b209add3316659204caee65268a0547c1e1fdc0e187e73"
+  },
+  {
+    "asset": "developer-collaborating.png",
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "alpha_min_max": [
+      0,
+      254
+    ],
+    "sha256": "c06c56b2b7fa45a67eebd56f9f01abb23d6270be16403d4747fd10670f0f5096"
+  },
+  {
+    "asset": "developer-seated.png",
+    "dimensions": [
+      1142,
+      1378
+    ],
+    "alpha_min_max": [
+      0,
+      255
+    ],
+    "sha256": "96733561e70e757d0a784cdda287f4d75395c6f02fc3a0c842aefc505f4e24eb"
+  },
+  {
+    "asset": "developer.png",
+    "dimensions": [
+      1254,
+      1254
+    ],
+    "alpha_min_max": [
+      0,
+      255
+    ],
+    "sha256": "fe07ceccd7483a805649e92135ce2760c87c545f2253d3c0020b9e9bce5f13a3"
+  },
+  {
+    "asset": "floor.png",
+    "dimensions": [
+      1254,
+      1254
+    ],
+    "alpha_min_max": [
+      0,
+      255
+    ],
+    "sha256": "4b547558f09e2530c74ef2261efda1eefcdd89914ad4eda769213b1dd5a99453"
+  },
+  {
+    "asset": "package.png",
+    "dimensions": [
+      1254,
+      1254
+    ],
+    "alpha_min_max": [
+      0,
+      255
+    ],
+    "sha256": "c9e52962af54ebff013f69f026d78e18400cb5faf3941121591d2c074638aeef"
+  },
+  {
+    "asset": "plant.png",
+    "dimensions": [
+      1254,
+      1254
+    ],
+    "alpha_min_max": [
+      0,
+      255
+    ],
+    "sha256": "07fb6ef6e1d134c16a9e75f927699ecf9682d28c42c3ca278554373f18324ac5"
+  }
+]

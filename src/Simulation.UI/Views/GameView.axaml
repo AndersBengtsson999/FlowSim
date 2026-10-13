@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:controls="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.GameView" x:DataType="vm:LiveViewModel">
+ <Border Background="#101A25" CornerRadius="10" Padding="16,14">
+  <StackPanel Spacing="8">
+   <Grid ColumnDefinitions="*,Auto,Auto">
+    <StackPanel><TextBlock Text="THE SOFTWARE WORKSHOP" Foreground="#FFEB00" FontSize="20" FontWeight="Bold"/><TextBlock Text="A connected workshop · live simulation state" Foreground="#A9BBC9" FontSize="12"/></StackPanel>
+    <ComboBox Grid.Column="1" Name="GameRenderingMode" Margin="8,0,12,0" ItemsSource="{Binding GameRenderingModes}" SelectedItem="{Binding GameRenderingMode}" AutomationProperties.Name="Game rendering mode"/>
+    <Border Grid.Column="2" Background="#253341" CornerRadius="5" Padding="12,6"><TextBlock Text="{Binding DayLabel}" Foreground="White" FontSize="18" FontWeight="SemiBold"/></Border>
+   </Grid>
+   <Viewbox Name="WorldViewport" Stretch="Uniform" HorizontalAlignment="Stretch">
+    <controls:GameWorldControl Name="GameWorld" Width="1080" Height="680" Scene="{Binding GameScene}" UseSprites="{Binding SpriteRendering}" AutomationProperties.Name="{Binding GameScene.Summary}"/>
+   </Viewbox>
+   <TextBlock Text="{Binding GameScene.Capacity}" Foreground="#D3DEE7" FontSize="12" TextWrapping="Wrap"/>
+   <TextBlock IsVisible="{Binding SpriteRendering}" Text="Mint = active · Amber = waiting. Packages are bounded samples; counters include all items. D = developer · S = specialist (included in developers) · T = tester. Figures and poses illustrate capacity, not assigned people or item-level events. Capacity above describes the last completed day." Foreground="#9BAFBE" FontSize="12" TextWrapping="Wrap"/>
+   <TextBlock IsVisible="{Binding !SpriteRendering}" Text="Mint = active · Amber = waiting · Up to 8 packages per area; counts include all items. Figures illustrate current team capacity (yellow caps = specialists), not assigned employees. Capacity above describes the last completed day." Foreground="#9BAFBE" FontSize="12" TextWrapping="Wrap"/>
+  </StackPanel>
+ </Border>
+</UserControl>

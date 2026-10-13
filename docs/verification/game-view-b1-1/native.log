@@ -1,0 +1,2 @@
+30 offscreen renders: 120 ms (smoke check, not a production benchmark).
+PASS: six embedded PNGs; cached decode; isometric axes; elevation; anchors; scale; deterministic overlap; explicit optional frames; 1100/800 windows; 1x/2x render. Backend: native macOS.

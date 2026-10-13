@@ -1,0 +1,12 @@
+{
+  "src_files_checked": 115,
+  "all_src_unchanged": true,
+  "original_six_pngs_unchanged": true,
+  "source_textures": 9,
+  "logical_workers": 4,
+  "render_objects": 24,
+  "native_macos_verified": true,
+  "existing_tests_passed": 611,
+  "animation_implemented": false,
+  "live_replaced": false
+}

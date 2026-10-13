@@ -1,0 +1,21 @@
+{
+  "mode": "built-in image_gen",
+  "referenceAssets": [
+    "developer.png",
+    "desk.png"
+  ],
+  "prompts": [
+    {
+      "name": "developer-seated",
+      "prompt": "Create one ORIGINAL transparent PNG game sprite, matching the supplied developer and desk style references ONLY. Polished colorful isometric management-game illustration, warm upper-left lighting, soft detailed shading, clean readable silhouettes, same stylized proportions/materials as references. Elevated orthographic camera about30degrees, ground edges about2:1. Full object with transparent padding, actual alpha background, no text, logos or environment. Do NOT copy the entire scene or include a desk/computer/floor. Single male developer matching the curly-haired glasses teal-shirt yellow-lanyard reference, genuinely SEATED working pose, no chair drawn. View from his back-left three-quarter side: he faces screen UPPER RIGHT toward an imaginary desk and computer. Bent hips and knees, thighs extend upper-right, feet on ground, torso upright slight forward lean. Both arms extend forward upper-right, elbows bent, hands at an imaginary keyboard on the desk at waist height. One natural anatomically convincing sitting character only. Chair will be a separate sprite. Preserve full visible feet and hands. This must be a usable independently positionable worker cutout, not an illustration of an office."
+    },
+    {
+      "name": "chair",
+      "prompt": "Create one ORIGINAL transparent PNG game sprite, matching the supplied developer and desk style references ONLY. Polished colorful isometric management-game illustration, warm upper-left lighting, soft detailed shading, clean readable silhouettes, same stylized proportions/materials as references. Elevated orthographic camera about30degrees, ground edges about2:1. Full object with transparent padding, actual alpha background, no text, logos or environment. Do NOT copy the entire scene or include a desk/computer/floor. Single EMPTY compact ergonomic office chair, dark navy upholstered seat and mid-height back, teal frame, five short caster legs. Seat faces screen UPPER RIGHT; viewer sees rear-left side of the backrest. No armrests to avoid obscuring separately composited worker arms. Sized for the developer in the reference. Full chair alone, no person, no desk. Soft rounded management-game style matching the reference. Clear seat shape and support legs."
+    },
+    {
+      "name": "developer-collaborating",
+      "prompt": "Create one ORIGINAL transparent PNG game sprite, matching the supplied developer and desk style references ONLY. Polished colorful isometric management-game illustration, warm upper-left lighting, soft detailed shading, clean readable silhouettes, same stylized proportions/materials as references. Elevated orthographic camera about30degrees, ground edges about2:1. Full object with transparent padding, actual alpha background, no text, logos or environment. Do NOT copy the entire scene or include a desk/computer/floor. Single friendly female software developer, stylized proportions like male reference, dark hair in a small bun, teal open cardigan, pale golden yellow shirt, navy jeans, sneakers. Standing three-quarter profile facing screen UPPER RIGHT. Collaborative teaching pose: slight lean forward, one arm pointing to a screen at chest height to upper right, other hand casually by waist. Eyes looking toward that same screen. Full character only, no screen or partner in image. Natural gesture readable at150px tall, pleasant focused expression, feet planted. This sprite will stand beside a separately rendered seated teammate."
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+PASS 360 primary run records, 360 lossless history archives, 36 exact repeats, zero failures.
+PASS report/README links and all Python syntax.
+PASS 105 source-tree files unchanged by SHA-256.
+PASS baseline equivalence: 63000 metric points across 30 seeds and first 300 days.
+PASS archive rerun replaces stale archive (isolated two-version fixture).
+PASS distribution and trajectory figures visually reviewed.

@@ -1,0 +1,734 @@
+[
+  {
+    "Name": "T2-R5",
+    "Request": {
+      "Name": "Validation v2",
+      "DeveloperCount": 5,
+      "TesterCount": 2,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 1,
+      "TesterAvailability": 1,
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 500,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 5,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 5 items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "DevelopmentDistribution": null,
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  },
+  {
+    "Name": "T2-R7",
+    "Request": {
+      "Name": "Validation v2",
+      "DeveloperCount": 5,
+      "TesterCount": 2,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 1,
+      "TesterAvailability": 1,
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 500,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 7,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 7 items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "DevelopmentDistribution": null,
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  },
+  {
+    "Name": "T2-R10",
+    "Request": {
+      "Name": "Validation v2",
+      "DeveloperCount": 5,
+      "TesterCount": 2,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 1,
+      "TesterAvailability": 1,
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 500,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 10,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 10 items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "DevelopmentDistribution": null,
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  },
+  {
+    "Name": "T2-RU",
+    "Request": {
+      "Name": "Validation v2",
+      "DeveloperCount": 5,
+      "TesterCount": 2,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 1,
+      "TesterAvailability": 1,
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 500,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 2147483647,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 Unlimited items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "DevelopmentDistribution": null,
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  },
+  {
+    "Name": "T3-R5",
+    "Request": {
+      "Name": "Validation v2",
+      "DeveloperCount": 5,
+      "TesterCount": 3,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 1,
+      "TesterAvailability": 1,
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 500,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 5,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 5 items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "DevelopmentDistribution": null,
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  },
+  {
+    "Name": "T3-R7",
+    "Request": {
+      "Name": "Validation v2",
+      "DeveloperCount": 5,
+      "TesterCount": 3,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 1,
+      "TesterAvailability": 1,
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 500,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 7,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 7 items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "DevelopmentDistribution": null,
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  },
+  {
+    "Name": "T3-R10",
+    "Request": {
+      "Name": "Validation v2",
+      "DeveloperCount": 5,
+      "TesterCount": 3,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 1,
+      "TesterAvailability": 1,
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 500,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 10,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 10 items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "DevelopmentDistribution": null,
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  },
+  {
+    "Name": "T3-RU",
+    "Request": {
+      "Name": "Validation v2",
+      "DeveloperCount": 5,
+      "TesterCount": 3,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 1,
+      "TesterAvailability": 1,
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 500,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 2147483647,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 Unlimited items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "DevelopmentDistribution": null,
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  },
+  {
+    "Name": "T4-R5",
+    "Request": {
+      "Name": "Validation v2",
+      "DeveloperCount": 5,
+      "TesterCount": 4,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 1,
+      "TesterAvailability": 1,
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 500,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 5,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 5 items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "DevelopmentDistribution": null,
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  },
+  {
+    "Name": "T4-R7",
+    "Request": {
+      "Name": "Validation v2",
+      "DeveloperCount": 5,
+      "TesterCount": 4,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 1,
+      "TesterAvailability": 1,
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 500,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 7,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 7 items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "DevelopmentDistribution": null,
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  },
+  {
+    "Name": "T4-R10",
+    "Request": {
+      "Name": "Validation v2",
+      "DeveloperCount": 5,
+      "TesterCount": 4,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 1,
+      "TesterAvailability": 1,
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 500,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 10,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 10 items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "DevelopmentDistribution": null,
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  },
+  {
+    "Name": "T4-RU",
+    "Request": {
+      "Name": "Validation v2",
+      "DeveloperCount": 5,
+      "TesterCount": 4,
+      "DeveloperCapacityPerDay": 1,
+      "TesterCapacityPerDay": 1,
+      "DeveloperAvailability": 1,
+      "TesterAvailability": 1,
+      "ArrivalMode": 2,
+      "WorkItemsPerDay": 0.8,
+      "DevelopmentWipLimit": 5,
+      "CodeReviewWipLimit": 3,
+      "TestingWipLimit": 3,
+      "NumberOfWorkItems": 0,
+      "SimulationDays": 500,
+      "DevelopmentEffort": 5,
+      "CodeReviewEffort": 1,
+      "TestingEffort": 2,
+      "RandomSeed": 12345,
+      "ResidualDependencies": {
+        "Rate": 0.25,
+        "MeanWaitingDays": 4
+      },
+      "Release": {
+        "Mode": 1,
+        "Capacity": 2147483647,
+        "Interval": 5,
+        "Description": "Scheduled \u00B7 every 5 days \u00B7 Unlimited items/release"
+      },
+      "Skills": {
+        "Specialists": 2,
+        "SpecialistWorkRate": 0.3
+      },
+      "Debt": {
+        "ShortcutRate": 0.3,
+        "ShortcutEffortReduction": 0.5,
+        "Tolerance": 0.1,
+        "Repayment": 0.2,
+        "CreationFactor": 2,
+        "ImpactFactor": 1
+      },
+      "Productivity": {
+        "Development": 1.5,
+        "CodeReview": 1,
+        "Testing": 1
+      },
+      "Quality": {
+        "Enabled": false,
+        "CodeReviewDefectProbability": 0,
+        "TestingDefectProbability": 0,
+        "ReworkWipLimit": 3,
+        "CodeReviewReworkEffortDistribution": {},
+        "TestingReworkEffortDistribution": {}
+      },
+      "DevelopmentDistribution": null,
+      "CodeReviewDistribution": null,
+      "TestingDistribution": null
+    }
+  }
+]

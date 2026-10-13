@@ -1,0 +1,2162 @@
+{
+  "T2-R5-12366": {
+    "SHA256Uncompressed": "8996086f6f36f965e188e0abcdefcd4e76da8f14ca9c8400eba2fbc858940325",
+    "UncompressedBytes": 126305900,
+    "GzipBytes": 4833596,
+    "XzBytes": 205692
+  },
+  "T2-R5-12352": {
+    "SHA256Uncompressed": "dcd51d47956089f21f58f1fdeb3145a8411bc58eae8b4d1ad74129e3b00e72a6",
+    "UncompressedBytes": 127460700,
+    "GzipBytes": 6830364,
+    "XzBytes": 221780
+  },
+  "T2-R5-12359": {
+    "SHA256Uncompressed": "df2a010a0963a3890b80792ba9be46c36267ac4b2eeee76ba19c19e653148ce1",
+    "UncompressedBytes": 121054489,
+    "GzipBytes": 3231223,
+    "XzBytes": 195896
+  },
+  "T2-R5-12345": {
+    "SHA256Uncompressed": "582d90a12b5d2af4a5ba4b5ee6bc7844ef73af36d1ab941ec43b784488b12fc9",
+    "UncompressedBytes": 124786067,
+    "GzipBytes": 3122880,
+    "XzBytes": 200232
+  },
+  "T2-R7-12366": {
+    "SHA256Uncompressed": "d327185cc2af1681f972ecb5dbdba70c96b4707f1f3f0f51ab7a1728fb744283",
+    "UncompressedBytes": 126306367,
+    "GzipBytes": 4832799,
+    "XzBytes": 205208
+  },
+  "T2-R7-12352": {
+    "SHA256Uncompressed": "dcd51d47956089f21f58f1fdeb3145a8411bc58eae8b4d1ad74129e3b00e72a6",
+    "UncompressedBytes": 127460700,
+    "GzipBytes": 6830364,
+    "XzBytes": 221780
+  },
+  "T2-R7-12359": {
+    "SHA256Uncompressed": "79a610eda2452ba697041dc2ec6d45f7417f97005d0d9d491ddb095ddac0df4e",
+    "UncompressedBytes": 121054958,
+    "GzipBytes": 3230430,
+    "XzBytes": 195432
+  },
+  "T2-R7-12345": {
+    "SHA256Uncompressed": "582d90a12b5d2af4a5ba4b5ee6bc7844ef73af36d1ab941ec43b784488b12fc9",
+    "UncompressedBytes": 124786067,
+    "GzipBytes": 3122880,
+    "XzBytes": 200232
+  },
+  "T2-R10-12366": {
+    "SHA256Uncompressed": "d327185cc2af1681f972ecb5dbdba70c96b4707f1f3f0f51ab7a1728fb744283",
+    "UncompressedBytes": 126306367,
+    "GzipBytes": 4832799,
+    "XzBytes": 205208
+  },
+  "T2-R10-12352": {
+    "SHA256Uncompressed": "dcd51d47956089f21f58f1fdeb3145a8411bc58eae8b4d1ad74129e3b00e72a6",
+    "UncompressedBytes": 127460700,
+    "GzipBytes": 6830364,
+    "XzBytes": 221780
+  },
+  "T2-R10-12359": {
+    "SHA256Uncompressed": "79a610eda2452ba697041dc2ec6d45f7417f97005d0d9d491ddb095ddac0df4e",
+    "UncompressedBytes": 121054958,
+    "GzipBytes": 3230430,
+    "XzBytes": 195432
+  },
+  "T2-R10-12345": {
+    "SHA256Uncompressed": "582d90a12b5d2af4a5ba4b5ee6bc7844ef73af36d1ab941ec43b784488b12fc9",
+    "UncompressedBytes": 124786067,
+    "GzipBytes": 3122880,
+    "XzBytes": 200232
+  },
+  "T2-RU-12366": {
+    "SHA256Uncompressed": "d327185cc2af1681f972ecb5dbdba70c96b4707f1f3f0f51ab7a1728fb744283",
+    "UncompressedBytes": 126306367,
+    "GzipBytes": 4832799,
+    "XzBytes": 205208
+  },
+  "T2-RU-12352": {
+    "SHA256Uncompressed": "dcd51d47956089f21f58f1fdeb3145a8411bc58eae8b4d1ad74129e3b00e72a6",
+    "UncompressedBytes": 127460700,
+    "GzipBytes": 6830364,
+    "XzBytes": 221780
+  },
+  "T2-RU-12359": {
+    "SHA256Uncompressed": "79a610eda2452ba697041dc2ec6d45f7417f97005d0d9d491ddb095ddac0df4e",
+    "UncompressedBytes": 121054958,
+    "GzipBytes": 3230430,
+    "XzBytes": 195432
+  },
+  "T2-RU-12345": {
+    "SHA256Uncompressed": "582d90a12b5d2af4a5ba4b5ee6bc7844ef73af36d1ab941ec43b784488b12fc9",
+    "UncompressedBytes": 124786067,
+    "GzipBytes": 3122880,
+    "XzBytes": 200232
+  },
+  "T3-R5-12366": {
+    "SHA256Uncompressed": "f63bd30d470dad840fde4c39ef1a4236be67da5e71c58b20a235a6cfe321408a",
+    "UncompressedBytes": 126305065,
+    "GzipBytes": 4818805,
+    "XzBytes": 206332
+  },
+  "T3-R5-12352": {
+    "SHA256Uncompressed": "83d71f2ac77868157c286a8529686ad72f74be4d97920d39bb6fedd4a20b45cf",
+    "UncompressedBytes": 127459895,
+    "GzipBytes": 6821185,
+    "XzBytes": 222416
+  },
+  "T3-R5-12359": {
+    "SHA256Uncompressed": "52477fb95e13f79a8ef401b5d89bd65815ea7804724b605e7e62115c5153c968",
+    "UncompressedBytes": 121053664,
+    "GzipBytes": 3216466,
+    "XzBytes": 196364
+  },
+  "T3-R5-12345": {
+    "SHA256Uncompressed": "f82461d9f95e17889efb6551715c2015e8464a0862c0b43eb10decbf1a7a5325",
+    "UncompressedBytes": 124784723,
+    "GzipBytes": 3105548,
+    "XzBytes": 200964
+  },
+  "T3-R7-12366": {
+    "SHA256Uncompressed": "d6fd21aea331c308d718a337aaebda68e003e04fc7da0a4c4c7530742513eff0",
+    "UncompressedBytes": 126317900,
+    "GzipBytes": 4813182,
+    "XzBytes": 204920
+  },
+  "T3-R7-12352": {
+    "SHA256Uncompressed": "585530987eb2bf5bfc9654436b40a82bf09b24aaa8d8f5563720a32c7f3b6b32",
+    "UncompressedBytes": 127466566,
+    "GzipBytes": 6817082,
+    "XzBytes": 221276
+  },
+  "T3-R7-12359": {
+    "SHA256Uncompressed": "7cd3de2d1b7f2e1fbd119c0731967fbc7ff9d5e3efaa90ef78fdb64e0c69e906",
+    "UncompressedBytes": 121064937,
+    "GzipBytes": 3210809,
+    "XzBytes": 194364
+  },
+  "T3-R7-12345": {
+    "SHA256Uncompressed": "229c94a6163d7adcebc9256ba32cb5f674c0715fc26c96e65af3e47e4da6c9d2",
+    "UncompressedBytes": 124796965,
+    "GzipBytes": 3099188,
+    "XzBytes": 199008
+  },
+  "T3-R10-12366": {
+    "SHA256Uncompressed": "d6fd21aea331c308d718a337aaebda68e003e04fc7da0a4c4c7530742513eff0",
+    "UncompressedBytes": 126317900,
+    "GzipBytes": 4813182,
+    "XzBytes": 204920
+  },
+  "T3-R10-12352": {
+    "SHA256Uncompressed": "585530987eb2bf5bfc9654436b40a82bf09b24aaa8d8f5563720a32c7f3b6b32",
+    "UncompressedBytes": 127466566,
+    "GzipBytes": 6817082,
+    "XzBytes": 221276
+  },
+  "T3-R10-12359": {
+    "SHA256Uncompressed": "7cd3de2d1b7f2e1fbd119c0731967fbc7ff9d5e3efaa90ef78fdb64e0c69e906",
+    "UncompressedBytes": 121064937,
+    "GzipBytes": 3210809,
+    "XzBytes": 194364
+  },
+  "T3-R10-12345": {
+    "SHA256Uncompressed": "ead3aac8c5955b8f4d2af5963cd7e496f7db1e967a06b4e10da192380b1bd659",
+    "UncompressedBytes": 124796990,
+    "GzipBytes": 3099161,
+    "XzBytes": 198916
+  },
+  "T3-RU-12366": {
+    "SHA256Uncompressed": "d6fd21aea331c308d718a337aaebda68e003e04fc7da0a4c4c7530742513eff0",
+    "UncompressedBytes": 126317900,
+    "GzipBytes": 4813182,
+    "XzBytes": 204920
+  },
+  "T3-RU-12352": {
+    "SHA256Uncompressed": "585530987eb2bf5bfc9654436b40a82bf09b24aaa8d8f5563720a32c7f3b6b32",
+    "UncompressedBytes": 127466566,
+    "GzipBytes": 6817082,
+    "XzBytes": 221276
+  },
+  "T3-RU-12359": {
+    "SHA256Uncompressed": "7cd3de2d1b7f2e1fbd119c0731967fbc7ff9d5e3efaa90ef78fdb64e0c69e906",
+    "UncompressedBytes": 121064937,
+    "GzipBytes": 3210809,
+    "XzBytes": 194364
+  },
+  "T3-RU-12345": {
+    "SHA256Uncompressed": "ead3aac8c5955b8f4d2af5963cd7e496f7db1e967a06b4e10da192380b1bd659",
+    "UncompressedBytes": 124796990,
+    "GzipBytes": 3099161,
+    "XzBytes": 198916
+  },
+  "T4-R5-12366": {
+    "SHA256Uncompressed": "b6a101fbf0d286fdc4db0a2484eb080e75c77446a904cc71c658896c6340b851",
+    "UncompressedBytes": 126305065,
+    "GzipBytes": 4818853,
+    "XzBytes": 206400
+  },
+  "T4-R5-12352": {
+    "SHA256Uncompressed": "a3d68bd5efa4d8e3da783862a1d8fc63d8f96fab75cd74613bf0e1d25358fdc1",
+    "UncompressedBytes": 127459895,
+    "GzipBytes": 6821262,
+    "XzBytes": 222412
+  },
+  "T4-R5-12359": {
+    "SHA256Uncompressed": "805edaaadb60a16c5dee46129d0ef1bbbfb502f4c3179061b52907f07267fa00",
+    "UncompressedBytes": 121053664,
+    "GzipBytes": 3216533,
+    "XzBytes": 196356
+  },
+  "T4-R5-12345": {
+    "SHA256Uncompressed": "9b9da625b19c522af21890c4c4ec0d3d78dfac1d4b5469c7b7b0b7ad8af0e930",
+    "UncompressedBytes": 124784723,
+    "GzipBytes": 3105613,
+    "XzBytes": 200960
+  },
+  "T4-R7-12366": {
+    "SHA256Uncompressed": "2bb54052c3f49b7ed941601fb92027bea8123184f293abe11255baf607a19c5a",
+    "UncompressedBytes": 126317900,
+    "GzipBytes": 4813246,
+    "XzBytes": 204944
+  },
+  "T4-R7-12352": {
+    "SHA256Uncompressed": "fd9b683841dfe1e47ed74bb8bfc3fd7ce6de9b40ff8f42ae79828ed0c20ee341",
+    "UncompressedBytes": 127466566,
+    "GzipBytes": 6817162,
+    "XzBytes": 221288
+  },
+  "T4-R7-12359": {
+    "SHA256Uncompressed": "1fbbd4049896b7a6ffdcbb117d9a7d7c8b247e9f5679e0cebb25e3dde4f1d8f5",
+    "UncompressedBytes": 121064937,
+    "GzipBytes": 3210895,
+    "XzBytes": 194364
+  },
+  "T4-R7-12345": {
+    "SHA256Uncompressed": "9279a6213f6e1ccee83cd6d6c1c7806155b069cbb346c5aedcdfaab9dfe237f7",
+    "UncompressedBytes": 124796965,
+    "GzipBytes": 3099252,
+    "XzBytes": 199044
+  },
+  "T4-R10-12366": {
+    "SHA256Uncompressed": "2bb54052c3f49b7ed941601fb92027bea8123184f293abe11255baf607a19c5a",
+    "UncompressedBytes": 126317900,
+    "GzipBytes": 4813246,
+    "XzBytes": 204944
+  },
+  "T4-R10-12352": {
+    "SHA256Uncompressed": "fd9b683841dfe1e47ed74bb8bfc3fd7ce6de9b40ff8f42ae79828ed0c20ee341",
+    "UncompressedBytes": 127466566,
+    "GzipBytes": 6817162,
+    "XzBytes": 221288
+  },
+  "T4-R10-12359": {
+    "SHA256Uncompressed": "1fbbd4049896b7a6ffdcbb117d9a7d7c8b247e9f5679e0cebb25e3dde4f1d8f5",
+    "UncompressedBytes": 121064937,
+    "GzipBytes": 3210895,
+    "XzBytes": 194364
+  },
+  "T4-R10-12345": {
+    "SHA256Uncompressed": "83cb9abe1caef92ffa93693469bd751659cf260ce30c50367f242ccd822ea802",
+    "UncompressedBytes": 124796990,
+    "GzipBytes": 3099226,
+    "XzBytes": 198948
+  },
+  "T4-RU-12352": {
+    "SHA256Uncompressed": "fd9b683841dfe1e47ed74bb8bfc3fd7ce6de9b40ff8f42ae79828ed0c20ee341",
+    "UncompressedBytes": 127466566,
+    "GzipBytes": 6817162,
+    "XzBytes": 221288
+  },
+  "T4-RU-12366": {
+    "SHA256Uncompressed": "2bb54052c3f49b7ed941601fb92027bea8123184f293abe11255baf607a19c5a",
+    "UncompressedBytes": 126317900,
+    "GzipBytes": 4813246,
+    "XzBytes": 204944
+  },
+  "T4-RU-12359": {
+    "SHA256Uncompressed": "1fbbd4049896b7a6ffdcbb117d9a7d7c8b247e9f5679e0cebb25e3dde4f1d8f5",
+    "UncompressedBytes": 121064937,
+    "GzipBytes": 3210895,
+    "XzBytes": 194364
+  },
+  "T4-RU-12345": {
+    "SHA256Uncompressed": "83cb9abe1caef92ffa93693469bd751659cf260ce30c50367f242ccd822ea802",
+    "UncompressedBytes": 124796990,
+    "GzipBytes": 3099226,
+    "XzBytes": 198948
+  },
+  "T2-R5-12353": {
+    "SHA256Uncompressed": "d7a7d34c40a26709bd330a168924c756a59fd65c9d318afe0d54cd02a73c4662",
+    "UncompressedBytes": 125667875,
+    "GzipBytes": 4539506,
+    "XzBytes": 208588
+  },
+  "T2-R5-12367": {
+    "SHA256Uncompressed": "ff774c970d3985a1b09963c22f7e8f24370186c40175237aa326cc940cc93430",
+    "UncompressedBytes": 126268102,
+    "GzipBytes": 6010730,
+    "XzBytes": 211920
+  },
+  "T2-R5-12360": {
+    "SHA256Uncompressed": "aa1757a975258b1b6bca284472975c044389bdac1b646cf25f62c1f267880d76",
+    "UncompressedBytes": 125262795,
+    "GzipBytes": 3274276,
+    "XzBytes": 199568
+  },
+  "T2-R5-12346": {
+    "SHA256Uncompressed": "03a6fed55741166981c95bcef17a1b74510702f385056132e06dfcbe4e280e94",
+    "UncompressedBytes": 126732274,
+    "GzipBytes": 5210472,
+    "XzBytes": 217828
+  },
+  "T2-R7-12367": {
+    "SHA256Uncompressed": "4dcc6e1d005208ac1245e27eff2fdb7f64d016975a6f7053973970e7eabf0098",
+    "UncompressedBytes": 126268481,
+    "GzipBytes": 6010039,
+    "XzBytes": 211604
+  },
+  "T2-R7-12353": {
+    "SHA256Uncompressed": "d7a7d34c40a26709bd330a168924c756a59fd65c9d318afe0d54cd02a73c4662",
+    "UncompressedBytes": 125667875,
+    "GzipBytes": 4539506,
+    "XzBytes": 208588
+  },
+  "T2-R7-12360": {
+    "SHA256Uncompressed": "32020719ce55f4ac700d1412478b528fbd4dd09d7c602d5b93143a44124ffd89",
+    "UncompressedBytes": 125262805,
+    "GzipBytes": 3274272,
+    "XzBytes": 199564
+  },
+  "T2-R7-12346": {
+    "SHA256Uncompressed": "9b8ec3617e506b42e20b4a341bb64a4ed5a994024c930ab6d1fbd739742b5278",
+    "UncompressedBytes": 126732696,
+    "GzipBytes": 5209767,
+    "XzBytes": 217460
+  },
+  "T2-R10-12367": {
+    "SHA256Uncompressed": "4dcc6e1d005208ac1245e27eff2fdb7f64d016975a6f7053973970e7eabf0098",
+    "UncompressedBytes": 126268481,
+    "GzipBytes": 6010039,
+    "XzBytes": 211604
+  },
+  "T2-R10-12353": {
+    "SHA256Uncompressed": "d7a7d34c40a26709bd330a168924c756a59fd65c9d318afe0d54cd02a73c4662",
+    "UncompressedBytes": 125667875,
+    "GzipBytes": 4539506,
+    "XzBytes": 208588
+  },
+  "T2-R10-12360": {
+    "SHA256Uncompressed": "32020719ce55f4ac700d1412478b528fbd4dd09d7c602d5b93143a44124ffd89",
+    "UncompressedBytes": 125262805,
+    "GzipBytes": 3274272,
+    "XzBytes": 199564
+  },
+  "T2-R10-12346": {
+    "SHA256Uncompressed": "9b8ec3617e506b42e20b4a341bb64a4ed5a994024c930ab6d1fbd739742b5278",
+    "UncompressedBytes": 126732696,
+    "GzipBytes": 5209767,
+    "XzBytes": 217460
+  },
+  "T2-RU-12367": {
+    "SHA256Uncompressed": "4dcc6e1d005208ac1245e27eff2fdb7f64d016975a6f7053973970e7eabf0098",
+    "UncompressedBytes": 126268481,
+    "GzipBytes": 6010039,
+    "XzBytes": 211604
+  },
+  "T2-RU-12353": {
+    "SHA256Uncompressed": "d7a7d34c40a26709bd330a168924c756a59fd65c9d318afe0d54cd02a73c4662",
+    "UncompressedBytes": 125667875,
+    "GzipBytes": 4539506,
+    "XzBytes": 208588
+  },
+  "T2-RU-12360": {
+    "SHA256Uncompressed": "32020719ce55f4ac700d1412478b528fbd4dd09d7c602d5b93143a44124ffd89",
+    "UncompressedBytes": 125262805,
+    "GzipBytes": 3274272,
+    "XzBytes": 199564
+  },
+  "T2-RU-12346": {
+    "SHA256Uncompressed": "9b8ec3617e506b42e20b4a341bb64a4ed5a994024c930ab6d1fbd739742b5278",
+    "UncompressedBytes": 126732696,
+    "GzipBytes": 5209767,
+    "XzBytes": 217460
+  },
+  "T3-R5-12367": {
+    "SHA256Uncompressed": "5349f22905bfe20076e9bceb8a60b816b61e8fef536aeb2ddc84956f8df90966",
+    "UncompressedBytes": 126268109,
+    "GzipBytes": 5999064,
+    "XzBytes": 212812
+  },
+  "T3-R5-12353": {
+    "SHA256Uncompressed": "ddb81cee097e695d40a0903f01d64aca944ab4efe8ad02d821585436c1a8cfe7",
+    "UncompressedBytes": 125666569,
+    "GzipBytes": 4525125,
+    "XzBytes": 210068
+  },
+  "T3-R5-12360": {
+    "SHA256Uncompressed": "add05a2d717023066bf749255c63f2f48152c3aa2e63c7164aa628de619eefd5",
+    "UncompressedBytes": 125260918,
+    "GzipBytes": 3253497,
+    "XzBytes": 199424
+  },
+  "T3-R5-12346": {
+    "SHA256Uncompressed": "c38c4625ee4201366e8b315a564ef1f22dc6e5e41b8f67068471f3ed3270ce0a",
+    "UncompressedBytes": 126731620,
+    "GzipBytes": 5199352,
+    "XzBytes": 219240
+  },
+  "T3-R7-12367": {
+    "SHA256Uncompressed": "975ed877bcd6fa24641bfb5e829db5ac1c30afd1ffa87478fa82027e26096789",
+    "UncompressedBytes": 126276019,
+    "GzipBytes": 5994810,
+    "XzBytes": 211344
+  },
+  "T3-R7-12353": {
+    "SHA256Uncompressed": "60349be516485e7262f1e6f0b2c87098b4d3e094cb0fe7e0d48089e983ad2a9c",
+    "UncompressedBytes": 125675878,
+    "GzipBytes": 4520944,
+    "XzBytes": 208380
+  },
+  "T3-R7-12360": {
+    "SHA256Uncompressed": "2c6391a384ecbc4e9b038692c3aa2586b129e82c5b525c2c284ae7263c153af1",
+    "UncompressedBytes": 125275141,
+    "GzipBytes": 3247860,
+    "XzBytes": 197756
+  },
+  "T3-R7-12346": {
+    "SHA256Uncompressed": "659e0f6a30347e9859e8b04d707cb49199e6b229ea3bc687d42c51a9a64d7c87",
+    "UncompressedBytes": 126743807,
+    "GzipBytes": 5193450,
+    "XzBytes": 217916
+  },
+  "T3-R10-12353": {
+    "SHA256Uncompressed": "60349be516485e7262f1e6f0b2c87098b4d3e094cb0fe7e0d48089e983ad2a9c",
+    "UncompressedBytes": 125675878,
+    "GzipBytes": 4520944,
+    "XzBytes": 208380
+  },
+  "T3-R10-12367": {
+    "SHA256Uncompressed": "975ed877bcd6fa24641bfb5e829db5ac1c30afd1ffa87478fa82027e26096789",
+    "UncompressedBytes": 126276019,
+    "GzipBytes": 5994810,
+    "XzBytes": 211344
+  },
+  "T3-R10-12360": {
+    "SHA256Uncompressed": "2c6391a384ecbc4e9b038692c3aa2586b129e82c5b525c2c284ae7263c153af1",
+    "UncompressedBytes": 125275141,
+    "GzipBytes": 3247860,
+    "XzBytes": 197756
+  },
+  "T3-R10-12346": {
+    "SHA256Uncompressed": "f17316921785db2fd836889568ff164424364f209a214947a1a4c40e2fa30eb6",
+    "UncompressedBytes": 126743814,
+    "GzipBytes": 5193437,
+    "XzBytes": 217896
+  },
+  "T3-RU-12353": {
+    "SHA256Uncompressed": "60349be516485e7262f1e6f0b2c87098b4d3e094cb0fe7e0d48089e983ad2a9c",
+    "UncompressedBytes": 125675878,
+    "GzipBytes": 4520944,
+    "XzBytes": 208380
+  },
+  "T3-RU-12367": {
+    "SHA256Uncompressed": "975ed877bcd6fa24641bfb5e829db5ac1c30afd1ffa87478fa82027e26096789",
+    "UncompressedBytes": 126276019,
+    "GzipBytes": 5994810,
+    "XzBytes": 211344
+  },
+  "T3-RU-12360": {
+    "SHA256Uncompressed": "2c6391a384ecbc4e9b038692c3aa2586b129e82c5b525c2c284ae7263c153af1",
+    "UncompressedBytes": 125275141,
+    "GzipBytes": 3247860,
+    "XzBytes": 197756
+  },
+  "T3-RU-12346": {
+    "SHA256Uncompressed": "f17316921785db2fd836889568ff164424364f209a214947a1a4c40e2fa30eb6",
+    "UncompressedBytes": 126743814,
+    "GzipBytes": 5193437,
+    "XzBytes": 217896
+  },
+  "T4-R5-12353": {
+    "SHA256Uncompressed": "1a24f7f45e9dc6bf15d275a2485f32bf188b4b7f48a9ba822eb9024b32feb739",
+    "UncompressedBytes": 125666569,
+    "GzipBytes": 4525213,
+    "XzBytes": 210088
+  },
+  "T4-R5-12367": {
+    "SHA256Uncompressed": "cd15f25b59604f5143709cec446972b9c229c46fba5d9e6e19c280bc33bab65f",
+    "UncompressedBytes": 126268109,
+    "GzipBytes": 5999167,
+    "XzBytes": 212828
+  },
+  "T4-R5-12360": {
+    "SHA256Uncompressed": "894c39524674bf708a713495be6b43a4bcbbe77922cb0b03f9ef437fa9762725",
+    "UncompressedBytes": 125260918,
+    "GzipBytes": 3253543,
+    "XzBytes": 199528
+  },
+  "T4-R5-12346": {
+    "SHA256Uncompressed": "f1323afb214d53d498bea8abe2faea3335ee62f3f475a8a042ab72f34c7cae68",
+    "UncompressedBytes": 126731620,
+    "GzipBytes": 5199451,
+    "XzBytes": 219288
+  },
+  "T4-R7-12353": {
+    "SHA256Uncompressed": "07b8caace9d130f84c93378565a27daa4ee25424da48c831a3b5d6d03bfba925",
+    "UncompressedBytes": 125675878,
+    "GzipBytes": 4521045,
+    "XzBytes": 208420
+  },
+  "T4-R7-12367": {
+    "SHA256Uncompressed": "cb2410b234c219c755b2d7494aebff7349db73f5b9beb21f5b7526ef9b10607e",
+    "UncompressedBytes": 126276019,
+    "GzipBytes": 5994933,
+    "XzBytes": 211360
+  },
+  "T4-R7-12360": {
+    "SHA256Uncompressed": "6a7751b9c6da0e12e310ca59a41dd66db37834d71dc15c268d8d66e796198b80",
+    "UncompressedBytes": 125275141,
+    "GzipBytes": 3247921,
+    "XzBytes": 197892
+  },
+  "T4-R7-12346": {
+    "SHA256Uncompressed": "ce2467a0809ebd2fc331c4cbad6be8ea6b10e930eefa05bccce553531a272908",
+    "UncompressedBytes": 126743807,
+    "GzipBytes": 5193575,
+    "XzBytes": 217956
+  },
+  "T4-R10-12353": {
+    "SHA256Uncompressed": "07b8caace9d130f84c93378565a27daa4ee25424da48c831a3b5d6d03bfba925",
+    "UncompressedBytes": 125675878,
+    "GzipBytes": 4521045,
+    "XzBytes": 208420
+  },
+  "T4-R10-12367": {
+    "SHA256Uncompressed": "cb2410b234c219c755b2d7494aebff7349db73f5b9beb21f5b7526ef9b10607e",
+    "UncompressedBytes": 126276019,
+    "GzipBytes": 5994933,
+    "XzBytes": 211360
+  },
+  "T4-R10-12360": {
+    "SHA256Uncompressed": "6a7751b9c6da0e12e310ca59a41dd66db37834d71dc15c268d8d66e796198b80",
+    "UncompressedBytes": 125275141,
+    "GzipBytes": 3247921,
+    "XzBytes": 197892
+  },
+  "T4-R10-12346": {
+    "SHA256Uncompressed": "ff6180a3b583c4183ed9c785081208e9d7056b2b2efc08f9d01d82f218f0340b",
+    "UncompressedBytes": 126743814,
+    "GzipBytes": 5193563,
+    "XzBytes": 217936
+  },
+  "T4-RU-12353": {
+    "SHA256Uncompressed": "07b8caace9d130f84c93378565a27daa4ee25424da48c831a3b5d6d03bfba925",
+    "UncompressedBytes": 125675878,
+    "GzipBytes": 4521045,
+    "XzBytes": 208420
+  },
+  "T4-RU-12367": {
+    "SHA256Uncompressed": "cb2410b234c219c755b2d7494aebff7349db73f5b9beb21f5b7526ef9b10607e",
+    "UncompressedBytes": 126276019,
+    "GzipBytes": 5994933,
+    "XzBytes": 211360
+  },
+  "T4-RU-12360": {
+    "SHA256Uncompressed": "6a7751b9c6da0e12e310ca59a41dd66db37834d71dc15c268d8d66e796198b80",
+    "UncompressedBytes": 125275141,
+    "GzipBytes": 3247921,
+    "XzBytes": 197892
+  },
+  "T4-RU-12346": {
+    "SHA256Uncompressed": "ff6180a3b583c4183ed9c785081208e9d7056b2b2efc08f9d01d82f218f0340b",
+    "UncompressedBytes": 126743814,
+    "GzipBytes": 5193563,
+    "XzBytes": 217936
+  },
+  "T2-R5-12354": {
+    "SHA256Uncompressed": "ab95f38617551a9b82492278535c437c4badd20d4b17b2cde41cd1ce56dc6ad2",
+    "UncompressedBytes": 124065164,
+    "GzipBytes": 6507930,
+    "XzBytes": 217588
+  },
+  "T2-R5-12368": {
+    "SHA256Uncompressed": "69a1de636a11e57180413968c2d90240beb8fb975e5febeee141d99fe815a12f",
+    "UncompressedBytes": 126045472,
+    "GzipBytes": 3283004,
+    "XzBytes": 201220
+  },
+  "T2-R5-12361": {
+    "SHA256Uncompressed": "3bf2d72df2834b2634a640fad7f4f423d14a62dfa46a2a55defcdf094a4cd48b",
+    "UncompressedBytes": 124872568,
+    "GzipBytes": 3257576,
+    "XzBytes": 201124
+  },
+  "T2-R5-12347": {
+    "SHA256Uncompressed": "fd1bf12d1edfe5e9296df6752f3fc852a636898e4dec33e0bbc0bf8f754f64d4",
+    "UncompressedBytes": 131628159,
+    "GzipBytes": 4767713,
+    "XzBytes": 218220
+  },
+  "T2-R7-12354": {
+    "SHA256Uncompressed": "bbc1893acd0933d5754936ef208c0dbe59eaea845aab4d6d8a0fb94437e6c3f1",
+    "UncompressedBytes": 124065171,
+    "GzipBytes": 6507926,
+    "XzBytes": 217632
+  },
+  "T2-R7-12368": {
+    "SHA256Uncompressed": "69a1de636a11e57180413968c2d90240beb8fb975e5febeee141d99fe815a12f",
+    "UncompressedBytes": 126045472,
+    "GzipBytes": 3283004,
+    "XzBytes": 201220
+  },
+  "T2-R7-12361": {
+    "SHA256Uncompressed": "3bf2d72df2834b2634a640fad7f4f423d14a62dfa46a2a55defcdf094a4cd48b",
+    "UncompressedBytes": 124872568,
+    "GzipBytes": 3257576,
+    "XzBytes": 201124
+  },
+  "T2-R7-12347": {
+    "SHA256Uncompressed": "519f97751e522c13fb51993e175cda5e727d12ccead3d6a0335b0773e50607ce",
+    "UncompressedBytes": 131628647,
+    "GzipBytes": 4767014,
+    "XzBytes": 217632
+  },
+  "T2-R10-12354": {
+    "SHA256Uncompressed": "bbc1893acd0933d5754936ef208c0dbe59eaea845aab4d6d8a0fb94437e6c3f1",
+    "UncompressedBytes": 124065171,
+    "GzipBytes": 6507926,
+    "XzBytes": 217632
+  },
+  "T2-R10-12368": {
+    "SHA256Uncompressed": "69a1de636a11e57180413968c2d90240beb8fb975e5febeee141d99fe815a12f",
+    "UncompressedBytes": 126045472,
+    "GzipBytes": 3283004,
+    "XzBytes": 201220
+  },
+  "T2-R10-12361": {
+    "SHA256Uncompressed": "3bf2d72df2834b2634a640fad7f4f423d14a62dfa46a2a55defcdf094a4cd48b",
+    "UncompressedBytes": 124872568,
+    "GzipBytes": 3257576,
+    "XzBytes": 201124
+  },
+  "T2-R10-12347": {
+    "SHA256Uncompressed": "519f97751e522c13fb51993e175cda5e727d12ccead3d6a0335b0773e50607ce",
+    "UncompressedBytes": 131628647,
+    "GzipBytes": 4767014,
+    "XzBytes": 217632
+  },
+  "T2-RU-12354": {
+    "SHA256Uncompressed": "bbc1893acd0933d5754936ef208c0dbe59eaea845aab4d6d8a0fb94437e6c3f1",
+    "UncompressedBytes": 124065171,
+    "GzipBytes": 6507926,
+    "XzBytes": 217632
+  },
+  "T2-RU-12368": {
+    "SHA256Uncompressed": "69a1de636a11e57180413968c2d90240beb8fb975e5febeee141d99fe815a12f",
+    "UncompressedBytes": 126045472,
+    "GzipBytes": 3283004,
+    "XzBytes": 201220
+  },
+  "T2-RU-12361": {
+    "SHA256Uncompressed": "3bf2d72df2834b2634a640fad7f4f423d14a62dfa46a2a55defcdf094a4cd48b",
+    "UncompressedBytes": 124872568,
+    "GzipBytes": 3257576,
+    "XzBytes": 201124
+  },
+  "T3-R5-12354": {
+    "SHA256Uncompressed": "64525f85df8fb9f362742c90ac8ab98b70d5355d613cf3f565b55d52184e2cab",
+    "UncompressedBytes": 124064720,
+    "GzipBytes": 6500647,
+    "XzBytes": 219448
+  },
+  "T2-RU-12347": {
+    "SHA256Uncompressed": "519f97751e522c13fb51993e175cda5e727d12ccead3d6a0335b0773e50607ce",
+    "UncompressedBytes": 131628647,
+    "GzipBytes": 4767014,
+    "XzBytes": 217632
+  },
+  "T3-R5-12368": {
+    "SHA256Uncompressed": "174a68be85a8978bde707c0fadbcafc8646a667c6340d61cb897812a3ffcf019",
+    "UncompressedBytes": 126045100,
+    "GzipBytes": 3263729,
+    "XzBytes": 201868
+  },
+  "T3-R5-12361": {
+    "SHA256Uncompressed": "c233d4eef63d876fdda721d42f209722d8976a3d4366c06d33f0e5c180c3784e",
+    "UncompressedBytes": 124871300,
+    "GzipBytes": 3239680,
+    "XzBytes": 202296
+  },
+  "T3-R7-12354": {
+    "SHA256Uncompressed": "ac2b45eac4add7292272fe201025ab158823509673af3aa3dae522895322ba38",
+    "UncompressedBytes": 124068191,
+    "GzipBytes": 6498179,
+    "XzBytes": 217740
+  },
+  "T3-R5-12347": {
+    "SHA256Uncompressed": "3ab1147850f03e8f77904abeff6484910225f3474527508e33c8b1c949283052",
+    "UncompressedBytes": 131625729,
+    "GzipBytes": 4751537,
+    "XzBytes": 219176
+  },
+  "T3-R7-12368": {
+    "SHA256Uncompressed": "db6aca4f537c1c9eb4cda3d6ec837dba554c8b68b812925d27f4f4c60b217831",
+    "UncompressedBytes": 126059208,
+    "GzipBytes": 3257632,
+    "XzBytes": 199860
+  },
+  "T3-R7-12361": {
+    "SHA256Uncompressed": "97efc4b897cca27a1f7525627166fafa615a40cbb10d6175c0d8e60135355338",
+    "UncompressedBytes": 124882264,
+    "GzipBytes": 3234247,
+    "XzBytes": 200020
+  },
+  "T3-R10-12354": {
+    "SHA256Uncompressed": "ac2b45eac4add7292272fe201025ab158823509673af3aa3dae522895322ba38",
+    "UncompressedBytes": 124068191,
+    "GzipBytes": 6498179,
+    "XzBytes": 217740
+  },
+  "T3-R7-12347": {
+    "SHA256Uncompressed": "fbd5e24058ff35d35064e6e4dcfefe2ebb7b2ede3d8a2cde4ac22ddb636d3bd6",
+    "UncompressedBytes": 131647820,
+    "GzipBytes": 4744372,
+    "XzBytes": 218016
+  },
+  "T3-R10-12368": {
+    "SHA256Uncompressed": "db6aca4f537c1c9eb4cda3d6ec837dba554c8b68b812925d27f4f4c60b217831",
+    "UncompressedBytes": 126059208,
+    "GzipBytes": 3257632,
+    "XzBytes": 199860
+  },
+  "T3-R10-12361": {
+    "SHA256Uncompressed": "97efc4b897cca27a1f7525627166fafa615a40cbb10d6175c0d8e60135355338",
+    "UncompressedBytes": 124882264,
+    "GzipBytes": 3234247,
+    "XzBytes": 200020
+  },
+  "T3-RU-12354": {
+    "SHA256Uncompressed": "ac2b45eac4add7292272fe201025ab158823509673af3aa3dae522895322ba38",
+    "UncompressedBytes": 124068191,
+    "GzipBytes": 6498179,
+    "XzBytes": 217740
+  },
+  "T3-RU-12368": {
+    "SHA256Uncompressed": "db6aca4f537c1c9eb4cda3d6ec837dba554c8b68b812925d27f4f4c60b217831",
+    "UncompressedBytes": 126059208,
+    "GzipBytes": 3257632,
+    "XzBytes": 199860
+  },
+  "T3-RU-12361": {
+    "SHA256Uncompressed": "97efc4b897cca27a1f7525627166fafa615a40cbb10d6175c0d8e60135355338",
+    "UncompressedBytes": 124882264,
+    "GzipBytes": 3234247,
+    "XzBytes": 200020
+  },
+  "T3-R10-12347": {
+    "SHA256Uncompressed": "fbd5e24058ff35d35064e6e4dcfefe2ebb7b2ede3d8a2cde4ac22ddb636d3bd6",
+    "UncompressedBytes": 131647820,
+    "GzipBytes": 4744372,
+    "XzBytes": 218016
+  },
+  "T4-R5-12354": {
+    "SHA256Uncompressed": "3d45078ec684be569a3ad8c0495dc34553121ac38e73939e26e7ae79853d0118",
+    "UncompressedBytes": 124064720,
+    "GzipBytes": 6500705,
+    "XzBytes": 219464
+  },
+  "T4-R5-12368": {
+    "SHA256Uncompressed": "32f7a9c359abb2a56c3fccab692ea5c2804e2c23f3413c6cdc0368a2b6900e4c",
+    "UncompressedBytes": 126045100,
+    "GzipBytes": 3263771,
+    "XzBytes": 201884
+  },
+  "T4-R5-12361": {
+    "SHA256Uncompressed": "dbaa20fb24865723b3cf3926386287cf526368c11cafe257a47481ea56c12465",
+    "UncompressedBytes": 124871300,
+    "GzipBytes": 3239778,
+    "XzBytes": 202320
+  },
+  "T3-RU-12347": {
+    "SHA256Uncompressed": "fbd5e24058ff35d35064e6e4dcfefe2ebb7b2ede3d8a2cde4ac22ddb636d3bd6",
+    "UncompressedBytes": 131647820,
+    "GzipBytes": 4744372,
+    "XzBytes": 218016
+  },
+  "T4-R7-12354": {
+    "SHA256Uncompressed": "40d01417434949d3e126972aba57459e41f4a990edb58d1552b8da1ccace957e",
+    "UncompressedBytes": 124068191,
+    "GzipBytes": 6498255,
+    "XzBytes": 217772
+  },
+  "T4-R7-12361": {
+    "SHA256Uncompressed": "45ce4a3d6faea6ffc1855b3985b37fd1ed531021b0e82251b7fc00f2a05be888",
+    "UncompressedBytes": 124882264,
+    "GzipBytes": 3234340,
+    "XzBytes": 200016
+  },
+  "T4-R7-12368": {
+    "SHA256Uncompressed": "b893c72343e94d8a6d07dae77e9411caefefc1095e8654220a7615737ff50c41",
+    "UncompressedBytes": 126059208,
+    "GzipBytes": 3257676,
+    "XzBytes": 199876
+  },
+  "T4-R5-12347": {
+    "SHA256Uncompressed": "e5483e9388c064ff833230da599660d88cba8718b575dc67a0288b85c9fe62b2",
+    "UncompressedBytes": 131625729,
+    "GzipBytes": 4751605,
+    "XzBytes": 219180
+  },
+  "T4-R10-12354": {
+    "SHA256Uncompressed": "40d01417434949d3e126972aba57459e41f4a990edb58d1552b8da1ccace957e",
+    "UncompressedBytes": 124068191,
+    "GzipBytes": 6498255,
+    "XzBytes": 217772
+  },
+  "T4-R10-12361": {
+    "SHA256Uncompressed": "45ce4a3d6faea6ffc1855b3985b37fd1ed531021b0e82251b7fc00f2a05be888",
+    "UncompressedBytes": 124882264,
+    "GzipBytes": 3234340,
+    "XzBytes": 200016
+  },
+  "T4-R10-12368": {
+    "SHA256Uncompressed": "b893c72343e94d8a6d07dae77e9411caefefc1095e8654220a7615737ff50c41",
+    "UncompressedBytes": 126059208,
+    "GzipBytes": 3257676,
+    "XzBytes": 199876
+  },
+  "T4-R7-12347": {
+    "SHA256Uncompressed": "5bc319c017b08f55070bf06e9932f65235a9aaf30eba201187e2d3f49641ba70",
+    "UncompressedBytes": 131647820,
+    "GzipBytes": 4744471,
+    "XzBytes": 218028
+  },
+  "T4-RU-12354": {
+    "SHA256Uncompressed": "40d01417434949d3e126972aba57459e41f4a990edb58d1552b8da1ccace957e",
+    "UncompressedBytes": 124068191,
+    "GzipBytes": 6498255,
+    "XzBytes": 217772
+  },
+  "T4-RU-12361": {
+    "SHA256Uncompressed": "45ce4a3d6faea6ffc1855b3985b37fd1ed531021b0e82251b7fc00f2a05be888",
+    "UncompressedBytes": 124882264,
+    "GzipBytes": 3234340,
+    "XzBytes": 200016
+  },
+  "T4-RU-12368": {
+    "SHA256Uncompressed": "b893c72343e94d8a6d07dae77e9411caefefc1095e8654220a7615737ff50c41",
+    "UncompressedBytes": 126059208,
+    "GzipBytes": 3257676,
+    "XzBytes": 199876
+  },
+  "T4-R10-12347": {
+    "SHA256Uncompressed": "5bc319c017b08f55070bf06e9932f65235a9aaf30eba201187e2d3f49641ba70",
+    "UncompressedBytes": 131647820,
+    "GzipBytes": 4744471,
+    "XzBytes": 218028
+  },
+  "T2-R5-12355": {
+    "SHA256Uncompressed": "fb8828c85407662567e7cdd3ded8a1ed51781c03f809493a802cea342967e7f6",
+    "UncompressedBytes": 123338628,
+    "GzipBytes": 3968373,
+    "XzBytes": 201612
+  },
+  "T2-R5-12369": {
+    "SHA256Uncompressed": "7bf571a20a44621453459133ca5fc173831a206dca48849cc45820fa552402e0",
+    "UncompressedBytes": 124682283,
+    "GzipBytes": 3476017,
+    "XzBytes": 203992
+  },
+  "T2-R5-12362": {
+    "SHA256Uncompressed": "1ae923f3d8c268c611c5f3451b5f5e0af30661d1e1fb7587514f5f9831e40564",
+    "UncompressedBytes": 128796157,
+    "GzipBytes": 6222213,
+    "XzBytes": 222184
+  },
+  "T4-RU-12347": {
+    "SHA256Uncompressed": "5bc319c017b08f55070bf06e9932f65235a9aaf30eba201187e2d3f49641ba70",
+    "UncompressedBytes": 131647820,
+    "GzipBytes": 4744471,
+    "XzBytes": 218028
+  },
+  "T2-R7-12355": {
+    "SHA256Uncompressed": "e55c5b2b1917bb130335c23117668ae600058a5b262948304c4cf4b89dd5e2a1",
+    "UncompressedBytes": 123338636,
+    "GzipBytes": 3968378,
+    "XzBytes": 201588
+  },
+  "T2-R7-12369": {
+    "SHA256Uncompressed": "7bf571a20a44621453459133ca5fc173831a206dca48849cc45820fa552402e0",
+    "UncompressedBytes": 124682283,
+    "GzipBytes": 3476017,
+    "XzBytes": 203992
+  },
+  "T2-R7-12362": {
+    "SHA256Uncompressed": "1ae923f3d8c268c611c5f3451b5f5e0af30661d1e1fb7587514f5f9831e40564",
+    "UncompressedBytes": 128796157,
+    "GzipBytes": 6222213,
+    "XzBytes": 222184
+  },
+  "T2-R5-12348": {
+    "SHA256Uncompressed": "2ffd18e040c9fd2df6c9787ae298c47c18cfd8c2f365c86c8d1e8b2074a8dc6f",
+    "UncompressedBytes": 124090990,
+    "GzipBytes": 4038891,
+    "XzBytes": 204068
+  },
+  "T2-R10-12355": {
+    "SHA256Uncompressed": "e55c5b2b1917bb130335c23117668ae600058a5b262948304c4cf4b89dd5e2a1",
+    "UncompressedBytes": 123338636,
+    "GzipBytes": 3968378,
+    "XzBytes": 201588
+  },
+  "T2-R10-12369": {
+    "SHA256Uncompressed": "7bf571a20a44621453459133ca5fc173831a206dca48849cc45820fa552402e0",
+    "UncompressedBytes": 124682283,
+    "GzipBytes": 3476017,
+    "XzBytes": 203992
+  },
+  "T2-R10-12362": {
+    "SHA256Uncompressed": "1ae923f3d8c268c611c5f3451b5f5e0af30661d1e1fb7587514f5f9831e40564",
+    "UncompressedBytes": 128796157,
+    "GzipBytes": 6222213,
+    "XzBytes": 222184
+  },
+  "T2-R7-12348": {
+    "SHA256Uncompressed": "82ff33a415719ac59f967d70437ca231ffa306f71111bde7c61dd99db55a7f15",
+    "UncompressedBytes": 124091010,
+    "GzipBytes": 4038885,
+    "XzBytes": 204092
+  },
+  "T2-RU-12355": {
+    "SHA256Uncompressed": "e55c5b2b1917bb130335c23117668ae600058a5b262948304c4cf4b89dd5e2a1",
+    "UncompressedBytes": 123338636,
+    "GzipBytes": 3968378,
+    "XzBytes": 201588
+  },
+  "T2-RU-12369": {
+    "SHA256Uncompressed": "7bf571a20a44621453459133ca5fc173831a206dca48849cc45820fa552402e0",
+    "UncompressedBytes": 124682283,
+    "GzipBytes": 3476017,
+    "XzBytes": 203992
+  },
+  "T2-RU-12362": {
+    "SHA256Uncompressed": "1ae923f3d8c268c611c5f3451b5f5e0af30661d1e1fb7587514f5f9831e40564",
+    "UncompressedBytes": 128796157,
+    "GzipBytes": 6222213,
+    "XzBytes": 222184
+  },
+  "T2-R10-12348": {
+    "SHA256Uncompressed": "82ff33a415719ac59f967d70437ca231ffa306f71111bde7c61dd99db55a7f15",
+    "UncompressedBytes": 124091010,
+    "GzipBytes": 4038885,
+    "XzBytes": 204092
+  },
+  "T3-R5-12355": {
+    "SHA256Uncompressed": "3609309402c7590830adddb33406d0910369ecde5ee9146431e79fa4d11af2f0",
+    "UncompressedBytes": 123338037,
+    "GzipBytes": 3955534,
+    "XzBytes": 202092
+  },
+  "T3-R5-12369": {
+    "SHA256Uncompressed": "df53891d06fd9737dd9c91ca96f7f8a94b0bed8802ffad4efa51ffe3a0875d1f",
+    "UncompressedBytes": 124680520,
+    "GzipBytes": 3457665,
+    "XzBytes": 204084
+  },
+  "T3-R5-12362": {
+    "SHA256Uncompressed": "d4fd82a6280b39d2f23e4c6d20cbfc3a9a116ba82380037f4662dad98f217917",
+    "UncompressedBytes": 128796163,
+    "GzipBytes": 6207954,
+    "XzBytes": 222720
+  },
+  "T2-RU-12348": {
+    "SHA256Uncompressed": "82ff33a415719ac59f967d70437ca231ffa306f71111bde7c61dd99db55a7f15",
+    "UncompressedBytes": 124091010,
+    "GzipBytes": 4038885,
+    "XzBytes": 204092
+  },
+  "T3-R7-12355": {
+    "SHA256Uncompressed": "ec91831975a82d3df9ea6c5013406cec8f6f65b310b3b9a652ba7bbb61f91377",
+    "UncompressedBytes": 123346771,
+    "GzipBytes": 3951565,
+    "XzBytes": 200360
+  },
+  "T3-R7-12369": {
+    "SHA256Uncompressed": "441d19bfd8a621d6c334814aecc57a0e7960839fe755804a91296505c15609b4",
+    "UncompressedBytes": 124692820,
+    "GzipBytes": 3451585,
+    "XzBytes": 202044
+  },
+  "T3-R7-12362": {
+    "SHA256Uncompressed": "bb7a20e45f652ba5c939b17a31bfdfb5a4d43757404ea3b2626730094a8447db",
+    "UncompressedBytes": 128806529,
+    "GzipBytes": 6202109,
+    "XzBytes": 221164
+  },
+  "T3-R5-12348": {
+    "SHA256Uncompressed": "4f86b21841d91842c16a34238d6d690511cea2536d7f70a8556e694e3fc817d4",
+    "UncompressedBytes": 124089539,
+    "GzipBytes": 4024076,
+    "XzBytes": 203952
+  },
+  "T3-R10-12355": {
+    "SHA256Uncompressed": "ec91831975a82d3df9ea6c5013406cec8f6f65b310b3b9a652ba7bbb61f91377",
+    "UncompressedBytes": 123346771,
+    "GzipBytes": 3951565,
+    "XzBytes": 200360
+  },
+  "T3-R10-12369": {
+    "SHA256Uncompressed": "441d19bfd8a621d6c334814aecc57a0e7960839fe755804a91296505c15609b4",
+    "UncompressedBytes": 124692820,
+    "GzipBytes": 3451585,
+    "XzBytes": 202044
+  },
+  "T3-R10-12362": {
+    "SHA256Uncompressed": "ab6ad66cc099eb1c94818b4b9ce98451282477f49d605deb79c9f38fd1fc6cfd",
+    "UncompressedBytes": 128806539,
+    "GzipBytes": 6202085,
+    "XzBytes": 221160
+  },
+  "T3-R7-12348": {
+    "SHA256Uncompressed": "7fdbedef565a2f86a789adcd092b4c29994176ef0f81610be9aa7c3c943eb375",
+    "UncompressedBytes": 124101388,
+    "GzipBytes": 4018958,
+    "XzBytes": 202312
+  },
+  "T3-RU-12355": {
+    "SHA256Uncompressed": "ec91831975a82d3df9ea6c5013406cec8f6f65b310b3b9a652ba7bbb61f91377",
+    "UncompressedBytes": 123346771,
+    "GzipBytes": 3951565,
+    "XzBytes": 200360
+  },
+  "T3-RU-12369": {
+    "SHA256Uncompressed": "441d19bfd8a621d6c334814aecc57a0e7960839fe755804a91296505c15609b4",
+    "UncompressedBytes": 124692820,
+    "GzipBytes": 3451585,
+    "XzBytes": 202044
+  },
+  "T3-RU-12362": {
+    "SHA256Uncompressed": "ab6ad66cc099eb1c94818b4b9ce98451282477f49d605deb79c9f38fd1fc6cfd",
+    "UncompressedBytes": 128806539,
+    "GzipBytes": 6202085,
+    "XzBytes": 221160
+  },
+  "T3-R10-12348": {
+    "SHA256Uncompressed": "7fdbedef565a2f86a789adcd092b4c29994176ef0f81610be9aa7c3c943eb375",
+    "UncompressedBytes": 124101388,
+    "GzipBytes": 4018958,
+    "XzBytes": 202312
+  },
+  "T4-R5-12355": {
+    "SHA256Uncompressed": "feaa1609758ed60b71f67a39df1cd9c3ebd268153952654152ce6474d8daf711",
+    "UncompressedBytes": 123338037,
+    "GzipBytes": 3955600,
+    "XzBytes": 202092
+  },
+  "T4-R5-12369": {
+    "SHA256Uncompressed": "10ec7949e0ee86f5ab484b60640c276b4a0a07aebc8cf01b6db11b3b576ea7f8",
+    "UncompressedBytes": 124680520,
+    "GzipBytes": 3457700,
+    "XzBytes": 204180
+  },
+  "T4-R5-12362": {
+    "SHA256Uncompressed": "fcbaba3739e4dd7f809877d7608ed16e1d54963ca918c6c71368658185eeec67",
+    "UncompressedBytes": 128796163,
+    "GzipBytes": 6208073,
+    "XzBytes": 222756
+  },
+  "T3-RU-12348": {
+    "SHA256Uncompressed": "7fdbedef565a2f86a789adcd092b4c29994176ef0f81610be9aa7c3c943eb375",
+    "UncompressedBytes": 124101388,
+    "GzipBytes": 4018958,
+    "XzBytes": 202312
+  },
+  "T4-R7-12355": {
+    "SHA256Uncompressed": "ed2e3a25055c04201a3f8f2f4bc7206aba7f9cd69b22487e9d976ceb2c12ed55",
+    "UncompressedBytes": 123346771,
+    "GzipBytes": 3951642,
+    "XzBytes": 200356
+  },
+  "T4-R7-12369": {
+    "SHA256Uncompressed": "e6c2475bfff8f6c8af695669ee77cf948d1c9d76f4c1ebe56294570dc914112f",
+    "UncompressedBytes": 124692820,
+    "GzipBytes": 3451637,
+    "XzBytes": 202120
+  },
+  "T4-R7-12362": {
+    "SHA256Uncompressed": "31d9ed7141c60321b181361a8a3138df5e50762a7f7697e1ff38fe806feb32e7",
+    "UncompressedBytes": 128806529,
+    "GzipBytes": 6202236,
+    "XzBytes": 221212
+  },
+  "T4-R5-12348": {
+    "SHA256Uncompressed": "6288104cc06afc6fd020261454b20bbfee51caa8ea4c20149ae55739f428cd26",
+    "UncompressedBytes": 124089539,
+    "GzipBytes": 4024113,
+    "XzBytes": 204000
+  },
+  "T4-R10-12355": {
+    "SHA256Uncompressed": "ed2e3a25055c04201a3f8f2f4bc7206aba7f9cd69b22487e9d976ceb2c12ed55",
+    "UncompressedBytes": 123346771,
+    "GzipBytes": 3951642,
+    "XzBytes": 200356
+  },
+  "T4-R10-12369": {
+    "SHA256Uncompressed": "e6c2475bfff8f6c8af695669ee77cf948d1c9d76f4c1ebe56294570dc914112f",
+    "UncompressedBytes": 124692820,
+    "GzipBytes": 3451637,
+    "XzBytes": 202120
+  },
+  "T4-R7-12348": {
+    "SHA256Uncompressed": "9383f6f304e5bdc3ea919d9d0b0ac9d4d25758fc2bd08d88b38fa321e843d1f4",
+    "UncompressedBytes": 124101388,
+    "GzipBytes": 4019012,
+    "XzBytes": 202340
+  },
+  "T4-R10-12362": {
+    "SHA256Uncompressed": "8c159b5545ac041251834c5f51be191534f9ff1d72e5784f6d083d96d1221818",
+    "UncompressedBytes": 128806539,
+    "GzipBytes": 6202211,
+    "XzBytes": 221212
+  },
+  "T4-RU-12355": {
+    "SHA256Uncompressed": "ed2e3a25055c04201a3f8f2f4bc7206aba7f9cd69b22487e9d976ceb2c12ed55",
+    "UncompressedBytes": 123346771,
+    "GzipBytes": 3951642,
+    "XzBytes": 200356
+  },
+  "T4-RU-12369": {
+    "SHA256Uncompressed": "e6c2475bfff8f6c8af695669ee77cf948d1c9d76f4c1ebe56294570dc914112f",
+    "UncompressedBytes": 124692820,
+    "GzipBytes": 3451637,
+    "XzBytes": 202120
+  },
+  "T4-R10-12348": {
+    "SHA256Uncompressed": "9383f6f304e5bdc3ea919d9d0b0ac9d4d25758fc2bd08d88b38fa321e843d1f4",
+    "UncompressedBytes": 124101388,
+    "GzipBytes": 4019012,
+    "XzBytes": 202340
+  },
+  "T4-RU-12362": {
+    "SHA256Uncompressed": "8c159b5545ac041251834c5f51be191534f9ff1d72e5784f6d083d96d1221818",
+    "UncompressedBytes": 128806539,
+    "GzipBytes": 6202211,
+    "XzBytes": 221212
+  },
+  "T2-R5-12356": {
+    "SHA256Uncompressed": "f2a8dd08240dfc86553d52e655920bf8b092a9f46bf4e341badada661a72ca50",
+    "UncompressedBytes": 126723281,
+    "GzipBytes": 3264771,
+    "XzBytes": 197080
+  },
+  "T2-R5-12370": {
+    "SHA256Uncompressed": "59683a667e0b7cc03507c1303984be0f66a794abbe4b0e83c555c3ea855e9b26",
+    "UncompressedBytes": 123847979,
+    "GzipBytes": 3143325,
+    "XzBytes": 198084
+  },
+  "T4-RU-12348": {
+    "SHA256Uncompressed": "9383f6f304e5bdc3ea919d9d0b0ac9d4d25758fc2bd08d88b38fa321e843d1f4",
+    "UncompressedBytes": 124101388,
+    "GzipBytes": 4019012,
+    "XzBytes": 202340
+  },
+  "T2-R5-12363": {
+    "SHA256Uncompressed": "d3934d0c44325b736c5428aed4d068805d9e581c47789ffab5eae4c249d64498",
+    "UncompressedBytes": 124409657,
+    "GzipBytes": 3562138,
+    "XzBytes": 200172
+  },
+  "T2-R7-12356": {
+    "SHA256Uncompressed": "f2a8dd08240dfc86553d52e655920bf8b092a9f46bf4e341badada661a72ca50",
+    "UncompressedBytes": 126723281,
+    "GzipBytes": 3264771,
+    "XzBytes": 197080
+  },
+  "T2-R7-12370": {
+    "SHA256Uncompressed": "82dd7b361697061197d2076a73395af5c97eaf3d8e0e2fde0a916806453c815d",
+    "UncompressedBytes": 123848430,
+    "GzipBytes": 3142744,
+    "XzBytes": 197716
+  },
+  "T2-R5-12349": {
+    "SHA256Uncompressed": "ba33d2c9458d8e37697b20feb01ebbb110b6647e3dbe4e813acb777037502e1d",
+    "UncompressedBytes": 125534972,
+    "GzipBytes": 3255541,
+    "XzBytes": 200136
+  },
+  "T2-R7-12363": {
+    "SHA256Uncompressed": "8c410976f36739655318e4c9a916acbeaeb958ef15e0c4f03ce94a58b7370e59",
+    "UncompressedBytes": 124409698,
+    "GzipBytes": 3562100,
+    "XzBytes": 200156
+  },
+  "T2-R10-12356": {
+    "SHA256Uncompressed": "f2a8dd08240dfc86553d52e655920bf8b092a9f46bf4e341badada661a72ca50",
+    "UncompressedBytes": 126723281,
+    "GzipBytes": 3264771,
+    "XzBytes": 197080
+  },
+  "T2-R10-12370": {
+    "SHA256Uncompressed": "82dd7b361697061197d2076a73395af5c97eaf3d8e0e2fde0a916806453c815d",
+    "UncompressedBytes": 123848430,
+    "GzipBytes": 3142744,
+    "XzBytes": 197716
+  },
+  "T2-R7-12349": {
+    "SHA256Uncompressed": "f3f53a3eef4858e5ab27e081d3e16d6c3a3e1080756c9c89cc67c7557fe0b387",
+    "UncompressedBytes": 125535457,
+    "GzipBytes": 3254934,
+    "XzBytes": 199496
+  },
+  "T2-R10-12363": {
+    "SHA256Uncompressed": "8c410976f36739655318e4c9a916acbeaeb958ef15e0c4f03ce94a58b7370e59",
+    "UncompressedBytes": 124409698,
+    "GzipBytes": 3562100,
+    "XzBytes": 200156
+  },
+  "T2-RU-12356": {
+    "SHA256Uncompressed": "f2a8dd08240dfc86553d52e655920bf8b092a9f46bf4e341badada661a72ca50",
+    "UncompressedBytes": 126723281,
+    "GzipBytes": 3264771,
+    "XzBytes": 197080
+  },
+  "T2-RU-12370": {
+    "SHA256Uncompressed": "82dd7b361697061197d2076a73395af5c97eaf3d8e0e2fde0a916806453c815d",
+    "UncompressedBytes": 123848430,
+    "GzipBytes": 3142744,
+    "XzBytes": 197716
+  },
+  "T2-RU-12363": {
+    "SHA256Uncompressed": "8c410976f36739655318e4c9a916acbeaeb958ef15e0c4f03ce94a58b7370e59",
+    "UncompressedBytes": 124409698,
+    "GzipBytes": 3562100,
+    "XzBytes": 200156
+  },
+  "T2-R10-12349": {
+    "SHA256Uncompressed": "f3f53a3eef4858e5ab27e081d3e16d6c3a3e1080756c9c89cc67c7557fe0b387",
+    "UncompressedBytes": 125535457,
+    "GzipBytes": 3254934,
+    "XzBytes": 199496
+  },
+  "T3-R5-12356": {
+    "SHA256Uncompressed": "81ce2e2541e284b8be6d88d7186b508319d865a4b37bd43b023bc714ed48ecc7",
+    "UncompressedBytes": 126721051,
+    "GzipBytes": 3244798,
+    "XzBytes": 197024
+  },
+  "T3-R5-12370": {
+    "SHA256Uncompressed": "e3a47d6f8c963608e7a2e4616a22bba0910bf071d9e22896a491e5941a7176ea",
+    "UncompressedBytes": 123847696,
+    "GzipBytes": 3126399,
+    "XzBytes": 199296
+  },
+  "T3-R5-12363": {
+    "SHA256Uncompressed": "7deaebbb32f3e170017320ae0a055728338a7caf80ac452fc4883166e87ac7c8",
+    "UncompressedBytes": 124407924,
+    "GzipBytes": 3545270,
+    "XzBytes": 199784
+  },
+  "T2-RU-12349": {
+    "SHA256Uncompressed": "f3f53a3eef4858e5ab27e081d3e16d6c3a3e1080756c9c89cc67c7557fe0b387",
+    "UncompressedBytes": 125535457,
+    "GzipBytes": 3254934,
+    "XzBytes": 199496
+  },
+  "T3-R7-12356": {
+    "SHA256Uncompressed": "26081d07c3d848750bf5769007bff68843841eb6591565705baa362a3a11587d",
+    "UncompressedBytes": 126737786,
+    "GzipBytes": 3238442,
+    "XzBytes": 195120
+  },
+  "T3-R7-12370": {
+    "SHA256Uncompressed": "8fa7467adc64d7da1c69b47ada661a28bcf075084330f30f94f2b4d04f3a7b52",
+    "UncompressedBytes": 123860732,
+    "GzipBytes": 3120921,
+    "XzBytes": 197656
+  },
+  "T3-R7-12363": {
+    "SHA256Uncompressed": "fccd91c92b1b14ad93dcc557f94e9a97ac20e14a3f67d9b315ba3b1199b31b83",
+    "UncompressedBytes": 124419649,
+    "GzipBytes": 3539264,
+    "XzBytes": 198320
+  },
+  "T3-R5-12349": {
+    "SHA256Uncompressed": "2a270b187815ab9449c97fecf253bad0fae3571ef1fb9c9b524541d1ab02ab22",
+    "UncompressedBytes": 125533148,
+    "GzipBytes": 3236083,
+    "XzBytes": 200960
+  },
+  "T3-R10-12356": {
+    "SHA256Uncompressed": "26081d07c3d848750bf5769007bff68843841eb6591565705baa362a3a11587d",
+    "UncompressedBytes": 126737786,
+    "GzipBytes": 3238442,
+    "XzBytes": 195120
+  },
+  "T3-R10-12370": {
+    "SHA256Uncompressed": "bc12648c142393b41f0ba154a5f7ff7fedcd5cc1a0e986c84e2b21a860b766db",
+    "UncompressedBytes": 123860739,
+    "GzipBytes": 3120913,
+    "XzBytes": 197596
+  },
+  "T3-R10-12363": {
+    "SHA256Uncompressed": "fccd91c92b1b14ad93dcc557f94e9a97ac20e14a3f67d9b315ba3b1199b31b83",
+    "UncompressedBytes": 124419649,
+    "GzipBytes": 3539264,
+    "XzBytes": 198320
+  },
+  "T3-R7-12349": {
+    "SHA256Uncompressed": "fb8c17369b3ce0b981ca00d68ac02a8fc96665b37d6ec54751ed083c4210101d",
+    "UncompressedBytes": 125547367,
+    "GzipBytes": 3230220,
+    "XzBytes": 198968
+  },
+  "T3-RU-12356": {
+    "SHA256Uncompressed": "26081d07c3d848750bf5769007bff68843841eb6591565705baa362a3a11587d",
+    "UncompressedBytes": 126737786,
+    "GzipBytes": 3238442,
+    "XzBytes": 195120
+  },
+  "T3-RU-12370": {
+    "SHA256Uncompressed": "bc12648c142393b41f0ba154a5f7ff7fedcd5cc1a0e986c84e2b21a860b766db",
+    "UncompressedBytes": 123860739,
+    "GzipBytes": 3120913,
+    "XzBytes": 197596
+  },
+  "T3-RU-12363": {
+    "SHA256Uncompressed": "fccd91c92b1b14ad93dcc557f94e9a97ac20e14a3f67d9b315ba3b1199b31b83",
+    "UncompressedBytes": 124419649,
+    "GzipBytes": 3539264,
+    "XzBytes": 198320
+  },
+  "T3-R10-12349": {
+    "SHA256Uncompressed": "45bdbb187ff0cc3021f5a881295ecfc9406795a6f8568accfce106daa419f071",
+    "UncompressedBytes": 125547376,
+    "GzipBytes": 3230199,
+    "XzBytes": 198936
+  },
+  "T4-R5-12356": {
+    "SHA256Uncompressed": "3e0b5500be4246a1b564d0f0c25a82377c26955605ad768b127f9c8c4fb5094f",
+    "UncompressedBytes": 126721051,
+    "GzipBytes": 3244882,
+    "XzBytes": 197068
+  },
+  "T4-R5-12370": {
+    "SHA256Uncompressed": "25b4f6bfcbe05d5a2c89f6d650cef3a48fbe825df2d0bd8f70e7ab96c68e8b07",
+    "UncompressedBytes": 123847696,
+    "GzipBytes": 3126468,
+    "XzBytes": 199308
+  },
+  "T4-R5-12363": {
+    "SHA256Uncompressed": "85e139fc45bec07b81c79196a35fe35e944e37641f3f317a42fdae6a3173fedd",
+    "UncompressedBytes": 124407924,
+    "GzipBytes": 3545361,
+    "XzBytes": 199836
+  },
+  "T3-RU-12349": {
+    "SHA256Uncompressed": "45bdbb187ff0cc3021f5a881295ecfc9406795a6f8568accfce106daa419f071",
+    "UncompressedBytes": 125547376,
+    "GzipBytes": 3230199,
+    "XzBytes": 198936
+  },
+  "T4-R7-12356": {
+    "SHA256Uncompressed": "e1111db4031c480a9c718cfec739a02409ec7f6fad53433e195e660e3a5ab4e0",
+    "UncompressedBytes": 126737786,
+    "GzipBytes": 3238536,
+    "XzBytes": 195168
+  },
+  "T4-R7-12370": {
+    "SHA256Uncompressed": "1a4b9d5aaea092a3dfd0675953f5841524cbe94dfee9b0cdbcf9a9246b968692",
+    "UncompressedBytes": 123860732,
+    "GzipBytes": 3120995,
+    "XzBytes": 197660
+  },
+  "T4-R7-12363": {
+    "SHA256Uncompressed": "1fb3e45106551c1505aa75a8ec891583194b8ca8c10cd0d773fd01d9fae57840",
+    "UncompressedBytes": 124419649,
+    "GzipBytes": 3539368,
+    "XzBytes": 198376
+  },
+  "T4-R5-12349": {
+    "SHA256Uncompressed": "0f75ad346f51a7018086e2b82a15f1dce2133fd8dd8d3c6bb517c3c686901a31",
+    "UncompressedBytes": 125533148,
+    "GzipBytes": 3236153,
+    "XzBytes": 201016
+  },
+  "T4-R10-12356": {
+    "SHA256Uncompressed": "e1111db4031c480a9c718cfec739a02409ec7f6fad53433e195e660e3a5ab4e0",
+    "UncompressedBytes": 126737786,
+    "GzipBytes": 3238536,
+    "XzBytes": 195168
+  },
+  "T4-R10-12370": {
+    "SHA256Uncompressed": "a2b626cee771c2738a2adc1259fe6e3006be362882034ab5d1c36780071e9c4a",
+    "UncompressedBytes": 123860739,
+    "GzipBytes": 3120986,
+    "XzBytes": 197596
+  },
+  "T4-R10-12363": {
+    "SHA256Uncompressed": "1fb3e45106551c1505aa75a8ec891583194b8ca8c10cd0d773fd01d9fae57840",
+    "UncompressedBytes": 124419649,
+    "GzipBytes": 3539368,
+    "XzBytes": 198376
+  },
+  "T4-R7-12349": {
+    "SHA256Uncompressed": "8f95765eb68addf08960f01e0dd73b50348abfcbf23e57af0d31f0f049c8e389",
+    "UncompressedBytes": 125547367,
+    "GzipBytes": 3230290,
+    "XzBytes": 199012
+  },
+  "T4-RU-12356": {
+    "SHA256Uncompressed": "e1111db4031c480a9c718cfec739a02409ec7f6fad53433e195e660e3a5ab4e0",
+    "UncompressedBytes": 126737786,
+    "GzipBytes": 3238536,
+    "XzBytes": 195168
+  },
+  "T4-RU-12370": {
+    "SHA256Uncompressed": "a2b626cee771c2738a2adc1259fe6e3006be362882034ab5d1c36780071e9c4a",
+    "UncompressedBytes": 123860739,
+    "GzipBytes": 3120986,
+    "XzBytes": 197596
+  },
+  "T4-RU-12363": {
+    "SHA256Uncompressed": "1fb3e45106551c1505aa75a8ec891583194b8ca8c10cd0d773fd01d9fae57840",
+    "UncompressedBytes": 124419649,
+    "GzipBytes": 3539368,
+    "XzBytes": 198376
+  },
+  "T4-R10-12349": {
+    "SHA256Uncompressed": "16cf77b90ef59b70d91e5589c2ea04e5bfe5092206eb8eed931ef3a9713e951d",
+    "UncompressedBytes": 125547376,
+    "GzipBytes": 3230269,
+    "XzBytes": 198984
+  },
+  "T2-R5-12357": {
+    "SHA256Uncompressed": "95f40d3530ddf239c95fc3265e015019a739aa68f816e86a46bfce71b3d984eb",
+    "UncompressedBytes": 123513836,
+    "GzipBytes": 3657290,
+    "XzBytes": 199372
+  },
+  "T2-R5-12371": {
+    "SHA256Uncompressed": "796a3c6146f5d058f635ec906387edcbc8740f6a9d128206dc337628f29e403e",
+    "UncompressedBytes": 126031610,
+    "GzipBytes": 4217450,
+    "XzBytes": 206360
+  },
+  "T2-R5-12364": {
+    "SHA256Uncompressed": "5c9661014e2326bbf39bac649e65f78480e1e1e25685a4b10a8d8e1ba5ab36d1",
+    "UncompressedBytes": 124449673,
+    "GzipBytes": 3213305,
+    "XzBytes": 199560
+  },
+  "T4-RU-12349": {
+    "SHA256Uncompressed": "16cf77b90ef59b70d91e5589c2ea04e5bfe5092206eb8eed931ef3a9713e951d",
+    "UncompressedBytes": 125547376,
+    "GzipBytes": 3230269,
+    "XzBytes": 198984
+  },
+  "T2-R7-12357": {
+    "SHA256Uncompressed": "95f40d3530ddf239c95fc3265e015019a739aa68f816e86a46bfce71b3d984eb",
+    "UncompressedBytes": 123513836,
+    "GzipBytes": 3657290,
+    "XzBytes": 199372
+  },
+  "T2-R7-12371": {
+    "SHA256Uncompressed": "796a3c6146f5d058f635ec906387edcbc8740f6a9d128206dc337628f29e403e",
+    "UncompressedBytes": 126031610,
+    "GzipBytes": 4217450,
+    "XzBytes": 206360
+  },
+  "T2-R7-12364": {
+    "SHA256Uncompressed": "5c9661014e2326bbf39bac649e65f78480e1e1e25685a4b10a8d8e1ba5ab36d1",
+    "UncompressedBytes": 124449673,
+    "GzipBytes": 3213305,
+    "XzBytes": 199560
+  },
+  "T2-R5-12350": {
+    "SHA256Uncompressed": "4c19e039a49ce46d0a1013167ab2aba8200d4b1cfe2ed11c8b7d83099ce6e6bb",
+    "UncompressedBytes": 122364377,
+    "GzipBytes": 3229647,
+    "XzBytes": 196612
+  },
+  "T2-R10-12357": {
+    "SHA256Uncompressed": "95f40d3530ddf239c95fc3265e015019a739aa68f816e86a46bfce71b3d984eb",
+    "UncompressedBytes": 123513836,
+    "GzipBytes": 3657290,
+    "XzBytes": 199372
+  },
+  "T2-R10-12371": {
+    "SHA256Uncompressed": "796a3c6146f5d058f635ec906387edcbc8740f6a9d128206dc337628f29e403e",
+    "UncompressedBytes": 126031610,
+    "GzipBytes": 4217450,
+    "XzBytes": 206360
+  },
+  "T2-R10-12364": {
+    "SHA256Uncompressed": "5c9661014e2326bbf39bac649e65f78480e1e1e25685a4b10a8d8e1ba5ab36d1",
+    "UncompressedBytes": 124449673,
+    "GzipBytes": 3213305,
+    "XzBytes": 199560
+  },
+  "T2-R7-12350": {
+    "SHA256Uncompressed": "4c19e039a49ce46d0a1013167ab2aba8200d4b1cfe2ed11c8b7d83099ce6e6bb",
+    "UncompressedBytes": 122364377,
+    "GzipBytes": 3229647,
+    "XzBytes": 196612
+  },
+  "T2-RU-12357": {
+    "SHA256Uncompressed": "95f40d3530ddf239c95fc3265e015019a739aa68f816e86a46bfce71b3d984eb",
+    "UncompressedBytes": 123513836,
+    "GzipBytes": 3657290,
+    "XzBytes": 199372
+  },
+  "T2-RU-12371": {
+    "SHA256Uncompressed": "796a3c6146f5d058f635ec906387edcbc8740f6a9d128206dc337628f29e403e",
+    "UncompressedBytes": 126031610,
+    "GzipBytes": 4217450,
+    "XzBytes": 206360
+  },
+  "T2-RU-12364": {
+    "SHA256Uncompressed": "5c9661014e2326bbf39bac649e65f78480e1e1e25685a4b10a8d8e1ba5ab36d1",
+    "UncompressedBytes": 124449673,
+    "GzipBytes": 3213305,
+    "XzBytes": 199560
+  },
+  "T2-R10-12350": {
+    "SHA256Uncompressed": "4c19e039a49ce46d0a1013167ab2aba8200d4b1cfe2ed11c8b7d83099ce6e6bb",
+    "UncompressedBytes": 122364377,
+    "GzipBytes": 3229647,
+    "XzBytes": 196612
+  },
+  "T3-R5-12357": {
+    "SHA256Uncompressed": "758fe053d145f980a509b8217dd10dbfdde33a00b19060451b83759d410cb113",
+    "UncompressedBytes": 123512915,
+    "GzipBytes": 3640765,
+    "XzBytes": 199944
+  },
+  "T3-R5-12371": {
+    "SHA256Uncompressed": "c9049aa276a128a94b2b7c86ec298589294b34464f2c94736839b260c7572133",
+    "UncompressedBytes": 126030712,
+    "GzipBytes": 4204174,
+    "XzBytes": 207292
+  },
+  "T3-R5-12364": {
+    "SHA256Uncompressed": "a2e192d9736794270803c180ac6849bedf131d9da3b1ff65c03d6e2c2b2628d9",
+    "UncompressedBytes": 124448379,
+    "GzipBytes": 3195102,
+    "XzBytes": 199956
+  },
+  "T2-RU-12350": {
+    "SHA256Uncompressed": "4c19e039a49ce46d0a1013167ab2aba8200d4b1cfe2ed11c8b7d83099ce6e6bb",
+    "UncompressedBytes": 122364377,
+    "GzipBytes": 3229647,
+    "XzBytes": 196612
+  },
+  "T3-R7-12357": {
+    "SHA256Uncompressed": "99bb8ebcc2f38d71121bbe66e1ce352682f65e3c5a140a5c49c3e7913690b31c",
+    "UncompressedBytes": 123524081,
+    "GzipBytes": 3635008,
+    "XzBytes": 197876
+  },
+  "T3-R7-12371": {
+    "SHA256Uncompressed": "4d512f4f9438ef8abe44502d0c69b1fd4adaa5bb00be85334c6fd310bd326135",
+    "UncompressedBytes": 126043435,
+    "GzipBytes": 4198208,
+    "XzBytes": 205120
+  },
+  "T3-R5-12350": {
+    "SHA256Uncompressed": "7ad422275c0b401a04fd6bf1cd4efee81858286935f58cca7ce9bbf5825af5c6",
+    "UncompressedBytes": 122363178,
+    "GzipBytes": 3214770,
+    "XzBytes": 197636
+  },
+  "T3-R7-12364": {
+    "SHA256Uncompressed": "eed345fefa643816b511bfb5d8691a33f0b7a7b4a803d5e8a25e390d6c257b83",
+    "UncompressedBytes": 124462078,
+    "GzipBytes": 3188621,
+    "XzBytes": 198344
+  },
+  "T3-R10-12357": {
+    "SHA256Uncompressed": "99bb8ebcc2f38d71121bbe66e1ce352682f65e3c5a140a5c49c3e7913690b31c",
+    "UncompressedBytes": 123524081,
+    "GzipBytes": 3635008,
+    "XzBytes": 197876
+  },
+  "T3-R10-12371": {
+    "SHA256Uncompressed": "4d512f4f9438ef8abe44502d0c69b1fd4adaa5bb00be85334c6fd310bd326135",
+    "UncompressedBytes": 126043435,
+    "GzipBytes": 4198208,
+    "XzBytes": 205120
+  },
+  "T3-R7-12350": {
+    "SHA256Uncompressed": "f7d6e2c60e046e707b46e6d9d8cc5ae81ca8b7c791b2873f3b4266841ae770ea",
+    "UncompressedBytes": 122373124,
+    "GzipBytes": 3210190,
+    "XzBytes": 196124
+  },
+  "T3-R10-12364": {
+    "SHA256Uncompressed": "506f5f84bb94858b7a9cde6b160896f2df40318cb80d8448ad936164e1261938",
+    "UncompressedBytes": 124462096,
+    "GzipBytes": 3188603,
+    "XzBytes": 198316
+  },
+  "T3-RU-12357": {
+    "SHA256Uncompressed": "99bb8ebcc2f38d71121bbe66e1ce352682f65e3c5a140a5c49c3e7913690b31c",
+    "UncompressedBytes": 123524081,
+    "GzipBytes": 3635008,
+    "XzBytes": 197876
+  },
+  "T3-RU-12371": {
+    "SHA256Uncompressed": "4d512f4f9438ef8abe44502d0c69b1fd4adaa5bb00be85334c6fd310bd326135",
+    "UncompressedBytes": 126043435,
+    "GzipBytes": 4198208,
+    "XzBytes": 205120
+  },
+  "T3-R10-12350": {
+    "SHA256Uncompressed": "b6f3b4464e288fe5b1ac99d1361061ece52da8fea1be9b4b8a61ebbba9d1bda0",
+    "UncompressedBytes": 122373132,
+    "GzipBytes": 3210164,
+    "XzBytes": 196148
+  },
+  "T3-RU-12364": {
+    "SHA256Uncompressed": "506f5f84bb94858b7a9cde6b160896f2df40318cb80d8448ad936164e1261938",
+    "UncompressedBytes": 124462096,
+    "GzipBytes": 3188603,
+    "XzBytes": 198316
+  },
+  "T4-R5-12357": {
+    "SHA256Uncompressed": "ca80a680f8be3e9e3c465fa1b26a53d862bc90715f1a87a71f01489f728b6ad5",
+    "UncompressedBytes": 123512915,
+    "GzipBytes": 3640842,
+    "XzBytes": 199976
+  },
+  "T4-R5-12371": {
+    "SHA256Uncompressed": "f1168162835173c869438758abc9bd07a3973c2073760efcdfa9d9a20be3c63b",
+    "UncompressedBytes": 126030712,
+    "GzipBytes": 4204267,
+    "XzBytes": 207276
+  },
+  "T3-RU-12350": {
+    "SHA256Uncompressed": "b6f3b4464e288fe5b1ac99d1361061ece52da8fea1be9b4b8a61ebbba9d1bda0",
+    "UncompressedBytes": 122373132,
+    "GzipBytes": 3210164,
+    "XzBytes": 196148
+  },
+  "T4-R5-12364": {
+    "SHA256Uncompressed": "f1ff171d7b178430d9b1667cb9b5618bf800aa948bb2d5e6fe4f8c25510db55a",
+    "UncompressedBytes": 124448379,
+    "GzipBytes": 3195159,
+    "XzBytes": 199948
+  },
+  "T4-R7-12357": {
+    "SHA256Uncompressed": "fa67e8e65e7abb506b23a4e0039c90ffe39bc5567c2dbfa733122f4074121516",
+    "UncompressedBytes": 123524081,
+    "GzipBytes": 3635093,
+    "XzBytes": 197912
+  },
+  "T4-R7-12371": {
+    "SHA256Uncompressed": "369c8a55ef2031c476ed02e55193d41a0ce7770d6ba988476c078fc7f0676bd2",
+    "UncompressedBytes": 126043435,
+    "GzipBytes": 4198294,
+    "XzBytes": 205132
+  },
+  "T4-R5-12350": {
+    "SHA256Uncompressed": "8c94c2925696110fdb4dddf0a5a35d2dd65a5ef0a8739c0a9767a017a318275a",
+    "UncompressedBytes": 122363178,
+    "GzipBytes": 3214847,
+    "XzBytes": 197636
+  },
+  "T4-R7-12364": {
+    "SHA256Uncompressed": "5718796e96a29bd5559f24283817ad6ac5c3303fafceaa8321a9c9c10367fff1",
+    "UncompressedBytes": 124462078,
+    "GzipBytes": 3188705,
+    "XzBytes": 198380
+  },
+  "T4-R10-12357": {
+    "SHA256Uncompressed": "fa67e8e65e7abb506b23a4e0039c90ffe39bc5567c2dbfa733122f4074121516",
+    "UncompressedBytes": 123524081,
+    "GzipBytes": 3635093,
+    "XzBytes": 197912
+  },
+  "T4-R10-12371": {
+    "SHA256Uncompressed": "369c8a55ef2031c476ed02e55193d41a0ce7770d6ba988476c078fc7f0676bd2",
+    "UncompressedBytes": 126043435,
+    "GzipBytes": 4198294,
+    "XzBytes": 205132
+  },
+  "T4-R7-12350": {
+    "SHA256Uncompressed": "cd7118c33a881cf52e8c5e5fe08d90e10d61c2133628cc958fcc25e8ca8ecc22",
+    "UncompressedBytes": 122373124,
+    "GzipBytes": 3210268,
+    "XzBytes": 196100
+  },
+  "T4-R10-12364": {
+    "SHA256Uncompressed": "ac26683b267fb22536d9728e20d8052f07d169e3745841fe9921cfcb6b23f464",
+    "UncompressedBytes": 124462096,
+    "GzipBytes": 3188687,
+    "XzBytes": 198356
+  },
+  "T4-RU-12357": {
+    "SHA256Uncompressed": "fa67e8e65e7abb506b23a4e0039c90ffe39bc5567c2dbfa733122f4074121516",
+    "UncompressedBytes": 123524081,
+    "GzipBytes": 3635093,
+    "XzBytes": 197912
+  },
+  "T4-RU-12371": {
+    "SHA256Uncompressed": "369c8a55ef2031c476ed02e55193d41a0ce7770d6ba988476c078fc7f0676bd2",
+    "UncompressedBytes": 126043435,
+    "GzipBytes": 4198294,
+    "XzBytes": 205132
+  },
+  "T4-R10-12350": {
+    "SHA256Uncompressed": "77ccff8a2301075fa0aa3847427db8768f9c6708403525b13285ba19df25aaad",
+    "UncompressedBytes": 122373132,
+    "GzipBytes": 3210243,
+    "XzBytes": 196128
+  },
+  "T4-RU-12364": {
+    "SHA256Uncompressed": "ac26683b267fb22536d9728e20d8052f07d169e3745841fe9921cfcb6b23f464",
+    "UncompressedBytes": 124462096,
+    "GzipBytes": 3188687,
+    "XzBytes": 198356
+  },
+  "T2-R5-12358": {
+    "SHA256Uncompressed": "8885d66bf1440b7cc1d12d44c75d3989d108a81e323fc8f2569f885b6f2a49b0",
+    "UncompressedBytes": 123710354,
+    "GzipBytes": 3521445,
+    "XzBytes": 202004
+  },
+  "T2-R5-12372": {
+    "SHA256Uncompressed": "1e44160db162cb55d1ab6f593393b5e2cb5d55672839888d19b72ca8b3eb490d",
+    "UncompressedBytes": 125667423,
+    "GzipBytes": 3975525,
+    "XzBytes": 204052
+  },
+  "T4-RU-12350": {
+    "SHA256Uncompressed": "77ccff8a2301075fa0aa3847427db8768f9c6708403525b13285ba19df25aaad",
+    "UncompressedBytes": 122373132,
+    "GzipBytes": 3210243,
+    "XzBytes": 196128
+  },
+  "T2-R5-12365": {
+    "SHA256Uncompressed": "b1cf8f9a449db1a35354e1aaa97b5b730d5aefb3db90d8c9b018abc8d4279085",
+    "UncompressedBytes": 132006307,
+    "GzipBytes": 7207574,
+    "XzBytes": 234484
+  },
+  "T2-R7-12358": {
+    "SHA256Uncompressed": "8885d66bf1440b7cc1d12d44c75d3989d108a81e323fc8f2569f885b6f2a49b0",
+    "UncompressedBytes": 123710354,
+    "GzipBytes": 3521445,
+    "XzBytes": 202004
+  },
+  "T2-R7-12372": {
+    "SHA256Uncompressed": "1e44160db162cb55d1ab6f593393b5e2cb5d55672839888d19b72ca8b3eb490d",
+    "UncompressedBytes": 125667423,
+    "GzipBytes": 3975525,
+    "XzBytes": 204052
+  },
+  "T2-R5-12351": {
+    "SHA256Uncompressed": "c3cfa077b77d892995c876b5c6d5d6f76a9b389b734c66a93657edb802569aea",
+    "UncompressedBytes": 125029702,
+    "GzipBytes": 3516033,
+    "XzBytes": 200868
+  },
+  "T2-R7-12365": {
+    "SHA256Uncompressed": "b1cf8f9a449db1a35354e1aaa97b5b730d5aefb3db90d8c9b018abc8d4279085",
+    "UncompressedBytes": 132006307,
+    "GzipBytes": 7207574,
+    "XzBytes": 234484
+  },
+  "T2-R10-12358": {
+    "SHA256Uncompressed": "8885d66bf1440b7cc1d12d44c75d3989d108a81e323fc8f2569f885b6f2a49b0",
+    "UncompressedBytes": 123710354,
+    "GzipBytes": 3521445,
+    "XzBytes": 202004
+  },
+  "T2-R10-12372": {
+    "SHA256Uncompressed": "1e44160db162cb55d1ab6f593393b5e2cb5d55672839888d19b72ca8b3eb490d",
+    "UncompressedBytes": 125667423,
+    "GzipBytes": 3975525,
+    "XzBytes": 204052
+  },
+  "T2-R7-12351": {
+    "SHA256Uncompressed": "c3cfa077b77d892995c876b5c6d5d6f76a9b389b734c66a93657edb802569aea",
+    "UncompressedBytes": 125029702,
+    "GzipBytes": 3516033,
+    "XzBytes": 200868
+  },
+  "T2-R10-12365": {
+    "SHA256Uncompressed": "b1cf8f9a449db1a35354e1aaa97b5b730d5aefb3db90d8c9b018abc8d4279085",
+    "UncompressedBytes": 132006307,
+    "GzipBytes": 7207574,
+    "XzBytes": 234484
+  },
+  "T2-RU-12358": {
+    "SHA256Uncompressed": "8885d66bf1440b7cc1d12d44c75d3989d108a81e323fc8f2569f885b6f2a49b0",
+    "UncompressedBytes": 123710354,
+    "GzipBytes": 3521445,
+    "XzBytes": 202004
+  },
+  "T2-RU-12372": {
+    "SHA256Uncompressed": "1e44160db162cb55d1ab6f593393b5e2cb5d55672839888d19b72ca8b3eb490d",
+    "UncompressedBytes": 125667423,
+    "GzipBytes": 3975525,
+    "XzBytes": 204052
+  },
+  "T2-R10-12351": {
+    "SHA256Uncompressed": "c3cfa077b77d892995c876b5c6d5d6f76a9b389b734c66a93657edb802569aea",
+    "UncompressedBytes": 125029702,
+    "GzipBytes": 3516033,
+    "XzBytes": 200868
+  },
+  "T2-RU-12365": {
+    "SHA256Uncompressed": "b1cf8f9a449db1a35354e1aaa97b5b730d5aefb3db90d8c9b018abc8d4279085",
+    "UncompressedBytes": 132006307,
+    "GzipBytes": 7207574,
+    "XzBytes": 234484
+  },
+  "T3-R5-12358": {
+    "SHA256Uncompressed": "c59939b106799767f7be88a759d26a9a3053eb3cc58f6795feb0b9bf1bcc6b02",
+    "UncompressedBytes": 123709752,
+    "GzipBytes": 3501435,
+    "XzBytes": 202484
+  },
+  "T3-R5-12372": {
+    "SHA256Uncompressed": "6f32adf73d9b3d8638b45ec50cb0465d1a3b6d7b245fb427b38978b5e0cb87d1",
+    "UncompressedBytes": 125666318,
+    "GzipBytes": 3958487,
+    "XzBytes": 204700
+  },
+  "T2-RU-12351": {
+    "SHA256Uncompressed": "c3cfa077b77d892995c876b5c6d5d6f76a9b389b734c66a93657edb802569aea",
+    "UncompressedBytes": 125029702,
+    "GzipBytes": 3516033,
+    "XzBytes": 200868
+  },
+  "T3-R5-12365": {
+    "SHA256Uncompressed": "acf38da36e1967a46e4c5af9d8f879de3f259c1b8c9af04a7ad13d1d9758a0fe",
+    "UncompressedBytes": 132005691,
+    "GzipBytes": 7197269,
+    "XzBytes": 234884
+  },
+  "T3-R7-12358": {
+    "SHA256Uncompressed": "b202fdfb7d0c2fd9af917da7570be95ad6f2201a11710d5954e90235af2c47a4",
+    "UncompressedBytes": 123721305,
+    "GzipBytes": 3496261,
+    "XzBytes": 200624
+  },
+  "T3-R7-12372": {
+    "SHA256Uncompressed": "703b890b2d99531753c4950879deeb89fc9337072a88007aaaadfe10df952635",
+    "UncompressedBytes": 125680232,
+    "GzipBytes": 3952376,
+    "XzBytes": 202752
+  },
+  "T3-R5-12351": {
+    "SHA256Uncompressed": "65f59cf14be740e0e7a800338fcc713a60a5ee90cacda5df3f734bea6d9e3731",
+    "UncompressedBytes": 125028419,
+    "GzipBytes": 3499700,
+    "XzBytes": 200956
+  },
+  "T3-R10-12358": {
+    "SHA256Uncompressed": "b202fdfb7d0c2fd9af917da7570be95ad6f2201a11710d5954e90235af2c47a4",
+    "UncompressedBytes": 123721305,
+    "GzipBytes": 3496261,
+    "XzBytes": 200624
+  },
+  "T3-R7-12365": {
+    "SHA256Uncompressed": "7721073a4b4b40d6fa8f377c3f56654ac3fae57994bd59ceb8362ef59934ae21",
+    "UncompressedBytes": 132019117,
+    "GzipBytes": 7190046,
+    "XzBytes": 233456
+  },
+  "T3-R10-12372": {
+    "SHA256Uncompressed": "703b890b2d99531753c4950879deeb89fc9337072a88007aaaadfe10df952635",
+    "UncompressedBytes": 125680232,
+    "GzipBytes": 3952376,
+    "XzBytes": 202752
+  },
+  "T3-R7-12351": {
+    "SHA256Uncompressed": "f805512c77762928a031a711f0d4dc7ce4a36b472d3fc070af7ec326c1a4cc68",
+    "UncompressedBytes": 125041900,
+    "GzipBytes": 3492845,
+    "XzBytes": 199472
+  },
+  "T3-RU-12358": {
+    "SHA256Uncompressed": "b202fdfb7d0c2fd9af917da7570be95ad6f2201a11710d5954e90235af2c47a4",
+    "UncompressedBytes": 123721305,
+    "GzipBytes": 3496261,
+    "XzBytes": 200624
+  },
+  "T3-R10-12365": {
+    "SHA256Uncompressed": "7721073a4b4b40d6fa8f377c3f56654ac3fae57994bd59ceb8362ef59934ae21",
+    "UncompressedBytes": 132019117,
+    "GzipBytes": 7190046,
+    "XzBytes": 233456
+  },
+  "T3-RU-12372": {
+    "SHA256Uncompressed": "703b890b2d99531753c4950879deeb89fc9337072a88007aaaadfe10df952635",
+    "UncompressedBytes": 125680232,
+    "GzipBytes": 3952376,
+    "XzBytes": 202752
+  },
+  "T3-R10-12351": {
+    "SHA256Uncompressed": "f805512c77762928a031a711f0d4dc7ce4a36b472d3fc070af7ec326c1a4cc68",
+    "UncompressedBytes": 125041900,
+    "GzipBytes": 3492845,
+    "XzBytes": 199472
+  },
+  "T4-R5-12358": {
+    "SHA256Uncompressed": "5b1b9b0ee2a4011217d523a745994b7cdab73edc83072a512a856c0a793f0d10",
+    "UncompressedBytes": 123709752,
+    "GzipBytes": 3501503,
+    "XzBytes": 202516
+  },
+  "T3-RU-12365": {
+    "SHA256Uncompressed": "7721073a4b4b40d6fa8f377c3f56654ac3fae57994bd59ceb8362ef59934ae21",
+    "UncompressedBytes": 132019117,
+    "GzipBytes": 7190046,
+    "XzBytes": 233456
+  },
+  "T4-R5-12372": {
+    "SHA256Uncompressed": "b5536153bb5a9add5ec6da0282c3e3dd5b1b23344836f02ba6c7062bf5f8c732",
+    "UncompressedBytes": 125666318,
+    "GzipBytes": 3958538,
+    "XzBytes": 204796
+  },
+  "T3-RU-12351": {
+    "SHA256Uncompressed": "f805512c77762928a031a711f0d4dc7ce4a36b472d3fc070af7ec326c1a4cc68",
+    "UncompressedBytes": 125041900,
+    "GzipBytes": 3492845,
+    "XzBytes": 199472
+  },
+  "T4-R7-12358": {
+    "SHA256Uncompressed": "0712965d587e2c295b89e501ac80933a9a28a3777652d5e9f82bd85544a1b96e",
+    "UncompressedBytes": 123721305,
+    "GzipBytes": 3496325,
+    "XzBytes": 200660
+  },
+  "T4-R5-12365": {
+    "SHA256Uncompressed": "35233d6dd82b61e2a2e86bdc48e7da995bc51b817da058e1f3d704a5b74f69b7",
+    "UncompressedBytes": 132005691,
+    "GzipBytes": 7197344,
+    "XzBytes": 234884
+  },
+  "T4-R7-12372": {
+    "SHA256Uncompressed": "b89e1b1ee2ca15d051890d29a9c6c13ecd2455e98ae921775611361ead73089f",
+    "UncompressedBytes": 125680232,
+    "GzipBytes": 3952462,
+    "XzBytes": 202892
+  },
+  "T4-R5-12351": {
+    "SHA256Uncompressed": "50944d8b28aae6bb8472cc27b7bc228f5c5109e99995a8d061e3cb8a98d78aaf",
+    "UncompressedBytes": 125028419,
+    "GzipBytes": 3499772,
+    "XzBytes": 201068
+  },
+  "T4-R10-12358": {
+    "SHA256Uncompressed": "0712965d587e2c295b89e501ac80933a9a28a3777652d5e9f82bd85544a1b96e",
+    "UncompressedBytes": 123721305,
+    "GzipBytes": 3496325,
+    "XzBytes": 200660
+  },
+  "T4-R7-12365": {
+    "SHA256Uncompressed": "22cc5b095e9649fdccf8b88e6c5bc5efe1aa865ce97b2f143cc937f4c7d0de2b",
+    "UncompressedBytes": 132019117,
+    "GzipBytes": 7190157,
+    "XzBytes": 233488
+  },
+  "T4-R10-12372": {
+    "SHA256Uncompressed": "b89e1b1ee2ca15d051890d29a9c6c13ecd2455e98ae921775611361ead73089f",
+    "UncompressedBytes": 125680232,
+    "GzipBytes": 3952462,
+    "XzBytes": 202892
+  },
+  "T4-R7-12351": {
+    "SHA256Uncompressed": "bff16b250cd42bd18314b2fecc8d3c38709122b3e428fd2e01bf0ffae141bbb5",
+    "UncompressedBytes": 125041900,
+    "GzipBytes": 3492939,
+    "XzBytes": 199540
+  },
+  "T4-RU-12358": {
+    "SHA256Uncompressed": "0712965d587e2c295b89e501ac80933a9a28a3777652d5e9f82bd85544a1b96e",
+    "UncompressedBytes": 123721305,
+    "GzipBytes": 3496325,
+    "XzBytes": 200660
+  },
+  "T4-R10-12365": {
+    "SHA256Uncompressed": "22cc5b095e9649fdccf8b88e6c5bc5efe1aa865ce97b2f143cc937f4c7d0de2b",
+    "UncompressedBytes": 132019117,
+    "GzipBytes": 7190157,
+    "XzBytes": 233488
+  },
+  "T4-R10-12351": {
+    "SHA256Uncompressed": "bff16b250cd42bd18314b2fecc8d3c38709122b3e428fd2e01bf0ffae141bbb5",
+    "UncompressedBytes": 125041900,
+    "GzipBytes": 3492939,
+    "XzBytes": 199540
+  },
+  "T4-RU-12372": {
+    "SHA256Uncompressed": "b89e1b1ee2ca15d051890d29a9c6c13ecd2455e98ae921775611361ead73089f",
+    "UncompressedBytes": 125680232,
+    "GzipBytes": 3952462,
+    "XzBytes": 202892
+  },
+  "T2-R5-12373": {
+    "SHA256Uncompressed": "b306ceb09dede342f9b3495ec56ee0062ed2e9ef08fa9f8f8c4f4c2e3e345543",
+    "UncompressedBytes": 124473120,
+    "GzipBytes": 4389634,
+    "XzBytes": 205020
+  },
+  "T4-RU-12365": {
+    "SHA256Uncompressed": "22cc5b095e9649fdccf8b88e6c5bc5efe1aa865ce97b2f143cc937f4c7d0de2b",
+    "UncompressedBytes": 132019117,
+    "GzipBytes": 7190157,
+    "XzBytes": 233488
+  },
+  "T4-RU-12351": {
+    "SHA256Uncompressed": "bff16b250cd42bd18314b2fecc8d3c38709122b3e428fd2e01bf0ffae141bbb5",
+    "UncompressedBytes": 125041900,
+    "GzipBytes": 3492939,
+    "XzBytes": 199540
+  },
+  "T2-R7-12373": {
+    "SHA256Uncompressed": "b306ceb09dede342f9b3495ec56ee0062ed2e9ef08fa9f8f8c4f4c2e3e345543",
+    "UncompressedBytes": 124473120,
+    "GzipBytes": 4389634,
+    "XzBytes": 205020
+  },
+  "T2-R10-12373": {
+    "SHA256Uncompressed": "b306ceb09dede342f9b3495ec56ee0062ed2e9ef08fa9f8f8c4f4c2e3e345543",
+    "UncompressedBytes": 124473120,
+    "GzipBytes": 4389634,
+    "XzBytes": 205020
+  },
+  "T2-RU-12373": {
+    "SHA256Uncompressed": "b306ceb09dede342f9b3495ec56ee0062ed2e9ef08fa9f8f8c4f4c2e3e345543",
+    "UncompressedBytes": 124473120,
+    "GzipBytes": 4389634,
+    "XzBytes": 205020
+  },
+  "T3-R5-12373": {
+    "SHA256Uncompressed": "77e9edbce913324b72345f7c29e864024c980663ca2829bb17d1eba187c5eb39",
+    "UncompressedBytes": 124471948,
+    "GzipBytes": 4378073,
+    "XzBytes": 205944
+  },
+  "T3-R7-12373": {
+    "SHA256Uncompressed": "4b88b68f634f1b4d732b414e821441bcdc24ed5d76e67d18b71d8a6aa8b057a5",
+    "UncompressedBytes": 124483076,
+    "GzipBytes": 4372839,
+    "XzBytes": 204584
+  },
+  "T3-R10-12373": {
+    "SHA256Uncompressed": "4b88b68f634f1b4d732b414e821441bcdc24ed5d76e67d18b71d8a6aa8b057a5",
+    "UncompressedBytes": 124483076,
+    "GzipBytes": 4372839,
+    "XzBytes": 204584
+  },
+  "T3-RU-12373": {
+    "SHA256Uncompressed": "4b88b68f634f1b4d732b414e821441bcdc24ed5d76e67d18b71d8a6aa8b057a5",
+    "UncompressedBytes": 124483076,
+    "GzipBytes": 4372839,
+    "XzBytes": 204584
+  },
+  "T4-R5-12373": {
+    "SHA256Uncompressed": "b35a5cd6343e86a79ef98b51858a0be35dcda417f86a092a68ea5be603811238",
+    "UncompressedBytes": 124471948,
+    "GzipBytes": 4378162,
+    "XzBytes": 206008
+  },
+  "T4-R7-12373": {
+    "SHA256Uncompressed": "6eaebd14d14bb88850fe8811df401f9b1d38d2a3b48c65b143912be0ea1c55d8",
+    "UncompressedBytes": 124483076,
+    "GzipBytes": 4372925,
+    "XzBytes": 204652
+  },
+  "T4-R10-12373": {
+    "SHA256Uncompressed": "6eaebd14d14bb88850fe8811df401f9b1d38d2a3b48c65b143912be0ea1c55d8",
+    "UncompressedBytes": 124483076,
+    "GzipBytes": 4372925,
+    "XzBytes": 204652
+  },
+  "T4-RU-12373": {
+    "SHA256Uncompressed": "6eaebd14d14bb88850fe8811df401f9b1d38d2a3b48c65b143912be0ea1c55d8",
+    "UncompressedBytes": 124483076,
+    "GzipBytes": 4372925,
+    "XzBytes": 204652
+  },
+  "T2-R5-12374": {
+    "SHA256Uncompressed": "b42f159735381b17edeea2a24dc801531e7d268d39ac111dc00d4dc7c72cfb37",
+    "UncompressedBytes": 125860331,
+    "GzipBytes": 3361990,
+    "XzBytes": 203132
+  },
+  "T2-R7-12374": {
+    "SHA256Uncompressed": "4011956983ee4a882d6129e6a6cddfa6f809322eaed2574f30e1dff07ee1cc93",
+    "UncompressedBytes": 125860749,
+    "GzipBytes": 3361439,
+    "XzBytes": 202736
+  },
+  "T2-R10-12374": {
+    "SHA256Uncompressed": "4011956983ee4a882d6129e6a6cddfa6f809322eaed2574f30e1dff07ee1cc93",
+    "UncompressedBytes": 125860749,
+    "GzipBytes": 3361439,
+    "XzBytes": 202736
+  },
+  "T2-RU-12374": {
+    "SHA256Uncompressed": "4011956983ee4a882d6129e6a6cddfa6f809322eaed2574f30e1dff07ee1cc93",
+    "UncompressedBytes": 125860749,
+    "GzipBytes": 3361439,
+    "XzBytes": 202736
+  },
+  "T3-R5-12374": {
+    "SHA256Uncompressed": "7da7e38f8aface228f2ce7132ed74cb7809768be241c3fb94757b2d548551e45",
+    "UncompressedBytes": 125859081,
+    "GzipBytes": 3343443,
+    "XzBytes": 204596
+  },
+  "T3-R7-12374": {
+    "SHA256Uncompressed": "db1948d5f94fe39a36e220ec2478342c68e2826889ee8d16c42d3fc95dba4e35",
+    "UncompressedBytes": 125873363,
+    "GzipBytes": 3337348,
+    "XzBytes": 203316
+  },
+  "T3-R10-12374": {
+    "SHA256Uncompressed": "e8fda920092080e40fa5f9a8a1857adee72a0a3c2a093f35226213fe3e67a0b0",
+    "UncompressedBytes": 125873372,
+    "GzipBytes": 3337322,
+    "XzBytes": 203324
+  },
+  "T3-RU-12374": {
+    "SHA256Uncompressed": "e8fda920092080e40fa5f9a8a1857adee72a0a3c2a093f35226213fe3e67a0b0",
+    "UncompressedBytes": 125873372,
+    "GzipBytes": 3337322,
+    "XzBytes": 203324
+  },
+  "T4-R5-12374": {
+    "SHA256Uncompressed": "d7f67d54efbab9ae798d7a6f555ab7d407c7b6a9eb4f7286c71197432eae38df",
+    "UncompressedBytes": 125859081,
+    "GzipBytes": 3343507,
+    "XzBytes": 204624
+  },
+  "T4-R7-12374": {
+    "SHA256Uncompressed": "0845fbf6604c432d1f12579182e64b9e873e6fccafeeea4a987cb358da770089",
+    "UncompressedBytes": 125873363,
+    "GzipBytes": 3337406,
+    "XzBytes": 203316
+  },
+  "T4-R10-12374": {
+    "SHA256Uncompressed": "5c14eff239b0dc36b89f3d9eddd71eb6a6dd12734964d66adbd2c47fdf4df62f",
+    "UncompressedBytes": 125873372,
+    "GzipBytes": 3337379,
+    "XzBytes": 203324
+  },
+  "T4-RU-12374": {
+    "SHA256Uncompressed": "5c14eff239b0dc36b89f3d9eddd71eb6a6dd12734964d66adbd2c47fdf4df62f",
+    "UncompressedBytes": 125873372,
+    "GzipBytes": 3337379,
+    "XzBytes": 203324
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "FixedRequestsIdentical": true,
+  "UpstreamDailyFieldsIdentical": true,
+  "ThreeFourTesterDailyFlowIdentical": true,
+  "UpstreamKeys": [
+    "DevelopmentWork",
+    "ReviewWork",
+    "UsedDevelopmentCapacity",
+    "UsedReviewCapacity",
+    "UsedDebtRepaymentCapacity",
+    "Debt",
+    "WaitingForCodeReviewCount",
+    "DevelopmentCount",
+    "SpecialistWorkWaiting"
+  ],
+  "ThreeFourKeys": [
+    "TestingWork",
+    "UsedTesterCapacity",
+    "WaitingForTestingCount",
+    "ReadyForReleaseCount",
+    "DoneCount",
+    "TotalWip"
+  ]
+}

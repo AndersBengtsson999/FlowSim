@@ -1,0 +1,8 @@
+{
+  "Exact": true,
+  "Seeds": 30,
+  "DaysPerSeed": 300,
+  "ComparedMetricPoints": 63000,
+  "Reference": "specialist-capacity-v1 S2",
+  "Current": "T2-R5"
+}

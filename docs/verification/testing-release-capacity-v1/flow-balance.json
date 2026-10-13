@@ -1,0 +1,2522 @@
+[
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12374,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12374,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12374,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12374,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 2,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12374,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12374,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12374,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12374,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 2,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12374,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12374,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12374,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12374,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12373,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12373,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12373,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12373,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 1,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12373,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12373,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12373,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12373,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 1,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12373,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12373,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12373,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12373,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12358,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12358,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12358,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12358,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12358,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12358,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12358,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12358,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12358,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12358,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12358,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12358,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12357,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12357,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12357,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12357,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 1,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12357,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12357,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12357,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12357,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 1,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12357,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12357,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12357,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12357,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12356,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12356,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12356,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12356,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": -1,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12356,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12356,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12356,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12356,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": -1,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12356,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12356,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12356,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12356,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12355,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12355,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12355,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12355,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 5
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12355,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12355,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12355,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12355,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 5
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12355,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 5
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12355,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 5
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12355,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 5
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12355,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 5
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12354,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12354,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12354,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12354,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 5,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12354,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12354,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12354,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12354,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 5,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12354,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12354,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12354,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12354,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12353,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12353,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12353,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12353,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 5,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12353,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12353,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12353,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12353,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 5,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12353,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12353,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12353,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12353,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12372,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12372,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12372,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12372,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": -1,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12372,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12372,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12372,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12372,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": -1,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12372,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12372,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12372,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12372,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12371,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12371,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12371,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12371,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": -1,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12371,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12371,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12371,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12371,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": -1,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12371,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12371,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12371,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12371,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12370,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12370,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12370,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12370,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12370,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12370,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12370,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12370,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12370,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12370,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12370,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12370,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12369,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12369,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12369,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12369,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 1,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12369,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12369,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12369,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12369,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 1,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12369,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12369,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12369,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12369,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12368,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12368,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12368,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12368,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": -1,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12368,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12368,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12368,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12368,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": -1,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12368,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12368,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12368,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12368,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12367,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12367,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12367,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12367,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12367,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12367,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12367,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12367,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12367,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12367,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12367,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12367,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12352,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12352,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12352,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12352,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 5
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12352,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12352,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12352,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12352,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 5
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12352,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 5
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12352,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 5
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12352,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 5
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12352,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 5
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12351,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12351,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12351,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12351,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 2,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12351,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12351,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12351,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12351,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 2,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12351,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12351,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12351,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12351,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12350,
+    "TestingInventoryChange": -4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -4
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12350,
+    "TestingInventoryChange": -4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -4
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12350,
+    "TestingInventoryChange": -4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -4
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12350,
+    "TestingInventoryChange": -4,
+    "ReleaseQueueChange": 5,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12350,
+    "TestingInventoryChange": -4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -4
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12350,
+    "TestingInventoryChange": -4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -4
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12350,
+    "TestingInventoryChange": -4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -4
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12350,
+    "TestingInventoryChange": -4,
+    "ReleaseQueueChange": 5,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12350,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12350,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12350,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12350,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12349,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12349,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12349,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12349,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 1,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12349,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12349,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12349,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12349,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 1,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12349,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12349,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12349,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12349,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12348,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12348,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12348,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12348,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12348,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12348,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12348,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12348,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12348,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12348,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12348,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12348,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12347,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -3
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12347,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -3
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12347,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -3
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12347,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12347,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -3
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12347,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -3
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12347,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -3
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12347,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12347,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12347,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12347,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12347,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12346,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12346,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12346,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": -1,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12346,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12346,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12346,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12346,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": -1,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12346,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12346,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12346,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12346,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12346,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 3
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12345,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12345,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12345,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12345,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12345,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12345,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12345,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12345,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12345,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12345,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12345,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12345,
+    "TestingInventoryChange": 5,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12365,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12365,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12365,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12365,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12365,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12365,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12365,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12365,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12365,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12365,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12365,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12365,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12364,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12364,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12364,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12364,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12364,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12364,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12364,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 2
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12364,
+    "TestingInventoryChange": 2,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12364,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12364,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12364,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12364,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12363,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12363,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12363,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12363,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 6,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12363,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12363,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12363,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12363,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 6,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12363,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12363,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12363,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12363,
+    "TestingInventoryChange": 6,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 6
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12362,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12362,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12362,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12362,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12362,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12362,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12362,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12362,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12362,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12362,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12362,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12362,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12361,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12361,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12361,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12361,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 2,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12361,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12361,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12361,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12361,
+    "TestingInventoryChange": -2,
+    "ReleaseQueueChange": 2,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12361,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12361,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12361,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12361,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12360,
+    "TestingInventoryChange": -3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12360,
+    "TestingInventoryChange": -3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12360,
+    "TestingInventoryChange": -3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12360,
+    "TestingInventoryChange": -3,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12360,
+    "TestingInventoryChange": -3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12360,
+    "TestingInventoryChange": -3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12360,
+    "TestingInventoryChange": -3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": -2
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12360,
+    "TestingInventoryChange": -3,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12360,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12360,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12360,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12360,
+    "TestingInventoryChange": 0,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12366,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12366,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12366,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12366,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12366,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12366,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12366,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 0
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12366,
+    "TestingInventoryChange": -1,
+    "ReleaseQueueChange": 4,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12366,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12366,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12366,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12366,
+    "TestingInventoryChange": 3,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T4-RU",
+    "Seed": 12359,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R10",
+    "Seed": 12359,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R7",
+    "Seed": 12359,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T4-R5",
+    "Seed": 12359,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T3-RU",
+    "Seed": 12359,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R10",
+    "Seed": 12359,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R7",
+    "Seed": 12359,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 1
+  },
+  {
+    "Scenario": "T3-R5",
+    "Seed": 12359,
+    "TestingInventoryChange": 1,
+    "ReleaseQueueChange": 3,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-RU",
+    "Seed": 12359,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R10",
+    "Seed": 12359,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R7",
+    "Seed": 12359,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  },
+  {
+    "Scenario": "T2-R5",
+    "Seed": 12359,
+    "TestingInventoryChange": 4,
+    "ReleaseQueueChange": 0,
+    "TotalWipChange": 4
+  }
+]

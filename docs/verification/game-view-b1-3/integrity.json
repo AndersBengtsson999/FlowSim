@@ -1,0 +1,11 @@
+{
+  "checkedFiles": 41,
+  "unchanged": true,
+  "changedFiles": [],
+  "scope": "Production Simulation.Core, Simulation.Application, Simulation.Infrastructure C# source",
+  "newSpriteAssemblyReferences": "Avalonia only; no simulation reference",
+  "runtimeResources": "Embedded avares PNGs",
+  "originalAssetCount": 9,
+  "originalAssetsUnchanged": true,
+  "changedOriginalAssets": []
+}

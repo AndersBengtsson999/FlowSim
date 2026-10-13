@@ -1,0 +1,2702 @@
+[
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12345,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12346,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12347,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 1,
+    "GainAtDay500": 1,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12348,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12349,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12350,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12351,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12352,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12353,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12354,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12355,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12356,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12357,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12358,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12359,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 1,
+    "GainAtDay500": 1,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12360,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12361,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12362,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12363,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12364,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12365,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12366,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 1,
+    "GainAtDay500": 1,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12367,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 1,
+    "GainAtDay500": 1,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12368,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12369,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12370,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12371,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12372,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12373,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R5",
+    "Higher": "T2-R7",
+    "Seed": 12374,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 1,
+    "GainAtDay500": 1,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12345,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12346,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12347,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12348,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12349,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12350,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12351,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12352,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12353,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12354,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12355,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12356,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12357,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12358,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12359,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12360,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12361,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12362,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12363,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12364,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12365,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12366,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12367,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12368,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12369,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12370,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12371,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12372,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12373,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R7",
+    "Higher": "T2-R10",
+    "Seed": 12374,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12345,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12346,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12347,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12348,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12349,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12350,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12351,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12352,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12353,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12354,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12355,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12356,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12357,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12358,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12359,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12360,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12361,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12362,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12363,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12364,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12365,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12366,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12367,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12368,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12369,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12370,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12371,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12372,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12373,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T2-R10",
+    "Higher": "T2-RU",
+    "Seed": 12374,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12345,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 25,
+    "GainAtDay500": 29,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12346,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 33,
+    "GainAtDay450": 28,
+    "GainAtDay500": 33,
+    "FinalWindowReleaseDifference": 5
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12347,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 45,
+    "GainAtDay450": 42,
+    "GainAtDay500": 45,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12348,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 26,
+    "GainAtDay450": 21,
+    "GainAtDay500": 24,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12349,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 28,
+    "GainAtDay500": 29,
+    "FinalWindowReleaseDifference": 1
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12350,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 28,
+    "GainAtDay450": 23,
+    "GainAtDay500": 28,
+    "FinalWindowReleaseDifference": 5
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12351,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 26,
+    "GainAtDay500": 28,
+    "FinalWindowReleaseDifference": 2
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12352,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 21,
+    "GainAtDay450": 18,
+    "GainAtDay500": 21,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12353,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 27,
+    "GainAtDay450": 21,
+    "GainAtDay500": 26,
+    "FinalWindowReleaseDifference": 5
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12354,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 15,
+    "GainAtDay450": 9,
+    "GainAtDay500": 14,
+    "FinalWindowReleaseDifference": 5
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12355,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 23,
+    "GainAtDay450": 19,
+    "GainAtDay500": 23,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12356,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 36,
+    "GainAtDay450": 35,
+    "GainAtDay500": 34,
+    "FinalWindowReleaseDifference": -1
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12357,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 22,
+    "GainAtDay450": 17,
+    "GainAtDay500": 18,
+    "FinalWindowReleaseDifference": 1
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12358,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 25,
+    "GainAtDay450": 21,
+    "GainAtDay500": 24,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12359,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 25,
+    "GainAtDay450": 22,
+    "GainAtDay500": 25,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12360,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 26,
+    "GainAtDay500": 29,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12361,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 31,
+    "GainAtDay450": 26,
+    "GainAtDay500": 28,
+    "FinalWindowReleaseDifference": 2
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12362,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 26,
+    "GainAtDay450": 21,
+    "GainAtDay500": 24,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12363,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 23,
+    "GainAtDay500": 29,
+    "FinalWindowReleaseDifference": 6
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12364,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 33,
+    "GainAtDay450": 29,
+    "GainAtDay500": 33,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12365,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 25,
+    "GainAtDay500": 29,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12366,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 31,
+    "GainAtDay450": 27,
+    "GainAtDay500": 31,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12367,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 21,
+    "GainAtDay450": 17,
+    "GainAtDay500": 21,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12368,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 27,
+    "GainAtDay500": 26,
+    "FinalWindowReleaseDifference": -1
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12369,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 25,
+    "GainAtDay450": 24,
+    "GainAtDay500": 25,
+    "FinalWindowReleaseDifference": 1
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12370,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 30,
+    "GainAtDay450": 26,
+    "GainAtDay500": 30,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12371,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 25,
+    "GainAtDay450": 24,
+    "GainAtDay500": 23,
+    "FinalWindowReleaseDifference": -1
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12372,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 26,
+    "GainAtDay450": 25,
+    "GainAtDay500": 24,
+    "FinalWindowReleaseDifference": -1
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12373,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 26,
+    "GainAtDay450": 25,
+    "GainAtDay500": 26,
+    "FinalWindowReleaseDifference": 1
+  },
+  {
+    "Lower": "T3-R5",
+    "Higher": "T3-R7",
+    "Seed": 12374,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 35,
+    "GainAtDay450": 32,
+    "GainAtDay500": 34,
+    "FinalWindowReleaseDifference": 2
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12345,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 2,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12346,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 1,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": -1
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12347,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12348,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12349,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12350,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12351,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12352,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12353,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12354,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12355,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12356,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12357,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12358,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12359,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12360,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12361,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12362,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12363,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12364,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12365,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12366,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12367,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12368,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12369,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12370,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12371,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12372,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12373,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R7",
+    "Higher": "T3-R10",
+    "Seed": 12374,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12345,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12346,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12347,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12348,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12349,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12350,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12351,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12352,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12353,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12354,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12355,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12356,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12357,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12358,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12359,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12360,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12361,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12362,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12363,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12364,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12365,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12366,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12367,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12368,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12369,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12370,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12371,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12372,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12373,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T3-R10",
+    "Higher": "T3-RU",
+    "Seed": 12374,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12345,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 25,
+    "GainAtDay500": 29,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12346,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 33,
+    "GainAtDay450": 28,
+    "GainAtDay500": 33,
+    "FinalWindowReleaseDifference": 5
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12347,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 45,
+    "GainAtDay450": 42,
+    "GainAtDay500": 45,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12348,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 26,
+    "GainAtDay450": 21,
+    "GainAtDay500": 24,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12349,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 28,
+    "GainAtDay500": 29,
+    "FinalWindowReleaseDifference": 1
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12350,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 28,
+    "GainAtDay450": 23,
+    "GainAtDay500": 28,
+    "FinalWindowReleaseDifference": 5
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12351,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 26,
+    "GainAtDay500": 28,
+    "FinalWindowReleaseDifference": 2
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12352,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 21,
+    "GainAtDay450": 18,
+    "GainAtDay500": 21,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12353,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 27,
+    "GainAtDay450": 21,
+    "GainAtDay500": 26,
+    "FinalWindowReleaseDifference": 5
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12354,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 15,
+    "GainAtDay450": 9,
+    "GainAtDay500": 14,
+    "FinalWindowReleaseDifference": 5
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12355,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 23,
+    "GainAtDay450": 19,
+    "GainAtDay500": 23,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12356,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 36,
+    "GainAtDay450": 35,
+    "GainAtDay500": 34,
+    "FinalWindowReleaseDifference": -1
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12357,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 22,
+    "GainAtDay450": 17,
+    "GainAtDay500": 18,
+    "FinalWindowReleaseDifference": 1
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12358,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 25,
+    "GainAtDay450": 21,
+    "GainAtDay500": 24,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12359,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 25,
+    "GainAtDay450": 22,
+    "GainAtDay500": 25,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12360,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 26,
+    "GainAtDay500": 29,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12361,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 31,
+    "GainAtDay450": 26,
+    "GainAtDay500": 28,
+    "FinalWindowReleaseDifference": 2
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12362,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 26,
+    "GainAtDay450": 21,
+    "GainAtDay500": 24,
+    "FinalWindowReleaseDifference": 3
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12363,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 23,
+    "GainAtDay500": 29,
+    "FinalWindowReleaseDifference": 6
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12364,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 33,
+    "GainAtDay450": 29,
+    "GainAtDay500": 33,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12365,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 25,
+    "GainAtDay500": 29,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12366,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 31,
+    "GainAtDay450": 27,
+    "GainAtDay500": 31,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12367,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 21,
+    "GainAtDay450": 17,
+    "GainAtDay500": 21,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12368,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 29,
+    "GainAtDay450": 27,
+    "GainAtDay500": 26,
+    "FinalWindowReleaseDifference": -1
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12369,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 25,
+    "GainAtDay450": 24,
+    "GainAtDay500": 25,
+    "FinalWindowReleaseDifference": 1
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12370,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 30,
+    "GainAtDay450": 26,
+    "GainAtDay500": 30,
+    "FinalWindowReleaseDifference": 4
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12371,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 25,
+    "GainAtDay450": 24,
+    "GainAtDay500": 23,
+    "FinalWindowReleaseDifference": -1
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12372,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 26,
+    "GainAtDay450": 25,
+    "GainAtDay500": 24,
+    "FinalWindowReleaseDifference": -1
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12373,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 26,
+    "GainAtDay450": 25,
+    "GainAtDay500": 26,
+    "FinalWindowReleaseDifference": 1
+  },
+  {
+    "Lower": "T4-R5",
+    "Higher": "T4-R7",
+    "Seed": 12374,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 35,
+    "GainAtDay450": 32,
+    "GainAtDay500": 34,
+    "FinalWindowReleaseDifference": 2
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12345,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 2,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12346,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 1,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": -1
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12347,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12348,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12349,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12350,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12351,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12352,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12353,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12354,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12355,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12356,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12357,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12358,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12359,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12360,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12361,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12362,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12363,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12364,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12365,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12366,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12367,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12368,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12369,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12370,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12371,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12372,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12373,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R7",
+    "Higher": "T4-R10",
+    "Seed": 12374,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 1,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12345,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12346,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12347,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12348,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12349,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12350,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12351,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12352,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12353,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12354,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12355,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12356,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12357,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12358,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12359,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12360,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12361,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12362,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12363,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12364,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12365,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12366,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12367,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12368,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12369,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12370,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12371,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12372,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12373,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  },
+  {
+    "Lower": "T4-R10",
+    "Higher": "T4-RU",
+    "Seed": 12374,
+    "MinimumCumulativeGain": 0,
+    "MaximumCumulativeGain": 0,
+    "GainAtDay450": 0,
+    "GainAtDay500": 0,
+    "FinalWindowReleaseDifference": 0
+  }
+]

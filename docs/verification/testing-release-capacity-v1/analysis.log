@@ -1,0 +1,254 @@
+PASS final-window statistics and paired comparisons
+Read 30/360 complete daily histories
+Read 60/360 complete daily histories
+Read 90/360 complete daily histories
+Read 120/360 complete daily histories
+Read 150/360 complete daily histories
+Read 180/360 complete daily histories
+Read 210/360 complete daily histories
+Read 240/360 complete daily histories
+Read 270/360 complete daily histories
+Read 300/360 complete daily histories
+Read 330/360 complete daily histories
+Read 360/360 complete daily histories
+PASS 360 records, 36 repeats, statistics and graphs.
+T3-R5 − T2-R5
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -0.31866666666666627, 'Median': 0.0, 'SD': 0.4599230320415562, 'CI95Low': -0.49040474926737565, 'CI95High': -0.14692858406595688, 'Increase': 0, 'Decrease': 10, 'Unchanged': 20, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': -25.150666666666666, 'Median': -25.49, 'SD': 5.765913471508182, 'CI95Low': -27.30369414094402, 'CI95High': -22.99763919238931, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.02186085094610751, 'Median': -0.013122844467974737, 'SD': 0.10882229455563662, 'CI95Low': -0.01877406165706479, 'CI95High': 0.06249576354927981, 'Increase': 13, 'Decrease': 17, 'Unchanged': 0, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.10866666666666672, 'Median': 0.13999999999999968, 'SD': 0.0804613136140951, 'CI95Low': 0.07862191839154554, 'CI95High': 0.1387114149417879, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+T4-R5 − T2-R5
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -0.31866666666666627, 'Median': 0.0, 'SD': 0.4599230320415562, 'CI95Low': -0.49040474926737565, 'CI95High': -0.14692858406595688, 'Increase': 0, 'Decrease': 10, 'Unchanged': 20, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': -25.150666666666666, 'Median': -25.49, 'SD': 5.765913471508182, 'CI95Low': -27.30369414094402, 'CI95High': -22.99763919238931, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.02186085094610751, 'Median': -0.013122844467974737, 'SD': 0.10882229455563662, 'CI95Low': -0.01877406165706479, 'CI95High': 0.06249576354927981, 'Increase': 13, 'Decrease': 17, 'Unchanged': 0, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.10866666666666672, 'Median': 0.13999999999999968, 'SD': 0.0804613136140951, 'CI95Low': 0.07862191839154554, 'CI95High': 0.1387114149417879, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+T4-R5 − T3-R5
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+T3-R7 − T2-R7
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.2700000000000001, 'Median': 0.2999999999999998, 'SD': 0.1967844961653089, 'CI95Low': 0.1965194615130229, 'CI95High': 0.34348053848697724, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -24.39657344755302, 'Median': -24.336599326599323, 'SD': 5.362349261670266, 'CI95Low': -26.398907569300967, 'CI95High': -22.394239325805074, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': -25.150666666666666, 'Median': -25.49, 'SD': 5.765913471508182, 'CI95Low': -27.30369414094402, 'CI95High': -22.99763919238931, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.02186085094610751, 'Median': -0.013122844467974737, 'SD': 0.10882229455563662, 'CI95Low': -0.01877406165706479, 'CI95High': 0.06249576354927981, 'Increase': 13, 'Decrease': 17, 'Unchanged': 0, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': -0.24749641050923046, 'Median': -0.2639581292358595, 'SD': 0.18354681570063894, 'CI95Low': -0.31603391787425705, 'CI95High': -0.1789589031442039, 'Increase': 4, 'Decrease': 26, 'Unchanged': 0, 'Unavailable': 0}
+T4-R7 − T2-R7
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.2700000000000001, 'Median': 0.2999999999999998, 'SD': 0.1967844961653089, 'CI95Low': 0.1965194615130229, 'CI95High': 0.34348053848697724, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -24.39657344755302, 'Median': -24.336599326599323, 'SD': 5.362349261670266, 'CI95Low': -26.398907569300967, 'CI95High': -22.394239325805074, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': -25.150666666666666, 'Median': -25.49, 'SD': 5.765913471508182, 'CI95Low': -27.30369414094402, 'CI95High': -22.99763919238931, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.02186085094610751, 'Median': -0.013122844467974737, 'SD': 0.10882229455563662, 'CI95Low': -0.01877406165706479, 'CI95High': 0.06249576354927981, 'Increase': 13, 'Decrease': 17, 'Unchanged': 0, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': -0.24749641050923046, 'Median': -0.2639581292358595, 'SD': 0.18354681570063894, 'CI95Low': -0.31603391787425705, 'CI95High': -0.1789589031442039, 'Increase': 4, 'Decrease': 26, 'Unchanged': 0, 'Unavailable': 0}
+T4-R7 − T3-R7
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+T3-R10 − T2-R10
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.2666666666666667, 'Median': 0.2999999999999998, 'SD': 0.19357495800804422, 'CI95Low': 0.1943845894237715, 'CI95High': 0.338948743909562, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -24.40431967290931, 'Median': -24.382053872053866, 'SD': 5.3617848835279265, 'CI95Low': -26.406443052395453, 'CI95High': -22.402196293423167, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': -25.150666666666666, 'Median': -25.49, 'SD': 5.765913471508182, 'CI95Low': -27.30369414094402, 'CI95High': -22.99763919238931, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.02186085094610751, 'Median': -0.013122844467974737, 'SD': 0.10882229455563662, 'CI95Low': -0.01877406165706479, 'CI95High': 0.06249576354927981, 'Increase': 13, 'Decrease': 17, 'Unchanged': 0, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': -0.24346722981338312, 'Median': -0.2639581292358595, 'SD': 0.1797189051318007, 'CI95Low': -0.3105753718810443, 'CI95High': -0.17635908774572195, 'Increase': 4, 'Decrease': 26, 'Unchanged': 0, 'Unavailable': 0}
+T4-R10 − T2-R10
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.2666666666666667, 'Median': 0.2999999999999998, 'SD': 0.19357495800804422, 'CI95Low': 0.1943845894237715, 'CI95High': 0.338948743909562, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -24.40431967290931, 'Median': -24.382053872053866, 'SD': 5.3617848835279265, 'CI95Low': -26.406443052395453, 'CI95High': -22.402196293423167, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': -25.150666666666666, 'Median': -25.49, 'SD': 5.765913471508182, 'CI95Low': -27.30369414094402, 'CI95High': -22.99763919238931, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.02186085094610751, 'Median': -0.013122844467974737, 'SD': 0.10882229455563662, 'CI95Low': -0.01877406165706479, 'CI95High': 0.06249576354927981, 'Increase': 13, 'Decrease': 17, 'Unchanged': 0, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': -0.24346722981338312, 'Median': -0.2639581292358595, 'SD': 0.1797189051318007, 'CI95Low': -0.3105753718810443, 'CI95High': -0.17635908774572195, 'Increase': 4, 'Decrease': 26, 'Unchanged': 0, 'Unavailable': 0}
+T4-R10 − T3-R10
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+T3-RU − T2-RU
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.2666666666666667, 'Median': 0.2999999999999998, 'SD': 0.19357495800804422, 'CI95Low': 0.1943845894237715, 'CI95High': 0.338948743909562, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -24.40431967290931, 'Median': -24.382053872053866, 'SD': 5.3617848835279265, 'CI95Low': -26.406443052395453, 'CI95High': -22.402196293423167, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': -25.150666666666666, 'Median': -25.49, 'SD': 5.765913471508182, 'CI95Low': -27.30369414094402, 'CI95High': -22.99763919238931, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.02186085094610751, 'Median': -0.013122844467974737, 'SD': 0.10882229455563662, 'CI95Low': -0.01877406165706479, 'CI95High': 0.06249576354927981, 'Increase': 13, 'Decrease': 17, 'Unchanged': 0, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': -0.24346722981338312, 'Median': -0.2639581292358595, 'SD': 0.1797189051318007, 'CI95Low': -0.3105753718810443, 'CI95High': -0.17635908774572195, 'Increase': 4, 'Decrease': 26, 'Unchanged': 0, 'Unavailable': 0}
+T4-RU − T2-RU
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.2666666666666667, 'Median': 0.2999999999999998, 'SD': 0.19357495800804422, 'CI95Low': 0.1943845894237715, 'CI95High': 0.338948743909562, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -24.40431967290931, 'Median': -24.382053872053866, 'SD': 5.3617848835279265, 'CI95Low': -26.406443052395453, 'CI95High': -22.402196293423167, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': -25.150666666666666, 'Median': -25.49, 'SD': 5.765913471508182, 'CI95Low': -27.30369414094402, 'CI95High': -22.99763919238931, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.02186085094610751, 'Median': -0.013122844467974737, 'SD': 0.10882229455563662, 'CI95Low': -0.01877406165706479, 'CI95High': 0.06249576354927981, 'Increase': 13, 'Decrease': 17, 'Unchanged': 0, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': -0.24346722981338312, 'Median': -0.2639581292358595, 'SD': 0.1797189051318007, 'CI95Low': -0.3105753718810443, 'CI95High': -0.17635908774572195, 'Increase': 4, 'Decrease': 26, 'Unchanged': 0, 'Unavailable': 0}
+T4-RU − T3-RU
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+T2-R7 − T2-R5
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -0.12466666666666686, 'Median': 0.0, 'SD': 0.21118276662535787, 'CI95Low': -0.20352360770212918, 'CI95High': -0.04580972563120454, 'Increase': 0, 'Decrease': 8, 'Unchanged': 22, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+T2-R10 − T2-R5
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -0.12466666666666686, 'Median': 0.0, 'SD': 0.21118276662535787, 'CI95Low': -0.20352360770212918, 'CI95High': -0.04580972563120454, 'Increase': 0, 'Decrease': 8, 'Unchanged': 22, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+T2-RU − T2-R5
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -0.12466666666666686, 'Median': 0.0, 'SD': 0.21118276662535787, 'CI95Low': -0.20352360770212918, 'CI95High': -0.04580972563120454, 'Increase': 0, 'Decrease': 8, 'Unchanged': 22, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+T2-R10 − T2-R7
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+T2-RU − T2-R7
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+T2-RU − T2-R10
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+T3-R7 − T3-R5
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.2700000000000001, 'Median': 0.2999999999999998, 'SD': 0.1967844961653089, 'CI95Low': 0.1965194615130229, 'CI95High': 0.34348053848697724, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -24.20257344755302, 'Median': -24.336599326599323, 'SD': 5.372328257513472, 'CI95Low': -26.2086337875875, 'CI95High': -22.19651310751854, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': -0.3561630771758972, 'Median': -0.40339209150001043, 'SD': 0.25861053610729556, 'CI95Low': -0.45272983838866354, 'CI95High': -0.2595963159631308, 'Increase': 4, 'Decrease': 26, 'Unchanged': 0, 'Unavailable': 0}
+T3-R10 − T3-R5
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.2666666666666667, 'Median': 0.2999999999999998, 'SD': 0.19357495800804422, 'CI95Low': 0.1943845894237715, 'CI95High': 0.338948743909562, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -24.210319672909307, 'Median': -24.382053872053866, 'SD': 5.371370073102155, 'CI95Low': -26.216022221004458, 'CI95High': -22.204617124814156, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': -0.35213389648004984, 'Median': -0.40339209150001043, 'SD': 0.2547434183601821, 'CI95Low': -0.4472566521944779, 'CI95High': -0.25701114076562176, 'Increase': 4, 'Decrease': 26, 'Unchanged': 0, 'Unavailable': 0}
+T3-RU − T3-R5
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.2666666666666667, 'Median': 0.2999999999999998, 'SD': 0.19357495800804422, 'CI95Low': 0.1943845894237715, 'CI95High': 0.338948743909562, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -24.210319672909307, 'Median': -24.382053872053866, 'SD': 5.371370073102155, 'CI95Low': -26.216022221004458, 'CI95High': -22.204617124814156, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': -0.35213389648004984, 'Median': -0.40339209150001043, 'SD': 0.2547434183601821, 'CI95Low': -0.4472566521944779, 'CI95High': -0.25701114076562176, 'Increase': 4, 'Decrease': 26, 'Unchanged': 0, 'Unavailable': 0}
+T3-R10 − T3-R7
+Throughput {'N': 30, 'Missing': 0, 'Mean': -0.0033333333333333214, 'Median': 0.0, 'SD': 0.01825741858350547, 'CI95Low': -0.010150765473775643, 'CI95High': 0.0034840988071089996, 'Increase': 0, 'Decrease': 1, 'Unchanged': 29, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -0.007746225356288269, 'Median': 0.0, 'SD': 0.02462568219250144, 'CI95Low': -0.01694160620882297, 'CI95High': 0.0014491554962464334, 'Increase': 0, 'Decrease': 3, 'Unchanged': 27, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.004029180695847353, 'Median': 0.0, 'SD': 0.02206873155379957, 'CI95Low': -0.004211419096808527, 'CI95High': 0.012269780488503232, 'Increase': 1, 'Decrease': 0, 'Unchanged': 29, 'Unavailable': 0}
+T3-RU − T3-R7
+Throughput {'N': 30, 'Missing': 0, 'Mean': -0.0033333333333333214, 'Median': 0.0, 'SD': 0.01825741858350547, 'CI95Low': -0.010150765473775643, 'CI95High': 0.0034840988071089996, 'Increase': 0, 'Decrease': 1, 'Unchanged': 29, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -0.007746225356288269, 'Median': 0.0, 'SD': 0.02462568219250144, 'CI95Low': -0.01694160620882297, 'CI95High': 0.0014491554962464334, 'Increase': 0, 'Decrease': 3, 'Unchanged': 27, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.004029180695847353, 'Median': 0.0, 'SD': 0.02206873155379957, 'CI95Low': -0.004211419096808527, 'CI95High': 0.012269780488503232, 'Increase': 1, 'Decrease': 0, 'Unchanged': 29, 'Unavailable': 0}
+T3-RU − T3-R10
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+T4-R7 − T4-R5
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.2700000000000001, 'Median': 0.2999999999999998, 'SD': 0.1967844961653089, 'CI95Low': 0.1965194615130229, 'CI95High': 0.34348053848697724, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -24.20257344755302, 'Median': -24.336599326599323, 'SD': 5.372328257513472, 'CI95Low': -26.2086337875875, 'CI95High': -22.19651310751854, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': -0.3561630771758972, 'Median': -0.40339209150001043, 'SD': 0.25861053610729556, 'CI95Low': -0.45272983838866354, 'CI95High': -0.2595963159631308, 'Increase': 4, 'Decrease': 26, 'Unchanged': 0, 'Unavailable': 0}
+T4-R10 − T4-R5
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.2666666666666667, 'Median': 0.2999999999999998, 'SD': 0.19357495800804422, 'CI95Low': 0.1943845894237715, 'CI95High': 0.338948743909562, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -24.210319672909307, 'Median': -24.382053872053866, 'SD': 5.371370073102155, 'CI95Low': -26.216022221004458, 'CI95High': -22.204617124814156, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': -0.35213389648004984, 'Median': -0.40339209150001043, 'SD': 0.2547434183601821, 'CI95Low': -0.4472566521944779, 'CI95High': -0.25701114076562176, 'Increase': 4, 'Decrease': 26, 'Unchanged': 0, 'Unavailable': 0}
+T4-RU − T4-R5
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.2666666666666667, 'Median': 0.2999999999999998, 'SD': 0.19357495800804422, 'CI95Low': 0.1943845894237715, 'CI95High': 0.338948743909562, 'Increase': 26, 'Decrease': 4, 'Unchanged': 0, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -24.210319672909307, 'Median': -24.382053872053866, 'SD': 5.371370073102155, 'CI95Low': -26.216022221004458, 'CI95High': -22.204617124814156, 'Increase': 0, 'Decrease': 30, 'Unchanged': 0, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': -0.35213389648004984, 'Median': -0.40339209150001043, 'SD': 0.2547434183601821, 'CI95Low': -0.4472566521944779, 'CI95High': -0.25701114076562176, 'Increase': 4, 'Decrease': 26, 'Unchanged': 0, 'Unavailable': 0}
+T4-R10 − T4-R7
+Throughput {'N': 30, 'Missing': 0, 'Mean': -0.0033333333333333214, 'Median': 0.0, 'SD': 0.01825741858350547, 'CI95Low': -0.010150765473775643, 'CI95High': 0.0034840988071089996, 'Increase': 0, 'Decrease': 1, 'Unchanged': 29, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -0.007746225356288269, 'Median': 0.0, 'SD': 0.02462568219250144, 'CI95Low': -0.01694160620882297, 'CI95High': 0.0014491554962464334, 'Increase': 0, 'Decrease': 3, 'Unchanged': 27, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.004029180695847353, 'Median': 0.0, 'SD': 0.02206873155379957, 'CI95Low': -0.004211419096808527, 'CI95High': 0.012269780488503232, 'Increase': 1, 'Decrease': 0, 'Unchanged': 29, 'Unavailable': 0}
+T4-RU − T4-R7
+Throughput {'N': 30, 'Missing': 0, 'Mean': -0.0033333333333333214, 'Median': 0.0, 'SD': 0.01825741858350547, 'CI95Low': -0.010150765473775643, 'CI95High': 0.0034840988071089996, 'Increase': 0, 'Decrease': 1, 'Unchanged': 29, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': -0.007746225356288269, 'Median': 0.0, 'SD': 0.02462568219250144, 'CI95Low': -0.01694160620882297, 'CI95High': 0.0014491554962464334, 'Increase': 0, 'Decrease': 3, 'Unchanged': 27, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.004029180695847353, 'Median': 0.0, 'SD': 0.02206873155379957, 'CI95Low': -0.004211419096808527, 'CI95High': 0.012269780488503232, 'Increase': 1, 'Decrease': 0, 'Unchanged': 29, 'Unavailable': 0}
+T4-RU − T4-R10
+Throughput {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryCycleTime {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SpecialistQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+TestingQueue {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeveloperUtilization {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+DeliveryWorkCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}
+SystemCost {'N': 30, 'Missing': 0, 'Mean': 0.0, 'Median': 0.0, 'SD': 0.0, 'CI95Low': 0.0, 'CI95High': 0.0, 'Increase': 0, 'Decrease': 0, 'Unchanged': 30, 'Unavailable': 0}

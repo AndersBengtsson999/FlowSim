@@ -63,6 +63,40 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         int? range = trendRange == "Full Session" ? null : int.Parse(trendRange.Split(' ')[1]);
         Trend = Live is null ? new([], []) : LivePerformanceTrend.Project(Live.Session, TrendMetric.Metric, RollingWindow, range);
     }
+    private string visualization = "Flow Board";
+    private GameSceneState? gameScene;
+    private string gameRenderingMode = "Sprites";
+    public IReadOnlyList<string> GameRenderingModes { get; } = ["Sprites", "Legacy vectors"];
+    public string GameRenderingMode
+    {
+        get => gameRenderingMode;
+        set
+        {
+            if (value == gameRenderingMode || !GameRenderingModes.Contains(value)) return;
+            gameRenderingMode = value;
+            PropertyChanged?.Invoke(this, new(nameof(GameRenderingMode)));
+            PropertyChanged?.Invoke(this, new(nameof(SpriteRendering)));
+        }
+    }
+    public bool SpriteRendering => gameRenderingMode == "Sprites";
+    public IReadOnlyList<string> Visualizations { get; } = ["Flow Board", "Game View"];
+    public string Visualization
+    {
+        get => visualization;
+        set
+        {
+            if (value == visualization || !Visualizations.Contains(value)) return;
+            visualization = value;
+            foreach (var name in new[] { nameof(Visualization), nameof(GameViewSelected), nameof(FlowBoardSelected), nameof(ShowLiveOverview), nameof(ShowLiveStatus), nameof(ShowLiveDebt) })
+                PropertyChanged?.Invoke(this, new(name));
+        }
+    }
+    public bool GameViewSelected => visualization == "Game View";
+    public bool FlowBoardSelected => !GameViewSelected;
+    public bool ShowLiveOverview => FlowBoardSelected || !HasSession;
+    public bool ShowLiveStatus => FlowBoardSelected && HasSession;
+    public bool ShowLiveDebt => FlowBoardSelected && DebtVisible;
+    public GameSceneState GameScene => gameScene ??= GameSceneState.From(Live);
     public IReadOnlyList<double> Speeds { get; } = [0.5, 1, 2, 5, 10];
     public double Speed { get => speed; set { if (!Speeds.Contains(value)) return; speed = value; timer.Interval = TimeSpan.FromSeconds(1 / speed); Notify(); } }
     public bool HasSession => Live is not null;
@@ -268,7 +302,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         if (Live.Step()) { AppendHistory(); Refresh(); }
         if (Live.LimitReached) { Pause(); status = "Live simulation safety limit reached."; Notify(); }
     });
-    public void Reset() { Pause(); Live = null; setupExpanded = true; stopped = false; editing = false; queueHistory.Clear(); Flow = []; Metrics = []; Details = ""; SelectedCheckpoint = null; selectedFlow = null; selectedIntervention = null; RefreshPerformance(); status = "Ready to start."; Notify(); }
+    public void Reset() { Pause(); Live = null; gameScene = null; setupExpanded = true; stopped = false; editing = false; queueHistory.Clear(); Flow = []; Metrics = []; Details = ""; SelectedCheckpoint = null; selectedFlow = null; selectedIntervention = null; RefreshPerformance(); status = "Ready to start."; Notify(); }
     public void BeginChange()
     {
         if (!CanChange) return;
@@ -330,6 +364,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     private void Refresh()
     {
         if (Live is null) return;
+        gameScene = null;
         var d = Live.CurrentSnapshot;
         var expanded = Flow.Where(row => row.IsExpanded).Select(row => row.Name).ToHashSet();
         Flow = FlowPresentation.Rows(d, Live.Session.Configuration, ShowRework);

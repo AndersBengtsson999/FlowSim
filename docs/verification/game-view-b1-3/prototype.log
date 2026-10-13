@@ -1,0 +1,2 @@
+30 offscreen office renders: 354 ms; 24 independently positioned objects, 12 decoded textures.
+PASS multi-instance cache, four workers, states, deterministic depth order, 1280/960/800 layouts, 1x/2x render, single-desk mode, no simulation reference. Backend: native macOS.

@@ -1,0 +1,12 @@
+{
+  "simulation_layers_unchanged_from_HEAD": {
+    "src/Simulation.Core": true,
+    "src/Simulation.Application": true,
+    "src/Simulation.Infrastructure": true
+  },
+  "stage": "B1",
+  "animations_implemented": false,
+  "tests_passed": 611,
+  "render_backend": "Avalonia Headless + Skia (real drawing)",
+  "native_display_available": false
+}

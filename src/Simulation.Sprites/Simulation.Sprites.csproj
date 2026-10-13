@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.22" />
+    <AvaloniaResource Include="Assets/*.png" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,22 @@
+{
+  "scene-1x": {
+    "size": [
+      960,
+      570
+    ],
+    "mode": "RGBA",
+    "transparent_pixels": 345006,
+    "partial_alpha_pixels": 144561,
+    "opaque_pixels": 57633
+  },
+  "scene-2x": {
+    "size": [
+      1920,
+      1140
+    ],
+    "mode": "RGBA",
+    "transparent_pixels": 1380907,
+    "partial_alpha_pixels": 576369,
+    "opaque_pixels": 231524
+  }
+}
