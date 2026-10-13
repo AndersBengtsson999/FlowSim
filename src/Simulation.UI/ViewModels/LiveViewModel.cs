@@ -79,6 +79,21 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         }
     }
     public bool SpriteRendering => gameRenderingMode == "Sprites";
+    private bool animateGameActivity = true;
+    public bool AnimateGameActivity
+    {
+        get => animateGameActivity;
+        set
+        {
+            if (value == animateGameActivity) return;
+            animateGameActivity = value;
+            PropertyChanged?.Invoke(this, new(nameof(AnimateGameActivity)));
+            PropertyChanged?.Invoke(this, new(nameof(GameAnimationStatus)));
+        }
+    }
+    public string GameAnimationStatus => !AnimateGameActivity ? "Animation off · simulation controls are unchanged" :
+        !HasSession ? "Animation ready · start a Live session" :
+        !IsRunning ? "Simulation paused · activity animation frozen" : "Illustrative activity · animation speed is independent of LIVE speed";
     public IReadOnlyList<string> Visualizations { get; } = ["Flow Board", "Game View"];
     public string Visualization
     {

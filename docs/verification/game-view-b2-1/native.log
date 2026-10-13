@@ -1,0 +1,3 @@
+Actual LIVE fast advance 100 days: 58 ms
+30 offscreen scene renders: 515 ms; 38 objects; 10 initial decoded textures
+PASS native macOS bindings, real fixture Day 8, pixel animation/freeze, lifecycle, viewport, cache, large team, full capture invariant and LIVE controls.

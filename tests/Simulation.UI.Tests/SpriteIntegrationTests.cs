@@ -76,7 +76,7 @@ public sealed class SpriteIntegrationTests
     {
         var live = LiveSimulation.Start(BaselineScenario.CreateRequest(), WorkArrivalMode.AlwaysAvailable);
         var original = GameSceneState.From(live);
-        var state = original with { DeveloperPoseCeiling = 5, UsedDeveloperCapacity = 5, CollaborationCapacity = .1 };
+        var state = original with { Day = 1, ActiveDevelopment = 1, UsedDevelopmentCapacity = 5, DeveloperPoseCeiling = 5, UsedDeveloperCapacity = 5, CollaborationCapacity = .1 };
         var scene = new SpriteWorkshop(state);
         Assert.True(scene.IllustratesCollaboration);
         Assert.Equal(2, scene.Workers.Count(w => w.Visual.State == SpritePose.Collaborating));

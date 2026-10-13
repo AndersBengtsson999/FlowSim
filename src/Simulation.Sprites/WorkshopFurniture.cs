@@ -3,6 +3,22 @@ namespace Simulation.Sprites;
 /// <summary>Reusable independent furniture and character layers; contains no simulation concepts.</summary>
 public static class WorkshopFurniture
 {
+    // A stable companion appearance avoids swapping between unrelated male/female source art
+    // when collaboration changes at 10x LIVE speed. Shared-screen effects carry the activity cue.
+    public static readonly CharacterAppearance StandingCompanion = new("standing-companion", new Dictionary<SpritePose, CharacterPose>
+    {
+        [SpritePose.Idle] = new("developer"),
+        [SpritePose.Collaborating] = new("developer")
+    });
+    // Same seated anchor in every state. Single-frame fallbacks until curated limb animation art exists.
+    public static readonly CharacterAppearance SeatedDeveloper = new("seated-developer", new Dictionary<SpritePose, CharacterPose>
+    {
+        [SpritePose.Idle] = new("developer-seated", true, "developer-seated-upper"),
+        [SpritePose.Working] = new("developer-seated", true, "developer-seated-upper"),
+        [SpritePose.Reviewing] = new("developer-seated", true, "developer-seated-upper"),
+        [SpritePose.Testing] = new("developer-seated", true, "developer-seated-upper"),
+        [SpritePose.Collaborating] = new("developer-seated", true, "developer-seated-upper")
+    });
     public static readonly CharacterAppearance Developer = new("developer", new Dictionary<SpritePose, CharacterPose>
     {
         [SpritePose.Idle] = new("developer"),

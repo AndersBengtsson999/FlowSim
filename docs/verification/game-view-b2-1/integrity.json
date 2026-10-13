@@ -1,0 +1,16 @@
+{
+  "productionSourceFilesChecked": 41,
+  "productionSimulationUnchanged": true,
+  "changedFiles": [],
+  "unchangedOriginalPNGCount": 12,
+  "captureFrameCount": 48,
+  "captureDurationMs": 7190,
+  "captureSize": [
+    1100,
+    720
+  ],
+  "changedPixelsFirstToMiddle": 686,
+  "gifBytes": 1704402,
+  "encodedChangedPixelsFirstToMiddle": 363,
+  "gifEncoding": "Fixed palette for stable unchanged pixels; actual captured frame timings"
+}

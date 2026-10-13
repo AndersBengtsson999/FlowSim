@@ -12,19 +12,21 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
     private readonly GameDrawing labels = new();
     private SpriteWorkshop? workshop;
     private SpriteBatch? batch;
+    private WorkshopEffects? effects;
     internal int DecodeCount => assets.DecodeCount;
     internal int ObjectCount => workshop?.Objects.Count ?? 0;
-    internal void Render(DrawingContext dc, GameSceneState? state)
+    internal void Render(DrawingContext dc, GameSceneState? state, double seconds = 0, bool animateFrames = false)
     {
         if (state is not { HasSession: true })
         {
-            workshop = null; batch = null; labels.ClearLabels();
+            workshop = null; batch = null; effects = null; labels.ClearLabels();
             labels.Text(dc, "Start a Live session to populate the workshop.", 540, 270, 24, centered: true);
             return;
         }
         if (!ReferenceEquals(workshop?.State, state))
         {
-            workshop = new(state); batch = new(workshop.Objects, SpriteWorkshop.Projection, assets); labels.ClearLabels();
+            workshop = new(state); batch = new(workshop.Objects, SpriteWorkshop.Projection, assets);
+            effects = new(workshop); labels.ClearLabels();
         }
         GameWorldLayout.Draw(dc, spriteDecoration: true);
         foreach (var queue in workshop!.Queues)
@@ -36,7 +38,8 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         dc.DrawLine(new Pen(Ink("#FFE36A"), 4), new(140, 367), new(205, 400));
         dc.DrawLine(new Pen(Ink("#FFE36A"), 4), new(205, 400), new(298, 353));
         dc.DrawLine(new Pen(Ink("#D49D7C"), 3, new DashStyle([3, 3], 0)), new(505, 269), new(450, 298));
-        batch!.Draw(dc);
+        effects!.DrawGround(dc, seconds);
+        batch!.Draw(dc, seconds, animateFrames, effects);
         foreach (var worker in workshop.Workers)
         {
             var p = worker.BadgePosition; var color = worker.Role == "T" ? "#72DCD6" : worker.Role == "S" ? "#FFE644" : "#CFDEE7";
@@ -51,7 +54,7 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         Title(dc, "RELEASE", 214, 244, "#FFEB00");
         Title(dc, "TECHNICAL DEBT", 450, 200, "#FFD0A7");
         labels.Text(dc, $"{state.Debt:0.##} effort · {state.DebtRatio:P1}", 450, 329, 14, "#FFE4C9", true);
-        labels.Text(dc, "Maintenance · side activity", 450, 347, 11, "#BFCAC8", true);
+        labels.Text(dc, $"Repayment {state.UsedDebtRepaymentCapacity:0.##} · last day", 450, 347, 11, "#BFCAC8", true);
         Count(dc, $"{state.Areas[0].Count:N0} waiting", 306, 276, false);
         labels.Text(dc, $"Dependencies {state.DependencyWaiting:N0} (included)", 740, 640, 14, "#E6D2AB", true);
         Count(dc, $"{state.ActiveDevelopment:N0} active", 542, 233, true);

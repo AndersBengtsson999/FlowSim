@@ -22,6 +22,10 @@ public sealed record GameSceneState(int Day, IReadOnlyList<GameArea> Areas, int 
     public int WaitingRework { get; init; }
     public int DependencyWaiting { get; init; }
     public double UsedDeveloperCapacity { get; init; }
+    public double UsedDevelopmentCapacity { get; init; }
+    public double UsedReviewCapacity { get; init; }
+    public double UsedReworkCapacity { get; init; }
+    public double UsedDebtRepaymentCapacity { get; init; }
     public double UsedTesterCapacity { get; init; }
     public double CollaborationCapacity { get; init; }
     // Conservative pose ceilings, not inferred employee assignments. Never exceed either the
@@ -55,6 +59,8 @@ public sealed record GameSceneState(int Day, IReadOnlyList<GameArea> Areas, int 
             ActiveDevelopment = d.DevelopmentCount, ActiveRework = d.ReworkCount,
             WaitingRework = d.WaitingForReworkCount, DependencyWaiting = d.WaitingForDependencyCount,
             UsedDeveloperCapacity = d.UsedDeveloperCapacity, UsedTesterCapacity = d.UsedTesterCapacity,
+            UsedDevelopmentCapacity = d.UsedDevelopmentCapacity, UsedReviewCapacity = d.UsedReviewCapacity,
+            UsedReworkCapacity = d.UsedReworkDeveloperCapacity, UsedDebtRepaymentCapacity = d.UsedDebtRepaymentCapacity,
             CollaborationCapacity = d.CollaborationDevelopmentCapacity,
             DeveloperPoseCeiling = s.CurrentDay == 0 ? 0 : (int)Math.Floor(Math.Min(d.AvailableDeveloperCapacity,
                 Math.Min(c.Team.AvailableDeveloperCapacity, c.Team.DeveloperCount * c.Team.DeveloperAvailability))),

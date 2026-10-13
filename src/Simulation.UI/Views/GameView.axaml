@@ -6,8 +6,12 @@
     <ComboBox Grid.Column="1" Name="GameRenderingMode" Margin="8,0,12,0" ItemsSource="{Binding GameRenderingModes}" SelectedItem="{Binding GameRenderingMode}" AutomationProperties.Name="Game rendering mode"/>
     <Border Grid.Column="2" Background="#253341" CornerRadius="5" Padding="12,6"><TextBlock Text="{Binding DayLabel}" Foreground="White" FontSize="18" FontWeight="SemiBold"/></Border>
    </Grid>
+   <WrapPanel IsVisible="{Binding SpriteRendering}" Orientation="Horizontal">
+    <CheckBox Name="AnimateGameActivity" Content="Animate activity" IsChecked="{Binding AnimateGameActivity}" Foreground="#D3DEE7" Margin="0,0,16,0" AutomationProperties.Name="Animate workshop activity. Turn off to reduce motion."/>
+    <TextBlock Text="{Binding GameAnimationStatus}" Foreground="#A9BBC9" FontSize="12" VerticalAlignment="Center" TextWrapping="Wrap"/>
+   </WrapPanel>
    <Viewbox Name="WorldViewport" Stretch="Uniform" HorizontalAlignment="Stretch">
-    <controls:GameWorldControl Name="GameWorld" Width="1080" Height="680" Scene="{Binding GameScene}" UseSprites="{Binding SpriteRendering}" AutomationProperties.Name="{Binding GameScene.Summary}"/>
+    <controls:GameWorldControl Name="GameWorld" Width="1080" Height="680" Scene="{Binding GameScene}" UseSprites="{Binding SpriteRendering}" AnimateActivity="{Binding AnimateGameActivity}" SimulationRunning="{Binding IsRunning}" AutomationProperties.Name="{Binding GameScene.Summary}"/>
    </Viewbox>
    <TextBlock Text="{Binding GameScene.Capacity}" Foreground="#D3DEE7" FontSize="12" TextWrapping="Wrap"/>
    <TextBlock IsVisible="{Binding SpriteRendering}" Text="Mint = active · Amber = waiting. Packages are bounded samples; counters include all items. D = developer · S = specialist (included in developers) · T = tester. Figures and poses illustrate capacity, not assigned people or item-level events. Capacity above describes the last completed day." Foreground="#9BAFBE" FontSize="12" TextWrapping="Wrap"/>

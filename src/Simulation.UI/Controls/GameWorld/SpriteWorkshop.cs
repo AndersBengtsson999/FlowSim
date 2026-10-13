@@ -21,6 +21,7 @@ public sealed class SpriteWorkshop
     public IReadOnlyList<WorkshopWorker> Workers { get; }
     public IReadOnlyList<WorkshopQueue> Queues { get; }
     public GameSceneState State { get; }
+    public WorkshopActivity Activity { get; }
     public const int MaximumDevelopers = 3;
     public const int MaximumTesters = 2;
     public int HiddenDevelopers => State.Developers - Workers.Count(w => w.Role != "T");
@@ -30,6 +31,7 @@ public sealed class SpriteWorkshop
     public SpriteWorkshop(GameSceneState state)
     {
         State = state;
+        Activity = WorkshopActivity.From(state);
         if (!state.HasSession) { Objects = []; Workers = []; Queues = []; return; }
         Queues =
         [
@@ -51,33 +53,30 @@ public sealed class SpriteWorkshop
         var development = Ground(555, 165); var review = Ground(823, 256); var testing = Ground(710, 404);
         var seatedDev = Offset(development, -.86 * scale / .7, -.35 * scale / .7);
         var seatedTest = Offset(testing, -.86 * scale / .7, -.35 * scale / .7);
-        var collaborate = state.Developers >= 2 && state.DeveloperPoseCeiling >= 2 && state.CollaborationCapacity > 0;
-        // One illustrative vignette, never utilization * headcount and never a worker-to-item assignment.
-        var devPose = collaborate ? SpritePose.Collaborating : state.DeveloperPoseCeiling >= 1 && state.UsedDeveloperCapacity > 0 ? SpritePose.Working : SpritePose.Idle;
-        var testPose = state.TesterPoseCeiling >= 1 && state.UsedTesterCapacity > 0 ? SpritePose.Working : SpritePose.Idle;
+        var seatedReview = Offset(review, -.86 * scale / .7, -.35 * scale / .7);
         for (var i = 0; i < Math.Min(MaximumDevelopers, state.Developers); i++)
         {
-            var pose = i == 0 ? devPose : i == 1 && collaborate ? SpritePose.Collaborating : SpritePose.Idle;
-            var position = i == 0 && pose != SpritePose.Idle ? seatedDev : i == 1 && collaborate ?
-                Ground(501, 152) : Ground(605 + i * 29, 173 + i * 13);
-            var appearance = i == 1 && collaborate ? Colleague : Developer;
-            var worker = new WorkerVisual($"developer/{i}", appearance, pose, position, scale, "development");
+            var pose = Activity.Developers[i];
+            var position = i == 0 ? seatedDev : i == 1 ? Ground(501, 152) : seatedReview;
+            var appearance = i == 1 ? StandingCompanion : SeatedDeveloper;
+            var station = i == 2 ? "review" : "development";
+            var worker = new WorkerVisual($"developer/{i}", appearance, pose, position, scale, station);
             var point = Projection.Project(position);
             workers.Add(new(worker, i < state.Specialists ? "S" : "D", new(point.X, point.Y + 9)));
-            objects.AddRange(worker.Compose(development));
+            objects.AddRange(worker.Compose(i == 2 ? review : development));
         }
         for (var i = 0; i < Math.Min(MaximumTesters, state.Testers); i++)
         {
-            var pose = i == 0 ? testPose : SpritePose.Idle;
-            var position = i == 0 && pose != SpritePose.Idle ? seatedTest : Ground(778 + i * 29, 409 + i * 13);
-            var worker = new WorkerVisual($"tester/{i}", Developer, pose, position, scale, "testing");
+            var pose = Activity.Testers[i];
+            var position = i == 0 ? seatedTest : Ground(778 + i * 29, 409 + i * 13);
+            var worker = new WorkerVisual($"tester/{i}", i == 0 ? SeatedDeveloper : Developer, pose, position, scale, "testing");
             var point = Projection.Project(position);
             workers.Add(new(worker, "T", new(point.X, point.Y + 9)));
             objects.AddRange(worker.Compose(testing));
         }
-        objects.AddRange(Workstation("development", development, scale, devPose == SpritePose.Idle ? null : seatedDev));
-        objects.AddRange(Workstation("review", review, scale));
-        objects.AddRange(Workstation("testing", testing, scale, testPose == SpritePose.Idle ? null : seatedTest));
+        objects.AddRange(Workstation("development", development, scale, state.Developers > 0 ? seatedDev : null));
+        objects.AddRange(Workstation("review", review, scale, state.Developers >= 3 ? seatedReview : null));
+        objects.AddRange(Workstation("testing", testing, scale, state.Testers > 0 ? seatedTest : null));
         objects.Add(new("backlog/shelf", "shelf", Ground(307, 209), .34));
         objects.Add(new("ready/shelf", "shelf", Ground(449, 448), .34));
         objects.Add(new("release/van", "delivery-van", Ground(214, 350), .52));
