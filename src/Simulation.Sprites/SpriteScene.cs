@@ -2,7 +2,7 @@ using Avalonia;
 
 namespace Simulation.Sprites;
 
-public enum SpritePose { Idle, Working, Walking, Collaborating, Reviewing, Testing }
+public enum SpritePose { Idle, Working, Walking, Collaborating, Reviewing, Testing, Maintaining }
 public readonly record struct WorldPoint(double X, double Y, double Elevation = 0);
 
 /// <summary>2:1 ground axes; elevation is vertical screen displacement, never a simulation value.</summary>

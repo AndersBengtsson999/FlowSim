@@ -83,7 +83,17 @@ internal sealed class WorkshopEffects : ISpriteDecoration
     {
         if (monitors.TryGetValue(id, out var monitor)) monitor.Draw(context, seconds);
         if (id == "debt/maintenance" && repayment)
-            using (context.PushOpacity(.35 + .25 * Pulse(seconds, 5)))
-                context.DrawEllipse(null, maintenance, new(450, 281), 8, 4);
+        {
+            // An examination diagram, not a completion percentage or a fictional debt work item.
+            using (context.PushOpacity(.45 + .35 * Pulse(seconds, 3.5)))
+            {
+                context.DrawLine(maintenance, new(446, 257), new(464, 266));
+                context.DrawLine(maintenance, new(464, 266), new(477, 258));
+                context.DrawLine(maintenance, new(477, 258), new(489, 264));
+                context.DrawEllipse(null, maintenance, new(464, 266), 3, 2);
+                var x = 449 + 30 * Pulse(seconds, 3.5);
+                context.DrawEllipse(Ink("#FFE59B"), null, new(x, 281 + (x - 449) * .48), 2.4, 1.7);
+            }
+        }
     }
 }

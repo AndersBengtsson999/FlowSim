@@ -44,16 +44,16 @@ public sealed class SpriteIntegrationTests
             Assert.Equal(developers, state.Developers); Assert.Equal(testers, state.Testers); Assert.Equal(specialists, state.Specialists);
             Assert.Equal(developers, scene.Workers.Count(w => w.Role != "T") + scene.HiddenDevelopers);
             Assert.Equal(testers, scene.Workers.Count(w => w.Role == "T") + scene.HiddenTesters);
-            Assert.Equal(Math.Min(3, specialists), scene.Workers.Count(w => w.Role == "S"));
+            Assert.Equal(Math.Min(SpriteWorkshop.MaximumDevelopers, specialists), scene.Workers.Count(w => w.Role == "S"));
             int Count(string id) => scene.Queues.Single(q => q.Id == id).Count;
-            Assert.Equal(d.BacklogCount, Count("backlog")); Assert.Equal(d.DevelopmentCount, Count("development"));
+            Assert.Equal(d.BacklogCount, Count("backlog") + Count("dependency")); Assert.Equal(d.WaitingForDependencyCount, Count("dependency")); Assert.Equal(d.DevelopmentCount, Count("development"));
             Assert.Equal(d.ReworkCount, Count("rework-active")); Assert.Equal(d.WaitingForReworkCount, Count("rework-wait"));
             Assert.Equal(d.CodeReviewCount, Count("review-active")); Assert.Equal(d.WaitingForCodeReviewCount, Count("review-wait"));
             Assert.Equal(d.TestingCount, Count("testing-active")); Assert.Equal(d.WaitingForTestingCount, Count("testing-wait"));
             Assert.Equal(d.ReadyForReleaseCount, Count("ready")); Assert.Equal(d.WaitingForDependencyCount, state.DependencyWaiting);
             Assert.Equal(state.ReleasedToday, Count("delivered")); Assert.Equal(d.DoneCount, state.Areas[5].Count);
             Assert.All(scene.Queues, q => { Assert.Equal(q.Count, q.Visible + q.Grouped); Assert.InRange(q.Visible, 0, q.Limit); });
-            Assert.InRange(scene.Objects.Count, 0, 70); Assert.InRange(scene.Workers.Count, 0, 5);
+            Assert.InRange(scene.Objects.Count, 0, 70); Assert.InRange(scene.Workers.Count, 0, 6);
             Assert.InRange(scene.Workers.Count(w => w.Role != "T" && w.Visual.State != SpritePose.Idle), 0, state.DeveloperPoseCeiling);
             Assert.InRange(scene.Workers.Count(w => w.Role == "T" && w.Visual.State != SpritePose.Idle), 0, state.TesterPoseCeiling);
             Assert.All(scene.Objects, o => Assert.True(SpriteCatalog.Assets.ContainsKey(o.AssetId)));
@@ -80,7 +80,7 @@ public sealed class SpriteIntegrationTests
         var scene = new SpriteWorkshop(state);
         Assert.True(scene.IllustratesCollaboration);
         Assert.Equal(2, scene.Workers.Count(w => w.Visual.State == SpritePose.Collaborating));
-        Assert.Equal(1, scene.Workers.Count(w => w.Role != "T" && w.Visual.State == SpritePose.Idle));
+        Assert.Equal(2, scene.Workers.Count(w => w.Role != "T" && w.Visual.State == SpritePose.Idle));
         var noPair = new SpriteWorkshop(state with { DeveloperPoseCeiling = 1 });
         Assert.False(noPair.IllustratesCollaboration);
         Assert.Single(noPair.Workers, w => w.Visual.State == SpritePose.Working);

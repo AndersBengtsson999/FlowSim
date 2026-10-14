@@ -1,0 +1,5 @@
+Actual LIVE fast advance 100 days: 67 ms
+Capture release phases: Loading, Departing, Away, Returning
+30 renders with 3 moving packages: 341 ms
+30 offscreen scene renders: 423 ms; 41 static objects + 12 moving; 11 initial decoded textures
+PASS native macOS bindings, real fixture Day 8, pixel animation/freeze, lifecycle, viewport, cache, large team, full capture invariant and LIVE controls.

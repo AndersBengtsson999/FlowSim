@@ -93,7 +93,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     }
     public string GameAnimationStatus => !AnimateGameActivity ? "Animation off · simulation controls are unchanged" :
         !HasSession ? "Animation ready · start a Live session" :
-        !IsRunning ? "Simulation paused · activity animation frozen" : "Illustrative activity · animation speed is independent of LIVE speed";
+        !IsRunning ? "Simulation paused · activity animation frozen" : Speed > 2 ? "Worker effects · package motion skipped at high speed" : "Worker effects · observed package transitions";
     public IReadOnlyList<string> Visualizations { get; } = ["Flow Board", "Game View"];
     public string Visualization
     {

@@ -6,6 +6,13 @@ public static class SpriteCatalog
     // Curated source rectangles preserve the generated PNGs/alpha; no runtime trimming or downloads.
     public static IReadOnlyDictionary<string, SpriteDefinition> Assets { get; } = new Dictionary<string, SpriteDefinition>
     {
+        ["developer-gestures"] = new("developer-gestures", new Uri("avares://Simulation.Sprites/Assets/developer-gestures.png"), .28,
+            new Dictionary<SpritePose, SpriteClip>
+            {
+                [SpritePose.Idle] = new([new(new(0, 0, 887, 887), new(490, 820))]),
+                [SpritePose.Collaborating] = GestureClip(),
+                [SpritePose.Maintaining] = GestureClip()
+            }),
         ["shelf"] = Asset("shelf", new(85, 180, 1110, 960), new(560, 735), .30),
         ["delivery-van"] = Asset("delivery-van", new(35, 155, 1200, 975), new(565, 735), .25),
         ["maintenance-bench"] = Asset("maintenance-bench", new(130, 10, 985, 1210), new(480, 1000), .30),
@@ -32,6 +39,12 @@ public static class SpriteCatalog
         new("developer", "developer", DeveloperPosition),
         new("package", "package", new(2.2, 1.2))
     ];
+    private static SpriteClip GestureClip()
+    {
+        var neutral = new SpriteFrame(new(0, 0, 887, 887), new(490, 820));
+        var pointing = new SpriteFrame(new(887, 0, 887, 887), new(414, 820));
+        return new([neutral, neutral, neutral, pointing, pointing, neutral], 1.5);
+    }
     private static SpriteDefinition Asset(string id, Rect source, Point anchor, double scale, params SpritePose[] poses) => new(id,
         new Uri($"avares://Simulation.Sprites/Assets/{id}.png"), scale,
         (poses.Length == 0 ? new[] { SpritePose.Idle } : poses).ToDictionary(p => p, _ => new SpriteClip([new(source, anchor)])));

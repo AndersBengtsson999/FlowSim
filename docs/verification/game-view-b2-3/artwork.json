@@ -1,0 +1,16 @@
+{
+  "tool": "Built-in image_gen",
+  "reference": "src/Simulation.Sprites/Assets/developer.png",
+  "asset": "src/Simulation.Sprites/Assets/developer-gestures.png",
+  "prompt": "Use case: identity-preserve. Create a production transparent PNG sprite strip of this exact original game character, two equally sized square cells side-by-side (2048x1024 total if possible). Left cell: neutral standing looking toward screen-right, hands lowered. Right cell: same identical standing character, right arm raised pointing toward screen-right at a colleague's computer. Preserve identity, curly dark hair, glasses, teal shirt, yellow lanyard, trousers, shoes, 2:1 isometric viewing angle, soft lighting, scale. Each cell full body with feet at identical relative position around (50%,90%), head at15%, body vertical and exact same pose/face apart from raised pointing arm. Plenty of margin so pointing hand stays inside right cell. Transparent RGBA background, no checkerboard, no scenery, no text, no borders. Two poses only, no furniture. Art intended as two reusable animation frames with identical foot anchors. Do not depict any other character.",
+  "size": [
+    1774,
+    887
+  ],
+  "mode": "RGBA",
+  "alphaRange": [
+    0,
+    255
+  ],
+  "sha256": "ed68ef15e848125ecbade158abbad109227774e2973ea14d79497cf355bf3f88"
+}

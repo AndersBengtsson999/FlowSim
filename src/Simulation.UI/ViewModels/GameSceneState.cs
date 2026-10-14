@@ -1,5 +1,7 @@
 using Simulation.Application;
 using Simulation.Core;
+using System.Runtime.CompilerServices;
+using Simulation.UI.Controls.GameWorld;
 
 namespace Simulation.UI.ViewModels;
 
@@ -17,6 +19,11 @@ public sealed record GameSceneState(int Day, IReadOnlyList<GameArea> Areas, int 
     int Specialists, double Debt, double DebtRatio, int ReleasedToday, string ReleasePolicy,
     string Capacity, bool HasSession)
 {
+    private sealed class Identity { public Guid Value { get; } = Guid.NewGuid(); }
+    private static readonly ConditionalWeakTable<SimulationSession, Identity> identities = new();
+    public Guid SessionIdentity { get; init; }
+    public IReadOnlyList<ItemJourney> Journeys { get; init; } = [];
+    public int ChangedItems { get; init; }
     public int ActiveDevelopment { get; init; }
     public int ActiveRework { get; init; }
     public int WaitingRework { get; init; }
@@ -44,6 +51,19 @@ public sealed record GameSceneState(int Day, IReadOnlyList<GameArea> Areas, int 
         var s = live.Session; var d = live.CurrentSnapshot; var c = s.Configuration;
         var previousDone = s.Days.Count > 1 ? s.Days[^2].DoneCount : 0;
         var released = s.CurrentDay == 0 ? 0 : d.DoneCount - previousDone;
+        // Read only the current day's suffix, retaining within-day order. Bound copied animation data.
+        var journeys = new List<ItemJourney>(); var changed = 0;
+        foreach (var item in s.WorkItems)
+        {
+            var transitions = item.Transitions;
+            if (transitions.Count == 0 || transitions[^1].Day != s.CurrentDay) continue;
+            changed++;
+            if (journeys.Count >= PackageMotion.MaximumPackages) continue;
+            var first = transitions.Count - 1;
+            while (first > 0 && transitions[first - 1].Day == s.CurrentDay) first--;
+            if (transitions.Count - first + 1 > PackageMotion.MaximumStages) continue;
+            journeys.Add(new(item.Id, new[] { transitions[first].From }.Concat(transitions.Skip(first).Select(t => t.To)).ToArray()));
+        }
         return new(s.CurrentDay, [
             new("Backlog", 0, d.BacklogCount, $"{d.WaitingForDependencyCount} waiting for dependency (included)"),
             new("Development", d.DevelopmentCount + d.ReworkCount, d.WaitingForReworkCount,
@@ -56,6 +76,7 @@ public sealed record GameSceneState(int Day, IReadOnlyList<GameArea> Areas, int 
             s.DebtState.Amount, s.DebtState.Ratio, released, c.Release.Description,
             s.CurrentDay == 0 ? "No completed day yet" : $"Day {s.CurrentDay} used / available · Dev {d.UsedDeveloperCapacity:0.##} / {d.AvailableDeveloperCapacity:0.##} · Test {d.UsedTesterCapacity:0.##} / {d.AvailableTesterCapacity:0.##}", true)
         {
+            SessionIdentity = identities.GetValue(s, _ => new()).Value, Journeys = journeys.ToArray(), ChangedItems = changed,
             ActiveDevelopment = d.DevelopmentCount, ActiveRework = d.ReworkCount,
             WaitingRework = d.WaitingForReworkCount, DependencyWaiting = d.WaitingForDependencyCount,
             UsedDeveloperCapacity = d.UsedDeveloperCapacity, UsedTesterCapacity = d.UsedTesterCapacity,

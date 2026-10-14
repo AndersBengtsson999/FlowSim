@@ -22,7 +22,7 @@ public sealed class SpriteWorkshop
     public IReadOnlyList<WorkshopQueue> Queues { get; }
     public GameSceneState State { get; }
     public WorkshopActivity Activity { get; }
-    public const int MaximumDevelopers = 3;
+    public const int MaximumDevelopers = 4;
     public const int MaximumTesters = 2;
     public int HiddenDevelopers => State.Developers - Workers.Count(w => w.Role != "T");
     public int HiddenTesters => State.Testers - Workers.Count(w => w.Role == "T");
@@ -35,7 +35,8 @@ public sealed class SpriteWorkshop
         if (!state.HasSession) { Objects = []; Workers = []; Queues = []; return; }
         Queues =
         [
-            new("backlog", "Backlog", state.Areas[0].Waiting, new(306, 253), false, 6),
+            new("backlog", "Backlog", Math.Max(0, state.Areas[0].Waiting - state.DependencyWaiting), new(306, 253), false, 6),
+            new("dependency", "Dependency waiting (Backlog subset)", state.DependencyWaiting, new(365, 225), false, 2),
             new("development", "Development", state.ActiveDevelopment, new(553, 211), true),
             new("review-active", "Code Review", state.Areas[2].Active, new(850, 292), true),
             new("review-wait", "Waiting for Code Review", state.Areas[2].Waiting, new(937, 282), false),
@@ -57,9 +58,9 @@ public sealed class SpriteWorkshop
         for (var i = 0; i < Math.Min(MaximumDevelopers, state.Developers); i++)
         {
             var pose = Activity.Developers[i];
-            var position = i == 0 ? seatedDev : i == 1 ? Ground(501, 152) : seatedReview;
-            var appearance = i == 1 ? StandingCompanion : SeatedDeveloper;
-            var station = i == 2 ? "review" : "development";
+            var position = i == 0 ? seatedDev : i == 1 ? Ground(501, 152) : i == 3 ? Ground(403, 305) : seatedReview;
+            var appearance = i is 1 or 3 ? StandingCompanion : SeatedDeveloper;
+            var station = i == 3 ? "debt" : i == 2 ? "review" : "development";
             var worker = new WorkerVisual($"developer/{i}", appearance, pose, position, scale, station);
             var point = Projection.Project(position);
             workers.Add(new(worker, i < state.Specialists ? "S" : "D", new(point.X, point.Y + 9)));

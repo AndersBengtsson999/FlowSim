@@ -1,0 +1,290 @@
+[
+  {
+    "frame": 0,
+    "seconds": 4.3E-06,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 1,
+    "seconds": 0.11775379999999999,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 2,
+    "seconds": 0.2653001,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 3,
+    "seconds": 0.45104979999999995,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 4,
+    "seconds": 0.5677420999999999,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 5,
+    "seconds": 0.7177127,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 6,
+    "seconds": 0.8990478000000001,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 7,
+    "seconds": 1.0172979000000002,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 8,
+    "seconds": 1.1657724,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 9,
+    "seconds": 1.3493427,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 10,
+    "seconds": 1.5010487,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 11,
+    "seconds": 1.6957779999999998,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 12,
+    "seconds": 1.8173438999999998,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 13,
+    "seconds": 1.9647447999999996,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 14,
+    "seconds": 2.1154488,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 15,
+    "seconds": 2.2959037,
+    "day": 8,
+    "phase": null
+  },
+  {
+    "frame": 16,
+    "seconds": 2.4529389,
+    "day": 15,
+    "phase": "Loading"
+  },
+  {
+    "frame": 17,
+    "seconds": 2.6510121000000004,
+    "day": 15,
+    "phase": "Loading"
+  },
+  {
+    "frame": 18,
+    "seconds": 2.8198041000000003,
+    "day": 15,
+    "phase": "Loading"
+  },
+  {
+    "frame": 19,
+    "seconds": 3.0154335000000003,
+    "day": 15,
+    "phase": "Loading"
+  },
+  {
+    "frame": 20,
+    "seconds": 3.2475159000000007,
+    "day": 15,
+    "phase": "Loading"
+  },
+  {
+    "frame": 21,
+    "seconds": 3.445079600000001,
+    "day": 15,
+    "phase": "Loading"
+  },
+  {
+    "frame": 22,
+    "seconds": 3.6432067000000012,
+    "day": 15,
+    "phase": "Loading"
+  },
+  {
+    "frame": 23,
+    "seconds": 3.8086126000000013,
+    "day": 15,
+    "phase": "Departing"
+  },
+  {
+    "frame": 24,
+    "seconds": 4.003415300000001,
+    "day": 15,
+    "phase": "Departing"
+  },
+  {
+    "frame": 25,
+    "seconds": 4.197697100000002,
+    "day": 15,
+    "phase": "Departing"
+  },
+  {
+    "frame": 26,
+    "seconds": 4.397079400000002,
+    "day": 15,
+    "phase": "Away"
+  },
+  {
+    "frame": 27,
+    "seconds": 4.626544900000001,
+    "day": 15,
+    "phase": "Returning"
+  },
+  {
+    "frame": 28,
+    "seconds": 4.8264963000000005,
+    "day": 15,
+    "phase": "Returning"
+  },
+  {
+    "frame": 29,
+    "seconds": 4.995724600000001,
+    "day": 15,
+    "phase": "Returning"
+  },
+  {
+    "frame": 30,
+    "seconds": 5.192272700000001,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 31,
+    "seconds": 5.340922900000001,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 32,
+    "seconds": 5.5229698,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 33,
+    "seconds": 5.6406936000000005,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 34,
+    "seconds": 5.820756100000001,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 35,
+    "seconds": 5.9366061000000006,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 36,
+    "seconds": 6.087016000000001,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 37,
+    "seconds": 6.234360900000001,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 38,
+    "seconds": 6.384335800000002,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 39,
+    "seconds": 6.533019900000002,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 40,
+    "seconds": 6.684317900000001,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 41,
+    "seconds": 6.8322101,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 42,
+    "seconds": 6.982013600000001,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 43,
+    "seconds": 7.132410400000001,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 44,
+    "seconds": 7.284319400000001,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 45,
+    "seconds": 7.432140300000001,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 46,
+    "seconds": 7.5820275000000015,
+    "day": 15,
+    "phase": null
+  },
+  {
+    "frame": 47,
+    "seconds": 7.7310145000000015,
+    "day": 15,
+    "phase": null
+  }
+]

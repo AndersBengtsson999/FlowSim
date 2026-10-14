@@ -7,7 +7,8 @@ namespace Simulation.UI.Controls.GameWorld;
 public sealed record WorkshopActivity(IReadOnlyList<SpritePose> Developers, IReadOnlyList<SpritePose> Testers,
     bool DevelopmentObserved, bool ReviewObserved, bool TestingObserved, bool RepaymentObserved)
 {
-    public int BusyDevelopers => Developers.Count(p => p != SpritePose.Idle);
+    public bool UnpicturedMaintenance { get; init; }
+    public int BusyDevelopers => Developers.Count(p => p != SpritePose.Idle) + (UnpicturedMaintenance ? 1 : 0);
     public int BusyTesters => Testers.Count(p => p != SpritePose.Idle);
     public static WorkshopActivity From(GameSceneState state)
     {
@@ -18,8 +19,16 @@ public sealed record WorkshopActivity(IReadOnlyList<SpritePose> Developers, IRea
         var review = observed && state.Areas[2].Active > 0 && state.UsedReviewCapacity > 0;
         var testing = observed && state.Areas[3].Active > 0 && state.UsedTesterCapacity > 0;
         var budget = Math.Min(developers.Length, Math.Max(0, state.DeveloperPoseCeiling));
-        // Fixed visual priority, not an allocation algorithm: one primary vignette, one review
-        // vignette, then an optional partner. Never multiply utilization by headcount or item count.
+        // Reserve observed maintenance in the SAME visual budget. Small teams use the diagram
+        // as a worker-equivalent rather than adding a fifth/fictional person or moving a seat.
+        var repayment = observed && state.UsedDebtRepaymentCapacity > 0 && state.DeveloperPoseCeiling > 0;
+        var unpicturedMaintenance = repayment && budget > 0 && developers.Length < 4;
+        if (repayment && budget > 0)
+        {
+            if (developers.Length >= 4) developers[3] = SpritePose.Maintaining;
+            budget--;
+        }
+        // Remaining slots illustrate primary work, review, then an optional partner.
         if (development && budget > 0) { developers[0] = SpritePose.Working; budget--; }
         if (review && budget > 0)
         {
@@ -32,6 +41,6 @@ public sealed record WorkshopActivity(IReadOnlyList<SpritePose> Developers, IRea
         }
         if (testing && testers.Length > 0 && state.TesterPoseCeiling > 0) testers[0] = SpritePose.Testing;
         return new(developers, testers, development, review, testing,
-            observed && state.UsedDebtRepaymentCapacity > 0 && state.DeveloperPoseCeiling > 0);
+            repayment) { UnpicturedMaintenance = unpicturedMaintenance };
     }
 }

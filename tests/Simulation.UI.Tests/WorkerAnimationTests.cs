@@ -21,11 +21,11 @@ public sealed class WorkerAnimationTests
     public void WorkingReviewTestingAndCollaborationUseBoundedAggregateSignals()
     {
         var a = WorkshopActivity.From(Busy());
-        Assert.Equal(new[] { SpritePose.Collaborating, SpritePose.Collaborating, SpritePose.Reviewing }, a.Developers);
+        Assert.Equal(new[] { SpritePose.Collaborating, SpritePose.Collaborating, SpritePose.Reviewing, SpritePose.Maintaining }, a.Developers);
         Assert.Equal(new[] { SpritePose.Testing, SpritePose.Idle }, a.Testers);
         Assert.True(a.RepaymentObserved);
         var scene = new SpriteWorkshop(Busy());
-        Assert.Equal(197, scene.HiddenDevelopers); Assert.Equal(98, scene.HiddenTesters);
+        Assert.Equal(196, scene.HiddenDevelopers); Assert.Equal(98, scene.HiddenTesters);
         Assert.InRange(scene.Objects.Count, 0, 70);
     }
 
@@ -53,7 +53,7 @@ public sealed class WorkerAnimationTests
     public void CompletedWorkDoesNotAnimateAnEmptyStageAndDayZeroIsIdle()
     {
         var state = Busy(); var areas = state.Areas.Select(a => a with { Active = 0 }).ToArray();
-        var empty = WorkshopActivity.From(state with { Areas = areas, ActiveDevelopment = 0 });
+        var empty = WorkshopActivity.From(state with { Areas = areas, ActiveDevelopment = 0, UsedDebtRepaymentCapacity = 0 });
         Assert.All(empty.Developers.Concat(empty.Testers), p => Assert.Equal(SpritePose.Idle, p));
         var zero = WorkshopActivity.From(state with { Day = 0 });
         Assert.All(zero.Developers.Concat(zero.Testers), p => Assert.Equal(SpritePose.Idle, p));
@@ -64,7 +64,7 @@ public sealed class WorkerAnimationTests
     [InlineData(1)] [InlineData(2)]
     public void SmallTeamCanIllustrateReviewWithoutAddingOrMovingAWorker(int developers)
     {
-        var state = Busy() with { Developers = developers, Specialists = 0, ActiveDevelopment = 0, UsedDevelopmentCapacity = 0 };
+        var state = Busy() with { Developers = developers, Specialists = 0, ActiveDevelopment = 0, UsedDevelopmentCapacity = 0, UsedDebtRepaymentCapacity = 0 };
         var review = new SpriteWorkshop(state);
         Assert.Equal(SpritePose.Reviewing, review.Activity.Developers[0]);
         Assert.Equal(developers, review.Workers.Count(w => w.Role != "T"));
@@ -78,7 +78,7 @@ public sealed class WorkerAnimationTests
     {
         var activity = WorkshopActivity.From(Busy() with { ActiveDevelopment = 0, ActiveRework = 1, UsedDevelopmentCapacity = 0, UsedReworkCapacity = .5, CollaborationCapacity = 0 });
         Assert.Equal(SpritePose.Working, activity.Developers[0]); Assert.True(activity.RepaymentObserved);
-        Assert.Equal(2, activity.BusyDevelopers); // Work + review; repayment does not add fictional workers.
+        Assert.Equal(3, activity.BusyDevelopers); // Work + review + maintenance all share the same ceiling.
     }
 
     [Fact]

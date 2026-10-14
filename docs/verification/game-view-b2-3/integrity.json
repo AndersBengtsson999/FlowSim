@@ -1,0 +1,10 @@
+{
+  "simulationProductionUnchanged": true,
+  "coreTests": 218,
+  "applicationTests": 216,
+  "uiTests": 242,
+  "totalTests": 676,
+  "maximumMovingPackagesVerified": 12,
+  "staticObjects": 41,
+  "thirtyNativeRendersMilliseconds": 423
+}

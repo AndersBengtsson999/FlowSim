@@ -1,0 +1,10 @@
+{
+  "simulationProductionUnchanged": true,
+  "completeSuitePassed": 655,
+  "corePassed": 218,
+  "applicationPassed": 216,
+  "uiPassed": 221,
+  "nativeMaximumMovingPackages": 12,
+  "nativeStaticObjects": 40,
+  "nativeThirtyRendersMs": 425
+}

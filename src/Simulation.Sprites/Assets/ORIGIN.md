@@ -43,3 +43,9 @@ Three additional original assets were generated with the built-in image tool (no
 | maintenance-bench.png | Cabinet and attached tool board; no fictional debt tasks | exec-af8480c8-3d30-4f2f-909d-e5e40b85ae25.png |
 
 Saved in this directory as unchanged PNGs with alpha and provenance metadata. See [exact B1.3 prompts](../../../docs/verification/game-view-b1-3/prompts.json) and [dimensions, transparency and hashes](../../../docs/verification/game-view-b1-3/assets-inspection.json). The van is a single reusable object; its doors and wheels are not independently animated layers. The original floor sprite remains available to the prototype; LIVE deliberately retains the connected B1 floor geometry.
+
+## B2.3 gestures — 2026-10-14
+
+`developer-gestures.png` is a new, original two-pose strip produced by the built-in `image_gen` tool using this project's existing `developer.png` as the edit reference. Source: `exec-f754de75-0e9e-4d32-b6c9-cdd6e6d73151.png`. It retains its generated RGBA pixels and provenance metadata without postprocessing. Neutral and pointing poses share one character identity. The output-use basis above applies; no third-party stock artwork was introduced. Exact prompt, dimensions, alpha and hash: [B2.3 provenance](../../../docs/verification/game-view-b2-3/artwork.json).
+
+Both cells are 887 × 887 pixels in a 1774 × 887 strip. Neutral foot anchor: (490, 820); pointing foot anchor relative to its cell: (414, 820). The differing X anchors compensate for generated cell placement. PixelsToDip = 0.28. The scene applies its ordinary 0.34 character scale. Idle uses only the neutral frame. Collaboration/maintenance play neutral, neutral, neutral, pointing, pointing, neutral at 1.5 frames/second, driven by the shared presentation clock. This is a two-pose gesture, not a smooth skeletal animation. No runtime generation or network access is needed.
