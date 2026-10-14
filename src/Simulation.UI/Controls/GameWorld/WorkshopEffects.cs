@@ -38,6 +38,15 @@ internal sealed class WorkshopEffects : ISpriteDecoration
                         dc.DrawEllipse(Color, null, Keys[i], 1.4, .75);
         }
     }
+    internal void SetWorkers(IReadOnlyList<LivingWorker>? workers)
+    {
+        if (workers is null) return;
+        foreach (var pair in monitors)
+        {
+            var station = pair.Key.Split('/')[0];
+            pair.Value.Pose = workers.FirstOrDefault(w => !w.Walking && w.Station == station && w.Pose != SpritePose.Idle)?.Pose ?? SpritePose.Idle;
+        }
+    }
     private readonly Dictionary<string, Monitor> monitors = new(StringComparer.Ordinal);
     private readonly Point[] idleAnchors;
     private readonly bool repayment;

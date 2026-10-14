@@ -226,3 +226,7 @@ Skills & Specialists v1 (model 0.6): one Development capability, shared capacity
 Release / Deployment v1 (model 0.7): Ready for Release → Released, Flow-based/Scheduled capacity, delivery/completion populations and preserved legacy history. See [semantics and validation](docs/RELEASE_DEPLOYMENT.md).
 
 [Dependencies v1](docs/DEPENDENCIES.md) adds seeded residual waiting before Development, with Live configuration, interventions, queue highlighting and trend visibility. Defaults preserve the previous behavior.
+
+## Living Office visual layer
+
+The sprite Game View includes bounded worker walking, four facing directions, collaboration approaches and occasional ambient gestures on the existing presentation clock. Movement is illustrative and does not alter simulation calculations. Pause freezes it; **Animate activity** disables it; above 2× speed unnecessary trips are skipped. [B2.4 architecture, native capture, validation and art limitations](docs/verification/game-view-b2-4/README.md).

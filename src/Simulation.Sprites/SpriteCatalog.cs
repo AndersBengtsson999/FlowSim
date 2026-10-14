@@ -6,6 +6,10 @@ public static class SpriteCatalog
     // Curated source rectangles preserve the generated PNGs/alpha; no runtime trimming or downloads.
     public static IReadOnlyDictionary<string, SpriteDefinition> Assets { get; } = new Dictionary<string, SpriteDefinition>
     {
+        ["developer-walk-0"] = Walking(0),
+["developer-walk-1"] = Walking(1),
+["developer-walk-2"] = Walking(2),
+["developer-walk-3"] = Walking(3),
         ["developer-gestures"] = new("developer-gestures", new Uri("avares://Simulation.Sprites/Assets/developer-gestures.png"), .28,
             new Dictionary<SpritePose, SpriteClip>
             {
@@ -39,6 +43,19 @@ public static class SpriteCatalog
         new("developer", "developer", DeveloperPosition),
         new("package", "package", new(2.2, 1.2))
     ];
+    private static SpriteDefinition Walking(int direction)
+    {
+        // Same unmodified RGBA atlas, independently anchored contact and passing frames.
+        double[] centers = [275, 690, 1110, 1535];
+        var x = direction * 443.5;
+        return new("developer-walk-" + direction, new Uri("avares://Simulation.Sprites/Assets/developer-walking.png"), .52,
+            new Dictionary<SpritePose, SpriteClip>
+            {
+                [SpritePose.Walking] = new([
+                    new(new(x, 0, 443.5, 440), new(centers[direction] - x, 425)),
+                    new(new(x, 440, 443.5, 447), new(centers[direction] - x, 425))], 5)
+            });
+    }
     private static SpriteClip GestureClip()
     {
         var neutral = new SpriteFrame(new(0, 0, 887, 887), new(490, 820));

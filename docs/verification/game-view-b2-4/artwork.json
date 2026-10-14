@@ -1,0 +1,24 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-14",
+  "asset": "src/Simulation.Sprites/Assets/developer-walking.png",
+  "reference": "src/Simulation.Sprites/Assets/developer.png",
+  "source": "exec-7f1710f6-9043-4148-9adb-8da9041a2007.png",
+  "sha256": "4a3afee4e1a7a0b15074889be6d9759d995ca4bd6ef0ef4b8843af1e33e356ab",
+  "dimensions": [
+    1774,
+    887
+  ],
+  "postprocessing": "None. Source rectangles and anchors only.",
+  "prompts": [
+    "Use case: identity-preserve. Production isometric walking sprite sheet for the exact original software developer in reference: curly dark hair, round glasses, teal overshirt, white undershirt, dark blue trousers, yellow lanyard, sneakers. Make a transparent RGBA PNG with exactly 4 columns and 2 rows of equal square cells, preferably 2048x1024. Column 1 walks toward screen bottom-right; column 2 toward bottom-left; column 3 toward top-left (back visible); column 4 toward top-right (back visible). Top row stride A, bottom row stride B opposite leg forward. Each cell contains one full-body figure, centered at the same relative foot anchor (50% width, 90% height), identical size, head about 15% height. Preserve proportions, elevated 2:1 isometric camera, soft game lighting and identity from reference. All eight cells are frames of ONE character, not different people. Natural clear walking poses, bent knees and alternating arms; do not slide a rigid standing body. Plenty of empty margin. Transparent background with no checkerboard, floor, labels, grid, props, scenery or text. The four facing directions must be clearly distinct. Keep cells aligned for direct source-rectangle rendering.",
+    "Edit this exact transparent walking sprite sheet. Keep its 4 columns, 2 rows, character identity, clothing, camera, scale, overall image dimensions and all first-row frames unchanged. Correct ONLY row 2: each character must now have the OPPOSITE LEG clearly forward and the opposite arm forward compared with the character directly above it. These must form alternating left-right walking steps, not duplicates of the same step. Preserve the four facing directions by column, full body, matching ground foot anchors, head/body placement within each cell. For each bottom-row figure swap which leg is planted forward versus trailing behind, changing the bend of both knees naturally. Preserve genuine transparent RGBA background, no labels, no scenery.",
+    "Create a corrected production animation spritesheet matching this character exactly (curly hair, glasses, teal shirt, yellow lanyard). 4 columns x 2 rows, transparent RGBA background, each full figure well inside its own cell with generous transparent margins. Columns face SE, SW, NW, NE respectively, matching reference. Top row: walking CONTACT pose with legs far apart. Bottom row: walking PASSING pose, feet CLOSE TOGETHER directly under pelvis, ONE KNEE RAISED AND BENT, other leg STRAIGHT DOWN bearing weight. Essential: bottom row legs MUST NOT be spread apart like top row. This is a contact/passing animation cycle. Match body size, head height and center of feet between rows. Polished isometric game illustration, consistent soft light. No shadows beyond feet, no scene, no letters, no grid. Keep entire head and both shoes inside each cell. Do not duplicate contact poses in bottom row."
+  ],
+  "selection": "First two attempts did not provide distinct alternating steps. Final contact/passing atlas selected; full alternating-foot cycle remains an art limitation.",
+  "alpha": {
+    "transparent": 1090914,
+    "partial": 481099,
+    "opaque": 1525
+  }
+}

@@ -16,7 +16,7 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
     private HashSet<string> growing = [];
     internal int DecodeCount => assets.DecodeCount;
     internal int ObjectCount => workshop?.Objects.Count ?? 0;
-    internal void Render(DrawingContext dc, GameSceneState? state, double seconds = 0, bool animateFrames = false, IReadOnlyList<SpriteObject>? moving = null, ReleaseVisual? release = null)
+    internal void Render(DrawingContext dc, GameSceneState? state, double seconds = 0, bool animateFrames = false, IReadOnlyList<SpriteObject>? moving = null, ReleaseVisual? release = null, IReadOnlyList<LivingWorker>? living = null)
     {
         if (state is not { HasSession: true })
         {
@@ -47,19 +47,28 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         dc.DrawLine(new Pen(Ink("#FFE36A"), 4), new(140, 367), new(205, 400));
         dc.DrawLine(new Pen(Ink("#FFE36A"), 4), new(205, 400), new(298, 353));
         dc.DrawLine(new Pen(Ink("#D49D7C"), 3, new DashStyle([3, 3], 0)), new(505, 269), new(450, 298));
-        effects!.DrawGround(dc, seconds);
+        if (living is null) effects!.DrawGround(dc, seconds);
+        effects!.SetWorkers(living);
         var vehicle = release is { Phase: not ReleasePhase.FeedbackOnly };
         if (release is not null)
         {
             using (dc.PushOpacity(.35 + .2 * WorkshopEffects.Pulse(seconds, 1.5)))
                 dc.DrawEllipse(null, new Pen(Ink("#FFEB00"), 3), new(261, 356), 42, 20);
         }
-        batch!.Draw(dc, seconds, animateFrames, effects,
-            vehicle ? (moving ?? []).Concat(release!.Sprites()).ToArray() : moving,
-            vehicle ? ReleaseVisual.ReplacedObjects : null);
+        var dynamicSprites = new List<SpriteObject>(moving ?? []);
+        var hidden = new HashSet<string>();
+        if (vehicle) { dynamicSprites.AddRange(release!.Sprites()); hidden.UnionWith(ReleaseVisual.ReplacedObjects); }
+        if (living is not null)
+        {
+            foreach (var worker in workshop.Workers) { hidden.Add(worker.Visual.Id); hidden.Add(worker.Visual.Id + "/upper-body"); }
+            foreach (var worker in living) dynamicSprites.AddRange(WorkerMotion.Sprites(worker, seconds));
+        }
+        batch!.Draw(dc, seconds, animateFrames, effects, dynamicSprites, hidden);
         foreach (var worker in workshop.Workers)
         {
-            var p = worker.BadgePosition; var color = worker.Role == "T" ? "#72DCD6" : worker.Role == "S" ? "#FFE644" : "#CFDEE7";
+            var actor = living?.FirstOrDefault(w => w.Worker.Visual.Id == worker.Visual.Id);
+            var p = actor is null ? worker.BadgePosition : SpriteWorkshop.Projection.Project(actor.Position) + new Vector(0, 9);
+            var color = worker.Role == "T" ? "#72DCD6" : worker.Role == "S" ? "#FFE644" : "#CFDEE7";
             dc.DrawEllipse(Ink("#182D37"), new Pen(Ink(color), 1.5), p, 9, 9);
             labels.Text(dc, worker.Role, p.X, p.Y - 8, 12, color, true);
         }
@@ -89,7 +98,7 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         labels.Text(dc, $"Figures: {workshop.Workers.Count(w => w.Role != "T")} Dev + {workshop.HiddenDevelopers:N0} grouped · {workshop.Workers.Count(w => w.Role == "T")} Test + {workshop.HiddenTesters:N0} grouped. Poses are illustrative.", 35, 617, 14, "#BECDDA");
         labels.Text(dc, state.ReleasePolicy, 35, 640, 14, "#BECDDA");
         labels.Text(dc, $"{state.ChangedItems:N0} items changed stage today · up to 12 animated · gold ring = queue grew", 740, 640, 10, "#BECDDA", true);
-        labels.Text(dc, $"Collaboration capacity last day: {state.CollaborationCapacity:0.##}" + (workshop.IllustratesCollaboration ? " · pair is illustrative, no named assignment" : " · no pair shown"), 35, 662, 13, "#BECDDA");
+        labels.Text(dc, $"Collaboration capacity last day: {state.CollaborationCapacity:0.##}" + (workshop.IllustratesCollaboration ? " · approach and pair are illustrative" : " · no pair shown"), 35, 662, 13, "#BECDDA");
     }
     private void Title(DrawingContext dc, string text, double x, double y, string color)
     {

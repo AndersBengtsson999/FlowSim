@@ -14,7 +14,7 @@
     <controls:GameWorldControl Name="GameWorld" Width="1080" Height="680" Scene="{Binding GameScene}" UseSprites="{Binding SpriteRendering}" AnimateActivity="{Binding AnimateGameActivity}" SimulationRunning="{Binding IsRunning}" PlaybackSpeed="{Binding Speed}" AutomationProperties.Name="{Binding GameScene.Summary}"/>
    </Viewbox>
    <TextBlock Text="{Binding GameScene.Capacity}" Foreground="#D3DEE7" FontSize="12" TextWrapping="Wrap"/>
-   <TextBlock IsVisible="{Binding SpriteRendering}" Text="Stacks sample queues; counters are exact. Backlog includes dependency waiting. Packages and van replay observed events; trips may combine release days. Above 2×, deliveries are summarized. Motion is not extra WIP. Figures illustrate shared capacity. D = developer · S = specialist · T = tester." Foreground="#9BAFBE" FontSize="12" TextWrapping="Wrap"/>
+   <TextBlock IsVisible="{Binding SpriteRendering}" Text="Stacks sample queues; counters are exact. Backlog includes dependency waiting. Packages and van replay observed events; trips may combine release days. Above 2×, deliveries are summarized. Motion is not extra WIP. Worker trips and gestures are illustrative, not employee assignments. Figures share available capacity. D = developer · S = specialist · T = tester." Foreground="#9BAFBE" FontSize="12" TextWrapping="Wrap"/>
    <TextBlock IsVisible="{Binding !SpriteRendering}" Text="Mint = active · Amber = waiting · Up to 8 packages per area; counts include all items. Figures illustrate current team capacity (yellow caps = specialists), not assigned employees. Capacity above describes the last completed day." Foreground="#9BAFBE" FontSize="12" TextWrapping="Wrap"/>
   </StackPanel>
  </Border>

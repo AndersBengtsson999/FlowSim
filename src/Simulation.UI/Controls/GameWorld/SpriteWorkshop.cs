@@ -76,7 +76,7 @@ public sealed class SpriteWorkshop
             objects.AddRange(worker.Compose(testing));
         }
         objects.AddRange(Workstation("development", development, scale, state.Developers > 0 ? seatedDev : null));
-        objects.AddRange(Workstation("review", review, scale, state.Developers >= 3 ? seatedReview : null));
+        objects.AddRange(Workstation("review", review, scale, state.Developers >= 3 || Activity.Developers.Contains(SpritePose.Reviewing) ? seatedReview : null));
         objects.AddRange(Workstation("testing", testing, scale, state.Testers > 0 ? seatedTest : null));
         objects.Add(new("backlog/shelf", "shelf", Ground(307, 209), .34));
         objects.Add(new("ready/shelf", "shelf", Ground(449, 448), .34));

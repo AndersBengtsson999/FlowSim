@@ -24,6 +24,9 @@ public sealed class GameWorldControl : Control
     public static readonly StyledProperty<double> PlaybackSpeedProperty = AvaloniaProperty.Register<GameWorldControl, double>(nameof(PlaybackSpeed), 1);
     public double PlaybackSpeed { get => GetValue(PlaybackSpeedProperty); set => SetValue(PlaybackSpeedProperty, value); }
     private readonly PackageMotion packages = new();
+    private readonly WorkerMotion workers = new();
+    public int MovingWorkerCount => workers.MovingCount;
+    public IReadOnlyList<LivingWorker> CurrentWorkers => workers.Sample(animation.Seconds, false);
     public ReleaseVisual? CurrentRelease => packages.Release(animation.Seconds);
     public int MovingPackageCount => packages.Count;
     private readonly GameWorldRenderer renderer = new();
@@ -56,13 +59,14 @@ public sealed class GameWorldControl : Control
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == PlaybackSpeedProperty) packages.Cancel();
+        if (change.Property == PlaybackSpeedProperty) { packages.Cancel(); workers.Synchronize(animation.Seconds); }
         if (change.Property == SceneProperty)
         {
             renderer.ClearLabels();
             if (Scene is null || Scene.Day < previousDay) animation.Reset(monotonic.Elapsed);
             previousDay = Scene?.Day ?? 0;
             packages.Observe(Scene, animation.Seconds, animation.IsRunning && SimulationRunning, PlaybackSpeed);
+            workers.Observe(Scene, animation.Seconds, animation.IsRunning && SimulationRunning, PlaybackSpeed);
         }
         if (change.Property == SceneProperty || change.Property == UseSpritesProperty || change.Property == AnimateActivityProperty ||
             change.Property == SimulationRunningProperty || change.Property == IsVisibleProperty || change.Property == PlaybackSpeedProperty) SynchronizeAnimation();
@@ -70,7 +74,7 @@ public sealed class GameWorldControl : Control
     public override void Render(DrawingContext context)
     {
         base.Render(context);
-        if (UseSprites) (sprites ??= new()).Render(context, Scene, AnimateActivity ? animation.Seconds : 0, AnimateActivity, packages.Sample(animation.Seconds), packages.Release(animation.Seconds));
+        if (UseSprites) (sprites ??= new()).Render(context, Scene, AnimateActivity ? animation.Seconds : 0, AnimateActivity, packages.Sample(animation.Seconds), packages.Release(animation.Seconds), workers.Sample(animation.Seconds, animation.IsRunning && PlaybackSpeed <= 2));
         else renderer.Render(context, Scene);
     }
     private void SynchronizeAnimation()
@@ -78,7 +82,7 @@ public sealed class GameWorldControl : Control
         if (animationTimer is null) return;
         var visible = IsEffectivelyVisible && TopLevel.GetTopLevel(this) is not Window { WindowState: WindowState.Minimized };
         var run = PresentationClock.ShouldRun(attached, visible, inViewport, UseSprites, AnimateActivity, SimulationRunning, Scene is { HasSession: true });
-        if (!attached || !visible || !inViewport || !UseSprites || !AnimateActivity) packages.Cancel();
+        if (!attached || !visible || !inViewport || !UseSprites || !AnimateActivity) { packages.Cancel(); workers.Synchronize(animation.Seconds); }
         animation.SetRunning(run, monotonic.Elapsed);
         if (run) animationTimer.Start(); else animationTimer.Stop();
     }
