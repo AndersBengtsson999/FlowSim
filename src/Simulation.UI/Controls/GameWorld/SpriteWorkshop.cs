@@ -8,7 +8,19 @@ namespace Simulation.UI.Controls.GameWorld;
 public sealed record WorkshopWorker(WorkerVisual Visual, string Role, Point BadgePosition);
 public sealed record WorkshopQueue(string Id, string Caption, int Count, Point Position, bool Active, int Limit = 4)
 {
-    public int Visible => Math.Min(Limit, Count);
+    public int Visible => Active ? Math.Min(Limit, Count) : StackCount(Count);
+    public static int StackCount(int count) => count <= 4 ? Math.Max(0, count) : Math.Min(12, 4 + (int)Math.Ceiling(2 * Math.Log2(count / 4.0)));
+    public bool Aggregated => Count > Visible;
+    public IEnumerable<SpriteObject> Sprites()
+    {
+        for (var i = 0; i < Visible; i++)
+        {
+            var column = i % 3; var row = i / 3 % 2; var level = i / 6;
+            yield return new($"queue/{Id}/{i}", "package", SpriteWorkshop.Ground(Position.X + column * 14 - 14,
+                Position.Y + column * 7 - row * 12) with { Elevation = level * .19 }, .26,
+                SortAnchor: SpriteWorkshop.Ground(Position.X, Position.Y + 10), StackOrder: i);
+        }
+    }
     public int Grouped => Count - Visible;
 }
 
@@ -22,6 +34,7 @@ public sealed class SpriteWorkshop
     public IReadOnlyList<WorkshopQueue> Queues { get; }
     public GameSceneState State { get; }
     public WorkshopActivity Activity { get; }
+    public const int MaximumObjects = 128;
     public const int MaximumDevelopers = 4;
     public const int MaximumTesters = 2;
     public int HiddenDevelopers => State.Developers - Workers.Count(w => w.Role != "T");
@@ -84,13 +97,7 @@ public sealed class SpriteWorkshop
         objects.Add(new("debt/maintenance", "maintenance-bench", Ground(450, 310), .30));
         objects.Add(new("plant/north", "plant", Ground(413, 118), .35));
         objects.Add(new("plant/south", "plant", Ground(350, 451), .35));
-        foreach (var queue in Queues)
-            for (var i = 0; i < queue.Visible; i++)
-            {
-                var column = i % 3; var row = i / 3;
-                objects.Add(new($"queue/{queue.Id}/{i}", "package", Ground(queue.Position.X + column * 14 - 14,
-                    queue.Position.Y + column * 7 - row * 15), .26, SortAnchor: Ground(queue.Position.X, queue.Position.Y + 10), StackOrder: row));
-            }
+        foreach (var queue in Queues) objects.AddRange(queue.Sprites());
         Objects = SpritePlacement.InDrawOrder(objects);
         Workers = workers.AsReadOnly();
     }

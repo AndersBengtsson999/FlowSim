@@ -27,7 +27,7 @@ public sealed record SpriteDefinition(string Id, Uri Resource, double PixelsToDi
 
 /// <summary>Stable presentation object. Depth stays on the ground even for an elevated desktop object.</summary>
 public sealed record SpriteObject(string Id, string AssetId, WorldPoint Position, double Scale = 1,
-    int Layer = 1, int StackOrder = 0, SpritePose Pose = SpritePose.Idle, int FrameIndex = 0, WorldPoint? SortAnchor = null)
+    int Layer = 1, int StackOrder = 0, SpritePose Pose = SpritePose.Idle, int FrameIndex = 0, WorldPoint? SortAnchor = null, double Opacity = 1)
 {
     public double GroundDepth => (SortAnchor ?? Position).X + (SortAnchor ?? Position).Y;
 }

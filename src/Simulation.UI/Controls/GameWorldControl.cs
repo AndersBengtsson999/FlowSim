@@ -11,7 +11,7 @@ using Simulation.UI.Controls.GameWorld;
 namespace Simulation.UI.Controls;
 
 /// <summary>Read-only scene host with one presentation timer. No simulation reference or commands.</summary>
-public sealed class GameWorldControl : Control
+public sealed partial class GameWorldControl : Control
 {
     public static readonly StyledProperty<GameSceneState?> SceneProperty = AvaloniaProperty.Register<GameWorldControl, GameSceneState?>(nameof(Scene));
     public GameSceneState? Scene { get => GetValue(SceneProperty); set => SetValue(SceneProperty, value); }
@@ -25,6 +25,8 @@ public sealed class GameWorldControl : Control
     public double PlaybackSpeed { get => GetValue(PlaybackSpeedProperty); set => SetValue(PlaybackSpeedProperty, value); }
     private readonly PackageMotion packages = new();
     private readonly WorkerMotion workers = new();
+    private readonly QueueStackMotion queues = new();
+    public int ChangingStackCount => queues.Count;
     public int MovingWorkerCount => workers.MovingCount;
     public IReadOnlyList<LivingWorker> CurrentWorkers => workers.Sample(animation.Seconds, false);
     public ReleaseVisual? CurrentRelease => packages.Release(animation.Seconds);
@@ -45,6 +47,7 @@ public sealed class GameWorldControl : Control
     public double AnimationSeconds => animation.Seconds;
     public GameWorldControl()
     {
+        Focusable = true;
         RenderOptions.SetBitmapInterpolationMode(this, Avalonia.Media.Imaging.BitmapInterpolationMode.HighQuality);
         // Low-priority shared scene clock. DispatcherTimer coalesces overdue ticks; no per-worker tasks.
         animationTimer = new(DispatcherPriority.Background) { Interval = TimeSpan.FromSeconds(1.0 / 30) };
@@ -55,11 +58,12 @@ public sealed class GameWorldControl : Control
             SynchronizeAnimation();
         };
     }
-    static GameWorldControl() => AffectsRender<GameWorldControl>(SceneProperty, UseSpritesProperty, AnimateActivityProperty, SimulationRunningProperty);
+    static GameWorldControl() => AffectsRender<GameWorldControl>(SceneProperty, UseSpritesProperty, AnimateActivityProperty, SimulationRunningProperty, SelectedStationProperty);
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == PlaybackSpeedProperty) { packages.Cancel(); workers.Synchronize(animation.Seconds); }
+        if (change.Property == SceneProperty || change.Property == SelectedStationProperty) RefreshStationDetails();
+        if (change.Property == PlaybackSpeedProperty) { packages.Cancel(); queues.Cancel(); workers.Synchronize(animation.Seconds); }
         if (change.Property == SceneProperty)
         {
             renderer.ClearLabels();
@@ -67,6 +71,7 @@ public sealed class GameWorldControl : Control
             previousDay = Scene?.Day ?? 0;
             packages.Observe(Scene, animation.Seconds, animation.IsRunning && SimulationRunning, PlaybackSpeed);
             workers.Observe(Scene, animation.Seconds, animation.IsRunning && SimulationRunning, PlaybackSpeed);
+            queues.Observe(Scene, animation.Seconds, animation.IsRunning && SimulationRunning, PlaybackSpeed);
         }
         if (change.Property == SceneProperty || change.Property == UseSpritesProperty || change.Property == AnimateActivityProperty ||
             change.Property == SimulationRunningProperty || change.Property == IsVisibleProperty || change.Property == PlaybackSpeedProperty) SynchronizeAnimation();
@@ -74,15 +79,16 @@ public sealed class GameWorldControl : Control
     public override void Render(DrawingContext context)
     {
         base.Render(context);
-        if (UseSprites) (sprites ??= new()).Render(context, Scene, AnimateActivity ? animation.Seconds : 0, AnimateActivity, packages.Sample(animation.Seconds), packages.Release(animation.Seconds), workers.Sample(animation.Seconds, animation.IsRunning && PlaybackSpeed <= 2));
-        else renderer.Render(context, Scene);
+        context.DrawRectangle(Brushes.Transparent, null, new Rect(Bounds.Size));
+        if (UseSprites) (sprites ??= new()).Render(context, Scene, AnimateActivity ? animation.Seconds : 0, AnimateActivity, packages.Sample(animation.Seconds), packages.Release(animation.Seconds), workers.Sample(animation.Seconds, animation.IsRunning && PlaybackSpeed <= 2), queues, SelectedStation, hoveredStation, IsFocused);
+        else { renderer.Render(context, Scene); StationMap.Highlight(context, SelectedStation, hoveredStation, IsFocused); }
     }
     private void SynchronizeAnimation()
     {
         if (animationTimer is null) return;
         var visible = IsEffectivelyVisible && TopLevel.GetTopLevel(this) is not Window { WindowState: WindowState.Minimized };
         var run = PresentationClock.ShouldRun(attached, visible, inViewport, UseSprites, AnimateActivity, SimulationRunning, Scene is { HasSession: true });
-        if (!attached || !visible || !inViewport || !UseSprites || !AnimateActivity) { packages.Cancel(); workers.Synchronize(animation.Seconds); }
+        if (!attached || !visible || !inViewport || !UseSprites || !AnimateActivity) { packages.Cancel(); queues.Cancel(); workers.Synchronize(animation.Seconds); }
         animation.SetRunning(run, monotonic.Elapsed);
         if (run) animationTimer.Start(); else animationTimer.Stop();
     }

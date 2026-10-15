@@ -24,10 +24,16 @@ public sealed record GameSceneState(int Day, IReadOnlyList<GameArea> Areas, int 
     public Guid SessionIdentity { get; init; }
     public IReadOnlyList<ItemJourney> Journeys { get; init; } = [];
     public int ChangedItems { get; init; }
+    public IReadOnlyDictionary<string, QueuePressure> QueuePressures { get; init; } = new Dictionary<string, QueuePressure>();
     public int ActiveDevelopment { get; init; }
     public int ActiveRework { get; init; }
     public int WaitingRework { get; init; }
     public int DependencyWaiting { get; init; }
+    public double AvailableDeveloperCapacity { get; init; }
+    public double AvailableTesterCapacity { get; init; }
+    public int DevelopmentWipLimit { get; init; }
+    public int ReviewWipLimit { get; init; }
+    public int TestingWipLimit { get; init; }
     public double UsedDeveloperCapacity { get; init; }
     public double UsedDevelopmentCapacity { get; init; }
     public double UsedReviewCapacity { get; init; }
@@ -76,9 +82,12 @@ public sealed record GameSceneState(int Day, IReadOnlyList<GameArea> Areas, int 
             s.DebtState.Amount, s.DebtState.Ratio, released, c.Release.Description,
             s.CurrentDay == 0 ? "No completed day yet" : $"Day {s.CurrentDay} used / available · Dev {d.UsedDeveloperCapacity:0.##} / {d.AvailableDeveloperCapacity:0.##} · Test {d.UsedTesterCapacity:0.##} / {d.AvailableTesterCapacity:0.##}", true)
         {
+            QueuePressures = QueuePressure.From(live),
             SessionIdentity = identities.GetValue(s, _ => new()).Value, Journeys = journeys.ToArray(), ChangedItems = changed,
             ActiveDevelopment = d.DevelopmentCount, ActiveRework = d.ReworkCount,
             WaitingRework = d.WaitingForReworkCount, DependencyWaiting = d.WaitingForDependencyCount,
+            AvailableDeveloperCapacity = d.AvailableDeveloperCapacity, AvailableTesterCapacity = d.AvailableTesterCapacity,
+            DevelopmentWipLimit = c.DevelopmentWipLimit, ReviewWipLimit = c.CodeReviewWipLimit, TestingWipLimit = c.TestingWipLimit,
             UsedDeveloperCapacity = d.UsedDeveloperCapacity, UsedTesterCapacity = d.UsedTesterCapacity,
             UsedDevelopmentCapacity = d.UsedDevelopmentCapacity, UsedReviewCapacity = d.UsedReviewCapacity,
             UsedReworkCapacity = d.UsedReworkDeveloperCapacity, UsedDebtRepaymentCapacity = d.UsedDebtRepaymentCapacity,

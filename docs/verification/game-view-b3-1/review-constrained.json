@@ -1,0 +1,109 @@
+{
+  "Day": 20,
+  "Queues": [
+    {
+      "Id": "backlog",
+      "Count": 103,
+      "Visible": 12,
+      "Aggregated": true
+    },
+    {
+      "Id": "dependency",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "development",
+      "Count": 16,
+      "Visible": 4,
+      "Aggregated": true
+    },
+    {
+      "Id": "review-active",
+      "Count": 1,
+      "Visible": 1,
+      "Aggregated": false
+    },
+    {
+      "Id": "review-wait",
+      "Count": 80,
+      "Visible": 12,
+      "Aggregated": true
+    },
+    {
+      "Id": "testing-active",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "testing-wait",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "ready",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "rework-active",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "rework-wait",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "delivered",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    }
+  ],
+  "QueuePressures": {
+    "backlog": {
+      "Kind": 0,
+      "Label": "",
+      "Marker": "",
+      "Color": "#B7CDCB"
+    },
+    "dependency": {
+      "Kind": 0,
+      "Label": "",
+      "Marker": "",
+      "Color": "#B7CDCB"
+    },
+    "review-wait": {
+      "Kind": 2,
+      "Label": "Shared Dev capacity busy",
+      "Marker": "\u2161",
+      "Color": "#EDAD49"
+    },
+    "testing-wait": {
+      "Kind": 0,
+      "Label": "",
+      "Marker": "",
+      "Color": "#B7CDCB"
+    },
+    "rework-wait": {
+      "Kind": 0,
+      "Label": "",
+      "Marker": "",
+      "Color": "#B7CDCB"
+    },
+    "ready": {
+      "Kind": 0,
+      "Label": "",
+      "Marker": "",
+      "Color": "#B7CDCB"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+balanced: Day 20; review 1; testing 1; ready 0; objects 28; 
+testing-blocked: Day 100; review 0; testing 35; ready 0; objects 35; testing-wait=Blocked:No testers
+review-constrained: Day 20; review 80; testing 0; ready 0; objects 53; review-wait=Constrained:Shared Dev capacity busy
+scheduled-batch: Day 30; review 0; testing 0; ready 38; objects 35; ready=Batching:Scheduled batch
+huge-queue: Day 8; review 0; testing 1997; ready 0; objects 36; testing-wait=Blocked:No testers
+Large queue: 30 native renders 446 ms; decoded 11; objects 36
+recovery-progress: Day 108; review 0; testing 26; ready 0; objects 37; 
+recovered: Day 208; review 0; testing 0; ready 0; objects 24; 
+PASS native macOS A–F, zero-testing activity, static warnings, paused pixels, high speed, restore, mode, reduced motion, resize, cache and unchanged capture.

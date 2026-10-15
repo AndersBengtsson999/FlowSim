@@ -52,8 +52,8 @@ public sealed class SpriteIntegrationTests
             Assert.Equal(d.TestingCount, Count("testing-active")); Assert.Equal(d.WaitingForTestingCount, Count("testing-wait"));
             Assert.Equal(d.ReadyForReleaseCount, Count("ready")); Assert.Equal(d.WaitingForDependencyCount, state.DependencyWaiting);
             Assert.Equal(state.ReleasedToday, Count("delivered")); Assert.Equal(d.DoneCount, state.Areas[5].Count);
-            Assert.All(scene.Queues, q => { Assert.Equal(q.Count, q.Visible + q.Grouped); Assert.InRange(q.Visible, 0, q.Limit); });
-            Assert.InRange(scene.Objects.Count, 0, 70); Assert.InRange(scene.Workers.Count, 0, 6);
+            Assert.All(scene.Queues, q => { Assert.Equal(q.Count, q.Visible + q.Grouped); Assert.InRange(q.Visible, 0, q.Active ? q.Limit : 12); });
+            Assert.InRange(scene.Objects.Count, 0, SpriteWorkshop.MaximumObjects); Assert.InRange(scene.Workers.Count, 0, 6);
             Assert.InRange(scene.Workers.Count(w => w.Role != "T" && w.Visual.State != SpritePose.Idle), 0, state.DeveloperPoseCeiling);
             Assert.InRange(scene.Workers.Count(w => w.Role == "T" && w.Visual.State != SpritePose.Idle), 0, state.TesterPoseCeiling);
             Assert.All(scene.Objects, o => Assert.True(SpriteCatalog.Assets.ContainsKey(o.AssetId)));

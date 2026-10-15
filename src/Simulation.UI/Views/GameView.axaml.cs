@@ -1,17 +1,45 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.VisualTree;
+using Avalonia.Controls.Primitives;
+using Simulation.UI.Controls.GameWorld;
 namespace Simulation.UI.Views;
 public partial class GameView : UserControl
 {
+    private bool? sidePanel;
     public GameView()
     {
         InitializeComponent();
-        LayoutUpdated += (_, _) =>
+        LayoutUpdated += (_, _) => FitWorkshop();
+    }
+    private void CloseStationClicked(object? sender, RoutedEventArgs e)
+    {
+        GameWorld.SelectedStation = null; GameWorld.Focus(Avalonia.Input.NavigationMethod.Pointer);
+    }
+    private void FitWorkshop()
+    {
+        if (!IsEffectivelyVisible || TopLevel.GetTopLevel(this) is not { } root || this.TranslatePoint(default, root) is not { } position) return;
+        var side = StationMap.SidePanel(Bounds.Width);
+        if (sidePanel != side)
         {
-            if (!IsEffectivelyVisible || TopLevel.GetTopLevel(this) is not { } root || this.TranslatePoint(default, root) is not { } position) return;
-            // Fit comfortably when possible; short windows keep a readable world and use the existing Live scroll viewer.
-            var height = Math.Max(390, root.Bounds.Height - Math.Max(0, position.Y) - 240);
-            if (Math.Abs(WorldViewport.MaxHeight - height) > 1) WorldViewport.MaxHeight = height;
-        };
+            sidePanel = side;
+            WorkshopContent.ColumnDefinitions = new(side ? "*,300" : "*");
+            WorkshopContent.RowDefinitions = new(side ? "Auto" : "Auto,Auto");
+            Grid.SetColumn(StationPanel, side ? 1 : 0); Grid.SetRow(StationPanel, side ? 0 : 1);
+            StationPanel.Margin = side ? new Thickness(12, 0, 0, 0) : new Thickness(0, 10, 0, 0);
+        }
+        var metrics = StationMetrics.GetVisualDescendants().OfType<UniformGrid>().FirstOrDefault();
+        if (metrics is not null && metrics.Columns != (side ? 1 : 2)) metrics.Columns = side ? 1 : 2;
+        // Collapse the unused sidebar; selection does not steal width when the panel is closed.
+        if (side) WorkshopContent.ColumnDefinitions[1].Width = new GridLength(GameWorld.HasSelection ? 300 : 0);
+        var scroll = this.GetVisualAncestors().OfType<ScrollViewer>().FirstOrDefault();
+        var bottom = scroll?.TranslatePoint(new Point(0, scroll.Bounds.Height), root)?.Y ?? root.Bounds.Height;
+        var height = StationMap.FitHeight(Math.Min(root.Bounds.Height, bottom) - Math.Max(0, position.Y), WorkshopHeader.Bounds.Height, side, GameWorld.HasSelection);
+        if (Math.Abs(WorldViewport.MaxHeight - height) > 1) WorldViewport.MaxHeight = height;
+        var panelHeight = side ? height : 200;
+        if (Math.Abs(StationPanel.MaxHeight - panelHeight) > 1) StationPanel.MaxHeight = panelHeight;
+        var sceneHeight = GameWorld.UseSprites ? StationMap.SceneHeight : 680;
+        if (GameWorld.Height != sceneHeight) GameWorld.Height = sceneHeight;
     }
 }

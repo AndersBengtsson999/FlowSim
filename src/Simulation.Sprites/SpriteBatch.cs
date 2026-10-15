@@ -34,6 +34,7 @@ public sealed class SpriteBatch
         void DrawMoving(SpriteObject item)
         {
             var definition = SpriteCatalog.Assets[item.AssetId];
+            using var opacity = context.PushOpacity(item.Opacity);
             context.DrawImage(assets.Get(definition), definition.Frame(item.Pose, item.FrameIndex).Source,
                 SpritePlacement.Destination(item, definition, projection));
         }

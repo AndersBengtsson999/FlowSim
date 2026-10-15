@@ -26,7 +26,7 @@ public sealed class WorkerAnimationTests
         Assert.True(a.RepaymentObserved);
         var scene = new SpriteWorkshop(Busy());
         Assert.Equal(196, scene.HiddenDevelopers); Assert.Equal(98, scene.HiddenTesters);
-        Assert.InRange(scene.Objects.Count, 0, 70);
+        Assert.InRange(scene.Objects.Count, 0, SpriteWorkshop.MaximumObjects);
     }
 
     [Fact]

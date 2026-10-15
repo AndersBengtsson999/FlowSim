@@ -101,7 +101,7 @@ public sealed class PackageMotionTests
         var queues = new SpriteWorkshop(state).Queues;
         Assert.Equal(2000, queues.Where(q => q.Id is "backlog" or "dependency").Sum(q => q.Count));
         Assert.Equal(900, queues.Single(q => q.Id == "review-wait").Count);
-        Assert.All(queues, q => Assert.InRange(q.Visible, 0, 6));
+        Assert.All(queues, q => Assert.InRange(q.Visible, 0, q.Active ? q.Limit : 12));
     }
     [Theory] [InlineData(7)] [InlineData(12345)] [InlineData(9876)]
     public void PresentationPreservesCompleteStateAndHistory(int seed)

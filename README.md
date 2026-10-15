@@ -230,3 +230,11 @@ Release / Deployment v1 (model 0.7): Ready for Release → Released, Flow-based/
 ## Living Office visual layer
 
 The sprite Game View includes bounded worker walking, four facing directions, collaboration approaches and occasional ambient gestures on the existing presentation clock. Movement is illustrative and does not alter simulation calculations. Pause freezes it; **Animate activity** disables it; above 2× speed unnecessary trips are skipped. [B2.4 architecture, native capture, validation and art limitations](docs/verification/game-view-b2-4/README.md).
+
+## Visual bottlenecks
+
+Game View uses bounded, nonlinear queue stacks with exact counters and explicit grouped samples. Static markers distinguish growing queues, observed capacity constraints, zero capacity, dependency waiting and scheduled release batching. [B3.1 screenshots, classification rules and verification](docs/verification/game-view-b3-1/README.md).
+
+## Station inspection
+
+Game View has selectable stations, read-only contextual metrics, keyboard selection, a compact condition summary and responsive workshop sizing. [B3.2 architecture, screenshots, verification and limitations](docs/verification/game-view-b3-2/README.md).

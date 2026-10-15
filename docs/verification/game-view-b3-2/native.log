@@ -1,0 +1,4 @@
+Window 960, 820: world scale 0,408, world height 253, panel 0, 263, 740, 180
+Window 1440, 1060: world scale 0,748, world height 464, panel 0, 474, 1220, 180
+Window 1840, 1120: world scale 1,040, world height 645, panel 1332, 0, 288, 313
+PASS native macOS routed pointer/keyboard, seven station choices, scaled queue hits, open/switch/close, observed metrics, LIVE updates, restore, animation/speed independence, legacy mode and full capture invariance.

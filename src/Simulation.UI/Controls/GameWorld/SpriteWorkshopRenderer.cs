@@ -13,10 +13,9 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
     private SpriteWorkshop? workshop;
     private SpriteBatch? batch;
     private WorkshopEffects? effects;
-    private HashSet<string> growing = [];
     internal int DecodeCount => assets.DecodeCount;
     internal int ObjectCount => workshop?.Objects.Count ?? 0;
-    internal void Render(DrawingContext dc, GameSceneState? state, double seconds = 0, bool animateFrames = false, IReadOnlyList<SpriteObject>? moving = null, ReleaseVisual? release = null, IReadOnlyList<LivingWorker>? living = null)
+    internal void Render(DrawingContext dc, GameSceneState? state, double seconds = 0, bool animateFrames = false, IReadOnlyList<SpriteObject>? moving = null, ReleaseVisual? release = null, IReadOnlyList<LivingWorker>? living = null, QueueStackMotion? queueMotion = null, string? selected = null, string? hovered = null, bool focused = false)
     {
         if (state is not { HasSession: true })
         {
@@ -27,9 +26,6 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         if (!ReferenceEquals(workshop?.State, state))
         {
             var next = new SpriteWorkshop(state);
-            growing = workshop is { } old && old.State.SessionIdentity == state.SessionIdentity && old.State.Day + 1 == state.Day
-                ? next.Queues.Where(q => !q.Active && q.Count > old.Queues.First(x => x.Id == q.Id).Count).Select(q => q.Id).ToHashSet()
-                : [];
             workshop = next; batch = new(workshop.Objects, SpriteWorkshop.Projection, assets);
             effects = new(workshop); labels.ClearLabels();
         }
@@ -37,11 +33,14 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         Poly(dc, "#34464B", new(165, 325), new(265, 375), new(120, 447), new(20, 397));
         dc.DrawLine(new Pen(Ink("#BAC4B7"), 2, new DashStyle([4, 5], 0)), new(214, 350), new(69, 422));
         GameWorldLayout.Draw(dc, spriteDecoration: true);
+        StationMap.Highlight(dc, selected, hovered, focused);
         foreach (var queue in workshop!.Queues)
         {
             var p = queue.Position;
-            if (growing.Contains(queue.Id)) dc.DrawEllipse(null, new Pen(Ink("#E7BB59"), 2), new(p.X, p.Y + 7), 43, 21);
-            Box(dc, p.X, p.Y + 8, 64, 30, 3, queue.Active ? "#547C70" : queue.Count > queue.Limit ? "#A88645" : "#7A7051", "#394B48", "#4F5D50");
+            var pressure = state.QueuePressures.GetValueOrDefault(queue.Id, QueuePressure.Normal);
+            if (pressure.Kind != QueuePressureKind.Normal)
+                dc.DrawEllipse(null, new Pen(Ink(pressure.Color), pressure.Kind == QueuePressureKind.Blocked ? 3 : 2), new(p.X, p.Y + 7), 42, 22);
+            Box(dc, p.X, p.Y + 8, 64, 30, 3, queue.Active ? "#547C70" : queue.Aggregated ? "#A88645" : "#7A7051", "#394B48", "#4F5D50");
         }
         // Loading bay outline and debt side area are fixtures, never extra simulation stages.
         dc.DrawLine(new Pen(Ink("#FFE36A"), 4), new(140, 367), new(205, 400));
@@ -57,6 +56,11 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         }
         var dynamicSprites = new List<SpriteObject>(moving ?? []);
         var hidden = new HashSet<string>();
+        if (queueMotion is not null)
+        {
+            dynamicSprites.AddRange(queueMotion.Sample(seconds));
+            hidden.UnionWith(queueMotion.Hidden);
+        }
         if (vehicle) { dynamicSprites.AddRange(release!.Sprites()); hidden.UnionWith(ReleaseVisual.ReplacedObjects); }
         if (living is not null)
         {
@@ -64,6 +68,20 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
             foreach (var worker in living) dynamicSprites.AddRange(WorkerMotion.Sprites(worker, seconds));
         }
         batch!.Draw(dc, seconds, animateFrames, effects, dynamicSprites, hidden);
+        foreach (var queue in workshop.Queues.Where(q => !q.Active))
+        {
+            var pressure = state.QueuePressures.GetValueOrDefault(queue.Id, QueuePressure.Normal);
+            if (pressure.Marker.Length > 0)
+            {
+                var p = new Point(queue.Position.X - 34, queue.Position.Y + 12);
+                // Shape plus glyph remains legible with motion disabled and without color perception.
+                if (pressure.Kind == QueuePressureKind.Blocked)
+                    Poly(dc, pressure.Color, new(p.X, p.Y - 12), new(p.X - 11, p.Y + 8), new(p.X + 11, p.Y + 8));
+                else dc.DrawRectangle(Ink(pressure.Color), null, new Rect(p.X - 10, p.Y - 10, 20, 20), 3, 3);
+                labels.Text(dc, pressure.Marker, p.X, p.Y - 9, 15, "#182D37", true);
+            }
+
+        }
         foreach (var worker in workshop.Workers)
         {
             var actor = living?.FirstOrDefault(w => w.Worker.Visual.Id == worker.Visual.Id);
@@ -72,33 +90,36 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
             dc.DrawEllipse(Ink("#182D37"), new Pen(Ink(color), 1.5), p, 9, 9);
             labels.Text(dc, worker.Role, p.X, p.Y - 8, 12, color, true);
         }
-        Title(dc, "BACKLOG", 307, 117, "#E9D9B8");
+        Title(dc, "BACKLOG", 307, 104, "#E9D9B8");
         Title(dc, "DEVELOPMENT", 555, 36, "#FFEB00");
         Title(dc, "CODE REVIEW", 817, 133, "#A8D5FA");
         Title(dc, "TESTING", 710, 292, "#8BE1C4");
+        if (state.QueuePressures.GetValueOrDefault("testing-wait", QueuePressure.Normal).Kind == QueuePressureKind.Blocked)
+            labels.Text(dc, "INACTIVE", 710, 314, 11, "#FFC27A", true);
         Title(dc, "READY FOR RELEASE", 449, 370, "#E9D9B8");
         Title(dc, "RELEASE", 214, 244, "#FFEB00");
         Title(dc, "TECHNICAL DEBT", 432, 205, "#FFD0A7");
-        labels.Text(dc, $"{state.Debt:0.##} effort · {state.DebtRatio:P1}", 424, 327, 14, "#FFE4C9", true);
-        labels.Text(dc, $"Repayment {state.UsedDebtRepaymentCapacity:0.##} · last day", 424, 347, 11, "#BFCAC8", true);
-        Count(dc, $"{state.Areas[0].Count:N0} waiting", 200, 193, false);
-        Count(dc, $"Dependency wait {state.DependencyWaiting:N0}", 200, 217, false);
-        Count(dc, $"{state.ActiveDevelopment:N0} active", 542, 233, true);
-        labels.Text(dc, $"Rework {state.ActiveRework:N0} active / {state.WaitingRework:N0} wait", 650, 276, 12, "#EBD3A3", true);
-        Count(dc, $"Active {state.Areas[2].Active:N0}", 823, 310, true);
-        Count(dc, $"Review queue · {state.Areas[2].Waiting:N0}", 948, 365, false);
-        Count(dc, $"Active {state.Areas[3].Active:N0}", 773, 466, true);
-        Count(dc, $"Test queue · {state.Areas[3].Waiting:N0}", 708, 499, false);
-        Count(dc, $"{state.Areas[4].Count:N0} waiting", 449, 520, false);
-        Count(dc, $"{state.Areas[5].Count:N0} delivered", 150, 465, true);
-        labels.Text(dc, $"{state.ReleasedToday:N0} released today", 150, 490, 12, "#F4E6B2", true);
-        if (release is not null) Count(dc, release.Caption, 170, 515, true);
-        labels.Text(dc, "Loading samples", 290, 378, 10, "#DAE8DF", true);
-        labels.Text(dc, $"TEAM   {state.Developers:N0} developers · {state.Specialists:N0} specialists included · {state.Testers:N0} testers", 35, 590, 18);
-        labels.Text(dc, $"Figures: {workshop.Workers.Count(w => w.Role != "T")} Dev + {workshop.HiddenDevelopers:N0} grouped · {workshop.Workers.Count(w => w.Role == "T")} Test + {workshop.HiddenTesters:N0} grouped. Poses are illustrative.", 35, 617, 14, "#BECDDA");
-        labels.Text(dc, state.ReleasePolicy, 35, 640, 14, "#BECDDA");
-        labels.Text(dc, $"{state.ChangedItems:N0} items changed stage today · up to 12 animated · gold ring = queue grew", 740, 640, 10, "#BECDDA", true);
-        labels.Text(dc, $"Collaboration capacity last day: {state.CollaborationCapacity:0.##}" + (workshop.IllustratesCollaboration ? " · approach and pair are illustrative" : " · no pair shown"), 35, 662, 13, "#BECDDA");
+        Count(dc, $"Debt · {state.Debt:0.##}", 424, 335, false);
+        Count(dc, $"{state.Areas[0].Count:N0} waiting{Grouped(state.Areas[0].Count)}", 307, 128, false);
+        Count(dc, $"Dev WIP · {state.ActiveDevelopment:N0}", 555, 240, true);
+        Count(dc, $"Queue · {state.Areas[2].Waiting:N0}{Grouped(state.Areas[2].Waiting)}", 933, 343, false);
+        Status(dc, state, "review-wait", 938, 367);
+        Count(dc, $"Queue · {state.Areas[3].Waiting:N0}{Grouped(state.Areas[3].Waiting)}", 708, 499, false);
+        Status(dc, state, "testing-wait", 708, 523);
+        Count(dc, $"{state.Areas[4].Count:N0} waiting{Grouped(state.Areas[4].Count)}", 449, 520, false);
+        Status(dc, state, "ready", 449, 544);
+        Count(dc, $"{state.Areas[5].Count:N0} delivered", 214, 415, true);
+        if (release is not null) Count(dc, release.Caption, 170, 470, true);
+    }
+    private static string Grouped(int count) => count > WorkshopQueue.StackCount(count) ? " · grouped" : "";
+    private void Status(DrawingContext dc, GameSceneState state, string id, double x, double y)
+    {
+        var pressure = state.QueuePressures.GetValueOrDefault(id, QueuePressure.Normal);
+        if (pressure.Label.Length == 0) return;
+        var caption = pressure.Kind == QueuePressureKind.Blocked ? "Blocked · " + pressure.Label : pressure.Label;
+        var width = caption.Length * 6.2 + 14;
+        dc.DrawRectangle(Ink("#182D37"), new Pen(Ink(pressure.Color), 1), new Rect(x - width / 2, y - 1, width, 20), 4, 4);
+        labels.Text(dc, caption, x, y, 12, pressure.Color, true);
     }
     private void Title(DrawingContext dc, string text, double x, double y, string color)
     {

@@ -1,0 +1,109 @@
+{
+  "Day": 100,
+  "Queues": [
+    {
+      "Id": "backlog",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "dependency",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "development",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "review-active",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "review-wait",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "testing-active",
+      "Count": 3,
+      "Visible": 3,
+      "Aggregated": false
+    },
+    {
+      "Id": "testing-wait",
+      "Count": 35,
+      "Visible": 11,
+      "Aggregated": true
+    },
+    {
+      "Id": "ready",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "rework-active",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "rework-wait",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    },
+    {
+      "Id": "delivered",
+      "Count": 0,
+      "Visible": 0,
+      "Aggregated": false
+    }
+  ],
+  "QueuePressures": {
+    "backlog": {
+      "Kind": 0,
+      "Label": "",
+      "Marker": "",
+      "Color": "#B7CDCB"
+    },
+    "dependency": {
+      "Kind": 0,
+      "Label": "",
+      "Marker": "",
+      "Color": "#B7CDCB"
+    },
+    "review-wait": {
+      "Kind": 0,
+      "Label": "",
+      "Marker": "",
+      "Color": "#B7CDCB"
+    },
+    "testing-wait": {
+      "Kind": 3,
+      "Label": "No testers",
+      "Marker": "!",
+      "Color": "#FFC27A"
+    },
+    "rework-wait": {
+      "Kind": 0,
+      "Label": "",
+      "Marker": "",
+      "Color": "#B7CDCB"
+    },
+    "ready": {
+      "Kind": 0,
+      "Label": "",
+      "Marker": "",
+      "Color": "#B7CDCB"
+    }
+  }
+}
