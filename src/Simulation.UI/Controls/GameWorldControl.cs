@@ -48,6 +48,7 @@ public sealed partial class GameWorldControl : Control
     public GameWorldControl()
     {
         Focusable = true;
+        ClipToBounds = true;
         RenderOptions.SetBitmapInterpolationMode(this, Avalonia.Media.Imaging.BitmapInterpolationMode.HighQuality);
         // Low-priority shared scene clock. DispatcherTimer coalesces overdue ticks; no per-worker tasks.
         animationTimer = new(DispatcherPriority.Background) { Interval = TimeSpan.FromSeconds(1.0 / 30) };
@@ -62,6 +63,7 @@ public sealed partial class GameWorldControl : Control
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
+        if (change.Property == BoundsProperty || change.Property == UseSpritesProperty) ResizeCamera();
         if (change.Property == SceneProperty || change.Property == SelectedStationProperty) RefreshStationDetails();
         if (change.Property == PlaybackSpeedProperty) { packages.Cancel(); queues.Cancel(); workers.Synchronize(animation.Seconds); }
         if (change.Property == SceneProperty)
@@ -80,6 +82,7 @@ public sealed partial class GameWorldControl : Control
     {
         base.Render(context);
         context.DrawRectangle(Brushes.Transparent, null, new Rect(Bounds.Size));
+        using var cameraTransform = context.PushTransform(Camera.Matrix);
         if (UseSprites) (sprites ??= new()).Render(context, Scene, AnimateActivity ? animation.Seconds : 0, AnimateActivity, packages.Sample(animation.Seconds), packages.Release(animation.Seconds), workers.Sample(animation.Seconds, animation.IsRunning && PlaybackSpeed <= 2), queues, SelectedStation, hoveredStation, IsFocused);
         else { renderer.Render(context, Scene); StationMap.Highlight(context, SelectedStation, hoveredStation, IsFocused); }
     }

@@ -28,27 +28,10 @@ public sealed partial class GameWorldControl
         HasSelection = Details.Title.Length > 0;
         WorkflowSummary = StationDetails.Summary(Scene);
     }
-    protected override void OnPointerMoved(PointerEventArgs e)
-    {
-        base.OnPointerMoved(e);
-        var next = Scene is { HasSession: true } ? StationMap.HitTest(e.GetPosition(this)) : null;
-        if (next == hoveredStation) return;
-        hoveredStation = next; Cursor = next is null ? DefaultCursor : StationCursor; InvalidateVisual();
-    }
-    protected override void OnPointerExited(PointerEventArgs e)
-    {
-        base.OnPointerExited(e); hoveredStation = null; Cursor = DefaultCursor; InvalidateVisual();
-    }
-    protected override void OnPointerPressed(PointerPressedEventArgs e)
-    {
-        base.OnPointerPressed(e);
-        if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed) return;
-        Focus(NavigationMethod.Pointer); SelectedStation = Scene is { HasSession: true } ? StationMap.HitTest(e.GetPosition(this)) : null; e.Handled = true;
-    }
     protected override void OnKeyDown(KeyEventArgs e)
     {
         base.OnKeyDown(e);
-        if (Scene is not { HasSession: true }) return;
+        if (Scene is not { HasSession: true } || e.KeyModifiers != KeyModifiers.None) return;
         switch (e.Key)
         {
             case Key.Left: case Key.Up: SelectedStation = StationMap.Move(SelectedStation, -1); break;

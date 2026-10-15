@@ -13,10 +13,14 @@
     <WrapPanel Orientation="Horizontal">
      <CheckBox Name="AnimateGameActivity" IsVisible="{Binding SpriteRendering}" Content="Animate activity" IsChecked="{Binding AnimateGameActivity}" Foreground="#D3DEE7" Margin="0,0,14,0" AutomationProperties.Name="Animate workshop activity. Turn off to reduce motion."/>
      <ComboBox Name="StationPicker" Width="190" PlaceholderText="Inspect a station" ItemsSource="{Binding #GameWorld.StationOptions}" SelectedItem="{Binding #GameWorld.SelectedStation, Mode=TwoWay}" AutomationProperties.Name="Select workshop station" Margin="0,0,10,0"/>
+     <Button Classes="stationClose" Content="−" Click="ZoomOutClicked" Background="#243945" Foreground="#E3ECEC" Margin="0,0,4,0" AutomationProperties.Name="Zoom out" ToolTip.Tip="Zoom out"/>
+     <TextBlock Text="{Binding #GameWorld.ZoomLabel}" Foreground="#E3ECEC" VerticalAlignment="Center" Margin="4,0,8,0" MinWidth="38"/>
+     <Button Classes="stationClose" Content="+" Click="ZoomInClicked" Background="#243945" Foreground="#E3ECEC" Margin="0,0,6,0" AutomationProperties.Name="Zoom in" ToolTip.Tip="Zoom in"/>
+     <Button Classes="stationClose" Content="Fit to View" Click="FitClicked" Background="#243945" Foreground="#E3ECEC" Margin="0,0,8,0" AutomationProperties.Name="Fit workshop to view"/>
      <Button Content="Help" Background="#243945" Foreground="#E3ECEC" BorderBrush="#6A818A" AutomationProperties.Name="Workshop help">
       <Button.Flyout><Flyout><StackPanel Spacing="8" MaxWidth="390">
        <TextBlock Text="Inspect the workshop" FontSize="17" FontWeight="Bold"/>
-       <TextBlock Text="Click a station or its storage zone. You can also choose a station from the list. With the world focused, use arrow keys to select, Enter or Space to open, and Escape to close." TextWrapping="Wrap"/>
+       <TextBlock Text="Wheel or two-finger trackpad scroll zooms around the pointer (75–250%). Drag empty scene space to pan, or middle-drag anywhere. Fit to View centers the workshop. Camera changes are immediate, without inertia. Click a station or its storage zone. You can also choose a station from the list. With the world focused, use arrow keys to select, Enter or Space to open, and Escape to close." TextWrapping="Wrap"/>
        <TextBlock Text="Counts are exact. Stacks grow nonlinearly and are bounded samples: grouped boxes do not each represent one item. ↑ growing · Ⅱ observed capacity constraint · ! zero capacity · B scheduled batch · D dependency waiting." TextWrapping="Wrap"/>
        <TextBlock Text="Figures and trips illustrate shared capacity, not individual employees. D = developer · S = specialist · T = tester. Extra team capacity is grouped rather than drawn as more people." TextWrapping="Wrap"/>
        <TextBlock Text="Packages and the vehicle replay observed events. A trip may combine release days. Motion creates no extra WIP. Above 2× speed, unnecessary trips are skipped. LIVE pause freezes animation. Station details never change or pause the simulation." TextWrapping="Wrap"/>
@@ -27,9 +31,9 @@
     <TextBlock Name="WorkflowSummary" Text="{Binding #GameWorld.WorkflowSummary}" Foreground="#C7D8D8" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Current workflow observations"/>
    </StackPanel>
    <Grid Name="WorkshopContent" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
-    <Viewbox Name="WorldViewport" Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-     <controls:GameWorldControl Name="GameWorld" Width="1080" Height="620" Scene="{Binding GameScene}" UseSprites="{Binding SpriteRendering}" AnimateActivity="{Binding AnimateGameActivity}" SimulationRunning="{Binding IsRunning}" PlaybackSpeed="{Binding Speed}" AutomationProperties.Name="Interactive workshop. Use arrow keys to select stations, Enter to inspect, Escape to close."/>
-    </Viewbox>
+    <Border Name="WorldViewport" ClipToBounds="True" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+     <controls:GameWorldControl Name="GameWorld" Scene="{Binding GameScene}" UseSprites="{Binding SpriteRendering}" AnimateActivity="{Binding AnimateGameActivity}" SimulationRunning="{Binding IsRunning}" PlaybackSpeed="{Binding Speed}" AutomationProperties.Name="Interactive workshop. Use arrow keys to select stations, Enter to inspect, Escape to close."/>
+    </Border>
     <Border Name="StationPanel" VerticalAlignment="Top" Grid.Row="1" IsVisible="{Binding #GameWorld.HasSelection}" Background="#1B2C37" BorderBrush="#4F626A" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,10,0,0">
      <Grid RowDefinitions="Auto,*">
       <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,8">

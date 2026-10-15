@@ -17,6 +17,9 @@ public partial class GameView : UserControl
     {
         GameWorld.SelectedStation = null; GameWorld.Focus(Avalonia.Input.NavigationMethod.Pointer);
     }
+    private void ZoomInClicked(object? sender, RoutedEventArgs e) => GameWorld.ZoomBy(1.2);
+    private void ZoomOutClicked(object? sender, RoutedEventArgs e) => GameWorld.ZoomBy(1 / 1.2);
+    private void FitClicked(object? sender, RoutedEventArgs e) => GameWorld.FitCamera();
     private void FitWorkshop()
     {
         if (!IsEffectivelyVisible || TopLevel.GetTopLevel(this) is not { } root || this.TranslatePoint(default, root) is not { } position) return;
@@ -36,10 +39,12 @@ public partial class GameView : UserControl
         var scroll = this.GetVisualAncestors().OfType<ScrollViewer>().FirstOrDefault();
         var bottom = scroll?.TranslatePoint(new Point(0, scroll.Bounds.Height), root)?.Y ?? root.Bounds.Height;
         var height = StationMap.FitHeight(Math.Min(root.Bounds.Height, bottom) - Math.Max(0, position.Y), WorkshopHeader.Bounds.Height, side, GameWorld.HasSelection);
-        if (Math.Abs(WorldViewport.MaxHeight - height) > 1) WorldViewport.MaxHeight = height;
+        var sceneHeight = GameWorld.UseSprites ? StationMap.SceneHeight : 680;
+        var width = Math.Max(1, WorkshopContent.Bounds.Width - (side && GameWorld.HasSelection ? 300 : 0));
+        var fittedHeight = Math.Min(height, width * sceneHeight / 1080);
+        if (Math.Abs(WorldViewport.Height - fittedHeight) > 1 || double.IsNaN(WorldViewport.Height)) WorldViewport.Height = fittedHeight;
         var panelHeight = side ? height : 200;
         if (Math.Abs(StationPanel.MaxHeight - panelHeight) > 1) StationPanel.MaxHeight = panelHeight;
-        var sceneHeight = GameWorld.UseSprites ? StationMap.SceneHeight : 680;
-        if (GameWorld.Height != sceneHeight) GameWorld.Height = sceneHeight;
+
     }
 }

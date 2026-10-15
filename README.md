@@ -238,3 +238,7 @@ Game View uses bounded, nonlinear queue stacks with exact counters and explicit 
 ## Station inspection
 
 Game View has selectable stations, read-only contextual metrics, keyboard selection, a compact condition summary and responsive workshop sizing. [B3.2 architecture, screenshots, verification and limitations](docs/verification/game-view-b3-2/README.md).
+
+## Workshop camera
+
+Game View supports pointer-centered wheel/trackpad-scroll zoom, empty-space or middle-button drag, and Fit to View. Station details remain fixed while the world moves. [B3.3 camera architecture, verification and limitations](docs/verification/game-view-b3-3/README.md).
