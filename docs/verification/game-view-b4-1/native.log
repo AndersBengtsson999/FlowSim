@@ -1,0 +1,5 @@
+Window 960, 820: world scale 0,408, world height 253, panel 0, 263, 740, 194
+Window 1440, 1060: world scale 0,747, world height 463, panel 0, 473, 1220, 180
+Window 1840, 1120: world scale 1,039, world height 644, panel 1332, 0, 288, 356
+Observed active animation: packages=True, workers=True, release=True
+PASS B4.1 observed rework and maintenance fixtures; all B3.3 routed camera controls: wheel anchor, 200% zoom, empty and middle drag, transformed Testing/Review/queue hits, fixed panel, resize, fit, checkpoint restore, shared clock and asset cache independence, full state invariance; B3.2 station checks retained.

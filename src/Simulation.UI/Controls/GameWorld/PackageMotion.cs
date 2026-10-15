@@ -43,14 +43,7 @@ public sealed partial class PackageMotion
         var path = new List<Point>();
         for (var i = 1; i < journey.Stages.Count; i++)
         {
-            var from = Port(journey.Stages[i - 1]); var to = Port(journey.Stages[i]);
-            // The outside aisle connects station ports without crossing furniture. Rework uses it in reverse.
-            path.Add(from);
-            var a = AisleIndex(journey.Stages[i - 1]); var b = AisleIndex(journey.Stages[i]);
-            if (a == b) { path.Add(to); continue; }
-            path.Add(Aisle[a]);
-            for (var k = a; k != b;) { k += Math.Sign(b - a); path.Add(Aisle[k]); }
-            path.Add(to);
+            path.AddRange(WorkflowGeometry.Route(journey.Stages[i - 1], journey.Stages[i]));
         }
         if (path.Count == 0) return SpriteWorkshop.Ground(306, 253);
         var lengths = path.Zip(path.Skip(1), (a, b) => ((Vector)(b - a)).Length).ToArray();
@@ -66,16 +59,6 @@ public sealed partial class PackageMotion
         }
         return SpriteWorkshop.Ground(path[^1].X, path[^1].Y);
     }
-    private static readonly Point[] Aisle = [new(365, 283), new(402, 266), new(555, 225), new(690, 258), new(793, 310), new(715, 350), new(633, 391), new(610, 445), new(448, 510), new(395, 465), new(365, 410), new(305, 405)];
-    private static int AisleIndex(WorkItemStatus s) => s switch
-    {
-        WorkItemStatus.Backlog => 0,
-        WorkItemStatus.Development or WorkItemStatus.Rework or WorkItemStatus.WaitingForRework => 2,
-        WorkItemStatus.WaitingForCodeReview or WorkItemStatus.CodeReview => 4,
-        WorkItemStatus.WaitingForTesting or WorkItemStatus.Testing => 7,
-        WorkItemStatus.ReadyForRelease => 8,
-        _ => 11
-    };
     public static Point Port(WorkItemStatus s) => s switch
     {
         WorkItemStatus.Backlog => new(306, 253), WorkItemStatus.Development => new(553, 211),

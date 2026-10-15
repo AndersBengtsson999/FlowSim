@@ -242,3 +242,7 @@ Game View has selectable stations, read-only contextual metrics, keyboard select
 ## Workshop camera
 
 Game View supports pointer-centered wheel/trackpad-scroll zoom, empty-space or middle-button drag, and Fit to View. Station details remain fixed while the world moves. [B3.3 camera architecture, verification and limitations](docs/verification/game-view-b3-3/README.md).
+
+## Workflow and station identity
+
+The workshop's numbered delivery stations share their floor route with observed package movement. Destination-labelled queues, distinct active/staging pads, a conditional rework return and independent planning/review/test accessories clarify the process. Technical debt remains a separate maintenance activity. [B4.1 verification and artwork provenance](docs/verification/game-view-b4-1/README.md).

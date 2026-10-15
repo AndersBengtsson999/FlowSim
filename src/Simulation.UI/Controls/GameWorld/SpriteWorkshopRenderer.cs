@@ -33,6 +33,7 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         Poly(dc, "#34464B", new(165, 325), new(265, 375), new(120, 447), new(20, 397));
         dc.DrawLine(new Pen(Ink("#BAC4B7"), 2, new DashStyle([4, 5], 0)), new(214, 350), new(69, 422));
         GameWorldLayout.Draw(dc, spriteDecoration: true);
+        WorkflowMarkings.Draw(dc, state);
         StationMap.Highlight(dc, selected, hovered, focused);
         foreach (var queue in workshop!.Queues)
         {
@@ -40,12 +41,13 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
             var pressure = state.QueuePressures.GetValueOrDefault(queue.Id, QueuePressure.Normal);
             if (pressure.Kind != QueuePressureKind.Normal)
                 dc.DrawEllipse(null, new Pen(Ink(pressure.Color), pressure.Kind == QueuePressureKind.Blocked ? 3 : 2), new(p.X, p.Y + 7), 42, 22);
-            Box(dc, p.X, p.Y + 8, 64, 30, 3, queue.Active ? "#547C70" : queue.Aggregated ? "#A88645" : "#7A7051", "#394B48", "#4F5D50");
+            Box(dc, p.X, p.Y + 8, 64, 30, 3, queue.Active ? "#547C70" : queue.Id == "ready" ? "#A28B4D" : "#7A7051", "#394B48", "#4F5D50");
+            WorkflowMarkings.QueueIdentity(dc, queue);
         }
         // Loading bay outline and debt side area are fixtures, never extra simulation stages.
         dc.DrawLine(new Pen(Ink("#FFE36A"), 4), new(140, 367), new(205, 400));
         dc.DrawLine(new Pen(Ink("#FFE36A"), 4), new(205, 400), new(298, 353));
-        dc.DrawLine(new Pen(Ink("#D49D7C"), 3, new DashStyle([3, 3], 0)), new(505, 269), new(450, 298));
+
         if (living is null) effects!.DrawGround(dc, seconds);
         effects!.SetWorkers(living);
         var vehicle = release is { Phase: not ReleasePhase.FeedbackOnly };
@@ -90,23 +92,24 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
             dc.DrawEllipse(Ink("#182D37"), new Pen(Ink(color), 1.5), p, 9, 9);
             labels.Text(dc, worker.Role, p.X, p.Y - 8, 12, color, true);
         }
-        Title(dc, "BACKLOG", 307, 104, "#E9D9B8");
-        Title(dc, "DEVELOPMENT", 555, 36, "#FFEB00");
-        Title(dc, "CODE REVIEW", 817, 133, "#A8D5FA");
-        Title(dc, "TESTING", 710, 292, "#8BE1C4");
+        Title(dc, "1 · BACKLOG", 287, 83, "#E9D9B8");
+        Title(dc, "2 · DEVELOPMENT", 555, 36, "#FFEB00");
+        Title(dc, "3 · CODE REVIEW", 817, 133, "#A8D5FA");
+        Title(dc, "4 · TESTING", 710, 292, "#8BE1C4");
         if (state.QueuePressures.GetValueOrDefault("testing-wait", QueuePressure.Normal).Kind == QueuePressureKind.Blocked)
             labels.Text(dc, "INACTIVE", 710, 314, 11, "#FFC27A", true);
-        Title(dc, "READY FOR RELEASE", 449, 370, "#E9D9B8");
-        Title(dc, "RELEASE", 214, 244, "#FFEB00");
+        Title(dc, "5 · READY FOR RELEASE", 449, 370, "#E9D9B8");
+        Title(dc, "6 · RELEASE", 214, 244, "#FFEB00");
         Title(dc, "TECHNICAL DEBT", 432, 205, "#FFD0A7");
+        if (WorkflowMarkings.HasReturns(state)) labels.Text(dc, "↶ Rework", 680, 264, 12, "#E9B9DD", true);
         Count(dc, $"Debt · {state.Debt:0.##}", 424, 335, false);
-        Count(dc, $"{state.Areas[0].Count:N0} waiting{Grouped(state.Areas[0].Count)}", 307, 128, false);
-        Count(dc, $"Dev WIP · {state.ActiveDevelopment:N0}", 555, 240, true);
-        Count(dc, $"Queue · {state.Areas[2].Waiting:N0}{Grouped(state.Areas[2].Waiting)}", 933, 343, false);
+        Count(dc, $"{state.Areas[0].Count:N0} waiting{Grouped(state.Areas[0].Count)}", 287, 108, false);
+        Count(dc, $"Dev WIP · {state.ActiveDevelopment:N0}", 555, 255, true);
+        Count(dc, $"Review queue · {state.Areas[2].Waiting:N0}{Grouped(state.Areas[2].Waiting)}", 933, 343, false);
         Status(dc, state, "review-wait", 938, 367);
-        Count(dc, $"Queue · {state.Areas[3].Waiting:N0}{Grouped(state.Areas[3].Waiting)}", 708, 499, false);
+        Count(dc, $"Testing queue · {state.Areas[3].Waiting:N0}{Grouped(state.Areas[3].Waiting)}", 708, 499, false);
         Status(dc, state, "testing-wait", 708, 523);
-        Count(dc, $"{state.Areas[4].Count:N0} waiting{Grouped(state.Areas[4].Count)}", 449, 520, false);
+        Count(dc, $"{state.Areas[4].Count:N0} staged{Grouped(state.Areas[4].Count)}", 449, 520, false);
         Status(dc, state, "ready", 449, 544);
         Count(dc, $"{state.Areas[5].Count:N0} delivered", 214, 415, true);
         if (release is not null) Count(dc, release.Caption, 170, 470, true);

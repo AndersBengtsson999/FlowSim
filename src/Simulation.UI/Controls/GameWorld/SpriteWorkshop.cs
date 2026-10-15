@@ -34,7 +34,7 @@ public sealed class SpriteWorkshop
     public IReadOnlyList<WorkshopQueue> Queues { get; }
     public GameSceneState State { get; }
     public WorkshopActivity Activity { get; }
-    public const int MaximumObjects = 128;
+    public const int MaximumObjects = 132;
     public const int MaximumDevelopers = 4;
     public const int MaximumTesters = 2;
     public int HiddenDevelopers => State.Developers - Workers.Count(w => w.Role != "T");
@@ -91,6 +91,11 @@ public sealed class SpriteWorkshop
         objects.AddRange(Workstation("development", development, scale, state.Developers > 0 ? seatedDev : null));
         objects.AddRange(Workstation("review", review, scale, state.Developers >= 3 || Activity.Developers.Contains(SpritePose.Reviewing) ? seatedReview : null));
         objects.AddRange(Workstation("testing", testing, scale, state.Testers > 0 ? seatedTest : null));
+        objects.RemoveAll(o => o.Id == "testing/computer");
+        objects.Add(new("testing/diagnostics", "test-console", testing with { Elevation = 2.83 * scale }, .18, StackOrder: 1));
+        objects.Add(new("development/second-monitor", "computer", Ground(581, 157) with { Elevation = 2.83 * scale }, .26, StackOrder: 1));
+        objects.Add(new("backlog/planning", "planning-board", Ground(350, 175), .30));
+        objects.Add(new("review/checklist", "review-board", Ground(910, 245), .29));
         objects.Add(new("backlog/shelf", "shelf", Ground(307, 209), .34));
         objects.Add(new("ready/shelf", "shelf", Ground(449, 448), .34));
         objects.Add(new("release/van", "delivery-van", Ground(214, 350), .52));

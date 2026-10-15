@@ -1,0 +1,41 @@
+[
+  {
+    "asset": "planning-board.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "eb179925894f7a3ce7fe5ac6acf9b31228f567644ca90853d81ede4a6b68fa09"
+  },
+  {
+    "asset": "review-board.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "0f8c558e6d98b0a22ae3682d6e1214a785ff42cf84ddee87cbd11f5c0ddc0ff5"
+  },
+  {
+    "asset": "test-console.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alpha_range": [
+      0,
+      255
+    ],
+    "sha256": "1ba6545f9c77f4cdb43ebb70e7b1fb83d4ce3562b3d1324efc1e7274f723100e"
+  }
+]

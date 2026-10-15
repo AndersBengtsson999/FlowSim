@@ -17,6 +17,9 @@ public static class SpriteCatalog
                 [SpritePose.Collaborating] = GestureClip(),
                 [SpritePose.Maintaining] = GestureClip()
             }),
+        ["planning-board"] = Asset("planning-board", new(0, 0, 1254, 1254), new(630, 1080), .25),
+        ["review-board"] = Asset("review-board", new(0, 0, 1254, 1254), new(630, 1090), .25),
+        ["test-console"] = Asset("test-console", new(0, 0, 1254, 1254), new(620, 930), .25),
         ["shelf"] = Asset("shelf", new(85, 180, 1110, 960), new(560, 735), .30),
         ["delivery-van"] = Asset("delivery-van", new(35, 155, 1200, 975), new(565, 735), .25),
         ["maintenance-bench"] = Asset("maintenance-bench", new(130, 10, 985, 1210), new(480, 1000), .30),

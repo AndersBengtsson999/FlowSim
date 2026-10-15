@@ -53,3 +53,15 @@ Both cells are 887 × 887 pixels in a 1774 × 887 strip. Neutral foot anchor: (4
 ## B2.4 walking — 2026-10-14
 
 `developer-walking.png` is original generated artwork from the built-in `image_gen` tool, using this project's original developer identity through two intermediate edits. Final source: `exec-7f1710f6-9043-4148-9adb-8da9041a2007.png`. The 1774 × 887 RGBA PNG is copied without pixel/alpha changes. It supplies four directions with contact/passing poses, sharing one decoded texture across four catalog aliases. The existing output-use basis applies; no third-party stock license is claimed. [Exact prompts, hash and limitations](../../../docs/verification/game-view-b2-4/artwork.json).
+
+## B4.1 station identity additions — 2026-10-15
+
+Three independent original RGBA sprites were generated with the built-in OpenAI image_gen tool using the imagegen skill and the existing project-owned desk.png as the sole style reference. They are not stock art, external icons or screenshots. The generated PNG files are copied unchanged, preserving transparency and provenance metadata. They use the same output-rights basis described above; no additional third-party asset license is asserted.
+
+| Asset | Generated source | Use |
+| --- | --- | --- |
+| planning-board.png | exec-f51302e8-aff5-489d-ae4c-f26abc282168.png | Backlog planning board; decorative cards are not counted work items |
+| review-board.png | exec-ccdde89b-ed28-4898-a126-8978f217e623.png | Review comparison/checklist display; decorative tick is not an item approval result |
+| test-console.png | exec-e5514c22-9e42-4085-a9f2-54dea09806fb.png | Tabletop diagnostic equipment; waveform is decorative, not a metric |
+
+All three are 1254×1254 RGBA, with alpha ranging from 0 to 255. Full image rectangles are registered in SpriteCatalog. Foot/contact anchors in source pixels: planning (630,1080), review (630,1090), console (620,930). PixelsToDip is .25; per-object scale positions them consistently with existing furniture. They load through the existing embedded-resource bitmap cache and require no network at runtime. Exact prompts: [B4.1 prompts](../../../docs/verification/game-view-b4-1/prompts.json).

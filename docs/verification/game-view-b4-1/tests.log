@@ -1,0 +1,12 @@
+Test run for /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/tests/Simulation.Core.Tests/bin/Release/net10.0/Simulation.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   218, Skipped:     0, Total:   218, Duration: 49 s - Simulation.Core.Tests.dll (net10.0)
+Test run for /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/tests/Simulation.Application.Tests/bin/Release/net10.0/Simulation.Application.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   216, Skipped:     0, Total:   216, Duration: 2 m 1 s - Simulation.Application.Tests.dll (net10.0)
+Test run for /Users/andersbengtsson/Developer/SoftwareDevelopmentSimulation/tests/Simulation.UI.Tests/bin/Release/net10.0/Simulation.UI.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   323, Skipped:     0, Total:   323, Duration: 29 s - Simulation.UI.Tests.dll (net10.0)

@@ -21,22 +21,22 @@ public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> R
             Add("Developers · configured", s.Developers); Add("Specialists · included", s.Specialists);
             if (s.Day > 0) Add("Shared Dev used / available · last day", $"{Number(s.UsedDeveloperCapacity)} / {Number(s.AvailableDeveloperCapacity)}");
         }
-        var explanation = "Counts are exact. Stacks are bounded samples; grouped packages do not represent individual items. Worker poses and trips are illustrative.";
+        var explanation = "Open-corner pads hold waiting work; solid mint pads show active work; gold staging holds completed work awaiting release. Counts are exact. Stacks are bounded samples; grouped packages do not represent individual items. Worker poses and trips are illustrative.";
         switch (station)
         {
             case "Backlog":
                 Add("Waiting · total", s.Areas[0].Waiting); Add("Dependency waiting · included", s.DependencyWaiting);
-                Add("Other backlog", Math.Max(0, s.Areas[0].Waiting - s.DependencyWaiting)); Pressure("backlog"); break;
+                Add("Other backlog", Math.Max(0, s.Areas[0].Waiting - s.DependencyWaiting)); Pressure("backlog"); explanation += " Board cards illustrate planning; the waiting count is the actual backlog."; break;
             case "Development":
                 Add("Active development / WIP limit", $"{s.ActiveDevelopment} / {s.DevelopmentWipLimit}");
                 Add("Rework · active / waiting", $"{s.ActiveRework} / {s.WaitingRework}");
                 SharedDevelopers();
                 if (s.Day > 0) { Add("Development capacity used · last day", Number(s.UsedDevelopmentCapacity)); Add("Rework capacity used · last day", Number(s.UsedReworkCapacity)); Add("Collaboration capacity · last day", Number(s.CollaborationCapacity)); }
-                Pressure("rework-wait"); explanation += " Development, review, rework and debt repayment share developer capacity. The queue change shown here refers to waiting rework."; break;
+                Pressure("rework-wait"); explanation += " Development, review, rework and debt repayment share developer capacity. The queue change shown here refers to waiting rework. Dashed mauve returns appear when rework is observed; they are not part of every item’s path."; break;
             case "Code Review":
                 Add("Waiting", s.Areas[2].Waiting); Add("Active WIP / limit", $"{s.Areas[2].Active} / {s.ReviewWipLimit}");
                 if (s.Day > 0) Add("Review capacity used · last day", Number(s.UsedReviewCapacity)); SharedDevelopers(); Pressure("review-wait");
-                explanation += " There is no independent review capacity allocation. A shared-capacity warning is an observation, not proof of a unique root bottleneck."; break;
+                explanation += " The checklist illustration identifies review, not an individual approval result. There is no independent review capacity allocation. A shared-capacity warning is an observation, not proof of a unique root bottleneck."; break;
             case "Testing":
                 Add("Waiting", s.Areas[3].Waiting); Add("Active WIP / limit", $"{s.Areas[3].Active} / {s.TestingWipLimit}"); Add("Testers · configured", s.Testers);
                 if (s.Day > 0) Add("Tester used / available · last day", $"{Number(s.UsedTesterCapacity)} / {Number(s.AvailableTesterCapacity)}");
@@ -50,7 +50,7 @@ public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> R
             case "Technical Debt":
                 Add("Debt · effort", Number(s.Debt)); Add("Debt ratio", s.DebtRatio.ToString("P1"));
                 if (s.Day > 0) Add("Repayment capacity used · last day", Number(s.UsedDebtRepaymentCapacity));
-                SharedDevelopers(); explanation += " Maintenance uses the same developer budget. No extra employee or work item is created by the illustration."; break;
+                SharedDevelopers(); explanation += " Maintenance uses the same developer budget. This is maintenance alongside delivery, not a mandatory work-item stage. No extra employee or work item is created by the illustration."; break;
             default: return Empty;
         }
         if (s.Day == 0) Add("Capacity observations", "No completed day yet");

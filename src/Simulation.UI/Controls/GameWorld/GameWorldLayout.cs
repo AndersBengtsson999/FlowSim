@@ -35,6 +35,8 @@ internal static class GameWorldLayout
         dc.DrawLine(new Pen(Ink("#CCC4AD"), 7), new(540, 17), new(1065, 302));
         dc.DrawLine(new Pen(Ink("#FFE6A1"), 2), new(17, 297), new(540, 13));
         dc.DrawLine(new Pen(Ink("#FFE6A1"), 2), new(540, 13), new(1063, 297));
+        if (!spriteDecoration)
+        {
         Path(dc, [new(325, 228), new(402, 266), new(555, 190), new(690, 258), new(793, 310), new(715, 350), new(633, 391), new(455, 480), new(305, 405), new(218, 362)]);
         Arrow(dc, new(426, 253), new(463, 235));
         Arrow(dc, new(654, 240), new(690, 258));
@@ -43,6 +45,7 @@ internal static class GameWorldLayout
         Arrow(dc, new(353, 429), new(317, 411));
         // Maintenance is a side connection, deliberately without a process arrow.
         dc.DrawLine(new Pen(Ink("#D49D7C"), 3, new DashStyle([3, 3], 0)), new(548, 216), new(505, 269));
+        }
         if (!spriteDecoration) { Plant(dc, 413, 118); Plant(dc, 913, 345); Plant(dc, 354, 474); }
     }
     private static void Path(DrawingContext dc, Point[] points)
