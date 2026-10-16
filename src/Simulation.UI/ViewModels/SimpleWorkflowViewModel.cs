@@ -117,6 +117,8 @@ public sealed class SimpleWorkflowViewModel : INotifyPropertyChanged
     public SimpleWorkflowViewModel(MainWindowViewModel owner)
     {
         Owner = owner;
+        Live.OpenGuidedComparison = () => { Owner.Compare.ShowGuided(Live); Navigate("Experiments"); };
+        Live.ReturnToLive = () => Navigate("Live");
         OpenLiveCommand = new(() => Navigate("Live"));
         OpenAnalyzeCommand = new(() => Navigate(analyzePage));
         OpenExperimentsCommand = new(() => Navigate("Experiments"));

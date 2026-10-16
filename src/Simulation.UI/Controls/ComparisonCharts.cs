@@ -35,7 +35,7 @@ public sealed class ComparisonFlowChart : Control
         base.Render(context); if (Series is not { Count: > 0 } series) return;
         var all = series.SelectMany(s => s.Points).ToArray(); if (all.Length == 0) return;
         var plot = new Rect(50, 70, Math.Max(1, Bounds.Width - 70), Math.Max(1, Bounds.Height - 105));
-        double max = Math.Max(1, all.Max(p => p.Value)), end = Math.Max(1, all.Max(p => p.Day));
+        double max = Math.Max(1, all.Max(p => p.Value)), start = all.Min(p => p.Day), end = all.Max(p => p.Day);
         IBrush[] colors = [Brushes.Teal, Brushes.DarkOrchid, Brushes.DarkOrange];
         for (int i = 0; i <= 2; i++)
         {
@@ -47,9 +47,9 @@ public sealed class ComparisonFlowChart : Control
         {
             context.DrawRectangle(colors[i], null, new Rect(0, i * 21, 10, 10)); ChartText.Draw(context, series[i].Name, new(17, i * 21 - 3));
             foreach (var p in series[i].Points)
-                context.DrawEllipse(colors[i], null, new(plot.Left + (end == 1 ? 0 : (p.Day - 1) / (end - 1) * plot.Width), plot.Bottom - p.Value / max * plot.Height), 2, 2);
+                context.DrawEllipse(colors[i], null, new(plot.Left + (end == start ? 0 : (p.Day - start) / (end - start) * plot.Width), plot.Bottom - p.Value / max * plot.Height), 2, 2);
         }
-        ChartText.Draw(context, $"Observed end-of-day samples · day 1 to {end:0} · no interpolation", new(plot.Left, plot.Bottom + 10));
+        ChartText.Draw(context, $"Observed end-of-day samples · day {start:0} to {end:0} · no interpolation", new(plot.Left, plot.Bottom + 10));
     }
 }
 internal static class ChartText

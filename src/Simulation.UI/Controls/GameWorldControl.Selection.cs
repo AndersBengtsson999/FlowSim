@@ -17,6 +17,8 @@ public sealed partial class GameWorldControl
     public bool HasSelection { get => GetValue(HasSelectionProperty); private set => SetValue(HasSelectionProperty, value); }
     public static readonly StyledProperty<string> WorkflowSummaryProperty = AvaloniaProperty.Register<GameWorldControl, string>(nameof(WorkflowSummary), "Start LIVE to inspect the workshop.");
     public string WorkflowSummary { get => GetValue(WorkflowSummaryProperty); private set => SetValue(WorkflowSummaryProperty, value); }
+    public static readonly StyledProperty<bool> IsTestingSelectedProperty = AvaloniaProperty.Register<GameWorldControl, bool>(nameof(IsTestingSelected));
+    public bool IsTestingSelected { get => GetValue(IsTestingSelectedProperty); private set => SetValue(IsTestingSelectedProperty, value); }
     public IReadOnlyList<string> StationOptions => StationMap.Names;
     private string? hoveredStation;
     private static readonly Cursor StationCursor = new(StandardCursorType.Hand);
@@ -25,6 +27,7 @@ public sealed partial class GameWorldControl
     {
         if (Scene is not { HasSession: true } && SelectedStation is not null) SelectedStation = null;
         Details = StationDetails.For(SelectedStation, Scene);
+        IsTestingSelected = SelectedStation == "Testing";
         HasSelection = Details.Title.Length > 0;
         WorkflowSummary = StationDetails.Summary(Scene);
     }

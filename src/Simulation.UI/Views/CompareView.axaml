@@ -30,6 +30,11 @@
  </UserControl.Resources>
  <ScrollViewer>
   <StackPanel Spacing="14" Margin="0,16">
+   <StackPanel IsVisible="{Binding HasGuided}" Spacing="12">
+    <Button Content="Scenario comparisons" Command="{Binding CloseGuidedCommand}" HorizontalAlignment="Left"/>
+    <views:GuidedComparisonView DataContext="{Binding GuidedLive}"/>
+   </StackPanel>
+   <StackPanel Spacing="14" IsVisible="{Binding !HasGuided}">
    <StackPanel Spacing="10">
     <TextBlock Text="Compare scenarios · What changed?" FontSize="22" FontWeight="SemiBold" />
     <Grid ColumnDefinitions="*,24,*" IsEnabled="{Binding CanEdit}">
@@ -282,5 +287,6 @@
    </Expander>
    <TextBlock Text="{Binding Status}" TextWrapping="Wrap" />
   </StackPanel>
+   </StackPanel>
  </ScrollViewer>
 </UserControl>

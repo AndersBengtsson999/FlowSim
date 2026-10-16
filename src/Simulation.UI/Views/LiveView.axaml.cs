@@ -8,7 +8,25 @@ namespace Simulation.UI.Views;
 
 public partial class LiveView : UserControl
 {
-    public LiveView() => InitializeComponent();
+    private LiveViewModel? observed;
+    private bool guidedEditorShown;
+    public LiveView()
+    {
+        InitializeComponent();
+        DataContextChanged += (_, _) =>
+        {
+            if (observed is not null) observed.PropertyChanged -= ModelChanged;
+            observed = DataContext as LiveViewModel;
+            if (observed is not null) observed.PropertyChanged += ModelChanged;
+        };
+    }
+    private void ModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        var show = observed?.GuidedPending == true && observed.IsEditing;
+        if (show && !guidedEditorShown)
+            Avalonia.Threading.Dispatcher.UIThread.Post(() => ChangeEditor.BringIntoView(), Avalonia.Threading.DispatcherPriority.Loaded);
+        guidedEditorShown = show;
+    }
     private LiveViewModel Model => (LiveViewModel)DataContext!;
     public async Task SaveToAsync(string path)
     {

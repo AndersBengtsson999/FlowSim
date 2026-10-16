@@ -28,6 +28,16 @@
       </StackPanel></Flyout></Button.Flyout>
      </Button>
     </WrapPanel>
+    <Expander IsVisible="{Binding HasGuidedExperiment}" HorizontalAlignment="Stretch" Background="#F5F7F8" Foreground="#17232D" Padding="8" Header="{Binding GuidedHeader}">
+     <StackPanel Spacing="6">
+      <TextBlock Text="{Binding GuidedProgress}" TextWrapping="Wrap"/>
+      <Grid ColumnDefinitions="2*,*,*"><TextBlock Text="Matched period" FontWeight="SemiBold"/><TextBlock Grid.Column="1" Text="Baseline" FontWeight="SemiBold"/><TextBlock Grid.Column="2" Text="Intervention" FontWeight="SemiBold"/></Grid>
+      <ItemsControl ItemsSource="{Binding GuidedRows}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:GuidedMetricRow">
+       <Grid ColumnDefinitions="2*,*,*"><TextBlock Text="{Binding Metric}"/><TextBlock Grid.Column="1" Text="{Binding Baseline}"/><TextBlock Grid.Column="2" Text="{Binding Experiment}"/></Grid>
+      </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+      <Button Content="Open detailed comparison" Command="{Binding GuidedDetailsCommand}" HorizontalAlignment="Left"/>
+     </StackPanel>
+    </Expander>
     <TextBlock Name="WorkflowSummary" Text="{Binding #GameWorld.WorkflowSummary}" Foreground="#C7D8D8" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Current workflow observations"/>
    </StackPanel>
    <Grid Name="WorkshopContent" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
@@ -42,6 +52,7 @@
       </Grid>
       <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
        <StackPanel Spacing="10">
+        <Button Name="TestingExperiment" Background="#FFEB00" Foreground="#17232D" IsVisible="{Binding #GameWorld.IsTestingSelected}" Content="Experiment with test capacity" Command="{Binding BeginGuidedCommand}" HorizontalAlignment="Left"/>
         <ItemsControl Name="StationMetrics" ItemsSource="{Binding #GameWorld.Details.Rows}">
          <ItemsControl.ItemsPanel><ItemsPanelTemplate><UniformGrid Columns="2"/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
          <ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:StationMetric">

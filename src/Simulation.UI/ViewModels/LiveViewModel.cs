@@ -12,7 +12,7 @@ public sealed record CheckpointRow(Guid Id, string Display);
 public sealed record LiveQueuePoint(int Day, int Review, int Testing, int Rework);
 
 /// <summary>Playback timing and input presentation only; Core owns each simulated day.</summary>
-public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
+public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
 {
     private readonly DispatcherTimer timer;
     private readonly List<LiveQueuePoint> queueHistory = [];
@@ -252,6 +252,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     public LiveViewModel()
     {
         Setup.LoadConfiguration(LiveSimulation.Demo);
+        InitializeGuided();
         timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         timer.Tick += (_, _) => Tick();
         StartCommand = new(() => Guard(Start), () => !HasSession && !fastAdvancing);
@@ -263,9 +264,9 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         ResetCommand = new(Reset);
         ChangeCommand = new(() => Guard(BeginChange), () => CanChange);
         ApplyCommand = new(() => Guard(ApplyChanges), () => editing);
-        CancelChangeCommand = new(() => { editing = false; status = "Changes discarded. Resume when ready."; Notify(); });
+        CancelChangeCommand = new(() => { CancelGuidedDraft(); editing = false; status = "Changes discarded. Resume when ready."; Notify(); });
         CheckpointCommand = new(() => Guard(() => { Pause(); Live!.CreateCheckpoint(CheckpointLabel); status = "Checkpoint created."; Notify(); }), () => HasSession && !editing && !fastAdvancing);
-        RestoreCommand = new(() => Guard(() => { Pause(); if (SelectedCheckpoint is null) throw new ArgumentException("Select a checkpoint."); Live!.RestoreCheckpoint(SelectedCheckpoint.Id); stopped = false; editing = false; RebuildHistory(); Refresh(); status = "Checkpoint restored. Resume when ready."; Notify(); }));
+        RestoreCommand = new(() => Guard(() => { Pause(); if (SelectedCheckpoint is null) throw new ArgumentException("Select a checkpoint."); Live!.RestoreCheckpoint(SelectedCheckpoint.Id); InvalidateGuided("A checkpoint was restored. Start a new comparison."); stopped = false; editing = false; RebuildHistory(); Refresh(); status = "Checkpoint restored. Resume when ready."; Notify(); }));
         DeleteCheckpointCommand = new(() => { if (SelectedCheckpoint is { } c) Live?.DeleteCheckpoint(c.Id); SelectedCheckpoint = null; Notify(); });
         DetailsCommand = new(() => { Pause(); var r = Live?.Session.GetResult(); Details = r is null ? "" : $"All-time · {r.SimulationDays} days\nLead Time {r.AverageLeadTime:0.0} · Cycle Time {r.AverageCycleTime:0.0} · Waiting Time {r.AverageWaitingTime:0.0}\nThroughput {r.ThroughputPerFiveDays:0.0} / 5 days · Average WIP {r.AverageWip:0.0}\nDefects {r.TotalDefectsFound} · Rework effort {r.TotalReworkEffort:0.0}\nDeveloper utilization {r.DeveloperUtilization:P0} · Tester utilization {r.TesterUtilization:P0}"; Notify(); });
         LimitCommand = new(() => Guard(() => { if (Live is not null) Live.SafetyLimit = Positive(SafetyLimit, "Safety Limit"); status = "Safety limit updated."; Notify(); }));
@@ -317,7 +318,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
         if (Live.Step()) { AppendHistory(); Refresh(); }
         if (Live.LimitReached) { Pause(); status = "Live simulation safety limit reached."; Notify(); }
     });
-    public void Reset() { Pause(); Live = null; gameScene = null; setupExpanded = true; stopped = false; editing = false; queueHistory.Clear(); Flow = []; Metrics = []; Details = ""; SelectedCheckpoint = null; selectedFlow = null; selectedIntervention = null; RefreshPerformance(); status = "Ready to start."; Notify(); }
+    public void Reset() { InvalidateGuided("LIVE was reset. Start a new comparison."); Pause(); Live = null; gameScene = null; setupExpanded = true; stopped = false; editing = false; queueHistory.Clear(); Flow = []; Metrics = []; Details = ""; SelectedCheckpoint = null; selectedFlow = null; selectedIntervention = null; RefreshPerformance(); status = "Ready to start."; Notify(); }
     public void BeginChange()
     {
         if (!CanChange) return;
@@ -368,10 +369,11 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
             DevelopmentWipLimit = r.DevelopmentWipLimit, CodeReviewWipLimit = r.CodeReviewWipLimit, TestingWipLimit = r.TestingWipLimit,
             ResidualDependencies = r.ResidualDependencies, Release = r.Release, Skills = r.Skills, Productivity = r.Productivity, Debt = r.Debt, Quality = quality, ArrivalMode = SupplyMode(DraftSupply), WorkItemsPerDay = Rate(DraftArrivalRate) }, ChangeLabel);
         if (Live.Session.Changes.Count > previousChanges) selectedIntervention = Live.Session.Changes[^1];
+        ApplyGuidedExperiment();
         editing = false; status = Live.Session.Changes.Count == previousChanges ? "No parameters changed. Resume when ready." : $"Changes recorded at Day {Day}; effective Day {Day + 1}. Resume when ready."; Refresh();
     }
     public void Load(LiveSimulation live)
-    { Pause(); Live = live; setupExpanded = false; stopped = false; editing = false; rollingWindow = live.RollingWindow; SafetyLimit = live.SafetyLimit.ToString(); SelectedCheckpoint = null; selectedFlow = null; Details = ""; RebuildHistory(); Refresh(); status = "Live simulation opened. Resume when ready."; Notify(); }
+    { InvalidateGuided("A LIVE session was loaded. Start a new comparison."); Pause(); Live = live; setupExpanded = false; stopped = false; editing = false; rollingWindow = live.RollingWindow; SafetyLimit = live.SafetyLimit.ToString(); SelectedCheckpoint = null; selectedFlow = null; Details = ""; RebuildHistory(); Refresh(); status = "Live simulation opened. Resume when ready."; Notify(); }
     public void NotifyStatus(string message) { status = message; Notify(); }
     private void RebuildHistory() { queueHistory.Clear(); if (Live is not null) foreach (var d in Live.Session.Days) queueHistory.Add(Point(d)); }
     private static LiveQueuePoint Point(DailySnapshot d) => new(d.Day + 1, d.WaitingForCodeReviewCount, d.WaitingForTestingCount, d.WaitingForReworkCount);
@@ -379,6 +381,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     private void Refresh()
     {
         if (Live is null) return;
+        RefreshGuided();
         gameScene = null;
         var d = Live.CurrentSnapshot;
         var expanded = Flow.Where(row => row.IsExpanded).Select(row => row.Name).ToHashSet();
@@ -466,7 +469,7 @@ public sealed class LiveViewModel : INotifyPropertyChanged, IDisposable
     private void Notify()
     {
         PropertyChanged?.Invoke(this, new(string.Empty));
-        RunToDayCommand?.Refresh(); StartCommand?.Refresh(); PauseCommand?.Refresh(); ResumeCommand?.Refresh(); StepCommand?.Refresh(); StopCommand?.Refresh(); ChangeCommand?.Refresh(); ApplyCommand?.Refresh(); CheckpointCommand?.Refresh();
+        BeginGuidedCommand?.Refresh(); RunToDayCommand?.Refresh(); StartCommand?.Refresh(); PauseCommand?.Refresh(); ResumeCommand?.Refresh(); StepCommand?.Refresh(); StopCommand?.Refresh(); ChangeCommand?.Refresh(); ApplyCommand?.Refresh(); CheckpointCommand?.Refresh();
     }
-    public void Dispose() { stopFastAdvance = true; timer.Stop(); }
+    public void Dispose() { guidedCancellation?.Cancel(); guidedCancellation?.Dispose(); stopFastAdvance = true; timer.Stop(); }
 }
