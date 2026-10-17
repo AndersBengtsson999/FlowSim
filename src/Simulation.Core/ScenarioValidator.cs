@@ -10,6 +10,8 @@ public static class ScenarioValidator
         if (string.IsNullOrWhiteSpace(scenario.Name)) Fail("Scenario name is required.");
         if (scenario.SimulationDays <= 0) Fail("SimulationDays must be positive.");
         if (scenario.Team is null) Fail("Team configuration is required.");
+        if (scenario.RoleCosts is null) Fail("Role costs are required.");
+        scenario.RoleCosts!.Validate();
         if (scenario.Quality is null) Fail("Quality settings are required.");
         scenario.Quality!.Validate();
         if (scenario.Productivity is null) Fail("Stage productivity is required.");

@@ -13,7 +13,7 @@ public sealed class PresentationTests
         var vm = new MainWindowViewModel(); await vm.RunAsync();
         Assert.Equal(PresentationLabels.Primary.Select(p => PresentationLabels.Label(p)).Order(), vm.PrimaryMetrics.Select(m => m.Label).Order());
         Assert.All(vm.PrimaryMetrics, m => Assert.NotEmpty(m.Explanation));
-        Assert.Equal(12, vm.Metrics.Count); Assert.Equal(6, vm.AdvancedMetrics.Count); Assert.Equal(10, vm.QualityMetrics.Count);
+        Assert.Equal(15, vm.Metrics.Count); Assert.Equal(9, vm.AdvancedMetrics.Count); Assert.Equal(10, vm.QualityMetrics.Count);
         Assert.Contains("items", vm.LargestQueue);
     }
     [Fact]

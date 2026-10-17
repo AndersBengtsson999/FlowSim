@@ -9,6 +9,8 @@ public static class LegacyReleaseObservation
     {
         if (node is JsonObject obj)
         {
+            // Economic metadata is additive and does not alter legacy operational observations.
+            obj.Remove("Economics"); obj.Remove("RoleCosts");
             if (obj["ResidualDependency"] is not null || obj["ResidualDependencies"] is JsonObject settings && settings["Rate"]!.GetValue<double>() != 0 || obj["WaitingForDependencyCount"] is JsonValue count && count.GetValue<int>() != 0)
                 throw new InvalidOperationException("Cannot normalize active residual dependencies.");
             foreach (var key in new[]{"ResidualDependency","ResidualDependencies","DependencyRandomState","WaitingForDependencyCount"}) obj.Remove(key);

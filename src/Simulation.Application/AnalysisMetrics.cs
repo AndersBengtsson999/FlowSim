@@ -11,7 +11,7 @@ public enum AnalysisMetric
     TotalDefectsFound, TotalReworkEffort, ReworkDeveloperCapacityShare,
     AverageAvailableDeveloperCapacity, AverageUsedDeveloperCapacity, AverageAvailableTesterCapacity, AverageUsedTesterCapacity,
     DevelopmentWipSaturation, CodeReviewWipSaturation, TestingWipSaturation, ReworkWipSaturation,
-    AverageWaitingForCodeReviewQueue, AverageWaitingForTestingQueue, AverageWaitingForReworkQueue, AverageBacklog, AverageBlockedTime
+    AverageWaitingForCodeReviewQueue, AverageWaitingForTestingQueue, AverageWaitingForReworkQueue, AverageBacklog, AverageBlockedTime, TotalTeamCostSek, CostPerDeliveredItemSek, ReworkCostSek
 }
 public sealed record AnalysisMeasurements(int StartDay, int EndDay, IReadOnlyDictionary<AnalysisMetric, double?> Values);
 
@@ -28,8 +28,12 @@ public static class AnalysisMetrics
         double Ratio(double used, double available) => available == 0 ? 0 : used / available;
         var dev = days.Sum(d => d.UsedDeveloperCapacity);
         var rework = days.Sum(d => d.UsedReworkDeveloperCapacity);
+        var economics = TeamEconomics.From(days, completed.Length);
         var v = new Dictionary<AnalysisMetric, double?>
         {
+            [AnalysisMetric.TotalTeamCostSek] = (double?)economics.TotalTeamCost,
+            [AnalysisMetric.CostPerDeliveredItemSek] = (double?)economics.CostPerDelivery,
+            [AnalysisMetric.ReworkCostSek] = (double?)economics.ReworkCost,
             [AnalysisMetric.CompletedWorkItems] = completed.Length,
             [AnalysisMetric.ThroughputPerFiveDays] = completed.Length * 5.0 / days.Length,
             [AnalysisMetric.AverageLeadTime] = ItemMean(w => w.LeadTime!.Value),

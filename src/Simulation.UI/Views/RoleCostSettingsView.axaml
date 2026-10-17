@@ -1,0 +1,9 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" x:Class="Simulation.UI.Views.RoleCostSettingsView" x:DataType="vm:MainWindowViewModel">
+ <StackPanel Spacing="8" Margin="8">
+  <Grid ColumnDefinitions="*,150,100"><TextBlock Text="Developer monthly cost" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding DeveloperMonthlyCost, Mode=TwoWay}" AutomationProperties.Name="Developer monthly cost"/><TextBlock Grid.Column="2" Text="SEK/month" Margin="8,0" VerticalAlignment="Center"/></Grid>
+  <Grid ColumnDefinitions="*,150,100"><TextBlock Text="Tester monthly cost" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding TesterMonthlyCost, Mode=TwoWay}" AutomationProperties.Name="Tester monthly cost"/><TextBlock Grid.Column="2" Text="SEK/month" Margin="8,0" VerticalAlignment="Center"/></Grid>
+  <Grid ColumnDefinitions="*,150,100"><TextBlock Text="Specialist monthly cost" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding SpecialistMonthlyCost, Mode=TwoWay}" AutomationProperties.Name="Specialist monthly cost"/><TextBlock Grid.Column="2" Text="SEK/month" Margin="8,0" VerticalAlignment="Center"/></Grid>
+  <Grid ColumnDefinitions="*,150,100"><TextBlock Text="Working days per month" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding WorkingDaysPerMonth, Mode=TwoWay}" AutomationProperties.Name="Working days per month"/></Grid>
+  <TextBlock Text="{Binding CostAssumptions}" TextWrapping="Wrap" FontSize="12"/>
+ </StackPanel>
+</UserControl>

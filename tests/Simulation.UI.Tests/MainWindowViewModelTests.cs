@@ -48,7 +48,7 @@ public sealed class MainWindowViewModelTests
         Assert.Equal(JsonSerializer.Serialize(expected), JsonSerializer.Serialize(vm.Result));
         Assert.Same(vm.Result!.Days, vm.Days);
         Assert.Same(vm.Result.WorkItems, vm.WorkItems);
-        Assert.Equal(12, vm.Metrics.Count);
+        Assert.Equal(15, vm.Metrics.Count);
         Assert.All(vm.Metrics, m => Assert.False(string.IsNullOrWhiteSpace(m.Explanation)));
         Assert.Equal(2, vm.SelectedView);
         Assert.False(vm.IsBusy);

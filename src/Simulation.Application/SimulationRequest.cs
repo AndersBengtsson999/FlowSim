@@ -24,6 +24,7 @@ public sealed record SimulationRequest
     public double TestingEffort { get; init; } = 2;
 
     public int RandomSeed { get; init; } = 12345;
+    public RoleCostSettings RoleCosts { get; init; } = new();
     public DependencySettings ResidualDependencies { get; init; } = new();
     public ReleaseSettings Release { get; init; } = new();
     public SkillSettings Skills { get; init; } = new();
@@ -46,7 +47,7 @@ public sealed record SimulationRequest
         var scenario = new SimulationScenario(Name, SimulationDays,
             new Team(DeveloperCount, TesterCount, DeveloperCapacityPerDay, TesterCapacityPerDay) { DeveloperAvailability = DeveloperAvailability, TesterAvailability = TesterAvailability },
             DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit,
-            EffortGenerator.Generate(NumberOfWorkItems, development, review, testing, RandomSeed), RandomSeed) { ResidualDependencies = ResidualDependencies, Release = Release, Skills = Skills, Quality = Quality, Productivity = Productivity, Debt = Debt, ArrivalMode = ArrivalMode, WorkItemsPerDay = WorkItemsPerDay,
+            EffortGenerator.Generate(NumberOfWorkItems, development, review, testing, RandomSeed), RandomSeed) { RoleCosts = RoleCosts, ResidualDependencies = ResidualDependencies, Release = Release, Skills = Skills, Quality = Quality, Productivity = Productivity, Debt = Debt, ArrivalMode = ArrivalMode, WorkItemsPerDay = WorkItemsPerDay,
                 DevelopmentArrivalEffort = development, CodeReviewArrivalEffort = review, TestingArrivalEffort = testing };
         ScenarioValidator.Validate(scenario);
         return scenario;

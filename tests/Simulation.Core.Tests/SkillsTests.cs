@@ -37,10 +37,15 @@ public sealed class SkillsTests
     }
 
     [Fact]
-    public void GeneralOnlyWorkUsesSpecialistCapacityWithoutReservationOrPremium()
+    public void GeneralOnlyWorkUsesSameRawCapacityWithSeparatelyPricedStaffing()
     {
         var a=Create(0,0,count:1,wip:1);var b=Create(5,0,count:1,wip:1);
-        for(var i=0;i<20;i++) Assert.Equal(JsonSerializer.Serialize(a.AdvanceOneDay()),JsonSerializer.Serialize(b.AdvanceOneDay()));
+        for(var i=0;i<20;i++)
+        {
+            var regular=a.AdvanceOneDay();var specialist=b.AdvanceOneDay();
+            Assert.Equal(JsonSerializer.Serialize(regular with {Economics=null}),JsonSerializer.Serialize(specialist with {Economics=null}));
+            Assert.True(specialist.Economics!.Total > regular.Economics!.Total);
+        }
         Assert.Equal(a.WorkItems.Single().DeliveryCost,b.WorkItems.Single().DeliveryCost);
     }
 

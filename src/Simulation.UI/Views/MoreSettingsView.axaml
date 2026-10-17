@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:charts="using:Simulation.UI.Controls" xmlns:views="using:Simulation.UI.Views" xmlns:core="clr-namespace:Simulation.Core;assembly=Simulation.Core" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Simulation.UI.Views.MoreSettingsView" x:DataType="vm:MainWindowViewModel">
  <StackPanel Spacing="16" Margin="0,16,0,16">
+  <Expander Header="Role costs · SEK" HorizontalAlignment="Stretch" IsEnabled="{Binding CanEdit}"><views:RoleCostSettingsView /></Expander>
   <Expander Header="Productivity · Development / Code Review / Testing" HorizontalAlignment="Stretch" IsEnabled="{Binding CanEdit}"><views:ProductivitySettingsView /></Expander>
   <Grid ColumnDefinitions="*,18,*" RowDefinitions="Auto,18,Auto" IsEnabled="{Binding CanEdit}">
    <Border Grid.Column="0" Grid.Row="0" Classes="card">

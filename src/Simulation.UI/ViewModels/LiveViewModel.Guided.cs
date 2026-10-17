@@ -26,6 +26,9 @@ public sealed partial class LiveViewModel
     public IReadOnlyList<CompareChartValue> GuidedReleased { get; private set; } = [];
     public IReadOnlyList<CompareChartValue> GuidedCycleTime { get; private set; } = [];
     public IReadOnlyList<CompareChartValue> GuidedCost { get; private set; } = [];
+    public string GuidedIncrementalShort { get; private set; } = "";
+    public string GuidedIncrementalCost { get; private set; } = "";
+    public IReadOnlyList<CompareChartValue> GuidedTeamCost { get; private set; } = [];
     public Task BaselineTask { get; private set; } = Task.CompletedTask;
     public Action? OpenGuidedComparison { get; set; }
     public Action? ReturnToLive { get; set; }
@@ -92,7 +95,7 @@ public sealed partial class LiveViewModel
     }
     private void RefreshGuided()
     {
-        GuidedRows = []; GuidedQueueSeries = []; GuidedReleased = []; GuidedCycleTime = []; GuidedCost = []; GuidedInterpretation = "";
+        GuidedIncrementalShort = ""; GuidedIncrementalCost = ""; GuidedTeamCost = []; GuidedRows = []; GuidedQueueSeries = []; GuidedReleased = []; GuidedCycleTime = []; GuidedCost = []; GuidedInterpretation = "";
         if (guidedExperiment is not { } e) { GuidedProgress = guidedMessage; return; }
         var result = e.Observe(Live?.Session);
         if (result.InvalidReason is { } reason)
@@ -110,6 +113,14 @@ public sealed partial class LiveViewModel
             new("Testing queue", $"{result.InitialQueue} → {bp.Testing.Current}", $"{result.InitialQueue} → {xp.Testing.Current}", D(bp.Testing.Current, xp.Testing.Current)),
             new("Cycle time · days", N(bp.CycleTime), N(xp.CycleTime), D(bp.CycleTime, xp.CycleTime)),
             new("Cost · capacity", N(bp.ConsumedSystemCapacity?.Total), N(xp.ConsumedSystemCapacity?.Total), D(bp.ConsumedSystemCapacity?.Total, xp.ConsumedSystemCapacity?.Total))];
+        GuidedRows = [.. GuidedRows,
+            new("Team cost · SEK", TeamEconomics.Money(bp.Economics.TotalTeamCost), TeamEconomics.Money(xp.Economics.TotalTeamCost), TeamEconomics.Money(xp.Economics.TotalTeamCost - bp.Economics.TotalTeamCost)),
+            new("Cost / delivery · SEK", TeamEconomics.Money(bp.Economics.CostPerDelivery), TeamEconomics.Money(xp.Economics.CostPerDelivery), TeamEconomics.Money(xp.Economics.CostPerDelivery - bp.Economics.CostPerDelivery)),
+            new("Allocated rework · SEK", TeamEconomics.Money(bp.Economics.ReworkCost), TeamEconomics.Money(xp.Economics.ReworkCost), TeamEconomics.Money(xp.Economics.ReworkCost - bp.Economics.ReworkCost))];
+        GuidedIncrementalShort = "Incremental cost per additional delivery: " + TeamEconomics.Money(EconomicPeriod.IncrementalCostPerAdditionalDelivery(bp.Economics, xp.Economics));
+        GuidedIncrementalCost = GuidedIncrementalShort +
+            ". Δ team cost / Δ released items, only when deliveries increase. Negative means lower total cost with more deliveries; positive means additional cost per additional delivery. N/A means no additional deliveries or missing monetary history.";
+        GuidedTeamCost = [new("Unchanged baseline", (double?)bp.Economics.TotalTeamCost), new("LIVE intervention", (double?)xp.Economics.TotalTeamCost)];
         GuidedQueueSeries = [new("Unchanged baseline", b.TestingQueue.Select(p => new ComparisonFlowPoint(p.Day, p.Count)).ToArray()),
             new("LIVE intervention", x.TestingQueue.Select(p => new ComparisonFlowPoint(p.Day, p.Count)).ToArray())];
         GuidedReleased = [new("Unchanged baseline", bp.Completed), new("LIVE intervention", xp.Completed)];

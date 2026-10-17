@@ -8,6 +8,7 @@
    <Grid ColumnDefinitions="2*,*,*,*" Margin="0,4"><TextBlock Text="{Binding Metric}"/><TextBlock Grid.Column="1" Text="{Binding Baseline}"/><TextBlock Grid.Column="2" Text="{Binding Experiment}"/><TextBlock Grid.Column="3" Text="{Binding Difference}"/></Grid>
   </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
   <TextBlock Text="{Binding GuidedInterpretation}" TextWrapping="Wrap"/>
+  <TextBlock Text="{Binding GuidedIncrementalCost}" TextWrapping="Wrap"/>
   <TextBlock Text="Testing queue · waiting items" FontSize="18" FontWeight="SemiBold"/>
   <charts:ComparisonFlowChart Series="{Binding GuidedQueueSeries}" Height="240"/>
   <TextBlock Text="Released items" FontWeight="SemiBold"/>
@@ -16,6 +17,9 @@
   <charts:ComparisonBarChart Values="{Binding GuidedCycleTime}" Height="85"/>
   <TextBlock Text="Total System Cost · consumed capacity" FontWeight="SemiBold"/>
   <charts:ComparisonBarChart Values="{Binding GuidedCost}" Height="85"/>
+  <TextBlock Text="Total team cost · SEK" FontWeight="SemiBold"/>
+  <charts:ComparisonBarChart Values="{Binding GuidedTeamCost}" Height="85"/>
+  <TextBlock Text="{Binding EconomicAssumptions}" TextWrapping="Wrap"/>
   <TextBlock Text="{Binding GuidedMetricHelp}" TextWrapping="Wrap"/>
  </StackPanel>
 </UserControl>

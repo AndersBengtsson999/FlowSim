@@ -21,6 +21,7 @@ public sealed record SimulationScenario(string Name, int SimulationDays, Team Te
     int DevelopmentWipLimit, int CodeReviewWipLimit, int TestingWipLimit,
     IReadOnlyList<WorkItem> WorkItems, int RandomSeed = 12345)
 {
+    public RoleCostSettings RoleCosts { get; init; } = new();
     public DependencySettings ResidualDependencies { get; init; } = new();
     public ReleaseSettings Release { get; init; } = new();
     public SkillSettings Skills { get; init; } = new();
@@ -61,6 +62,8 @@ public sealed record DailySnapshot(int Day, int DevelopmentWip, int ReviewWip, i
     double AvailableDeveloperCapacity, double AvailableTesterCapacity,
     double UsedReworkDeveloperCapacity = 0, int ReworkWip = 0, double CollaborationDevelopmentCapacity = 0)
 {
+    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    public DailyTeamCost? Economics { get; init; }
     // Active Development at day end with positive remaining effort and no raw Development capacity received that day.
     public int SpecialistWorkWaiting { get; init; }
     public DebtObservation? Debt { get; init; }

@@ -10,6 +10,7 @@ public sealed class PresentationLabels : IValueConverter
 {
     public static string Label(object? value) => value?.ToString() switch
     {
+        "TotalTeamCostSek" => "Total team cost · SEK", "CostPerDeliveredItemSek" => "Cost / delivered item · SEK", "ReworkCostSek" => "Allocated rework cost · SEK",
         "ThroughputPerFiveDays" => "Throughput / 5 days",
         "DeveloperCount" => "Developers", "TesterCount" => "Testers",
         "AverageWip" => "Average WIP", "TotalWip" => "Total WIP",

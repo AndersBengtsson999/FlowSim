@@ -139,6 +139,7 @@
     <Grid ColumnDefinitions="*,110"><TextBlock Text="Dependency Waiting Time (days)" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Setup.DependencyWaitingDays, Mode=TwoWay}" AutomationProperties.Name="Dependency Waiting Time (days)"/></Grid>
     <TextBlock Text="Sampled once on arrival. Waiting does not use Development WIP or capacity. Changes affect future arrivals." Classes="note" TextWrapping="Wrap"/>
    </StackPanel></Expander>
+   <Expander Header="Role costs · SEK" HorizontalAlignment="Stretch"><views:RoleCostSettingsView DataContext="{Binding Setup}" /></Expander>
    <Expander Header="Release / Deployment" HorizontalAlignment="Stretch"><views:ReleaseSettingsView DataContext="{Binding Setup}" /></Expander>
    <Expander Header="Technical Debt" HorizontalAlignment="Stretch"><views:DebtSettingsView DataContext="{Binding Setup}" /></Expander>
    <Expander Header="Quality · defects and rework" HorizontalAlignment="Stretch"><views:LiveQualityView DataContext="{Binding Setup}" /></Expander>
@@ -203,6 +204,16 @@
     <TextBlock Text="View" VerticalAlignment="Center" FontWeight="SemiBold"/>
     <ComboBox Name="LiveVisualization" ItemsSource="{Binding Visualizations}" SelectedItem="{Binding Visualization, Mode=TwoWay}" MinWidth="160" AutomationProperties.Name="Live visualization"/>
    </StackPanel>
+   <Expander Name="EconomicSummary" Background="#F5F5F0" Header="{Binding EconomicHeader}" HorizontalAlignment="Stretch">
+    <StackPanel Spacing="8" Margin="8">
+     <StackPanel Orientation="Horizontal" Spacing="12"><TextBlock Text="Window · days" VerticalAlignment="Center"/><ComboBox ItemsSource="{Binding RollingWindows}" SelectedItem="{Binding RollingWindow}" AutomationProperties.Name="Economic evaluation window"/></StackPanel>
+     <TextBlock Text="{Binding EconomicWindow}" TextWrapping="Wrap"/>
+     <ItemsControl ItemsSource="{Binding EconomicRows}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:MetricRow"><Grid ColumnDefinitions="*,*" Margin="0,3"><TextBlock Text="{Binding Label}"/><TextBlock Grid.Column="1" Text="{Binding Value}" FontWeight="SemiBold"/></Grid></DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+     <TextBlock Text="Team cost / delivered item · SEK · rolling window ending on each day" TextWrapping="Wrap"/>
+     <charts:LivePerformanceTrendChart Series="{Binding EconomicTrend}" Unit="SEK / delivered item" Height="180"/>
+     <TextBlock Text="{Binding EconomicAssumptions}" TextWrapping="Wrap" FontSize="12"/>
+    </StackPanel>
+   </Expander>
    <views:GameView IsVisible="{Binding GameViewSelected}"/>
    <StackPanel IsVisible="{Binding FlowBoardSelected}" Spacing="8">
    <Border Classes="sectionBand"><Grid ColumnDefinitions="*,Auto"><TextBlock Text="Flow Board" Classes="liveSection"/><TextBlock Grid.Column="1" Text="Work Items" Foreground="#111111" FontSize="12" Margin="0,0,30,0"/></Grid></Border>

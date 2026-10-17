@@ -16,6 +16,10 @@ public static class ScenarioParameters
         };
         return new ReadOnlyDictionary<string, string>(new Dictionary<string, string>
         {
+            ["Developer monthly cost · SEK"] = s.RoleCosts.DeveloperMonthly.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            ["Tester monthly cost · SEK"] = s.RoleCosts.TesterMonthly.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            ["Specialist monthly cost · SEK"] = s.RoleCosts.SpecialistMonthly.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            ["Working days per month"] = s.RoleCosts.WorkingDaysPerMonth.ToString(),
             ["Name"] = s.Name, ["Simulation Days"] = s.SimulationDays.ToString(), ["Work Items"] = s.NumberOfWorkItems.ToString(),
             ["Developers"] = s.DeveloperCount.ToString(), ["Testers"] = s.TesterCount.ToString(),
             ["Developer Capacity / Day"] = N(s.DeveloperCapacityPerDay), ["Tester Capacity / Day"] = N(s.TesterCapacityPerDay),

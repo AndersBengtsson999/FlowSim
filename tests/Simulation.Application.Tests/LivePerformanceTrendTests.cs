@@ -39,6 +39,7 @@ public sealed class LivePerformanceTrendTests
                 LiveTrendMetric.Throughput => p.Throughput, LiveTrendMetric.CycleTime => p.CycleTime,
                 LiveTrendMetric.DeliveryCost => p.DeliveryCostPerDoneItem,
                 LiveTrendMetric.CompletionRate => p.CompletionRate, LiveTrendMetric.DevelopmentCycleTime => p.DevelopmentCycleTime, LiveTrendMetric.ReleaseWaitTime => p.ReleaseWaitTime,
+                LiveTrendMetric.TeamCostPerDelivery => (double?)p.Economics.CostPerDelivery,
                 LiveTrendMetric.SystemCost => p.SystemCostPerDoneItem,
                 LiveTrendMetric.AverageWip => p.AverageWip, LiveTrendMetric.DeveloperUtilization => 100 * p.DeveloperUtilization,
                 _ => 100 * p.TesterUtilization };

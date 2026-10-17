@@ -12,13 +12,13 @@ public static class LiveSessionJson
     public sealed record StoredState(SimulationSessionState Header, IReadOnlyList<StoredDay> History);
     public sealed record StoredCheckpoint(Guid Id, string Label, StoredState State);
     public sealed record StoredDocument(int SchemaVersion, string SimulationModelVersion, string DocumentKind,
-        StoredState State, IReadOnlyList<StoredCheckpoint> Checkpoints, int SafetyLimit, int RollingWindow, string? OriginalModelVersion = null);
+        StoredState State, IReadOnlyList<StoredCheckpoint> Checkpoints, int SafetyLimit, int RollingWindow, string? OriginalModelVersion = null, KpiDashboardSettings? Dashboard = null);
 
     public static string Save(LiveSimulation live)
     {
         var d = live.Capture();
         return JsonSerializer.Serialize(new StoredDocument(d.SchemaVersion, d.SimulationModelVersion, "LiveSession", Pack(d.State),
-            d.Checkpoints.Select(c => new StoredCheckpoint(c.Id, c.Label, Pack(c.State))).ToArray(), d.SafetyLimit, d.RollingWindow, d.OriginalModelVersion), Options);
+            d.Checkpoints.Select(c => new StoredCheckpoint(c.Id, c.Label, Pack(c.State))).ToArray(), d.SafetyLimit, d.RollingWindow, d.OriginalModelVersion, d.Dashboard), Options);
     }
     public static LiveSimulation Load(string json)
     {
@@ -26,7 +26,7 @@ public static class LiveSessionJson
         if (d.DocumentKind != "LiveSession" || d.SchemaVersion != 1 || !SimulationModel.CanLoad(d.SimulationModelVersion))
             throw new JsonException("Unsupported Live session document, schema or simulation model version.");
         return LiveSimulation.Restore(new(d.SchemaVersion, d.SimulationModelVersion, Unpack(d.State),
-            d.Checkpoints.Select(c => new LiveCheckpoint(c.Id, c.Label, Unpack(c.State))).ToArray(), d.SafetyLimit, d.RollingWindow, d.OriginalModelVersion));
+            d.Checkpoints.Select(c => new LiveCheckpoint(c.Id, c.Label, Unpack(c.State))).ToArray(), d.SafetyLimit, d.RollingWindow, d.OriginalModelVersion, d.Dashboard));
     }
     private static StoredState Pack(SimulationSessionState state)
     {

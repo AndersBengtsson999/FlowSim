@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:charts="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.KpiDashboardView" x:DataType="vm:LiveViewModel" Name="Dashboard">
+ <Border Background="#EFF3F4" CornerRadius="6" Padding="8">
+  <StackPanel Spacing="6">
+   <Grid ColumnDefinitions="*,Auto">
+    <TextBlock Text="Team Performance" FontWeight="Bold" Foreground="#17232D" VerticalAlignment="Center"/>
+    <Button Grid.Column="1" Name="ChooseKpis" Content="KPIs…" Padding="6,3" AutomationProperties.Name="Choose up to four KPIs">
+     <Button.Flyout><Flyout><StackPanel Spacing="4" Width="290">
+      <TextBlock Text="Choose up to four KPIs" FontWeight="Bold"/>
+      <TextBlock Text="{Binding KpiSelectionSummary}" TextWrapping="Wrap"/>
+      <ItemsControl ItemsSource="{Binding KpiChoices}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:KpiChoice">
+       <CheckBox Content="{Binding Name}" IsChecked="{Binding Selected, Mode=TwoWay}" IsEnabled="{Binding CanSelect}" ToolTip.Tip="{Binding Help}" AutomationProperties.Name="{Binding Name}"/>
+      </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+      <TextBlock Text="Saved with the LIVE session. Changes are neutral; higher is not always better." TextWrapping="Wrap" FontSize="11"/>
+     </StackPanel></Flyout></Button.Flyout>
+    </Button>
+   </Grid>
+   <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="Rolling days" Foreground="#17232D" VerticalAlignment="Center"/><ComboBox Name="KpiWindowPicker" ItemsSource="{Binding KpiWindows}" SelectedItem="{Binding KpiWindow}" MinHeight="24" Padding="6,2" AutomationProperties.Name="KPI rolling evaluation days"/></StackPanel>
+   <TextBlock Text="Choose KPIs to show values." IsVisible="{Binding NoKpis}" Foreground="#17232D"/>
+   <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+    <ItemsControl ItemsSource="{Binding KpiCards}">
+     <ItemsControl.ItemsPanel><ItemsPanelTemplate><StackPanel Orientation="{Binding #Dashboard.LayoutOrientation}" Spacing="6"/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+     <ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:KpiCard">
+      <Border Background="White" BorderBrush="#D6DFE3" BorderThickness="1" CornerRadius="4" Padding="7" Width="234" ToolTip.Tip="{Binding Help}">
+       <StackPanel Spacing="1">
+        <TextBlock Text="{Binding Name}" Foreground="#253D4A" FontSize="13" FontWeight="SemiBold"/>
+        <StackPanel Orientation="Horizontal" Spacing="5"><TextBlock Text="{Binding Value}" Foreground="#17232D" FontWeight="Bold" FontSize="19"/><TextBlock Text="{Binding Unit}" Foreground="#526879" FontSize="10" VerticalAlignment="Center"/></StackPanel>
+        <TextBlock Text="{Binding Kind}" Foreground="#526879" FontSize="10"/>
+        <TextBlock Text="{Binding Period}" Foreground="#526879" FontSize="10"/>
+        <TextBlock Text="{Binding Change}" Foreground="#344F60" FontSize="11" ToolTip.Tip="{Binding ComparisonHelp}"/>
+        <charts:LivePerformanceTrendChart Series="{Binding Trend}" Unit="{Binding Unit}" Compact="True" SamplesOnly="True" Height="28"/>
+        <TextBlock Text="{Binding TrendCaption}" Foreground="#526879" FontSize="10"/>
+       </StackPanel>
+      </Border>
+     </DataTemplate></ItemsControl.ItemTemplate>
+    </ItemsControl>
+   </ScrollViewer>
+  </StackPanel>
+ </Border>
+</UserControl>

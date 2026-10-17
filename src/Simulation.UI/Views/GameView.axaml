@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:controls="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.GameView" x:DataType="vm:LiveViewModel">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:views="using:Simulation.UI.Views" xmlns:controls="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.GameView" x:DataType="vm:LiveViewModel">
  <UserControl.Styles>
   <Style Selector="Button.stationClose:focus-visible"><Setter Property="BorderBrush" Value="#FFEB00"/><Setter Property="BorderThickness" Value="2"/></Style>
  </UserControl.Styles>
@@ -12,6 +12,7 @@
     </Grid>
     <WrapPanel Orientation="Horizontal">
      <CheckBox Name="AnimateGameActivity" IsVisible="{Binding SpriteRendering}" Content="Animate activity" IsChecked="{Binding AnimateGameActivity}" Foreground="#D3DEE7" Margin="0,0,14,0" AutomationProperties.Name="Animate workshop activity. Turn off to reduce motion."/>
+     <CheckBox Content="Team Performance" IsChecked="{Binding DashboardVisible}" Foreground="#D3DEE7" Margin="0,0,10,0" AutomationProperties.Name="Show Team Performance dashboard"/>
      <ComboBox Name="StationPicker" Width="190" PlaceholderText="Inspect a station" ItemsSource="{Binding #GameWorld.StationOptions}" SelectedItem="{Binding #GameWorld.SelectedStation, Mode=TwoWay}" AutomationProperties.Name="Select workshop station" Margin="0,0,10,0"/>
      <Button Classes="stationClose" Content="−" Click="ZoomOutClicked" Background="#243945" Foreground="#E3ECEC" Margin="0,0,4,0" AutomationProperties.Name="Zoom out" ToolTip.Tip="Zoom out"/>
      <TextBlock Text="{Binding #GameWorld.ZoomLabel}" Foreground="#E3ECEC" VerticalAlignment="Center" Margin="4,0,8,0" MinWidth="38"/>
@@ -35,11 +36,13 @@
       <ItemsControl ItemsSource="{Binding GuidedRows}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:GuidedMetricRow">
        <Grid ColumnDefinitions="2*,*,*"><TextBlock Text="{Binding Metric}"/><TextBlock Grid.Column="1" Text="{Binding Baseline}"/><TextBlock Grid.Column="2" Text="{Binding Experiment}"/></Grid>
       </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+      <TextBlock Text="{Binding GuidedIncrementalShort}" TextWrapping="Wrap" FontSize="11"/>
       <Button Content="Open detailed comparison" Command="{Binding GuidedDetailsCommand}" HorizontalAlignment="Left"/>
      </StackPanel>
     </Expander>
     <TextBlock Name="WorkflowSummary" Text="{Binding #GameWorld.WorkflowSummary}" Foreground="#C7D8D8" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Current workflow observations"/>
    </StackPanel>
+   <Grid Name="DashboardLayout" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
    <Grid Name="WorkshopContent" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
     <Border Name="WorldViewport" ClipToBounds="True" HorizontalAlignment="Stretch" VerticalAlignment="Top">
      <controls:GameWorldControl Name="GameWorld" Scene="{Binding GameScene}" UseSprites="{Binding SpriteRendering}" AnimateActivity="{Binding AnimateGameActivity}" SimulationRunning="{Binding IsRunning}" PlaybackSpeed="{Binding Speed}" AutomationProperties.Name="Interactive workshop. Use arrow keys to select stations, Enter to inspect, Escape to close."/>
@@ -67,6 +70,8 @@
       </ScrollViewer>
      </Grid>
     </Border>
+   </Grid>
+   <views:KpiDashboardView Name="KpiPanel" Grid.Row="1" IsVisible="{Binding DashboardVisible}" VerticalAlignment="Top" Margin="0,8,0,0"/>
    </Grid>
   </StackPanel>
  </Border>

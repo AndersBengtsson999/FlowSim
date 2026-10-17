@@ -19,7 +19,7 @@ public sealed class GuidedInterventionViewModelTests
         vm.ApplyChanges(); await vm.BaselineTask;
         Assert.Equal(100, vm.Day); Assert.False(vm.IsRunning); Assert.False(vm.GuidedPending);
         Assert.Empty(vm.GuidedRows); vm.Tick(); Assert.Equal(100, vm.Day);
-        vm.Step(); Assert.Contains("1/10", vm.GuidedProgress); Assert.Equal(4, vm.GuidedRows.Count);
+        vm.Step(); Assert.Contains("1/10", vm.GuidedProgress); Assert.Equal(7, vm.GuidedRows.Count);
         vm.Resume(); vm.Tick(); vm.Pause(); var progress = vm.GuidedProgress;
         vm.Tick(); Assert.Equal(progress, vm.GuidedProgress);
         for(int i=0;i<8;i++) vm.Step(); Assert.StartsWith("Complete", vm.GuidedProgress);

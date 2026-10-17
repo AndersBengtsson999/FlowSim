@@ -178,7 +178,8 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         Metric("Developer Utilization", r.DeveloperUtilization, "Share of all available developer capacity consumed by Development, Code Review, Rework and Debt Repayment. Release consumes none. Includes idle days.", "P1"),
         Metric("Tester Utilization", r.TesterUtilization, "Share of all available tester capacity consumed by Testing. Includes idle days.", "P1"),
         Metric("Maximum Waiting for Code Review Queue", r.MaximumWaitingForCodeReviewQueue, "Largest end-of-day count in Waiting for Code Review. This is not a within-day peak.", "0", " items"),
-        Metric("Maximum Waiting for Testing Queue", r.MaximumWaitingForTestingQueue, "Largest end-of-day count in Waiting for Testing. This is not a within-day peak.", "0", " items")
+        Metric("Maximum Waiting for Testing Queue", r.MaximumWaitingForTestingQueue, "Largest end-of-day count in Waiting for Testing. This is not a within-day peak.", "0", " items"),
+        .. MonetaryResultMetrics
     ];
     public AsyncCommand RunCommand { get; }
     public RelayCommand CancelCommand { get; }
@@ -217,6 +218,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         configuredName = BaselineScenario.CreateRequest().Name;
         var baseline = BaselineScenario.Create();
         var effort = baseline.WorkItems[0];
+        LoadCosts(new());
         ReleaseMode = "Flow-based"; ReleaseCapacity = ReleaseSettings.FormatCapacity(int.MaxValue); ReleaseInterval = "5";
         DependencyRate = DependencyWaitingDays = "0";
         Specialists = SpecialistWorkRate = "0";
@@ -268,6 +270,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         if (isBusy) throw new InvalidOperationException("Wait for the running simulation before editing a comparison scenario.");
         configuredName = request.Name;
         string N(double n) => n.ToString(CultureInfo.InvariantCulture);
+        LoadCosts(request.RoleCosts);
         ReleaseMode = request.Release.Mode == Simulation.Core.ReleaseMode.Scheduled ? "Scheduled" : "Flow-based"; ReleaseCapacity = ReleaseSettings.FormatCapacity(request.Release.Capacity); ReleaseInterval = N(request.Release.Interval);
         DependencyRate = N(request.ResidualDependencies.Rate * 100); DependencyWaitingDays = N(request.ResidualDependencies.MeanWaitingDays);
         Specialists = N(request.Skills.Specialists); SpecialistWorkRate = N(request.Skills.SpecialistWorkRate * 100);
@@ -377,6 +380,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     private SimulationRequest ReadRequest() => new()
     {
         Name = configuredName,
+        RoleCosts = CaptureCosts(),
         Release = new(ReleaseMode == "Scheduled" ? Simulation.Core.ReleaseMode.Scheduled : ReleaseMode == "Flow-based" ? Simulation.Core.ReleaseMode.FlowBased : throw new ScenarioValidationException("Invalid Release Mode."), ParseReleaseCapacity(ReleaseCapacity), Integer(ReleaseInterval, "Release Interval")),
         ResidualDependencies = new(Number(DependencyRate, "Dependency Rate (%)") / 100, Number(DependencyWaitingDays, "Dependency Waiting Time (days)")),
         Skills = new(Integer(Specialists, "Specialists"), Number(SpecialistWorkRate, "Specialist Work Rate (%)") / 100),

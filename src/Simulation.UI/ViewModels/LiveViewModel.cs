@@ -252,7 +252,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
     public LiveViewModel()
     {
         Setup.LoadConfiguration(LiveSimulation.Demo);
-        InitializeGuided();
+        InitializeGuided(); InitializeKpis();
         timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         timer.Tick += (_, _) => Tick();
         StartCommand = new(() => Guard(Start), () => !HasSession && !fastAdvancing);
@@ -278,6 +278,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         var setup = Setup.CaptureSetup();
         setup = setup with { Quality = ReadQuality(Setup) };
         Live = LiveSimulation.Start(setup, SupplyMode(ArrivalMode), Rate(ArrivalRate));
+        Live.Dashboard = KpiSettings;
         Live.SafetyLimit = limit; Live.RollingWindow = RollingWindow; setupExpanded = false;
         stopped = false; queueHistory.Clear(); Refresh(); Resume();
     }
@@ -328,7 +329,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
             DeveloperCapacityPerDay = c.Team.DeveloperCapacityPerDay, TesterCapacityPerDay = c.Team.TesterCapacityPerDay,
             DeveloperAvailability = c.Team.DeveloperAvailability, TesterAvailability = c.Team.TesterAvailability,
             DevelopmentWipLimit = c.DevelopmentWipLimit, CodeReviewWipLimit = c.CodeReviewWipLimit, TestingWipLimit = c.TestingWipLimit,
-            ResidualDependencies = c.ResidualDependencies, Release = c.Release, Skills = c.Skills, Productivity = c.Productivity, Debt = c.Debt, Quality = c.Quality, NumberOfWorkItems = 0 });
+            RoleCosts = c.RoleCosts, ResidualDependencies = c.ResidualDependencies, Release = c.Release, Skills = c.Skills, Productivity = c.Productivity, Debt = c.Debt, Quality = c.Quality, NumberOfWorkItems = 0 });
         draftSupply = c.ArrivalMode == WorkArrivalMode.AlwaysAvailable ? "Always available" : c.ArrivalMode == WorkArrivalMode.FixedBacklog ? "Fixed Backlog" : "Fixed rate";
         DraftArrivalRate = c.WorkItemsPerDay.ToString(CultureInfo.InvariantCulture); ChangeLabel = "";
         SimpleChangeField F(string name, Func<string> get, Action<string> set, string help = "") => new(name, get(), get, set, help, name is "Developers" or "Testers" or "Specialists" || name.EndsWith(" WIP") ? ChangeNumberKind.Integer : ChangeNumberKind.Number);
@@ -355,6 +356,12 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
             new("Technical Debt", ChangeFields.Skip(9).Take(4).ToArray()),
             new("WIP", ChangeFields.Skip(13).Take(4).ToArray()),
             new("Dependencies", ChangeFields.Skip(17).ToArray())];
+        var costFields = new[] { F("Developer monthly cost · SEK", () => Draft.DeveloperMonthlyCost, v => Draft.DeveloperMonthlyCost = v),
+            F("Tester monthly cost · SEK", () => Draft.TesterMonthlyCost, v => Draft.TesterMonthlyCost = v),
+            F("Specialist monthly cost · SEK", () => Draft.SpecialistMonthlyCost, v => Draft.SpecialistMonthlyCost = v),
+            F("Working days per month", () => Draft.WorkingDaysPerMonth, v => Draft.WorkingDaysPerMonth = v) };
+        ChangeFields = [.. ChangeFields, .. costFields];
+        ChangeGroups = [.. ChangeGroups, new("Role costs · SEK (illustrative)", costFields)];
         AdvancedDebtChanges = [F("Debt Creation Factor (x)", () => Draft.DebtCreationFactor, v => Draft.DebtCreationFactor = v,
             "Debt per unit of shortcut effort saved. A scenario calibration assumption. Locked at Development start; existing debt and active plans stay unchanged.")];
         status = "Paused while editing. Changes apply from the next simulated day."; Notify();
@@ -367,13 +374,13 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         var previousChanges = Live.Session.Changes.Count;
         Live.Session.ApplyChanges(Live.Session.Configuration with { Team = new(r.DeveloperCount, r.TesterCount, r.DeveloperCapacityPerDay, r.TesterCapacityPerDay) { DeveloperAvailability = r.DeveloperAvailability, TesterAvailability = r.TesterAvailability },
             DevelopmentWipLimit = r.DevelopmentWipLimit, CodeReviewWipLimit = r.CodeReviewWipLimit, TestingWipLimit = r.TestingWipLimit,
-            ResidualDependencies = r.ResidualDependencies, Release = r.Release, Skills = r.Skills, Productivity = r.Productivity, Debt = r.Debt, Quality = quality, ArrivalMode = SupplyMode(DraftSupply), WorkItemsPerDay = Rate(DraftArrivalRate) }, ChangeLabel);
+            RoleCosts = r.RoleCosts, ResidualDependencies = r.ResidualDependencies, Release = r.Release, Skills = r.Skills, Productivity = r.Productivity, Debt = r.Debt, Quality = quality, ArrivalMode = SupplyMode(DraftSupply), WorkItemsPerDay = Rate(DraftArrivalRate) }, ChangeLabel);
         if (Live.Session.Changes.Count > previousChanges) selectedIntervention = Live.Session.Changes[^1];
         ApplyGuidedExperiment();
         editing = false; status = Live.Session.Changes.Count == previousChanges ? "No parameters changed. Resume when ready." : $"Changes recorded at Day {Day}; effective Day {Day + 1}. Resume when ready."; Refresh();
     }
     public void Load(LiveSimulation live)
-    { InvalidateGuided("A LIVE session was loaded. Start a new comparison."); Pause(); Live = live; setupExpanded = false; stopped = false; editing = false; rollingWindow = live.RollingWindow; SafetyLimit = live.SafetyLimit.ToString(); SelectedCheckpoint = null; selectedFlow = null; Details = ""; RebuildHistory(); Refresh(); status = "Live simulation opened. Resume when ready."; Notify(); }
+    { InvalidateGuided("A LIVE session was loaded. Start a new comparison."); Pause(); Live = live; LoadKpis(); setupExpanded = false; stopped = false; editing = false; rollingWindow = live.RollingWindow; SafetyLimit = live.SafetyLimit.ToString(); SelectedCheckpoint = null; selectedFlow = null; Details = ""; RebuildHistory(); Refresh(); status = "Live simulation opened. Resume when ready."; Notify(); }
     public void NotifyStatus(string message) { status = message; Notify(); }
     private void RebuildHistory() { queueHistory.Clear(); if (Live is not null) foreach (var d in Live.Session.Days) queueHistory.Add(Point(d)); }
     private static LiveQueuePoint Point(DailySnapshot d) => new(d.Day + 1, d.WaitingForCodeReviewCount, d.WaitingForTestingCount, d.WaitingForReworkCount);
@@ -392,6 +399,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
     }
     private void RefreshPerformance()
     {
+        RefreshKpis();
         if (Live is not null)
         {
             var days = Live.Session.Days.TakeLast(RollingWindow).ToArray();
@@ -413,6 +421,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
             selectedIntervention = Live?.Session.Changes.LastOrDefault();
         RefreshComparison();
         RefreshTrend();
+        EconomicTrend = Live is null ? new([], []) : LivePerformanceTrend.Project(Live.Session, LiveTrendMetric.TeamCostPerDelivery, RollingWindow, 100);
     }
     private void RefreshComparison()
     {
@@ -442,6 +451,10 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         Add("Developer Capacity per Person / Day", c.Before.Team.DeveloperCapacityPerDay, c.After.Team.DeveloperCapacityPerDay); Add("Tester Capacity per Person / Day", c.Before.Team.TesterCapacityPerDay, c.After.Team.TesterCapacityPerDay);
         Add("Developer Availability", $"{c.Before.Team.DeveloperAvailability:P0}", $"{c.After.Team.DeveloperAvailability:P0}");
         Add("Tester Availability", $"{c.Before.Team.TesterAvailability:P0}", $"{c.After.Team.TesterAvailability:P0}");
+        Add("Developer monthly cost · SEK", c.Before.RoleCosts.DeveloperMonthly, c.After.RoleCosts.DeveloperMonthly);
+        Add("Tester monthly cost · SEK", c.Before.RoleCosts.TesterMonthly, c.After.RoleCosts.TesterMonthly);
+        Add("Specialist monthly cost · SEK", c.Before.RoleCosts.SpecialistMonthly, c.After.RoleCosts.SpecialistMonthly);
+        Add("Working days per month", c.Before.RoleCosts.WorkingDaysPerMonth, c.After.RoleCosts.WorkingDaysPerMonth);
         Add("Release Mode", c.Before.Release.Mode == ReleaseMode.Scheduled ? "Scheduled" : "Flow-based", c.After.Release.Mode == ReleaseMode.Scheduled ? "Scheduled" : "Flow-based");
         Add("Release Capacity", ReleaseSettings.FormatCapacity(c.Before.Release.Capacity), ReleaseSettings.FormatCapacity(c.After.Release.Capacity));
         Add("Release Interval", c.Before.Release.Interval, c.After.Release.Interval);

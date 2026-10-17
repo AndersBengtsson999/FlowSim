@@ -1,0 +1,1 @@
+PASS: native macOS dashboard renders; default periods, window binding, selection limit, responsive placement, hiding, save/load and unchanged simulation state.

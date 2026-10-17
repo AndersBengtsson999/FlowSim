@@ -18,6 +18,7 @@ public sealed record PerformancePeriod(int FirstDay, int LastDay, int AvailableD
     public QueuePerformance WaitingForDependency { get; init; } = new(0,0,null);
     public bool DependenciesRelevant { get; init; }
     public QueuePerformance ReadyForRelease { get; init; } = new(0,0,null);
+    public EconomicPeriod Economics { get; init; } = new(null, 0, null);
     public SystemCost? ConsumedSystemCapacity { get; init; }
     public double? SystemCostPerReleasedItem => Completed > 0 ? ConsumedSystemCapacity?.Total / Completed : null;
     // Compatibility property names: terminal output is now Released (plus historical Done).
@@ -86,6 +87,7 @@ public static class LivePerformance
           WaitingForDependency = Queue(d => d.WaitingForDependencyCount),
           DependenciesRelevant = days.Any(d => d.WaitingForDependencyCount > 0 || (session.Changes.LastOrDefault(c => c.Day <= d.Day)?.After ?? session.InitialConfiguration).ResidualDependencies.Rate > 0),
           ReadyForRelease = Queue(d => d.ReadyForReleaseCount),
+          Economics = TeamEconomics.From(days, completed.Length),
           ConsumedSystemCapacity = SystemCost.Sum(days, session), AverageDeliveryCost = AverageCost(workCompleted), EndDebtRatio = days.LastOrDefault()?.Debt?.State.Ratio ?? 0, EndDebtOverhead = days.LastOrDefault()?.Debt?.Overhead ?? 0,
           DebtRelevant = days.Any(d => d.Debt is { } debt && (debt.State.Amount > 0 || debt.Created > 0 || debt.RepaymentCapacity > 0)) };
     }

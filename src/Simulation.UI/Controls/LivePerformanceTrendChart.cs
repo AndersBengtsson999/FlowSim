@@ -12,6 +12,8 @@ namespace Simulation.UI.Controls;
 public sealed class LivePerformanceTrendChart : Control
 {
     public static readonly StyledProperty<LiveTrendSeries?> SeriesProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, LiveTrendSeries?>(nameof(Series));
+    public static readonly StyledProperty<bool> SamplesOnlyProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, bool>(nameof(SamplesOnly));
+    public bool SamplesOnly { get => GetValue(SamplesOnlyProperty); set => SetValue(SamplesOnlyProperty, value); }
     public static readonly StyledProperty<bool> CompactProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, bool>(nameof(Compact));
     public bool Compact { get => GetValue(CompactProperty); set => SetValue(CompactProperty, value); }
     public static readonly StyledProperty<string> UnitProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, string>(nameof(Unit), "");
@@ -19,7 +21,7 @@ public sealed class LivePerformanceTrendChart : Control
     public LiveTrendSeries? Series { get => GetValue(SeriesProperty); set => SetValue(SeriesProperty, value); }
     public string Unit { get => GetValue(UnitProperty); set => SetValue(UnitProperty, value); }
     public int SelectedDay { get => GetValue(SelectedDayProperty); set => SetValue(SelectedDayProperty, value); }
-    static LivePerformanceTrendChart() => AffectsRender<LivePerformanceTrendChart>(SeriesProperty, UnitProperty, SelectedDayProperty, CompactProperty);
+    static LivePerformanceTrendChart() => AffectsRender<LivePerformanceTrendChart>(SeriesProperty, UnitProperty, SelectedDayProperty, CompactProperty, SamplesOnlyProperty);
     private Rect Plot => Compact ? new(2, 2, Math.Max(1, Bounds.Width - 4), Math.Max(1, Bounds.Height - 4)) : new(55, 27, Math.Max(1, Bounds.Width - 70), Math.Max(1, Bounds.Height - 58));
     private int First => Series?.Points.FirstOrDefault()?.Day ?? 0;
     private int Last => Series?.Points.LastOrDefault()?.Day ?? 0;
@@ -44,6 +46,12 @@ public sealed class LivePerformanceTrendChart : Control
         }
         var pen = new Pen(Brush.Parse("#326D84"), 1.8);
         var bucket = Math.Max(1, (int)Math.Ceiling(series.Points.Count / Plot.Width));
+        if (SamplesOnly)
+        {
+            foreach (var sample in series.Points.Where(p => p.Value.HasValue))
+                context.DrawEllipse(pen.Brush, null, new(X(sample.Day), Y(sample.Value!.Value)), 1.6, 1.6);
+            return;
+        }
         Point? previous = null;
         for (var i = 0; i < series.Points.Count; i += bucket)
         {

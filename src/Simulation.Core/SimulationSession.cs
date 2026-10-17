@@ -5,6 +5,7 @@ public enum WorkArrivalMode { FixedBacklog, ContinuousArrival, AlwaysAvailable }
 public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5,
     int CodeReviewWipLimit = 3, int TestingWipLimit = 3)
 {
+    public RoleCostSettings RoleCosts { get; init; } = new();
     public DependencySettings ResidualDependencies { get; init; } = new();
     public ReleaseSettings Release { get; init; } = new();
     public SkillSettings Skills { get; init; } = new();
@@ -25,7 +26,7 @@ public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5
             throw new ScenarioValidationException("All three arrival effort distributions are required.");
     }
     internal SimulationScenario Scenario(string name, int days, IReadOnlyList<WorkItem> items, int seed) =>
-        new(name, days, Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit, items, seed) { ResidualDependencies = ResidualDependencies, Quality = Quality, Productivity = Productivity, Debt = Debt, Skills = Skills, Release = Release };
+        new(name, days, Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit, items, seed) { RoleCosts = RoleCosts, ResidualDependencies = ResidualDependencies, Quality = Quality, Productivity = Productivity, Debt = Debt, Skills = Skills, Release = Release };
 }
 
 public sealed record ConfigurationChange(int Day, string? Label, SessionConfiguration Before, SessionConfiguration After);
@@ -88,7 +89,7 @@ public sealed class SimulationSession
         ScenarioValidator.Validate(scenario);
         Name = scenario.Name; RandomSeed = scenario.RandomSeed;
         Configuration = configuration ?? new(scenario.Team, scenario.DevelopmentWipLimit, scenario.CodeReviewWipLimit,
-            scenario.TestingWipLimit) { ResidualDependencies = scenario.ResidualDependencies, Release = scenario.Release, Skills = scenario.Skills, Quality = scenario.Quality, Productivity = scenario.Productivity, Debt = scenario.Debt, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
+            scenario.TestingWipLimit) { RoleCosts = scenario.RoleCosts, ResidualDependencies = scenario.ResidualDependencies, Release = scenario.Release, Skills = scenario.Skills, Quality = scenario.Quality, Productivity = scenario.Productivity, Debt = scenario.Debt, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
                 DevelopmentEffort = scenario.DevelopmentArrivalEffort, CodeReviewEffort = scenario.CodeReviewArrivalEffort, TestingEffort = scenario.TestingArrivalEffort };
         Configuration.Validate(); InitialConfiguration = Configuration;
         items = scenario.WorkItems.Select(w => w.CopyForRun()).ToList();
@@ -153,7 +154,7 @@ public sealed class SimulationSession
             if (latestObservations.TryGetValue(w.Id, out var prior) && prior == w) return prior;
             latestObservations[w.Id] = w; return w;
         }).ToArray();
-        day = day with { Items = Array.AsReadOnly(observations) };
+        day = day with { Items = Array.AsReadOnly(observations), Economics = DailyTeamCost.Observe(Configuration, day) };
         days.Add(day);
         return day;
     }
@@ -199,6 +200,7 @@ public sealed class SimulationSession
     private static void ValidateState(SimulationSessionState s)
     {
         ArgumentNullException.ThrowIfNull(s);
+        foreach (var day in s.Days) day.Economics?.Validate();
         s.InitialConfiguration.Validate(); s.Configuration.Validate();
         s.DebtState?.Validate();
         if (s.CurrentDay < 0 || s.Days.Count != s.CurrentDay || s.ArrivalAccumulator < 0 || s.ArrivalAccumulator >= 1 || s.NextWorkItemId < 1)

@@ -108,6 +108,7 @@ public static class Validation
                 Require(point.Value is null||double.IsFinite(point.Value.Value),"Finite trend "+metric.Name);
                 var d=s.Days[point.Day-1];var p=LivePerformance.Period(s,Math.Max(1,point.Day-Window+1),point.Day);
                 double? expected=metric.Metric switch {
+                    LiveTrendMetric.TeamCostPerDelivery=>(double?)p.Economics.CostPerDelivery,
                     LiveTrendMetric.Throughput=>p.Throughput,LiveTrendMetric.CycleTime=>p.CycleTime,LiveTrendMetric.DevelopmentCycleTime=>p.DevelopmentCycleTime,LiveTrendMetric.ReleaseWaitTime=>p.ReleaseWaitTime,
                     LiveTrendMetric.CompletionRate=>p.CompletionRate,LiveTrendMetric.AverageWip=>p.AverageWip,LiveTrendMetric.DeliveryCost=>p.DeliveryWorkCostPerItem,LiveTrendMetric.SystemCost=>p.SystemCostPerReleasedItem,
                     LiveTrendMetric.DeveloperUtilization=>p.DeveloperUtilization*100,LiveTrendMetric.TesterUtilization=>p.TesterUtilization*100,

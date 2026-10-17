@@ -127,7 +127,7 @@ public sealed class ScenarioComparisonRunner
         AnalysisMetric.AverageLeadTime, AnalysisMetric.AverageCycleTime, AnalysisMetric.AverageWip, AnalysisMetric.DeveloperUtilization,
         AnalysisMetric.TesterUtilization, AnalysisMetric.MaximumWaitingForCodeReviewQueue, AnalysisMetric.MaximumWaitingForTestingQueue,
         AnalysisMetric.TotalDefectsFound, AnalysisMetric.TotalReworkEffort, AnalysisMetric.ReworkDeveloperCapacityShare];
-    public static IReadOnlyList<AnalysisMetric> DisplayMetrics { get; } = Array.AsReadOnly(new[] { AnalysisMetric.CompletedWorkItems, AnalysisMetric.ThroughputPerFiveDays,
+    public static IReadOnlyList<AnalysisMetric> DisplayMetrics { get; } = Array.AsReadOnly(new[] { AnalysisMetric.TotalTeamCostSek, AnalysisMetric.CostPerDeliveredItemSek, AnalysisMetric.ReworkCostSek, AnalysisMetric.CompletedWorkItems, AnalysisMetric.ThroughputPerFiveDays,
         AnalysisMetric.AverageLeadTime, AnalysisMetric.AverageCycleTime, AnalysisMetric.AverageActiveTime, AnalysisMetric.AverageWaitingTime,
         AnalysisMetric.AverageBlockedTime, AnalysisMetric.AverageWip, AnalysisMetric.DeveloperUtilization, AnalysisMetric.TesterUtilization,
         AnalysisMetric.MaximumWaitingForCodeReviewQueue, AnalysisMetric.MaximumWaitingForTestingQueue, AnalysisMetric.MaximumWaitingForReworkQueue,
