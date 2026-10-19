@@ -65,7 +65,7 @@ public sealed partial class LiveViewModel
     public TeamKpiDefinition? ComparisonKpi
     {
         get => ExplorerOptions.FirstOrDefault(d => d.Id == KpiSettings.Comparison);
-        set { KpiSettings = KpiSettings with { Comparison = value?.Id }; SaveKpis(); }
+        set { KpiSettings = KpiSettings with { Comparison = value?.Id == KpiSettings.Explorer ? null : value?.Id }; SaveKpis(); }
     }
     public KpiCard? ExplorerPrimary { get; private set; }
     public KpiCard? ExplorerSecondary { get; private set; }
@@ -82,6 +82,6 @@ public sealed partial class LiveViewModel
         var ids = new[] { metric, KpiSettings.Comparison ?? metric }.Distinct().ToArray();
         var cards = KpiDashboard.Project(Live.Session, KpiSettings with { Selected = ids }, 120).Select(o => new KpiCard(o)).ToArray();
         ExplorerPrimary = cards.First();
-        ExplorerSecondary = KpiSettings.Comparison is { } second ? cards.First(c => c.Observation.Definition.Id == second) : null;
+        ExplorerSecondary = KpiSettings.Comparison is { } second && second != metric ? cards.First(c => c.Observation.Definition.Id == second) : null;
     }
 }

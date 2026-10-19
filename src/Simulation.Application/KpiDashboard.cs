@@ -61,6 +61,7 @@ public static partial class KpiDashboard
                 start,end,current?.AvailableDays ?? 0,window,trend);
         }).ToArray();
     }
+    public static double? PeriodValue(TeamKpi id, SimulationSession session, int first, int last) => last < first ? null : Value(id, LivePerformance.Period(session, first, last), session);
     private static double? Value(TeamKpi id, PerformancePeriod? period, SimulationSession session)
     {
         if (period is null || period.AvailableDays == 0) return null;

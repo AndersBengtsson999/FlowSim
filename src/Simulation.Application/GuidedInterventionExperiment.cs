@@ -12,7 +12,7 @@ public sealed record GuidedComparison(int StartDay, int EndDay, int ObservedDays
 
 /// <summary>Coordinates two existing sessions; never advances or draws randomness from LIVE.
 /// Checkpoint day N is the shared starting observation; evaluation is N+1..N+window.</summary>
-public sealed class GuidedInterventionExperiment
+public sealed partial class GuidedInterventionExperiment
 {
     private readonly SimulationSessionState checkpoint;
     private readonly SimulationSession live;
@@ -33,13 +33,18 @@ public sealed class GuidedInterventionExperiment
         this.checkpoint = checkpoint.State;
         this.live = live;
         liveConfiguration = live.Configuration;
-        if (live.CurrentDay != StartDay || !OnlyTesterCountChanged(this.checkpoint.Configuration, liveConfiguration))
-            throw new ArgumentException("A guided comparison supports only a tester-count change at the checkpoint day.");
+        if (live.CurrentDay != StartDay || !SingleStaffingChange(this.checkpoint.Configuration, liveConfiguration))
+            throw new ArgumentException("A guided comparison supports only one developer-count or tester-count change at the checkpoint day.");
         Window = window;
         expectedChanges = live.Changes.Count;
     }
     public static bool OnlyTesterCountChanged(SessionConfiguration before, SessionConfiguration after) =>
         after with { Team = after.Team with { TesterCount = before.Team.TesterCount } } == before;
+
+    public int OriginalDevelopers => checkpoint.Configuration.Team.DeveloperCount;
+    public int ProposedDevelopers => liveConfiguration.Team.DeveloperCount;
+    public static bool SingleStaffingChange(SessionConfiguration before, SessionConfiguration after) =>
+        OnlyTesterCountChanged(before, after) || after with { Team = after.Team with { DeveloperCount = before.Team.DeveloperCount } } == before;
 
     public Task PrepareBaselineAsync(CancellationToken cancellationToken = default) => Task.Run(() =>
     {

@@ -15,8 +15,8 @@ public sealed partial class LiveViewModel
     public bool GuidedPending => guidedCheckpoint is not null;
     public bool HasGuidedExperiment => guidedExperiment is not null || guidedMessage.Length > 0;
     public string GuidedDraftDescription => guidedCheckpoint is null ? "" :
-        $"Testing experiment: {guidedCheckpoint.State.Configuration.Team.TesterCount} → {Draft.NumberOfTesters} testers. Effective Day {guidedCheckpoint.State.CurrentDay + 1}. Evaluate Days {guidedCheckpoint.State.CurrentDay + 1}–{guidedCheckpoint.State.CurrentDay + EvaluationDays}. An unchanged checkpoint baseline will be available if only Testers is changed. Apply, then resume LIVE when ready.";
-    public string GuidedTitle => guidedExperiment is { } e ? $"Experiment: Testers {e.OriginalTesters} → {e.ProposedTesters}" : "Testing experiment";
+        $"Staffing experiment: developers {guidedCheckpoint.State.Configuration.Team.DeveloperCount} → {Draft.NumberOfDevelopers}; testers {guidedCheckpoint.State.Configuration.Team.TesterCount} → {Draft.NumberOfTesters}. Effective Day {guidedCheckpoint.State.CurrentDay + 1}. Evaluate Days {guidedCheckpoint.State.CurrentDay + 1}–{guidedCheckpoint.State.CurrentDay + EvaluationDays}. An unchanged checkpoint baseline will be available if only Testers or only Developers is changed. Apply, then resume LIVE when ready.";
+    public string GuidedTitle => guidedExperiment is { } e ? $"Experiment: Developers {e.OriginalDevelopers} → {e.ProposedDevelopers}; Testers {e.OriginalTesters} → {e.ProposedTesters}" : "Staffing experiment";
     public string GuidedHeader => GuidedTitle + (guidedExperiment is { } e ? $" · {Math.Clamp(Day - e.StartDay, 0, e.Window)}/{e.Window} days" + (e.InvalidReason is not null ? " · Invalidated" : "") : "");
     public string GuidedProgress { get; private set; } = "";
     public string GuidedInterpretation { get; private set; } = "";
@@ -48,7 +48,7 @@ public sealed partial class LiveViewModel
         BeginChange();
         foreach (var field in ChangeFields)
             field.PropertyChanged += (_, _) => { if (GuidedPending) PropertyChanged?.Invoke(this, new(nameof(GuidedDraftDescription))); };
-        guidedCheckpoint = Live.CreateCheckpoint($"Testing experiment · Day {Day}");
+        guidedCheckpoint = Live.CreateCheckpoint($"Staffing experiment · Day {Day}");
         Notify();
     }
     private void CancelGuidedDraft() { guidedCheckpoint = null; }
@@ -57,10 +57,10 @@ public sealed partial class LiveViewModel
         if (guidedCheckpoint is not { } checkpoint || Live is null) return;
         guidedCheckpoint = null;
         guidedCancellation?.Cancel();
-        if (!GuidedInterventionExperiment.OnlyTesterCountChanged(checkpoint.State.Configuration, Live.Session.Configuration))
+        if (!GuidedInterventionExperiment.SingleStaffingChange(checkpoint.State.Configuration, Live.Session.Configuration))
         {
             guidedExperiment = null;
-            guidedMessage = "Comparison not started: change only Testers for this experiment. Your ordinary LIVE changes were applied.";
+            guidedMessage = "Comparison not started: change only Testers or only Developers for this experiment. Your ordinary LIVE changes were applied.";
             return;
         }
         guidedExperiment = new(checkpoint, Live.Session, EvaluationDays);
@@ -95,6 +95,7 @@ public sealed partial class LiveViewModel
     }
     private void RefreshGuided()
     {
+        RefreshScenarioKpis();
         GuidedIncrementalShort = ""; GuidedIncrementalCost = ""; GuidedTeamCost = []; GuidedRows = []; GuidedQueueSeries = []; GuidedReleased = []; GuidedCycleTime = []; GuidedCost = []; GuidedInterpretation = "";
         if (guidedExperiment is not { } e) { GuidedProgress = guidedMessage; return; }
         var result = e.Observe(Live?.Session);

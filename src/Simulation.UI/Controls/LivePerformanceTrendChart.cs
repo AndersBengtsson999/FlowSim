@@ -11,6 +11,16 @@ namespace Simulation.UI.Controls;
 /// <summary>Single neutral series. Pixel envelopes bound drawing cost; tooltips use original points.</summary>
 public sealed class LivePerformanceTrendChart : Control
 {
+    public static readonly StyledProperty<LiveTrendSeries?> ComparisonSeriesProperty = AvaloniaProperty.Register<LivePerformanceTrendChart,LiveTrendSeries?>(nameof(ComparisonSeries));
+    public LiveTrendSeries? ComparisonSeries { get=>GetValue(ComparisonSeriesProperty);set=>SetValue(ComparisonSeriesProperty,value); }
+    public (double Minimum,double Maximum) ValueScale
+    {
+        get {
+            var values=(Series?.Points ?? []).Concat(ComparisonSeries?.Points ?? []).Select(p=>p.Value ?? 0).ToArray();
+            var min=values.Length==0?0:Math.Min(0,values.Min());var max=values.Length==0?1:Math.Max(0,values.Max());
+            return (min,max==min?min+1:max);
+        }
+    }
     public static readonly StyledProperty<LiveTrendSeries?> SeriesProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, LiveTrendSeries?>(nameof(Series));
     public static readonly StyledProperty<IBrush> SeriesBrushProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, IBrush>(nameof(SeriesBrush), Brush.Parse("#326D84"));
     public IBrush SeriesBrush { get => GetValue(SeriesBrushProperty); set => SetValue(SeriesBrushProperty, value); }
@@ -23,7 +33,7 @@ public sealed class LivePerformanceTrendChart : Control
     public LiveTrendSeries? Series { get => GetValue(SeriesProperty); set => SetValue(SeriesProperty, value); }
     public string Unit { get => GetValue(UnitProperty); set => SetValue(UnitProperty, value); }
     public int SelectedDay { get => GetValue(SelectedDayProperty); set => SetValue(SelectedDayProperty, value); }
-    static LivePerformanceTrendChart() => AffectsRender<LivePerformanceTrendChart>(SeriesProperty, UnitProperty, SelectedDayProperty, CompactProperty, SamplesOnlyProperty, SeriesBrushProperty);
+    static LivePerformanceTrendChart() => AffectsRender<LivePerformanceTrendChart>(SeriesProperty, UnitProperty, SelectedDayProperty, CompactProperty, SamplesOnlyProperty, SeriesBrushProperty, ComparisonSeriesProperty);
     private Rect Plot => Compact ? new(2, 2, Math.Max(1, Bounds.Width - 4), Math.Max(1, Bounds.Height - 4)) : new(55, 27, Math.Max(1, Bounds.Width - 70), Math.Max(1, Bounds.Height - 58));
     private int First => Series?.Points.FirstOrDefault()?.Day ?? 0;
     private int Last => Series?.Points.LastOrDefault()?.Day ?? 0;
@@ -34,9 +44,7 @@ public sealed class LivePerformanceTrendChart : Control
         base.Render(context);
         if (!Compact) Label(context, Unit, new(Plot.Left, 3));
         if (Series is not { Points.Count: > 0 } series) { if (!Compact) Label(context, "No completed simulated days yet.", new(Plot.Left, Plot.Top)); return; }
-        var max = Math.Max(0, series.Points.Max(p => p.Value ?? 0));
-        var min = Math.Min(0, series.Points.Min(p => p.Value ?? 0));
-        if (max == min) max = min + 1;
+        var (min,max) = ValueScale;
         double Y(double value) => Plot.Bottom - (value - min) / (max - min) * Plot.Height;
         var gridPen = new Pen(Brush.Parse("#E4EAEE"), 1);
         context.DrawLine(gridPen, Plot.BottomLeft, Plot.BottomRight);
@@ -54,6 +62,9 @@ public sealed class LivePerformanceTrendChart : Control
         {
             foreach (var sample in series.Points.Where(p => p.Value.HasValue))
                 context.DrawEllipse(pen.Brush, null, new(X(sample.Day), Y(sample.Value!.Value)), 1.6, 1.6);
+            if (ComparisonSeries is { } comparison)
+                foreach (var sample in comparison.Points.Where(p=>p.Value.HasValue))
+                    context.DrawRectangle(Brush.Parse("#875387"), null, new Rect(X(sample.Day)-2,Y(sample.Value!.Value)-2,4,4));
             return;
         }
         Point? previous = null;
@@ -86,6 +97,12 @@ public sealed class LivePerformanceTrendChart : Control
     public string DescribeAtDay(int day)
     {
         var point = Series?.Points.FirstOrDefault(p => p.Day == day);
+        if (ComparisonSeries is { } comparison)
+        {
+            var other=comparison.Points.FirstOrDefault(p=>p.Day==day);
+            string V(double? value)=>value?.ToString("G17",CultureInfo.CurrentCulture) ?? "N/A";
+            return $"Day {day}\nBaseline: {V(point?.Value)} {Unit}\nIntervention: {V(other?.Value)} {Unit}\nDifference: {V(other?.Value-point?.Value)} {Unit}";
+        }
         return point is null ? "" : $"Day {day}: {(point.Value is { } v ? v.ToString("G17", CultureInfo.CurrentCulture) + " " + Unit : "Unavailable")}";
     }
     protected override void OnPointerMoved(PointerEventArgs e)
