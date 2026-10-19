@@ -12,6 +12,8 @@ namespace Simulation.UI.Controls;
 public sealed class LivePerformanceTrendChart : Control
 {
     public static readonly StyledProperty<LiveTrendSeries?> SeriesProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, LiveTrendSeries?>(nameof(Series));
+    public static readonly StyledProperty<IBrush> SeriesBrushProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, IBrush>(nameof(SeriesBrush), Brush.Parse("#326D84"));
+    public IBrush SeriesBrush { get => GetValue(SeriesBrushProperty); set => SetValue(SeriesBrushProperty, value); }
     public static readonly StyledProperty<bool> SamplesOnlyProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, bool>(nameof(SamplesOnly));
     public bool SamplesOnly { get => GetValue(SamplesOnlyProperty); set => SetValue(SamplesOnlyProperty, value); }
     public static readonly StyledProperty<bool> CompactProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, bool>(nameof(Compact));
@@ -21,30 +23,32 @@ public sealed class LivePerformanceTrendChart : Control
     public LiveTrendSeries? Series { get => GetValue(SeriesProperty); set => SetValue(SeriesProperty, value); }
     public string Unit { get => GetValue(UnitProperty); set => SetValue(UnitProperty, value); }
     public int SelectedDay { get => GetValue(SelectedDayProperty); set => SetValue(SelectedDayProperty, value); }
-    static LivePerformanceTrendChart() => AffectsRender<LivePerformanceTrendChart>(SeriesProperty, UnitProperty, SelectedDayProperty, CompactProperty, SamplesOnlyProperty);
+    static LivePerformanceTrendChart() => AffectsRender<LivePerformanceTrendChart>(SeriesProperty, UnitProperty, SelectedDayProperty, CompactProperty, SamplesOnlyProperty, SeriesBrushProperty);
     private Rect Plot => Compact ? new(2, 2, Math.Max(1, Bounds.Width - 4), Math.Max(1, Bounds.Height - 4)) : new(55, 27, Math.Max(1, Bounds.Width - 70), Math.Max(1, Bounds.Height - 58));
     private int First => Series?.Points.FirstOrDefault()?.Day ?? 0;
     private int Last => Series?.Points.LastOrDefault()?.Day ?? 0;
-    private int Start => Series?.Interventions.Any(c => c.Day == 0) == true ? 0 : First;
+    private int Start => !SamplesOnly && Series?.Interventions.Any(c => c.Day == 0) == true ? 0 : First;
     private double X(int day) => Plot.Left + (day - Start) * Plot.Width / Math.Max(1, Last - Start);
     public override void Render(DrawingContext context)
     {
         base.Render(context);
         if (!Compact) Label(context, Unit, new(Plot.Left, 3));
         if (Series is not { Points.Count: > 0 } series) { if (!Compact) Label(context, "No completed simulated days yet.", new(Plot.Left, Plot.Top)); return; }
-        var max = Math.Max(1, series.Points.Max(p => p.Value ?? 0));
-        double Y(double value) => Plot.Bottom - value / max * Plot.Height;
+        var max = Math.Max(0, series.Points.Max(p => p.Value ?? 0));
+        var min = Math.Min(0, series.Points.Min(p => p.Value ?? 0));
+        if (max == min) max = min + 1;
+        double Y(double value) => Plot.Bottom - (value - min) / (max - min) * Plot.Height;
         var gridPen = new Pen(Brush.Parse("#E4EAEE"), 1);
         context.DrawLine(gridPen, Plot.BottomLeft, Plot.BottomRight);
         if (!Compact)
         {
         context.DrawLine(gridPen, Plot.TopLeft, Plot.TopRight);
         context.DrawLine(gridPen, new(Plot.Left, Plot.Center.Y), new(Plot.Right, Plot.Center.Y));
-        Label(context, max.ToString("0.##"), new(0, Plot.Top)); Label(context, "0", new(20, Plot.Bottom - 12));
+        Label(context, max.ToString("G4"), new(0, Plot.Top)); Label(context, min.ToString("G4"), new(0, Plot.Bottom - 12));
         Label(context, $"Day {Start}", new(Plot.Left, Plot.Bottom + 7));
         if (Last > Start) Label(context, $"Day {Last}", new(Plot.Right - 65, Plot.Bottom + 7));
         }
-        var pen = new Pen(Brush.Parse("#326D84"), 1.8);
+        var pen = new Pen(SeriesBrush, 1.8);
         var bucket = Math.Max(1, (int)Math.Ceiling(series.Points.Count / Plot.Width));
         if (SamplesOnly)
         {

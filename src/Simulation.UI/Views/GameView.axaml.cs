@@ -24,11 +24,12 @@ public partial class GameView : UserControl
     {
         if (!IsEffectivelyVisible || TopLevel.GetTopLevel(this) is not { } root || this.TranslatePoint(default, root) is not { } position) return;
         var dashboardSide = Bounds.Width >= 1100;
-        var dashboardWidth = dashboardSide && KpiPanel.IsVisible ? 260 : 0;
+        var explorer = DataContext is Simulation.UI.ViewModels.LiveViewModel { ExplorerOpen: true };
+        var dashboardWidth = dashboardSide && KpiPanel.IsVisible ? (explorer ? 400 : 260) : 0;
         if (DashboardLayout.ColumnDefinitions.Count != 2) DashboardLayout.ColumnDefinitions = new("*,0");
         if (DashboardLayout.ColumnDefinitions[1].Width.Value != dashboardWidth) DashboardLayout.ColumnDefinitions[1].Width = new GridLength(dashboardWidth);
         Grid.SetColumn(KpiPanel, dashboardSide ? 1 : 0); Grid.SetRow(KpiPanel, dashboardSide ? 0 : 1);
-        KpiPanel.LayoutOrientation = dashboardSide ? Avalonia.Layout.Orientation.Vertical : Avalonia.Layout.Orientation.Horizontal;
+        KpiPanel.LayoutOrientation = dashboardSide && !explorer ? Avalonia.Layout.Orientation.Vertical : Avalonia.Layout.Orientation.Horizontal;
         KpiPanel.Margin = dashboardSide ? new Thickness(10,0,0,0) : new Thickness(0,8,0,0);
         var side = StationMap.SidePanel(Math.Max(1, Bounds.Width - dashboardWidth));
         if (sidePanel != side)

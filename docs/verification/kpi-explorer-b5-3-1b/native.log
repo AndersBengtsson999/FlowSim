@@ -1,0 +1,2 @@
+20 LIVE steps with Explorer: 4092 ms
+PASS: native macOS Explorer opens from card, compares aligned series, updates during LIVE, preserves zoom/station selection, resizes, saves/loads and closes.

@@ -29,7 +29,7 @@ public sealed class KpiDashboardTests
         var live=At(2*window);var before=JsonSerializer.Serialize(live.Session.Capture());
         var current=LivePerformance.Period(live.Session,window+1,2*window);
         var previous=LivePerformance.Period(live.Session,1,window);
-        foreach(var id in Enum.GetValues<TeamKpi>())
+        foreach(var id in Enum.GetValues<TeamKpi>().Where(id=>id<=TeamKpi.TechnicalDebt))
         {
             var card=Assert.Single(KpiDashboard.Project(live.Session,new(window,[id])));
             Assert.Equal(window+1,card.FirstDay);Assert.Equal(2*window,card.LastDay);Assert.Equal(window,card.AvailableDays);

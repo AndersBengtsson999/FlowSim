@@ -54,7 +54,7 @@ public sealed class PreviewApp : Avalonia.Application
         Require(vm.KpiCards.All(c=>c.Period.Contains("81–100")),"Twenty-day labels");
         Save(game,"dashboard-wide");
         var state=System.Text.Json.JsonSerializer.Serialize(live.Session.Capture());
-        var picker=panel.GetVisualDescendants().OfType<ComboBox>().Single();
+        var picker=panel.GetVisualDescendants().OfType<ComboBox>().Single(b=>b.Name=="KpiWindowPicker");
         picker.SelectedItem=10;await Task.Delay(100);
         Require(vm.KpiWindow==10 && vm.KpiCards.All(c=>c.Period.Contains("91–100")),"Window binding");
         var choose=panel.GetVisualDescendants().OfType<Button>().Single(b=>b.Name=="ChooseKpis");
@@ -63,7 +63,7 @@ public sealed class PreviewApp : Avalonia.Application
         Require(flyout.IsOpen,"KPI selector opens via keyboard");
         var content=(Control)flyout.Content!;
         var boxes=content.GetVisualDescendants().OfType<CheckBox>().ToArray();
-        Require(boxes.Length==12,"All choices rendered");
+        Require(boxes.Length==KpiDashboard.Definitions.Count,"All choices rendered");
         boxes.Single(b=>b.DataContext is KpiChoice c && c.Definition.Id==TeamKpi.ReworkEffort).IsChecked=false;
         boxes.Single(b=>b.DataContext is KpiChoice c && c.Definition.Id==TeamKpi.TechnicalDebt).IsChecked=true;
         await Task.Delay(100);Save(content.GetVisualAncestors().OfType<Control>().First(c=>c.GetType().Name=="FlyoutPresenter"),"kpi-selector");flyout.Hide();

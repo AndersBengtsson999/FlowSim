@@ -18,16 +18,17 @@ public sealed record KpiCard(TeamKpiObservation Observation)
     public string Name => Observation.Definition.Name;
     public string Unit => Observation.Definition.Unit;
     public string Kind => Observation.Definition.Kind;
+    public string ExplorerDescription => Observation.Definition.Description + " " + KpiDashboard.Interpretation(Observation.Definition.Id);
     public string Help => Observation.Definition.Description + " " + ComparisonHelp + " Trends show observed samples only; each rolling point ends on its labelled day.";
-    private string Format(double? value) => value?.ToString(Observation.Definition.Id is TeamKpi.CostPerDelivery or TeamKpi.TotalTeamCost ? "N2" : "0.##",CultureInfo.CurrentCulture) ?? "N/A";
+    private string Format(double? value) => value?.ToString(Observation.Definition.Id is TeamKpi.CostPerDelivery or TeamKpi.TotalTeamCost or TeamKpi.ReworkCost or TeamKpi.CostPerWorkSize ? "N2" : Observation.Definition.Id == TeamKpi.WorkVolumePerSek ? "0.######" : "0.##",CultureInfo.CurrentCulture) ?? "N/A";
     public string Value => Format(Observation.Value);
     public string Period => Observation.AvailableDays == 0 ? "No observed days" : $"Days {Observation.FirstDay}–{Observation.LastDay}" + (Observation.AvailableDays < Observation.Window ? $" · {Observation.AvailableDays}/{Observation.Window}d" : $" · {Observation.Window}d");
     public string Change => Observation.Difference is not { } delta ? "Δ N/A · preceding window" : $"Δ {(delta > 0 ? "+" : "")}{Format(delta)} {DeltaUnit}";
-    private string DeltaUnit => Observation.Definition.Id is TeamKpi.DeveloperUtilization or TeamKpi.TesterUtilization ? "pp" : Unit;
+    private string DeltaUnit => Observation.Definition.Id is TeamKpi.DeveloperUtilization or TeamKpi.TesterUtilization or TeamKpi.ReworkProportion or TeamKpi.DeliveryFrequency ? "pp" : Unit;
     public string ComparisonHelp => Observation.LastDay < 2 * Observation.Window ? "A comparison requires two complete equal-length windows." :
         $"Compared with Days {Observation.LastDay - 2 * Observation.Window + 1}–{Observation.LastDay - Observation.Window}. N/A if either value is undefined. Changes are neutral, not performance scores.";
     public LiveTrendSeries Trend => Observation.Trend;
-    public string TrendCaption => Trend.Points.Count == 0 ? "No trend yet" : $"Day {Trend.Points[0].Day}–{Trend.Points[^1].Day} · scale 0–{Format(Math.Max(1,Trend.Points.Max(p=>p.Value ?? 0)))}";
+    public string TrendCaption => Trend.Points.Count == 0 ? "No trend yet" : $"Day {Trend.Points[0].Day}–{Trend.Points[^1].Day} · scale {Format(Math.Min(0,Trend.Points.Min(p=>p.Value ?? 0)))}–{Format((Trend.Points.All(p=>(p.Value ?? 0)==0) ? 1 : Math.Max(0,Trend.Points.Max(p=>p.Value ?? 0))))}";
 }
 public sealed partial class LiveViewModel
 {
@@ -54,5 +55,33 @@ public sealed partial class LiveViewModel
         RefreshKpis();foreach(var choice in KpiChoices)choice.Refresh();Notify();
     }
     private void LoadKpis() { KpiSettings=Live!.Dashboard.Normalize();foreach(var choice in KpiChoices)choice.Refresh(); }
-    private void RefreshKpis() => KpiCards=Live is null ? [] : KpiDashboard.Project(Live.Session,KpiSettings).Select(o=>new KpiCard(o)).ToArray();
+    private void RefreshKpis() { KpiCards=Live is null ? [] : KpiDashboard.Project(Live.Session,KpiSettings).Select(o=>new KpiCard(o)).ToArray(); RefreshExplorer(); }
+}
+
+public sealed partial class LiveViewModel
+{
+    public bool ExplorerOpen => KpiSettings.Explorer.HasValue;
+    public IReadOnlyList<TeamKpiDefinition> ExplorerOptions => KpiDashboard.Definitions;
+    public TeamKpiDefinition? ComparisonKpi
+    {
+        get => ExplorerOptions.FirstOrDefault(d => d.Id == KpiSettings.Comparison);
+        set { KpiSettings = KpiSettings with { Comparison = value?.Id }; SaveKpis(); }
+    }
+    public KpiCard? ExplorerPrimary { get; private set; }
+    public KpiCard? ExplorerSecondary { get; private set; }
+    public bool HasComparison => ExplorerSecondary is not null;
+    public string ExplorerHelp => KpiSettings.Explorer is { } id ? KpiDashboard.Interpretation(id) : "";
+    public string ComparisonHelp => KpiSettings.Comparison is { } id ? KpiDashboard.Interpretation(id) : "";
+    public void OpenExplorer(TeamKpi metric) { KpiSettings = KpiSettings with { Explorer = metric }; SaveKpis(); }
+    public void CloseExplorer() { KpiSettings = KpiSettings with { Explorer = null }; SaveKpis(); }
+    public void ClearComparison() { ComparisonKpi = null; }
+    private void RefreshExplorer()
+    {
+        ExplorerPrimary = null; ExplorerSecondary = null;
+        if (Live is null || KpiSettings.Explorer is not { } metric) return;
+        var ids = new[] { metric, KpiSettings.Comparison ?? metric }.Distinct().ToArray();
+        var cards = KpiDashboard.Project(Live.Session, KpiSettings with { Selected = ids }, 120).Select(o => new KpiCard(o)).ToArray();
+        ExplorerPrimary = cards.First();
+        ExplorerSecondary = KpiSettings.Comparison is { } second ? cards.First(c => c.Observation.Definition.Id == second) : null;
+    }
 }

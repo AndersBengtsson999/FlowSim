@@ -1,11 +1,12 @@
 using Simulation.Core;
 namespace Simulation.Application;
 
-public enum TeamKpi { ReleasedThroughput, CycleTime, CostPerDelivery, ReworkEffort, TotalTeamCost, DeveloperUtilization, TesterUtilization, TotalWip, DevelopmentQueue, ReviewQueue, TestingQueue, TechnicalDebt }
-public sealed record KpiDashboardSettings(int Window = 20, IReadOnlyList<TeamKpi>? Selected = null, bool Visible = true)
+public enum TeamKpi { ReleasedThroughput, CycleTime, CostPerDelivery, ReworkEffort, TotalTeamCost, DeveloperUtilization, TesterUtilization, TotalWip, DevelopmentQueue, ReviewQueue, TestingQueue, TechnicalDebt, CycleTimeP85, DeliveryFrequency, DeliveryVariability, WipAge, ReviewQueueGrowth, ReworkCost, ReworkProportion, DebtGrowth, DebtRepayment, CostPerWorkSize, WorkVolumePerSek }
+public sealed record KpiDashboardSettings(int Window = 20, IReadOnlyList<TeamKpi>? Selected = null, bool Visible = true, TeamKpi? Explorer = null, TeamKpi? Comparison = null)
 {
     public static IReadOnlyList<TeamKpi> Defaults { get; } = Array.AsReadOnly(new[] { TeamKpi.ReleasedThroughput, TeamKpi.CycleTime, TeamKpi.CostPerDelivery, TeamKpi.ReworkEffort });
     public KpiDashboardSettings Normalize() => this with { Window = Window is 10 or 20 or 40 ? Window : 20,
+        Explorer = Explorer is { } e && Enum.IsDefined(e) ? e : null, Comparison = Comparison is { } c && Enum.IsDefined(c) ? c : null,
         Selected = Array.AsReadOnly((Selected ?? Defaults).Where(Enum.IsDefined).Distinct().Take(4).ToArray()) };
 }
 public sealed record TeamKpiDefinition(TeamKpi Id, string Name, string Unit, string Kind, string Description, LiveTrendMetric? Trend = null);
@@ -15,7 +16,7 @@ public sealed record TeamKpiObservation(TeamKpiDefinition Definition, double? Va
 {
     public double? Difference => Value - Previous;
 }
-public static class KpiDashboard
+public static partial class KpiDashboard
 {
     public static IReadOnlyList<TeamKpiDefinition> Definitions { get; } = Array.AsReadOnly(new[] {
         new TeamKpiDefinition(TeamKpi.ReleasedThroughput,"Released throughput","items / 5 days","Period rate","Actually released items / observed days × 5. Partial history uses observed days only.",LiveTrendMetric.Throughput),
@@ -29,27 +30,38 @@ public static class KpiDashboard
         new(TeamKpi.DevelopmentQueue,"Development queue","items","End-of-period snapshot","Existing Backlog count, including dependency waiting; not active Development."),
         new(TeamKpi.ReviewQueue,"Code Review queue","items","End-of-period snapshot","Waiting for Code Review at the final observed day.",LiveTrendMetric.ReviewQueue),
         new(TeamKpi.TestingQueue,"Testing queue","items","End-of-period snapshot","Waiting for Testing at the final observed day.",LiveTrendMetric.TestingQueue),
-        new(TeamKpi.TechnicalDebt,"Technical debt","effort units","End-of-period snapshot","Recorded outstanding debt amount, not cumulative debt creation. N/A without a debt observation.")
+        new(TeamKpi.TechnicalDebt,"Technical debt","effort units","End-of-period snapshot","Recorded outstanding debt amount, not cumulative debt creation. N/A without a debt observation."),
+        new(TeamKpi.CycleTimeP85,"Cycle time · P85","days","Released cohort percentile","Nearest-rank 85th percentile of start-to-release duration for releases in the window; small cohorts are unstable."),
+        new(TeamKpi.DeliveryFrequency,"Delivery frequency","% of days","Period ratio","100 × days with at least one release / observed days. Measures release-day frequency, not batch size or customer value."),
+        new(TeamKpi.DeliveryVariability,"Delivery variability","items / day","Population standard deviation","Population standard deviation of daily released counts, including zero-release days. Batching can raise variability."),
+        new(TeamKpi.WipAge,"Age of WIP","days","End-of-period average","Mean elapsed days since Development start among started, unreleased items at the final day. Excludes Backlog and does not predict completion."),
+        new(TeamKpi.ReviewQueueGrowth,"Review queue growth","items / day","Period slope","Least-squares slope of daily waiting-for-review counts, requiring three observations. Not a causal diagnosis."),
+        new(TeamKpi.ReworkCost,"Rework cost","SEK","Period total","Sum of recorded allocated rework cost. Included in team cost, not an extra charge; not lost revenue."),
+        new(TeamKpi.ReworkProportion,"Rework proportion","%","Period ratio","100 × consumed rework capacity / total consumed developer capacity. Not a defect rate."),
+        new(TeamKpi.DebtGrowth,"Technical debt growth","effort units","Period net change","Sum of recorded debt created minus debt repaid. Can be negative; not a monetary liability."),
+        new(TeamKpi.DebtRepayment,"Debt repayment effort","capacity units","Period total","Sum of recorded raw repayment capacity. Not the amount of debt removed when productivity differs."),
+        new(TeamKpi.CostPerWorkSize,"Cost / delivered work size","SEK / effort unit","Period ratio","Recorded team cost / sum of original Development effort of released items. Base effort is a size proxy, not business value."),
+        new(TeamKpi.WorkVolumePerSek,"Delivered work / SEK","effort units / SEK","Period ratio","Original Development effort of released items / recorded team cost. Zero deliveries gives zero when cost is positive; not business value.")
     });
-    public static IReadOnlyList<TeamKpiObservation> Project(SimulationSession session, KpiDashboardSettings settings)
+    public static IReadOnlyList<TeamKpiObservation> Project(SimulationSession session, KpiDashboardSettings settings, int range = 40)
     {
         settings = settings.Normalize();
         var end = session.CurrentDay; var window = settings.Window; var start = Math.Max(1, end - window + 1);
         var current = end == 0 ? null : LivePerformance.Period(session, start, end);
         var previous = end < 2 * window ? null : LivePerformance.Period(session, end - 2 * window + 1, end - window);
-        var trendStart = Math.Max(1, end - 39);
+        var trendStart = Math.Max(1, end - range + 1);
         return settings.Selected!.Select(id =>
         {
             var definition = Definitions.Single(d => d.Id == id);
-            var trend = definition.Trend is { } metric ? LivePerformanceTrend.Project(session, metric, window, 40) :
+            var trend = definition.Trend is { } metric ? LivePerformanceTrend.Project(session, metric, window, range) :
                 new LiveTrendSeries(Enumerable.Range(trendStart, Math.Max(0, end - trendStart + 1)).Select(day =>
-                    new LiveTrendPoint(day, RawValue(id, session.Days, Math.Max(1, day - window + 1), day))).ToArray(),
+                    new LiveTrendPoint(day, ObservedValue(id, session, Math.Max(1, day - window + 1), day))).ToArray(),
                     session.Changes.Where(c => c.Day >= trendStart && c.Day <= end).ToArray());
-            return new TeamKpiObservation(definition, Value(id,current,session.Days), Value(id,previous,session.Days),
+            return new TeamKpiObservation(definition, Value(id,current,session), Value(id,previous,session),
                 start,end,current?.AvailableDays ?? 0,window,trend);
         }).ToArray();
     }
-    private static double? Value(TeamKpi id, PerformancePeriod? period, IReadOnlyList<DailySnapshot> history)
+    private static double? Value(TeamKpi id, PerformancePeriod? period, SimulationSession session)
     {
         if (period is null || period.AvailableDays == 0) return null;
         return id switch {
@@ -59,7 +71,7 @@ public static class KpiDashboard
             TeamKpi.DeveloperUtilization => period.DeveloperUtilization * 100,
             TeamKpi.TesterUtilization => period.TesterUtilization * 100,
             TeamKpi.ReviewQueue => period.Review.Current, TeamKpi.TestingQueue => period.Testing.Current,
-            _ => RawValue(id, history, period.FirstDay, period.LastDay)
+            _ => ObservedValue(id, session, period.FirstDay, period.LastDay)
         };
     }
     private static double? RawValue(TeamKpi id, IReadOnlyList<DailySnapshot> history, int first, int last)
