@@ -1,0 +1,2 @@
+Expanded row bounds: 0, 29, 262, 428; content: 0, 0, 228, 347
+Headless PASS: 30-day stable identity, expansion, control reuse and scroll; page scroll ownership; run/pause/resume, accelerated playback, intervention, checkpoint, save/load, reset, layout, Explorer and camera.

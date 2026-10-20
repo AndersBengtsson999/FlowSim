@@ -33,7 +33,7 @@ public class CollaborationIntegrationTests
             Days(session, 60);
         }
         Assert.Equal(Result(live), Result(loaded));
-        Assert.Equal("0.8", live.Session.GetResult().SimulationModelVersion);
+        Assert.Equal(SimulationModel.Version, live.Session.GetResult().SimulationModelVersion);
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class CollaborationIntegrationTests
     {
         var scenario = new ScenarioDefinition(Guid.NewGuid(), Request);
         var experiment = new Experiment(Guid.NewGuid(), "Old model", "", new[] { scenario }, scenario.Id, new());
-        static string Old(string json) => json.Replace("\"0.8\"", "\"0.1\"");
+        static string Old(string json) => json.Replace($"\"{SimulationModel.Version}\"", "\"0.1\"");
         Assert.Throws<JsonException>(() => ExperimentJson.LoadScenario(Old(ExperimentJson.SaveScenario(scenario))));
         Assert.Throws<JsonException>(() => ExperimentJson.LoadExperiment(Old(ExperimentJson.SaveExperiment(experiment))));
         var live = LiveSimulation.Start(Request); Days(live, 2);

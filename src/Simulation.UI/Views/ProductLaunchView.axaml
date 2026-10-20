@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" x:Class="Simulation.UI.Views.ProductLaunchView" x:DataType="vm:LiveViewModel">
+ <Border Background="#F2F5F4" BorderBrush="#A68F00" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,6">
+  <StackPanel Spacing="6">
+   <TextBlock Text="Product Version / Customer Launch" Foreground="#17232D" FontWeight="SemiBold"/>
+   <TextBlock Text="{Binding ProductVersionSummary}" Foreground="#17232D" TextWrapping="Wrap"/>
+   <TextBlock IsVisible="{Binding LaunchDecisionPending}" Text="{Binding ProductDecisionText}" Foreground="#6B5300" TextWrapping="Wrap"/>
+   <WrapPanel IsVisible="{Binding CanEditLaunch}">
+    <Button Content="Launch Now" Command="{Binding LaunchProductCommand}" Background="#FFEB00" Foreground="#17232D" Margin="0,0,8,4"/>
+    <TextBlock Text="Plan / postpone by" Foreground="#17232D" VerticalAlignment="Center" Margin="0,0,6,4"/>
+    <TextBox Text="{Binding LaunchDelay, Mode=TwoWay}" Width="65" Margin="0,0,6,4" IsEnabled="{Binding CanEditLaunch}" AutomationProperties.Name="Launch delay"/>
+    <ComboBox ItemsSource="{Binding PlanningUnits}" SelectedItem="{Binding PlanningUnit, Mode=TwoWay}" Width="145" Margin="0,0,6,4" IsEnabled="{Binding CanEditLaunch}"/>
+    <TextBlock Text="Sprint length (days)" Foreground="#17232D" VerticalAlignment="Center" Margin="0,0,6,4"/>
+    <TextBox Text="{Binding PlanningSprintLength, Mode=TwoWay}" Width="65" Margin="0,0,6,4" IsEnabled="{Binding CanEditLaunch}" AutomationProperties.Name="Launch planning sprint length"/>
+    <Button Content="Plan / Postpone Launch" Command="{Binding PlanLaunchCommand}" Margin="0,0,8,4"/>
+   </WrapPanel>
+   <Expander Header="Version name, customer metrics and history" HorizontalAlignment="Stretch">
+    <StackPanel Spacing="8">
+     <WrapPanel><TextBox Text="{Binding VersionNameDraft, Mode=TwoWay}" Watermark="Name active version" Width="220" IsEnabled="{Binding CanEditLaunch}"/><Button Content="Name active version" Command="{Binding RenameVersionCommand}"/></WrapPanel>
+     <TextBlock Text="{Binding LiveCustomerSummary}" TextWrapping="Wrap"/>
+     <TextBlock Text="{Binding LiveCustomerHistory}" TextWrapping="Wrap"/>
+    </StackPanel>
+   </Expander>
+  </StackPanel>
+ </Border>
+</UserControl>

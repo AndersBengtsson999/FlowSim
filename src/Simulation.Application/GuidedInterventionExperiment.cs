@@ -52,7 +52,7 @@ public sealed partial class GuidedInterventionExperiment
         for (var i = 0; i < Window; i++)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            isolated.AdvanceOneDay();
+            isolated.AdvanceOneDay(LaunchDecisionPolicy.Automatic);
         }
         cancellationToken.ThrowIfCancellationRequested();
         baseline = isolated;

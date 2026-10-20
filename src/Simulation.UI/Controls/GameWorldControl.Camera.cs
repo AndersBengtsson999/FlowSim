@@ -31,7 +31,7 @@ public sealed partial class GameWorldControl
     protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
     {
         base.OnPointerWheelChanged(e);
-        if (e.Delta.Y == 0) return;
+        if (!WorkshopWheel.IsZoom(e.KeyModifiers, e.Delta.Y, OperatingSystem.IsMacOS())) return;
         var point = e.GetPosition(this);
         if (!new Rect(Bounds.Size).Contains(point)) return;
         Camera.ZoomAt(Math.Exp(Math.Clamp(e.Delta.Y * .12, -1, 1)), point);
@@ -78,4 +78,10 @@ public sealed partial class GameWorldControl
     {
         base.OnPointerExited(e); hoverPoint = null; UpdateHover(); InvalidateVisual();
     }
+}
+
+public static class WorkshopWheel
+{
+    public static bool IsZoom(KeyModifiers modifiers, double verticalDelta, bool macOS) =>
+        double.IsFinite(verticalDelta) && verticalDelta != 0 && modifiers == (macOS ? KeyModifiers.Meta : KeyModifiers.Control);
 }

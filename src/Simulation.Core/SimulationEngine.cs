@@ -9,7 +9,7 @@ public sealed class SimulationEngine
         for (var day = 0; day < scenario.SimulationDays; day++)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            session.AdvanceOneDay();
+            session.AdvanceOneDay(LaunchDecisionPolicy.Automatic);
         }
         return session.GetResult();
     }

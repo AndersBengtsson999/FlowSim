@@ -218,7 +218,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         configuredName = BaselineScenario.CreateRequest().Name;
         var baseline = BaselineScenario.Create();
         var effort = baseline.WorkItems[0];
-        LoadCosts(new());
+        LoadCosts(new()); LoadProductLaunch(new());
         ReleaseMode = "Flow-based"; ReleaseCapacity = ReleaseSettings.FormatCapacity(int.MaxValue); ReleaseInterval = "5";
         DependencyRate = DependencyWaitingDays = "0";
         Specialists = SpecialistWorkRate = "0";
@@ -271,6 +271,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
         configuredName = request.Name;
         string N(double n) => n.ToString(CultureInfo.InvariantCulture);
         LoadCosts(request.RoleCosts);
+        LoadProductLaunch(request.ProductLaunch);
         ReleaseMode = request.Release.Mode == Simulation.Core.ReleaseMode.Scheduled ? "Scheduled" : "Flow-based"; ReleaseCapacity = ReleaseSettings.FormatCapacity(request.Release.Capacity); ReleaseInterval = N(request.Release.Interval);
         DependencyRate = N(request.ResidualDependencies.Rate * 100); DependencyWaitingDays = N(request.ResidualDependencies.MeanWaitingDays);
         Specialists = N(request.Skills.Specialists); SpecialistWorkRate = N(request.Skills.SpecialistWorkRate * 100);
@@ -380,7 +381,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     private SimulationRequest ReadRequest() => new()
     {
         Name = configuredName,
-        RoleCosts = CaptureCosts(),
+        RoleCosts = CaptureCosts(), ProductLaunch = CaptureProductLaunch(),
         Release = new(ReleaseMode == "Scheduled" ? Simulation.Core.ReleaseMode.Scheduled : ReleaseMode == "Flow-based" ? Simulation.Core.ReleaseMode.FlowBased : throw new ScenarioValidationException("Invalid Release Mode."), ParseReleaseCapacity(ReleaseCapacity), Integer(ReleaseInterval, "Release Interval")),
         ResidualDependencies = new(Number(DependencyRate, "Dependency Rate (%)") / 100, Number(DependencyWaitingDays, "Dependency Waiting Time (days)")),
         Skills = new(Integer(Specialists, "Specialists"), Number(SpecialistWorkRate, "Specialist Work Rate (%)") / 100),

@@ -9,6 +9,11 @@ public static class LegacyReleaseObservation
     {
         if (node is JsonObject obj)
         {
+            // Customer delivery is additive metadata. These fixtures predate product versions;
+            // retain every pre-existing operational field and reject real customer-launch histories.
+            if (obj["ProductDelivery"] is JsonObject delivery && delivery["CustomerLaunches"] is JsonArray launches && launches.Count > 0)
+                throw new InvalidOperationException("Cannot compare a customer-launched timeline to a pre-launch fixture.");
+            foreach (var key in new[] { "ProductLaunch", "ProductDelivery", "CustomerDelivery", "ProductVersionId", "InternalReleaseDay", "CustomerLaunchDay" }) obj.Remove(key);
             // Economic metadata is additive and does not alter legacy operational observations.
             obj.Remove("Economics"); obj.Remove("RoleCosts");
             if (obj["ResidualDependency"] is not null || obj["ResidualDependencies"] is JsonObject settings && settings["Rate"]!.GetValue<double>() != 0 || obj["WaitingForDependencyCount"] is JsonValue count && count.GetValue<int>() != 0)

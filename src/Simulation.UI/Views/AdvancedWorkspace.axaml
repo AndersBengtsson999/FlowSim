@@ -227,6 +227,7 @@
           </Border>
          </StackPanel>
         </Expander>
+        <Expander Header="Internal release and customer launch" HorizontalAlignment="Stretch"><views:ReleaseSettingsView /></Expander>
         <Expander Header="Technical Debt" HorizontalAlignment="Stretch"><views:DebtSettingsView /></Expander>
         <Expander Header="Advanced · capacity, seeds and examples" HorizontalAlignment="Stretch">
          <StackPanel Spacing="10">
@@ -407,6 +408,9 @@
          <ScrollViewer>
           <StackPanel Spacing="12" Margin="0,12">
            <TextBlock Text="{Binding SingleRunLabel}" Classes="section" />
+      <TextBlock Text="Customer launch results · existing delivery KPIs remain internal" FontWeight="SemiBold" TextWrapping="Wrap"/>
+      <TextBlock Text="{Binding CustomerLaunchSummary}" TextWrapping="Wrap"/>
+      <Expander Header="Product versions and launch dates" HorizontalAlignment="Stretch"><TextBlock Text="{Binding CustomerLaunchHistory}" TextWrapping="Wrap"/></Expander>
            <TextBlock Text="Results from the last completed run. Time averages include completed Work Items only; an empty average is shown as 0." Classes="note" />
            <ItemsControl ItemsSource="{Binding PrimaryMetrics}">
             <ItemsControl.ItemTemplate>

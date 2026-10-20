@@ -22,6 +22,8 @@ public static class ScenarioValidator
         scenario.ResidualDependencies!.Validate();
         if (scenario.Release is null) Fail("Release settings are required.");
         scenario.Release!.Validate();
+        if (scenario.ProductLaunch is null) Fail("Product launch settings are required.");
+        scenario.ProductLaunch!.Validate();
         var team = scenario.Team!;
         if (scenario.Skills is null) Fail("Skills settings are required.");
         if (!double.IsFinite(team.DeveloperAvailability) || team.DeveloperAvailability < 0 || team.DeveloperAvailability > 1

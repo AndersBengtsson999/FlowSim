@@ -7,6 +7,7 @@ public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5
 {
     public RoleCostSettings RoleCosts { get; init; } = new();
     public DependencySettings ResidualDependencies { get; init; } = new();
+    public ProductLaunchSettings ProductLaunch { get; init; } = new();
     public ReleaseSettings Release { get; init; } = new();
     public SkillSettings Skills { get; init; } = new();
     public TechnicalDebtSettings Debt { get; init; } = new();
@@ -26,7 +27,7 @@ public sealed record SessionConfiguration(Team Team, int DevelopmentWipLimit = 5
             throw new ScenarioValidationException("All three arrival effort distributions are required.");
     }
     internal SimulationScenario Scenario(string name, int days, IReadOnlyList<WorkItem> items, int seed) =>
-        new(name, days, Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit, items, seed) { RoleCosts = RoleCosts, ResidualDependencies = ResidualDependencies, Quality = Quality, Productivity = Productivity, Debt = Debt, Skills = Skills, Release = Release };
+        new(name, days, Team, DevelopmentWipLimit, CodeReviewWipLimit, TestingWipLimit, items, seed) { RoleCosts = RoleCosts, ResidualDependencies = ResidualDependencies, Quality = Quality, Productivity = Productivity, Debt = Debt, Skills = Skills, Release = Release, ProductLaunch = ProductLaunch };
 }
 
 public sealed record ConfigurationChange(int Day, string? Label, SessionConfiguration Before, SessionConfiguration After);
@@ -53,6 +54,7 @@ public sealed record SimulationSessionState(string Name, int RandomSeed, int Cur
     ulong ArrivalRandomState, ulong DiscoveryRandomState, ulong ReworkRandomState,
     IReadOnlyList<DailySnapshot> Days, IReadOnlyList<ConfigurationChange> Changes)
 {
+    public ProductDeliveryState? ProductDelivery { get; init; }
     public ulong? DependencyRandomState { get; init; }
     public ulong? SkillRandomState { get; init; }
     public TechnicalDebtState? DebtState { get; init; }
@@ -61,6 +63,12 @@ public sealed record SimulationSessionState(string Name, int RandomSeed, int Cur
 /// <summary>A single evolving timeline. No clocks, UI, serialization or external services.</summary>
 public sealed class SimulationSession
 {
+    private readonly ProductDeliveryLedger productDelivery;
+    public ProductDeliveryState ProductDelivery => productDelivery.Capture();
+    public LaunchDecision? PendingLaunchDecision => productDelivery.Pending;
+    public void PlanCustomerLaunch(int amount, LaunchPlanUnit unit, int sprintLength) => productDelivery.Plan(CurrentDay, amount, unit, sprintLength);
+    public void RenameActiveVersion(string name) => productDelivery.Rename(name);
+    public CustomerLaunch LaunchProductVersion(string versionId) => productDelivery.Launch(versionId, CurrentDay);
     private readonly List<WorkItem> items;
     private readonly Dictionary<string, WorkItem> byId;
     private readonly List<DailySnapshot> days = [];
@@ -89,7 +97,7 @@ public sealed class SimulationSession
         ScenarioValidator.Validate(scenario);
         Name = scenario.Name; RandomSeed = scenario.RandomSeed;
         Configuration = configuration ?? new(scenario.Team, scenario.DevelopmentWipLimit, scenario.CodeReviewWipLimit,
-            scenario.TestingWipLimit) { RoleCosts = scenario.RoleCosts, ResidualDependencies = scenario.ResidualDependencies, Release = scenario.Release, Skills = scenario.Skills, Quality = scenario.Quality, Productivity = scenario.Productivity, Debt = scenario.Debt, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
+            scenario.TestingWipLimit) { RoleCosts = scenario.RoleCosts, ResidualDependencies = scenario.ResidualDependencies, Release = scenario.Release, ProductLaunch = scenario.ProductLaunch, Skills = scenario.Skills, Quality = scenario.Quality, Productivity = scenario.Productivity, Debt = scenario.Debt, ArrivalMode = scenario.ArrivalMode, WorkItemsPerDay = scenario.WorkItemsPerDay,
                 DevelopmentEffort = scenario.DevelopmentArrivalEffort, CodeReviewEffort = scenario.CodeReviewArrivalEffort, TestingEffort = scenario.TestingArrivalEffort };
         Configuration.Validate(); InitialConfiguration = Configuration;
         items = scenario.WorkItems.Select(w => w.CopyForRun()).ToList();
@@ -101,6 +109,7 @@ public sealed class SimulationSession
         dependencyRandom = new(unchecked(RandomSeed ^ (int)0xD3EED123));
         skillRandom = new(unchecked(RandomSeed ^ (int)0x5A11C0DE));
         foreach (var item in items) Classify(item);
+        productDelivery = new(Configuration.ProductLaunch);
     }
 
     private SimulationSession(SimulationSessionState s)
@@ -122,10 +131,17 @@ public sealed class SimulationSession
         _ = debt.State.Overhead(Configuration.Debt);
         defects = new(Configuration.Quality, RandomSeed);
         defects.RestoreRandom(s.DiscoveryRandomState, s.ReworkRandomState);
+        productDelivery = s.ProductDelivery is { } delivery ? new(delivery, CurrentDay, items) : ProductDeliveryLedger.Import(items);
     }
 
-    public DailySnapshot AdvanceOneDay()
+    public DailySnapshot AdvanceOneDay(LaunchDecisionPolicy launchPolicy = LaunchDecisionPolicy.Interactive)
     {
+        if (!Enum.IsDefined(launchPolicy)) throw new ScenarioValidationException("Invalid launch decision policy.");
+        if (productDelivery.Pending is { } pending)
+        {
+            if (launchPolicy == LaunchDecisionPolicy.Interactive) throw new ScenarioValidationException("Resolve the pending customer launch before advancing another day.");
+            productDelivery.Launch(pending.VersionId, CurrentDay);
+        }
         // Existing/fixed future items are assigned only on their arrival boundary.
         foreach (var item in items.Where(w => w.CreatedDay == CurrentDay && w.State == WorkItemStatus.Backlog))
             item.AssignDependency(Configuration.ResidualDependencies.Assign(item.CreatedDay, dependencyRandom));
@@ -156,6 +172,8 @@ public sealed class SimulationSession
         }).ToArray();
         day = day with { Items = Array.AsReadOnly(observations), Economics = DailyTeamCost.Observe(Configuration, day) };
         days.Add(day);
+        productDelivery.ObserveRelease(CurrentDay, items.Where(w => w.State.IsDelivered() && w.DoneDay == CurrentDay).ToArray());
+        productDelivery.Boundary(CurrentDay, launchPolicy);
         return day;
     }
 
@@ -181,6 +199,7 @@ public sealed class SimulationSession
     public void ApplyChanges(SessionConfiguration configuration, string? label = null)
     {
         configuration.Validate();
+        if (configuration.ProductLaunch != Configuration.ProductLaunch) throw new ScenarioValidationException("Use customer launch planning to revise an active version; initial launch settings are not a team intervention.");
         _ = DebtState.Overhead(configuration.Debt);
         if (label?.Length > 100) throw new ScenarioValidationException("Change label must be at most 100 characters.");
         if (configuration == Configuration) return;
@@ -188,13 +207,20 @@ public sealed class SimulationSession
         Configuration = configuration; defects.Configure(configuration.Quality);
     }
 
-    public SimulationResult GetResult() => SimulationResultBuilder.Build(
-        Configuration.Scenario(Name, CurrentDay, items, RandomSeed), items, days);
+    public SimulationResult GetResult()
+    {
+        var result = SimulationResultBuilder.Build(Configuration.Scenario(Name, CurrentDay, items, RandomSeed), items, days);
+        var delivery = ProductDelivery;
+        var versions = delivery.InternalReleases.SelectMany(r => r.ItemIds.Select(id => (id, r.VersionId))).ToDictionary(x => x.id, x => x.VersionId);
+        var launches = delivery.CustomerLaunches.SelectMany(l => l.ItemIds.Select(id => (id, l.Day))).ToDictionary(x => x.id, x => x.Day);
+        return result with { ProductDelivery = delivery, WorkItems = result.WorkItems.Select(w => w with
+        { ProductVersionId = versions.GetValueOrDefault(w.Id), CustomerLaunchDay = launches.TryGetValue(w.Id, out var day) ? day : null }).ToArray() };
+    }
 
     public SimulationSessionState Capture() => new(Name, RandomSeed, CurrentDay, InitialConfiguration, Configuration,
         items.Select(w => w.Capture()).ToArray(), accumulator, nextId, arrivalRandom.State,
         defects.RandomState.Discovery, defects.RandomState.Rework,
-        days.Select(d => d with { Items = Array.AsReadOnly(d.Items.ToArray()) }).ToArray(), changes.ToArray()) { DependencyRandomState = dependencyRandom.State, DebtState = DebtState, SkillRandomState = skillRandom.State };
+        days.Select(d => d with { Items = Array.AsReadOnly(d.Items.ToArray()) }).ToArray(), changes.ToArray()) { ProductDelivery = ProductDelivery, DependencyRandomState = dependencyRandom.State, DebtState = DebtState, SkillRandomState = skillRandom.State };
     public static SimulationSession Restore(SimulationSessionState state) => new(state);
 
     private static void ValidateState(SimulationSessionState s)

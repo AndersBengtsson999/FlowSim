@@ -84,7 +84,7 @@ public sealed class InterventionBoundaryTests
         }).ToArray();
         var changed = template.Configuration with { Team = new(5, 3) };
         var change = new ConfigurationChange(100, "Boundary", template.Configuration, changed);
-        var session = SimulationSession.Restore(template with { CurrentDay = 140, Days = days, WorkItems = items, Configuration = changed, Changes = [change] });
+        var session = SimulationSession.Restore(template with { CurrentDay = 140, Days = days, WorkItems = items, ProductDelivery = null, Configuration = changed, Changes = [change] });
         var c = LivePerformance.Compare(session, session.Changes.Single(), 20);
         Assert.Equal(2, c.Before.Completed); Assert.Equal(2, c.After.Completed);
         Assert.Equal(.5, c.Before.Throughput); Assert.Equal(.5, c.After.Throughput);

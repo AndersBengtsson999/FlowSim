@@ -51,7 +51,7 @@ public sealed class LiveSimulation
     public LiveSimulation(SimulationSession session) => Session = session;
     public bool Step()
     {
-        if (LimitReached) return false;
+        if (LimitReached || Session.PendingLaunchDecision is not null) return false;
         Session.AdvanceOneDay(); return true;
     }
     public LiveCheckpoint CreateCheckpoint(string label)
@@ -82,7 +82,7 @@ public sealed class LiveSimulation
         var config = new SessionConfiguration(new(request.DeveloperCount, request.TesterCount, request.DeveloperCapacityPerDay, request.TesterCapacityPerDay) { DeveloperAvailability = request.DeveloperAvailability, TesterAvailability = request.TesterAvailability },
             request.DevelopmentWipLimit, request.CodeReviewWipLimit, request.TestingWipLimit)
         {
-            RoleCosts = request.RoleCosts, ResidualDependencies = request.ResidualDependencies, Release = request.Release, Skills = request.Skills, Quality = request.Quality, Productivity = request.Productivity, Debt = request.Debt, ArrivalMode = arrivalMode, WorkItemsPerDay = rate,
+            RoleCosts = request.RoleCosts, ResidualDependencies = request.ResidualDependencies, Release = request.Release, ProductLaunch = request.ProductLaunch, Skills = request.Skills, Quality = request.Quality, Productivity = request.Productivity, Debt = request.Debt, ArrivalMode = arrivalMode, WorkItemsPerDay = rate,
             DevelopmentEffort = request.DevelopmentDistribution ?? new FixedEffort(request.DevelopmentEffort),
             CodeReviewEffort = request.CodeReviewDistribution ?? new FixedEffort(request.CodeReviewEffort),
             TestingEffort = request.TestingDistribution ?? new FixedEffort(request.TestingEffort)

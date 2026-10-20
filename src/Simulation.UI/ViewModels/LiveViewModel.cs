@@ -139,7 +139,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
     public bool IsFastAdvancing => fastAdvancing;
     public bool IsRunning => running || fastAdvancing;
     public AsyncCommand RunToDayCommand { get; }
-    public bool CanResume => HasSession && !running && !fastAdvancing && !editing && !stopped && !(Live?.LimitReached ?? false);
+    public bool CanResume => HasSession && !running && !fastAdvancing && !editing && !stopped && !(Live?.LimitReached ?? false) && !LaunchDecisionPending;
     public bool IsEditing => editing;
     public bool CanChange => HasSession && !fastAdvancing && !editing && !stopped;
     public int Day => Live?.Session.CurrentDay ?? 0;
@@ -252,7 +252,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
     public LiveViewModel()
     {
         Setup.LoadConfiguration(LiveSimulation.Demo);
-        InitializeGuided(); InitializeKpis();
+        InitializeGuided(); InitializeKpis(); InitializeProductDelivery();
         timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         timer.Tick += (_, _) => Tick();
         StartCommand = new(() => Guard(Start), () => !HasSession && !fastAdvancing);
@@ -278,6 +278,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         var setup = Setup.CaptureSetup();
         setup = setup with { Quality = ReadQuality(Setup) };
         Live = LiveSimulation.Start(setup, SupplyMode(ArrivalMode), Rate(ArrivalRate));
+        PlanningSprintLength = setup.ProductLaunch.SprintLength.ToString();
         Live.Dashboard = KpiSettings;
         Live.SafetyLimit = limit; Live.RollingWindow = RollingWindow; setupExpanded = false;
         stopped = false; queueHistory.Clear(); Refresh(); Resume();
@@ -305,7 +306,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
                     await Task.Delay(1);
                 }
             }
-            if (ReferenceEquals(Live, session)) status = session.LimitReached ? "Live simulation safety limit reached." : $"Paused at Day {Day}.";
+            if (ReferenceEquals(Live, session)) status = LaunchDecisionPending ? $"Customer launch decision required at Day {Day}." : session.LimitReached ? "Live simulation safety limit reached." : $"Paused at Day {Day}.";
         }
         catch (Exception ex) { status = ex.Message; }
         finally { fastAdvancing = false; Refresh(); Notify(); }
@@ -317,6 +318,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
     {
         if (Live is null || editing || stopped) return;
         if (Live.Step()) { AppendHistory(); Refresh(); }
+        if (LaunchDecisionPending) { Pause(); status = $"Customer launch decision required at Day {Day}."; Notify(); }
         if (Live.LimitReached) { Pause(); status = "Live simulation safety limit reached."; Notify(); }
     });
     public void Reset() { InvalidateGuided("LIVE was reset. Start a new comparison."); Pause(); Live = null; gameScene = null; setupExpanded = true; stopped = false; editing = false; queueHistory.Clear(); Flow = []; Metrics = []; Details = ""; SelectedCheckpoint = null; selectedFlow = null; selectedIntervention = null; RefreshPerformance(); status = "Ready to start."; Notify(); }
@@ -380,7 +382,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         editing = false; status = Live.Session.Changes.Count == previousChanges ? "No parameters changed. Resume when ready." : $"Changes recorded at Day {Day}; effective Day {Day + 1}. Resume when ready."; Refresh();
     }
     public void Load(LiveSimulation live)
-    { InvalidateGuided("A LIVE session was loaded. Start a new comparison."); Pause(); Live = live; LoadKpis(); setupExpanded = false; stopped = false; editing = false; rollingWindow = live.RollingWindow; SafetyLimit = live.SafetyLimit.ToString(); SelectedCheckpoint = null; selectedFlow = null; Details = ""; RebuildHistory(); Refresh(); status = "Live simulation opened. Resume when ready."; Notify(); }
+    { InvalidateGuided("A LIVE session was loaded. Start a new comparison."); Pause(); Live = live; PlanningSprintLength = live.Session.Configuration.ProductLaunch.SprintLength.ToString(); LoadKpis(); setupExpanded = false; stopped = false; editing = false; rollingWindow = live.RollingWindow; SafetyLimit = live.SafetyLimit.ToString(); SelectedCheckpoint = null; selectedFlow = null; Details = ""; RebuildHistory(); Refresh(); status = "Live simulation opened. Resume when ready."; Notify(); }
     public void NotifyStatus(string message) { status = message; Notify(); }
     private void RebuildHistory() { queueHistory.Clear(); if (Live is not null) foreach (var d in Live.Session.Days) queueHistory.Add(Point(d)); }
     private static LiveQueuePoint Point(DailySnapshot d) => new(d.Day + 1, d.WaitingForCodeReviewCount, d.WaitingForTestingCount, d.WaitingForReworkCount);
@@ -482,6 +484,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
     private void Notify()
     {
         PropertyChanged?.Invoke(this, new(string.Empty));
+        LaunchProductCommand?.Refresh(); PlanLaunchCommand?.Refresh(); RenameVersionCommand?.Refresh();
         BeginGuidedCommand?.Refresh(); RunToDayCommand?.Refresh(); StartCommand?.Refresh(); PauseCommand?.Refresh(); ResumeCommand?.Refresh(); StepCommand?.Refresh(); StopCommand?.Refresh(); ChangeCommand?.Refresh(); ApplyCommand?.Refresh(); CheckpointCommand?.Refresh();
     }
     public void Dispose() { guidedCancellation?.Cancel(); guidedCancellation?.Dispose(); stopFastAdvance = true; timer.Stop(); }

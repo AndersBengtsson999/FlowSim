@@ -10,6 +10,9 @@ public sealed record WorkItemResult(string Id, string Name, WorkItemStatus Final
     IReadOnlyList<StateTransition> Transitions,
     double DevelopmentEffort, double CodeReviewEffort, double TestingEffort)
 {
+    public string? ProductVersionId { get; init; }
+    public int? InternalReleaseDay => DoneDay;
+    public int? CustomerLaunchDay { get; init; }
     public ResidualDependency? ResidualDependency { get; init; }
     public int? ReadyForReleaseDay { get; init; }
     public int? ReleasedDay { get; init; }

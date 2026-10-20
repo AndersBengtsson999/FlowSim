@@ -5,5 +5,16 @@
   <Grid ColumnDefinitions="*,150,110" IsVisible="{Binding ScheduledRelease}"><TextBlock Text="Release Interval" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding ReleaseInterval, Mode=TwoWay}" AutomationProperties.Name="Release Interval"/><TextBlock Grid.Column="2" Text="days" Margin="8,0" VerticalAlignment="Center"/></Grid>
   <TextBlock Text="Enter a whole number or Unlimited. Set capacity to 0 to pause releases." TextWrapping="Wrap" FontSize="11" Opacity="0.7"/>
   <TextBlock IsVisible="{Binding ScheduledRelease}" Text="Release days follow the simulation calendar: an interval of 5 means days 5, 10, 15…" TextWrapping="Wrap" FontSize="11" Opacity="0.7"/>
+  <TextBlock Text="Product version / customer launch (initial plan)" FontWeight="SemiBold"/>
+  <TextBox Text="{Binding ProductVersionName, Mode=TwoWay}" Watermark="Version name" AutomationProperties.Name="Initial product version name"/>
+  <WrapPanel>
+   <TextBlock Text="Launch after" VerticalAlignment="Center" Margin="0,0,8,0"/>
+   <TextBox Text="{Binding LaunchAfter, Mode=TwoWay}" Watermark="Manual" Width="90" AutomationProperties.Name="Initial customer launch after"/>
+   <ComboBox ItemsSource="{Binding LaunchUnits}" SelectedItem="{Binding LaunchUnit, Mode=TwoWay}" Width="145"/>
+   <TextBlock Text="Sprint length" VerticalAlignment="Center" Margin="8,0"/>
+   <TextBox Text="{Binding LaunchSprintLength, Mode=TwoWay}" Width="65" AutomationProperties.Name="Initial sprint planning length"/>
+   <TextBlock Text="working days" VerticalAlignment="Center" Margin="8,0"/>
+  </WrapPanel>
+  <TextBlock Text="Leave launch duration blank for manual launch. A sprint is only a planning duration. LIVE pauses after processing the planned day; unattended Run launches automatically. Existing delivery metrics measure internal releases." TextWrapping="Wrap" FontSize="12"/>
  </StackPanel>
 </UserControl>

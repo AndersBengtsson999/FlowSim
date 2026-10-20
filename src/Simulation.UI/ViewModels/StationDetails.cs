@@ -4,6 +4,8 @@ public sealed record StationMetric(string Label, string Value);
 public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> Rows, string Explanation)
 {
     public IReadOnlyList<InspectedWorkItem> Items { get; init; } = [];
+    public string CompactSummary { get; init; } = "";
+    public string Help => string.Join("\n", Rows.Select(r => $"{r.Label}: {r.Value}")) + "\n\n" + Explanation + "\nActive WIP means admitted work, not proof of processing today. Queue waiting excludes backlog and active-state time.";
     public string Observation { get; init; } = "";
     public string ItemSummary { get; init; } = "";
     public static readonly StationDetails Empty = new("", [], "");
@@ -82,9 +84,10 @@ public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> R
         explanation = $"Observed queue: {pressure.Trend}. " + (pressure.Label.Length > 0 ? pressure.Label + ". " : "") + explanation;
         return new(selection, rows, explanation)
         {
+            CompactSummary = $"Total items: {items.Length} · " + string.Join(" · ", items.GroupBy(i => i.Group).OrderBy(g => g.First().GroupOrder).Select(g => $"{g.Key}: {g.Count()}")) + $"\nQueue trend: {pressure.Trend}",
             Observation = $"Observed queue: {pressure.Trend}. " + (pressure.Label.Length > 0 ? pressure.Label + ". " : "") + "This is an observation, not a proven root cause.",
-            Items = items.Take(50).ToArray(),
-            ItemSummary = station == "Technical Debt" ? "Aggregate maintenance effort; no individual debt work items." : $"{items.Length} items · showing up to 50. Expand an item to inspect. Active WIP means admitted work, not proof of processing today. Queue waiting excludes backlog and active-state time."
+            Items = items.ToArray(),
+            ItemSummary = station == "Technical Debt" ? "Aggregate maintenance effort; no individual debt work items." : $"{items.Length} items · Expand an item to inspect. Active WIP means admitted work, not proof of processing today. Queue waiting excludes backlog and active-state time."
         };
     }
     public static string Summary(GameSceneState? s)

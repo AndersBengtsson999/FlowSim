@@ -23,6 +23,7 @@ public sealed record SimulationScenario(string Name, int SimulationDays, Team Te
 {
     public RoleCostSettings RoleCosts { get; init; } = new();
     public DependencySettings ResidualDependencies { get; init; } = new();
+    public ProductLaunchSettings ProductLaunch { get; init; } = new();
     public ReleaseSettings Release { get; init; } = new();
     public SkillSettings Skills { get; init; } = new();
     public TechnicalDebtSettings Debt { get; init; } = new();
@@ -99,6 +100,8 @@ public sealed record SimulationResult(string ScenarioName, int CompletedWorkItem
     int SimulationDays, int TotalWorkItems, double AverageActiveTime, double AverageWaitingTime,
     double AverageBlockedTime, int MaximumWaitingForCodeReviewQueue, int MaximumWaitingForTestingQueue)
 {
+    public ProductDeliveryState? ProductDelivery { get; init; }
+    public CustomerDeliveryMetrics CustomerDelivery => CustomerDeliveryMetrics.From(ProductDelivery, WorkItems);
     public int TotalDefectsFound { get; init; }
     public int CodeReviewDefectsFound { get; init; }
     public int TestingDefectsFound { get; init; }

@@ -214,6 +214,7 @@
      <TextBlock Text="{Binding EconomicAssumptions}" TextWrapping="Wrap" FontSize="12"/>
     </StackPanel>
    </Expander>
+   <views:ProductLaunchView IsVisible="{Binding ShowFlowProduct}"/>
    <views:GameView IsVisible="{Binding GameViewSelected}"/>
    <StackPanel IsVisible="{Binding FlowBoardSelected}" Spacing="8">
    <Border Classes="sectionBand"><Grid ColumnDefinitions="*,Auto"><TextBlock Text="Flow Board" Classes="liveSection"/><TextBlock Grid.Column="1" Text="Work Items" Foreground="#111111" FontSize="12" Margin="0,0,30,0"/></Grid></Border>
