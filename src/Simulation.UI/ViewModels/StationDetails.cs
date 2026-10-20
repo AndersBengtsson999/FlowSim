@@ -3,12 +3,28 @@ namespace Simulation.UI.ViewModels;
 public sealed record StationMetric(string Label, string Value);
 public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> Rows, string Explanation)
 {
+    public IReadOnlyList<InspectedWorkItem> Items { get; init; } = [];
+    public string Observation { get; init; } = "";
+    public string ItemSummary { get; init; } = "";
     public static readonly StationDetails Empty = new("", [], "");
     public static StationDetails For(string? station, GameSceneState? s)
     {
         if (station is null || s is not { HasSession: true }) return Empty;
+        var selection = station;
+        station = station switch { "Dependency queue" => "Backlog", "Review queue" => "Code Review", "Testing queue" => "Testing", "Rework queue" => "Development", _ => station };
         var rows = new List<StationMetric>();
         void Add(string label, object value) => rows.Add(new(label, value.ToString() ?? ""));
+        Add("Observed through", $"Day {s.Day}");
+        Add("Purpose", station switch
+        {
+            "Backlog" => "Work awaiting development; dependency waits are included",
+            "Development" => "Development and rework share the developer budget",
+            "Code Review" => "Review developed work before testing",
+            "Testing" => "Test reviewed work before release",
+            "Ready for Release" => "Completed work awaiting release policy",
+            "Release" => "Delivered work, cumulative",
+            _ => "Repay aggregate technical debt using shared developer capacity"
+        });
         string Number(double value) => value.ToString("0.##");
         void Pressure(string id)
         {
@@ -54,7 +70,22 @@ public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> R
             default: return Empty;
         }
         if (s.Day == 0) Add("Capacity observations", "No completed day yet");
-        return new(station, rows, explanation);
+        var items = s.InspectionItems.Where(i => i.BelongsTo(selection)).ToArray();
+        if (selection != station) Add("Selected queue · items", items.Length);
+        var capacity = station == "Testing" ? s.AvailableTesterCapacity : s.AvailableDeveloperCapacity;
+        var used = station == "Testing" ? s.UsedTesterCapacity : s.UsedDeveloperCapacity;
+        if (station is "Testing" or "Development" or "Code Review" or "Technical Debt")
+            Add(station == "Testing" ? "Tester utilization · last day" : "Shared developer utilization · last day", s.Day > 0 && capacity > 0 ? (used / capacity).ToString("P1") : "N/A");
+        if (selection == "Dependency queue") Add("Queue scope", "Unresolved residual dependencies (Backlog subset)");
+        var pressureId = selection == "Dependency queue" ? "dependency" : station switch { "Backlog" => "backlog", "Development" => "rework-wait", "Code Review" => "review-wait", "Testing" => "testing-wait", "Ready for Release" or "Release" => "ready", _ => "" };
+        var pressure = s.QueuePressures.GetValueOrDefault(pressureId, QueuePressure.Normal);
+        explanation = $"Observed queue: {pressure.Trend}. " + (pressure.Label.Length > 0 ? pressure.Label + ". " : "") + explanation;
+        return new(selection, rows, explanation)
+        {
+            Observation = $"Observed queue: {pressure.Trend}. " + (pressure.Label.Length > 0 ? pressure.Label + ". " : "") + "This is an observation, not a proven root cause.",
+            Items = items.Take(50).ToArray(),
+            ItemSummary = station == "Technical Debt" ? "Aggregate maintenance effort; no individual debt work items." : $"{items.Length} items · showing up to 50. Expand an item to inspect. Active WIP means admitted work, not proof of processing today. Queue waiting excludes backlog and active-state time."
+        };
     }
     public static string Summary(GameSceneState? s)
     {

@@ -66,6 +66,15 @@
           </Grid>
          </DataTemplate></ItemsControl.ItemTemplate>
         </ItemsControl>
+        <TextBlock Text="{Binding #GameWorld.Details.Observation}" Foreground="#FFEB00" TextWrapping="Wrap"/>
+        <TextBlock Text="{Binding #GameWorld.Details.ItemSummary}" Foreground="#BACCD4" TextWrapping="Wrap"/>
+        <ItemsControl ItemsSource="{Binding #GameWorld.Details.Items}">
+         <ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:InspectedWorkItem">
+          <Expander IsExpanded="{Binding Expanded, Mode=TwoWay}" Header="{Binding Heading}" HorizontalAlignment="Stretch" Foreground="White">
+           <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Background="#EEF3F5" Foreground="#17232D" Padding="8" FontSize="13"/>
+          </Expander>
+         </DataTemplate></ItemsControl.ItemTemplate>
+        </ItemsControl>
         <TextBlock Text="{Binding #GameWorld.Details.Explanation}" Foreground="#BACCD4" FontSize="12" TextWrapping="Wrap"/>
        </StackPanel>
       </ScrollViewer>

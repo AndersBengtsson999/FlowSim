@@ -21,6 +21,7 @@ public sealed record GameSceneState(int Day, IReadOnlyList<GameArea> Areas, int 
 {
     private sealed class Identity { public Guid Value { get; } = Guid.NewGuid(); }
     private static readonly ConditionalWeakTable<SimulationSession, Identity> identities = new();
+    public IReadOnlyList<InspectedWorkItem> InspectionItems { get; init; } = [];
     public Guid SessionIdentity { get; init; }
     public IReadOnlyList<ItemJourney> Journeys { get; init; } = [];
     public int ChangedItems { get; init; }
@@ -70,6 +71,8 @@ public sealed record GameSceneState(int Day, IReadOnlyList<GameArea> Areas, int 
             if (transitions.Count - first + 1 > PackageMotion.MaximumStages) continue;
             journeys.Add(new(item.Id, new[] { transitions[first].From }.Concat(transitions.Skip(first).Select(t => t.To)).ToArray()));
         }
+        var observations = d.Items.ToDictionary(w => w.Id);
+        var completed = s.WorkItems.Where(w => w.State.IsWorkComplete()).Select(w => w.Id).ToHashSet();
         return new(s.CurrentDay, [
             new("Backlog", 0, d.BacklogCount, $"{d.WaitingForDependencyCount} waiting for dependency (included)"),
             new("Development", d.DevelopmentCount + d.ReworkCount, d.WaitingForReworkCount,
@@ -82,6 +85,7 @@ public sealed record GameSceneState(int Day, IReadOnlyList<GameArea> Areas, int 
             s.DebtState.Amount, s.DebtState.Ratio, released, c.Release.Description,
             s.CurrentDay == 0 ? "No completed day yet" : $"Day {s.CurrentDay} used / available · Dev {d.UsedDeveloperCapacity:0.##} / {d.AvailableDeveloperCapacity:0.##} · Test {d.UsedTesterCapacity:0.##} / {d.AvailableTesterCapacity:0.##}", true)
         {
+            InspectionItems = s.WorkItems.Where(w => w.CreatedDay <= Math.Max(0, s.CurrentDay - 1)).Select(w => InspectedWorkItem.From(w, s.CurrentDay, completed, s.CurrentDay > 0 ? observations.GetValueOrDefault(w.Id) : null)).ToArray(),
             QueuePressures = QueuePressure.From(live),
             SessionIdentity = identities.GetValue(s, _ => new()).Value, Journeys = journeys.ToArray(), ChangedItems = changed,
             ActiveDevelopment = d.DevelopmentCount, ActiveRework = d.ReworkCount,

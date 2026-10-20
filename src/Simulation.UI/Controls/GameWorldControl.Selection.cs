@@ -19,14 +19,22 @@ public sealed partial class GameWorldControl
     public string WorkflowSummary { get => GetValue(WorkflowSummaryProperty); private set => SetValue(WorkflowSummaryProperty, value); }
     public static readonly StyledProperty<bool> IsTestingSelectedProperty = AvaloniaProperty.Register<GameWorldControl, bool>(nameof(IsTestingSelected));
     public bool IsTestingSelected { get => GetValue(IsTestingSelectedProperty); private set => SetValue(IsTestingSelectedProperty, value); }
-    public IReadOnlyList<string> StationOptions => StationMap.Names;
+    public IReadOnlyList<string> StationOptions => StationMap.InspectionOptions;
     private string? hoveredStation;
     private static readonly Cursor StationCursor = new(StandardCursorType.Hand);
     private static readonly Cursor DefaultCursor = new(StandardCursorType.Arrow);
+    private Guid inspectionSession;
     private void RefreshStationDetails()
     {
         if (Scene is not { HasSession: true } && SelectedStation is not null) SelectedStation = null;
-        Details = StationDetails.For(SelectedStation, Scene);
+        var next = StationDetails.For(SelectedStation, Scene);
+        if (inspectionSession == Scene?.SessionIdentity && next.Title == Details.Title)
+        {
+            var expanded = Details.Items.Where(i => i.Expanded).Select(i => i.Id).ToHashSet();
+            foreach (var item in next.Items) item.Expanded = expanded.Contains(item.Id);
+        }
+        inspectionSession = Scene?.SessionIdentity ?? Guid.Empty;
+        Details = next;
         IsTestingSelected = SelectedStation == "Testing";
         HasSelection = Details.Title.Length > 0;
         WorkflowSummary = StationDetails.Summary(Scene);

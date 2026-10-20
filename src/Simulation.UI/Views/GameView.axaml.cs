@@ -53,7 +53,7 @@ public partial class GameView : UserControl
         // Preserve readable sprites; short windows may scroll the dashboard instead of miniaturizing the workshop.
         var fittedHeight = Math.Min(Math.Max(420, height), width * sceneHeight / 1080);
         if (Math.Abs(WorldViewport.Height - fittedHeight) > 1 || double.IsNaN(WorldViewport.Height)) WorldViewport.Height = fittedHeight;
-        var panelHeight = side ? height : 200;
+        var panelHeight = side ? height : 320;
         if (Math.Abs(StationPanel.MaxHeight - panelHeight) > 1) StationPanel.MaxHeight = panelHeight;
 
     }

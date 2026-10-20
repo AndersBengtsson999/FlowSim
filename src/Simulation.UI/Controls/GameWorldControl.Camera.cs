@@ -17,7 +17,7 @@ public sealed partial class GameWorldControl
     public void ZoomBy(double factor) { Camera.ZoomAt(factor, new(Bounds.Width / 2, Bounds.Height / 2)); CameraChanged(); }
     public void FitCamera() { Camera.Fit(); CameraChanged(); }
     private void ResizeCamera() { Camera.Resize(Bounds.Size, new(1080, UseSprites ? StationMap.SceneHeight : 680)); CameraChanged(); }
-    private string? StationAt(Point point) => Scene is { HasSession: true } ? StationMap.HitTest(Camera.ToWorld(point)) : null;
+    private string? StationAt(Point point) => Scene is { HasSession: true } ? (UseSprites ? StationMap.InspectAt(Camera.ToWorld(point)) : StationMap.HitTest(Camera.ToWorld(point))) : null;
     private void CameraChanged()
     {
         ZoomLabel = $"{Camera.Zoom * 100:0}%";

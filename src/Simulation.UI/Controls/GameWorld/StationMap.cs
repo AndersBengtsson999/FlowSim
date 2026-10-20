@@ -32,6 +32,15 @@ public static class StationMap
         new("Release", [new(130,270), new(215,235), new(300,285), new(335,350), new(300,395), new(210,425), new(125,380)]),
         new("Technical Debt", [new(365,270), new(410,235), new(535,285), new(535,330), new(440,360), new(365,330)])
     ];
+    public static IReadOnlyList<StationRegion> QueueRegions { get; } =
+    [
+        Queue("Dependency queue", 365, 225), Queue("Review queue", 937, 282),
+        Queue("Testing queue", 670, 471), Queue("Rework queue", 639, 225)
+    ];
+    private static StationRegion Queue(string name, double x, double y) => new(name,
+        [new(x-23,y-10), new(x,y-24), new(x+23,y-10), new(x+23,y+8), new(x,y+20), new(x-23,y+8)]);
+    public static string? InspectAt(Point point) => QueueRegions.FirstOrDefault(r => r.Contains(point))?.Name ?? HitTest(point);
+    public static IReadOnlyList<string> InspectionOptions { get; } = Regions.Concat(QueueRegions).Select(r => r.Name).ToArray();
     public static IReadOnlyList<string> Names { get; } = Regions.Select(r => r.Name).ToArray();
     public static string? HitTest(Point point) => Regions.FirstOrDefault(r => r.Contains(point))?.Name;
     public static string Move(string? current, int offset)
@@ -44,7 +53,7 @@ public static class StationMap
         Math.Max(240, remainingHeight - headerHeight - 32 - (!sidePanel && selected ? 210 : 0));
     internal static void Highlight(DrawingContext dc, string? selected, string? hover, bool focused)
     {
-        foreach (var region in Regions.Where(r => r.Name == selected || r.Name == hover || focused && selected is null && r.Name == Names[0]))
+        foreach (var region in Regions.Concat(QueueRegions).Where(r => r.Name == selected || r.Name == hover || focused && selected is null && r.Name == Names[0]))
         {
             var geometry = new StreamGeometry();
             using (var path = geometry.Open()) { path.BeginFigure(region.Points[0], true); foreach (var p in region.Points.Skip(1)) path.LineTo(p); path.EndFigure(true); }
