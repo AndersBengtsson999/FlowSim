@@ -1,4 +1,5 @@
-<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:app="using:Simulation.Application" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:charts="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.KpiDashboardView" x:DataType="vm:LiveViewModel" Name="Dashboard">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:app="using:Simulation.Application" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:charts="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.KpiDashboardView" x:DataType="vm:LiveViewModel" Name="Dashboard" Foreground="#17232D">
+ <UserControl.Styles><Style Selector="Button"><Setter Property="MinHeight" Value="30"/><Setter Property="Padding" Value="10,5"/><Setter Property="Margin" Value="0"/></Style><Style Selector="Button:focus-visible"><Setter Property="BorderBrush" Value="#A68F00"/><Setter Property="BorderThickness" Value="2"/></Style></UserControl.Styles>
  <Border Background="#EFF3F4" CornerRadius="6" Padding="8">
   <StackPanel Spacing="6">
    <Grid ColumnDefinitions="*,Auto">
@@ -10,73 +11,80 @@
       <ScrollViewer MaxHeight="360"><ItemsControl ItemsSource="{Binding KpiChoices}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:KpiChoice">
        <CheckBox Content="{Binding Name}" IsChecked="{Binding Selected, Mode=TwoWay}" IsEnabled="{Binding CanSelect}" ToolTip.Tip="{Binding Help}" AutomationProperties.Name="{Binding Name}"/>
       </DataTemplate></ItemsControl.ItemTemplate></ItemsControl></ScrollViewer>
-      <TextBlock Text="Saved with the LIVE session. Changes are neutral; higher is not always better." TextWrapping="Wrap" FontSize="11"/>
+      <TextBlock Text="Saved with the LIVE session. Changes are neutral; higher is not always better." TextWrapping="Wrap" FontSize="12"/>
      </StackPanel></Flyout></Button.Flyout>
     </Button>
    </Grid>
-   <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="Rolling days" Foreground="#17232D" VerticalAlignment="Center"/><ComboBox Name="KpiWindowPicker" ItemsSource="{Binding KpiWindows}" SelectedItem="{Binding KpiWindow}" MinHeight="24" Padding="6,2" AutomationProperties.Name="KPI rolling evaluation days"/></StackPanel>
+   <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="Rolling evaluation · days" Foreground="#17232D" VerticalAlignment="Center"/><ComboBox Name="KpiWindowPicker" ItemsSource="{Binding KpiWindows}" SelectedItem="{Binding KpiWindow}" MinHeight="24" Padding="6,2" AutomationProperties.Name="KPI rolling evaluation days"/></StackPanel>
    <TextBlock Text="Choose KPIs to show values." IsVisible="{Binding NoKpis}" Foreground="#17232D"/>
-   <Border IsVisible="{Binding ExplorerOpen}" Background="White" CornerRadius="4" Padding="8">
-     <ScrollViewer MaxHeight="580" HorizontalScrollBarVisibility="Disabled">
+   <WrapPanel>
+    <Button Name="ExpandExplorer" Background="#FFEB00" Foreground="#17232D" FontWeight="SemiBold" Content="Expand Explorer ↗" Click="ExpandExplorerClicked" ToolTip.Tip="Open a larger, non-modal Explorer. The workshop stays active."/>
+    <Button Name="DetachedNote" Content="Explorer is open ↗" Click="ExpandExplorerClicked"/>
+   </WrapPanel>
+   <Border Name="ExplorerSurface" Background="White" CornerRadius="4" Padding="8">
+     <ScrollViewer Name="ExplorerScroll" MaxHeight="620" HorizontalScrollBarVisibility="Disabled">
       <StackPanel Spacing="6">
-       <Grid ColumnDefinitions="*,Auto"><TextBlock Text="KPI Explorer" FontWeight="Bold"/><Button Grid.Column="1" Content="Close" Click="CloseExplorerClicked"/></Grid>
+       <Grid ColumnDefinitions="*,Auto"><TextBlock Text="KPI Explorer" FontWeight="Bold"/><Button Name="CloseExplorerButton" Grid.Column="1" Content="Compact view" Click="CloseExplorerClicked"/></Grid>
        <ComboBox Name="ExplorerModePicker" ItemsSource="{Binding ExplorerModes}" SelectedItem="{Binding ExplorerMode}" HorizontalAlignment="Stretch" AutomationProperties.Name="Explorer comparison mode"/>
        <StackPanel IsVisible="{Binding CompareKpis}" Spacing="6">
-       <TextBlock Text="Last 120 days · separate value scales, shared day axis. Hover for values. Association does not prove causation." TextWrapping="Wrap" FontSize="11"/>
-       <ContentControl Content="{Binding ExplorerPrimary}"><ContentControl.ContentTemplate><DataTemplate x:DataType="vm:KpiCard"><StackPanel Spacing="3">
-        <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="#326D84"/>
-        <TextBlock Text="Definition · hover for details" ToolTip.Tip="{Binding ExplorerDescription}" FontSize="11"/>
-        <TextBlock Text="{Binding Period}" ToolTip.Tip="{Binding Kind}" FontSize="11"/>
-        <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="{Binding Value}" FontWeight="Bold"/><TextBlock Text="{Binding Unit}"/></StackPanel>
-        <charts:LivePerformanceTrendChart Series="{Binding Trend}" Unit="{Binding Unit}" SamplesOnly="True" Height="110"/>
-       </StackPanel></DataTemplate></ContentControl.ContentTemplate></ContentControl>
+       <TextBlock Text="History: up to 120 observed days. Each rolling point uses the evaluation window above. Separate value scales; shared day axis. Hover for values. Association does not prove causation." TextWrapping="Wrap" FontSize="12"/>
+
 
        <TextBlock Text="Compare with"/>
        <ComboBox ItemsSource="{Binding ExplorerOptions}" SelectedItem="{Binding ComparisonKpi}" HorizontalAlignment="Stretch" AutomationProperties.Name="Comparison KPI"><ComboBox.ItemTemplate><DataTemplate x:DataType="app:TeamKpiDefinition"><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate></ComboBox>
        <Button Content="Remove comparison" Click="RemoveComparisonClicked" IsVisible="{Binding HasComparison}"/>
-       <ContentControl Content="{Binding ExplorerSecondary}" IsVisible="{Binding HasComparison}"><ContentControl.ContentTemplate><DataTemplate x:DataType="vm:KpiCard"><StackPanel Spacing="3">
-        <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="#875387"/>
-        <TextBlock Text="Definition · hover for details" ToolTip.Tip="{Binding ExplorerDescription}" FontSize="11"/>
-        <TextBlock Text="{Binding Period}" ToolTip.Tip="{Binding Kind}" FontSize="11"/>
+       <Grid Name="MetricGraphs" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
+       <ContentControl Name="PrimaryMetric" Content="{Binding ExplorerPrimary}"><ContentControl.ContentTemplate><DataTemplate x:DataType="vm:KpiCard"><StackPanel Spacing="3">
+        <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="#326D84"/>
+        <TextBlock Text="Definition · hover for details" ToolTip.Tip="{Binding ExplorerDescription}" FontSize="12"/>
+        <TextBlock Text="{Binding Period}" ToolTip.Tip="{Binding Kind}" FontSize="12"/>
         <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="{Binding Value}" FontWeight="Bold"/><TextBlock Text="{Binding Unit}"/></StackPanel>
-        <charts:LivePerformanceTrendChart Series="{Binding Trend}" Unit="{Binding Unit}" SeriesBrush="#875387" SamplesOnly="True" Height="110"/>
+        <charts:LivePerformanceTrendChart Series="{Binding Trend}" Unit="{Binding Unit}" SamplesOnly="True" Height="{Binding #Dashboard.ChartHeight}"/>
+       </StackPanel></DataTemplate></ContentControl.ContentTemplate></ContentControl>
+       <ContentControl Name="SecondaryMetric" Grid.Row="1" Content="{Binding ExplorerSecondary}" IsVisible="{Binding HasComparison}"><ContentControl.ContentTemplate><DataTemplate x:DataType="vm:KpiCard"><StackPanel Spacing="3">
+        <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="#875387"/>
+        <TextBlock Text="Definition · hover for details" ToolTip.Tip="{Binding ExplorerDescription}" FontSize="12"/>
+        <TextBlock Text="{Binding Period}" ToolTip.Tip="{Binding Kind}" FontSize="12"/>
+        <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="{Binding Value}" FontWeight="Bold"/><TextBlock Text="{Binding Unit}"/></StackPanel>
+        <charts:LivePerformanceTrendChart Series="{Binding Trend}" Unit="{Binding Unit}" SeriesBrush="#875387" SamplesOnly="True" Height="{Binding #Dashboard.ChartHeight}"/>
        </StackPanel></DataTemplate></ContentControl.ContentTemplate></ContentControl>
 
+       </Grid>
        </StackPanel>
        <StackPanel IsVisible="{Binding CompareScenarios}" Spacing="6">
         <TextBlock Text="{Binding GuidedTitle}" FontWeight="Bold" TextWrapping="Wrap"/>
-        <TextBlock Text="{Binding ScenarioStatus}" TextWrapping="Wrap" FontSize="11"/>
+        <TextBlock Text="{Binding ScenarioStatus}" TextWrapping="Wrap" FontSize="12"/>
         <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="New evaluation days"/><ComboBox ItemsSource="{Binding EvaluationPeriods}" SelectedItem="{Binding EvaluationDays}"/></StackPanel>
         <Button Content="Start staffing experiment…" Command="{Binding BeginGuidedCommand}"/>
-        <TextBlock Text="Existing B5.1 baseline; LIVE advances only when you resume or step. One staffing variable. Shared checkpoint RNG, but random events may diverge after a change." TextWrapping="Wrap" FontSize="11"/>
+        <TextBlock Text="Existing B5.1 baseline; LIVE advances only when you resume or step. One staffing variable. Shared checkpoint RNG, but random events may diverge after a change." TextWrapping="Wrap" FontSize="12"/>
         <ComboBox Name="ScenarioMetricPicker" ItemsSource="{Binding ScenarioOptions}" SelectedItem="{Binding ScenarioKpi}" HorizontalAlignment="Stretch" AutomationProperties.Name="Scenario KPI"><ComboBox.ItemTemplate><DataTemplate x:DataType="app:TeamKpiDefinition"><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate></ComboBox>
-        <TextBlock Text="{Binding ScenarioKpi.Description}" TextWrapping="Wrap" FontSize="11"/>
-        <TextBlock Text="Evaluation-to-date values · same scale. Hover for values and Δ." TextWrapping="Wrap" FontSize="11"/>
+        <TextBlock Text="{Binding ScenarioKpi.Description}" TextWrapping="Wrap" FontSize="12"/>
+        <TextBlock Text="Evaluation-to-date values · same scale. Hover for values and Δ." TextWrapping="Wrap" FontSize="12"/>
         <StackPanel Orientation="Horizontal" Spacing="10"><TextBlock Text="● Baseline" Foreground="#326D84"/><TextBlock Text="■ LIVE intervention" Foreground="#875387"/></StackPanel>
-        <charts:LivePerformanceTrendChart Series="{Binding ScenarioBaseline}" ComparisonSeries="{Binding ScenarioIntervention}" Unit="{Binding ScenarioKpi.Unit}" SamplesOnly="True" Height="180"/>
-        <TextBlock Text="Matched period summary · Δ = intervention − baseline" TextWrapping="Wrap" FontSize="11"/>
+        <charts:LivePerformanceTrendChart Series="{Binding ScenarioBaseline}" ComparisonSeries="{Binding ScenarioIntervention}" Unit="{Binding ScenarioKpi.Unit}" SamplesOnly="True" Height="{Binding #Dashboard.ChartHeight}"/>
+        <TextBlock Text="Matched period summary · Δ = intervention − baseline" TextWrapping="Wrap" FontSize="12"/>
         <ItemsControl ItemsSource="{Binding ScenarioRows}"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:ScenarioKpiDisplayRow"><StackPanel Margin="0,3">
-         <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="11"/><TextBlock Text="{Binding Unit}" FontSize="10"/>
-         <Grid ColumnDefinitions="*,*,*"><StackPanel><TextBlock Text="Baseline" FontSize="10"/><TextBlock Text="{Binding Baseline}" FontSize="11"/></StackPanel><StackPanel Grid.Column="1"><TextBlock Text="Intervention" FontSize="10"/><TextBlock Text="{Binding Intervention}" FontSize="11"/></StackPanel><StackPanel Grid.Column="2"><TextBlock Text="Δ" FontSize="10"/><TextBlock Text="{Binding Difference}" FontSize="11"/></StackPanel></Grid>
+         <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="12"/><TextBlock Text="{Binding Unit}" FontSize="11"/>
+         <Grid ColumnDefinitions="*,*,*"><StackPanel><TextBlock Text="Baseline" FontSize="11"/><TextBlock Text="{Binding Baseline}" FontSize="12"/></StackPanel><StackPanel Grid.Column="1"><TextBlock Text="Intervention" FontSize="11"/><TextBlock Text="{Binding Intervention}" FontSize="12"/></StackPanel><StackPanel Grid.Column="2"><TextBlock Text="Δ" FontSize="11"/><TextBlock Text="{Binding Difference}" FontSize="12"/></StackPanel></Grid>
         </StackPanel></DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
-        <TextBlock Text="{Binding ScenarioEconomics}" TextWrapping="Wrap" FontSize="11"/>
+        <TextBlock Text="{Binding ScenarioEconomics}" TextWrapping="Wrap" FontSize="12"/>
        </StackPanel>
       </StackPanel>
      </ScrollViewer>
     </Border>
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+    <ScrollViewer Name="CardStrip" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
     <ItemsControl ItemsSource="{Binding KpiCards}">
      <ItemsControl.ItemsPanel><ItemsPanelTemplate><StackPanel Orientation="{Binding #Dashboard.LayoutOrientation}" Spacing="6"/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
      <ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:KpiCard">
-      <Button Click="OpenExplorerClicked" Padding="0" Background="Transparent" AutomationProperties.Name="{Binding Name}"><Border Background="White" BorderBrush="#D6DFE3" BorderThickness="1" CornerRadius="4" Padding="7" Width="234" ToolTip.Tip="{Binding Help}">
+      <Button Click="OpenExplorerClicked" Padding="0" Background="Transparent" AutomationProperties.Name="{Binding Name}"><Border Background="White" BorderBrush="{Binding SelectionBorder}" BorderThickness="2" CornerRadius="4" Padding="7" Width="234" ToolTip.Tip="{Binding Help}">
        <StackPanel Spacing="1">
         <TextBlock Text="{Binding Name}" Foreground="#253D4A" FontSize="13" FontWeight="SemiBold"/>
-        <StackPanel Orientation="Horizontal" Spacing="5"><TextBlock Text="{Binding Value}" Foreground="#17232D" FontWeight="Bold" FontSize="19"/><TextBlock Text="{Binding Unit}" Foreground="#526879" FontSize="10" VerticalAlignment="Center"/></StackPanel>
-        <TextBlock Text="{Binding Kind}" Foreground="#526879" FontSize="10"/>
-        <TextBlock Text="{Binding Period}" Foreground="#526879" FontSize="10"/>
-        <TextBlock Text="{Binding Change}" Foreground="#344F60" FontSize="11" ToolTip.Tip="{Binding ComparisonHelp}"/>
+        <StackPanel Orientation="Horizontal" Spacing="5"><TextBlock Text="{Binding Value}" Foreground="#17232D" FontWeight="Bold" FontSize="19"/><TextBlock Text="{Binding Unit}" Foreground="#526879" FontSize="11" VerticalAlignment="Center"/></StackPanel>
+        <TextBlock Text="{Binding Kind}" Foreground="#526879" FontSize="11"/>
+        <TextBlock Text="{Binding Period}" Foreground="#526879" FontSize="11"/>
+        <TextBlock Text="{Binding Change}" Foreground="#344F60" FontSize="12" ToolTip.Tip="{Binding ComparisonHelp}"/>
         <charts:LivePerformanceTrendChart Series="{Binding Trend}" Unit="{Binding Unit}" Compact="True" SamplesOnly="True" Height="28"/>
-        <TextBlock Text="{Binding TrendCaption}" Foreground="#526879" FontSize="10"/>
+        <TextBlock Text="{Binding TrendCaption}" Foreground="#526879" FontSize="11"/>
        </StackPanel>
       </Border></Button>
      </DataTemplate></ItemsControl.ItemTemplate>

@@ -23,13 +23,13 @@ public partial class GameView : UserControl
     private void FitWorkshop()
     {
         if (!IsEffectivelyVisible || TopLevel.GetTopLevel(this) is not { } root || this.TranslatePoint(default, root) is not { } position) return;
-        var dashboardSide = Bounds.Width >= 1100;
-        var explorer = DataContext is Simulation.UI.ViewModels.LiveViewModel { ExplorerOpen: true };
-        var dashboardWidth = dashboardSide && KpiPanel.IsVisible ? (explorer ? 400 : 260) : 0;
+        var explorer = DataContext is Simulation.UI.ViewModels.LiveViewModel { ExplorerOpen: true, ExplorerExpanded: false };
+        var dashboardSide = explorer && Bounds.Width >= 1200;
+        var dashboardWidth = dashboardSide && KpiPanel.IsVisible ? 420 : 0;
         if (DashboardLayout.ColumnDefinitions.Count != 2) DashboardLayout.ColumnDefinitions = new("*,0");
         if (DashboardLayout.ColumnDefinitions[1].Width.Value != dashboardWidth) DashboardLayout.ColumnDefinitions[1].Width = new GridLength(dashboardWidth);
         Grid.SetColumn(KpiPanel, dashboardSide ? 1 : 0); Grid.SetRow(KpiPanel, dashboardSide ? 0 : 1);
-        KpiPanel.LayoutOrientation = dashboardSide && !explorer ? Avalonia.Layout.Orientation.Vertical : Avalonia.Layout.Orientation.Horizontal;
+        KpiPanel.LayoutOrientation = Avalonia.Layout.Orientation.Horizontal;
         KpiPanel.Margin = dashboardSide ? new Thickness(10,0,0,0) : new Thickness(0,8,0,0);
         var side = StationMap.SidePanel(Math.Max(1, Bounds.Width - dashboardWidth));
         if (sidePanel != side)
@@ -46,10 +46,12 @@ public partial class GameView : UserControl
         if (side) WorkshopContent.ColumnDefinitions[1].Width = new GridLength(GameWorld.HasSelection ? 300 : 0);
         var scroll = this.GetVisualAncestors().OfType<ScrollViewer>().FirstOrDefault();
         var bottom = scroll?.TranslatePoint(new Point(0, scroll.Bounds.Height), root)?.Y ?? root.Bounds.Height;
-        var height = StationMap.FitHeight(Math.Min(root.Bounds.Height, bottom) - Math.Max(0, position.Y), WorkshopHeader.Bounds.Height, side, GameWorld.HasSelection);
+        var dashboardHeight = !dashboardSide && !explorer && KpiPanel.IsVisible ? KpiPanel.Bounds.Height + 8 : 0;
+        var height = StationMap.FitHeight(Math.Min(root.Bounds.Height, bottom) - Math.Max(0, position.Y) - dashboardHeight, WorkshopHeader.Bounds.Height, side, GameWorld.HasSelection);
         var sceneHeight = GameWorld.UseSprites ? StationMap.SceneHeight : 680;
         var width = Math.Max(1, WorkshopContent.Bounds.Width - (side && GameWorld.HasSelection ? 300 : 0));
-        var fittedHeight = Math.Min(height, width * sceneHeight / 1080);
+        // Preserve readable sprites; short windows may scroll the dashboard instead of miniaturizing the workshop.
+        var fittedHeight = Math.Min(Math.Max(420, height), width * sceneHeight / 1080);
         if (Math.Abs(WorldViewport.Height - fittedHeight) > 1 || double.IsNaN(WorldViewport.Height)) WorldViewport.Height = fittedHeight;
         var panelHeight = side ? height : 200;
         if (Math.Abs(StationPanel.MaxHeight - panelHeight) > 1) StationPanel.MaxHeight = panelHeight;

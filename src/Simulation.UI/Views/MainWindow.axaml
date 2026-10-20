@@ -1,4 +1,4 @@
-<Window xmlns="https://github.com/avaloniaui" xmlns:charts="using:Simulation.UI.Controls" xmlns:views="using:Simulation.UI.Views" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Simulation.UI.Views.MainWindow" x:DataType="vm:MainWindowViewModel" Title="Software Development Simulation" Width="1240" Height="900" MinWidth="960" MinHeight="680" Background="#F4F4F0">
+<Window xmlns="https://github.com/avaloniaui" xmlns:charts="using:Simulation.UI.Controls" xmlns:views="using:Simulation.UI.Views" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Simulation.UI.Views.MainWindow" Name="RootWindow" x:DataType="vm:MainWindowViewModel" Title="Software Development Simulation" Width="1240" Height="900" MinWidth="960" MinHeight="680" Background="#F4F4F0">
  <Window.Resources>
   <vm:PresentationLabels x:Key="HumanLabel" />
   <DataTemplate x:Key="ChangeField" x:DataType="vm:SimpleChangeField">
@@ -69,9 +69,12 @@
      <Border Background="#FFEB00" CornerRadius="3" Padding="8,4"><TextBlock Text="FLOW" Foreground="#111111" FontWeight="Bold" FontSize="18"/></Border>
      <StackPanel><TextBlock Name="ApplicationTitle" Text="Software Development Simulation" Foreground="White" FontWeight="SemiBold" FontSize="16"/><TextBlock Text="EXPLORE · OBSERVE · IMPROVE" Foreground="#BABABA" FontSize="10" LetterSpacing="2"/></StackPanel>
     </StackPanel>
-    <Button Grid.Column="2" Content="Help  ?" Classes="headerButton" VerticalAlignment="Center" AutomationProperties.Name="Simulation help">
+    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+    <Button Content="Application ▾" Classes="headerButton" AutomationProperties.Name="Application menu"><Button.Flyout><MenuFlyout><MenuItem Header="Exit Application" InputGesture="{Binding #RootWindow.ExitGesture}" Command="{Binding #RootWindow.ExitCommand}"/></MenuFlyout></Button.Flyout></Button>
+    <Button Content="Help  ?" Classes="headerButton" VerticalAlignment="Center" AutomationProperties.Name="Simulation help">
      <Button.Flyout><Flyout><StackPanel Spacing="8" MaxWidth="340"><TextBlock Text="Work with the flow" FontWeight="Bold" FontSize="18"/><TextBlock Text="Start a Live session, watch the queues and pause to change your team or working assumptions. Changes take effect on the next simulated day." TextWrapping="Wrap"/><TextBlock Text="Scenarios runs a separate simulation. Compare and Explore help investigate alternatives. Leaving Live pauses the current session." TextWrapping="Wrap"/><TextBlock Text="Yellow identifies controls. Orange and red queue highlights indicate accumulation; inspect their tooltips for the numbers." TextWrapping="Wrap"/></StackPanel></Flyout></Button.Flyout>
     </Button>
+    </StackPanel>
    </Grid>
   </Border>
   <Grid Grid.Row="1" ColumnDefinitions="Auto,*">

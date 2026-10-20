@@ -40,6 +40,7 @@
       <Button Content="Open detailed comparison" Command="{Binding GuidedDetailsCommand}" HorizontalAlignment="Left"/>
      </StackPanel>
     </Expander>
+    <TextBlock Text="{Binding WorkshopFeedback}" Foreground="#E3ECEC" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Latest simulated day feedback"/>
     <TextBlock Name="WorkflowSummary" Text="{Binding #GameWorld.WorkflowSummary}" Foreground="#C7D8D8" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Current workflow observations"/>
    </StackPanel>
    <Grid Name="DashboardLayout" RowDefinitions="Auto,Auto" ColumnDefinitions="*">

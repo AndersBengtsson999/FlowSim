@@ -1,0 +1,1 @@
+PASS: native compact/expanded layout, resize, LIVE update, mode and station preservation, zoom/pan/Fit, Cmd+Q registration and cancellable lifecycle Exit. Invoking final Exit command.

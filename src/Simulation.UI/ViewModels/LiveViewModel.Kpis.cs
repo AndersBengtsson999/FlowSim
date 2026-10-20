@@ -15,6 +15,8 @@ public sealed class KpiChoice(TeamKpiDefinition definition, LiveViewModel owner)
 }
 public sealed record KpiCard(TeamKpiObservation Observation)
 {
+    public bool Selected { get; init; }
+    public string SelectionBorder => Selected ? "#A68F00" : "#D6DFE3";
     public string Name => Observation.Definition.Name;
     public string Unit => Observation.Definition.Unit;
     public string Kind => Observation.Definition.Kind;
@@ -55,11 +57,24 @@ public sealed partial class LiveViewModel
         RefreshKpis();foreach(var choice in KpiChoices)choice.Refresh();Notify();
     }
     private void LoadKpis() { KpiSettings=Live!.Dashboard.Normalize();foreach(var choice in KpiChoices)choice.Refresh(); }
-    private void RefreshKpis() { KpiCards=Live is null ? [] : KpiDashboard.Project(Live.Session,KpiSettings).Select(o=>new KpiCard(o)).ToArray(); RefreshExplorer(); }
+    private void RefreshKpis() { KpiCards=Live is null ? [] : KpiDashboard.Project(Live.Session,KpiSettings).Select(o=>new KpiCard(o) { Selected=KpiSettings.Explorer==o.Definition.Id }).ToArray(); RefreshExplorer(); }
 }
 
 public sealed partial class LiveViewModel
 {
+    private bool explorerExpanded;
+    public bool ExplorerExpanded { get=>explorerExpanded; set { if(explorerExpanded==value)return; explorerExpanded=value;Notify(); } }
+    public string WorkshopFeedback
+    {
+        get {
+            if(Live is null || Day==0)return "Start or step LIVE to observe releases and changes.";
+            var released=Live.Session.WorkItems.Count(w=>w.DoneDay==Day);
+            var change=Live.Session.Changes.LastOrDefault();
+            var effective=change is null ? "" : $" · Change {(change.Day >= Day ? "takes effect" : "effective")} Day {change.Day+1}";
+            var complete=guidedExperiment is {InvalidReason:null} e && e.BaselineReady && Day>=e.EndDay ? " · Experiment complete" : "";
+            return $"Day {Day} · Released {released} item(s){effective}{complete}";
+        }
+    }
     public bool ExplorerOpen => KpiSettings.Explorer.HasValue;
     public IReadOnlyList<TeamKpiDefinition> ExplorerOptions => KpiDashboard.Definitions;
     public TeamKpiDefinition? ComparisonKpi
