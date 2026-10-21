@@ -1,3 +1,4 @@
+using Simulation.UI.Theming;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
@@ -44,7 +45,7 @@ public sealed class DailyChart : Control
         var max = Math.Max(1, days.Max(d => Enumerable.Range(0, seriesCount).Max(s => Value(d, s))));
         double X(int i) => plot.Left + (days.Count == 1 ? plot.Width / 2 : i * plot.Width / (days.Count - 1));
         double Y(double value) => plot.Bottom - value / max * plot.Height;
-        var grid = new Pen(Brush.Parse("#E2E8F0"), 1);
+        var grid = new Pen(Brush.Parse(FlowPalette.Border), 1);
         for (var tick = 0; tick <= 2; tick++)
         {
             var value = max * tick / 2;
@@ -56,7 +57,7 @@ public sealed class DailyChart : Control
         // Draw available capacity first, so coinciding actual usage stays visible.
         for (var series = seriesCount - 1; series >= 0; series--)
         {
-            var color = series == 0 ? "#246B91" : Mode is DailyChartMode.Queues or DailyChartMode.ReworkStates ? "#AE6B0D" : "#94A3B8";
+            var color = series == 0 ? FlowPalette.Accent : Mode is DailyChartMode.Queues or DailyChartMode.ReworkStates ? FlowPalette.Warning : FlowPalette.Secondary;
             var brush = Brush.Parse(color);
             var pen = new Pen(brush, series == 0 ? 2.5 : 1.5);
             if (days.Count == 1) context.DrawEllipse(brush, null, new Point(X(0), Y(Value(days[0], series))), 3, 3);
@@ -73,7 +74,7 @@ public sealed class DailyChart : Control
             }
         }
         var selected = Math.Clamp(SelectedDay - 1, 0, days.Count - 1);
-        context.DrawLine(new Pen(Brush.Parse("#475569"), 1), new Point(X(selected), plot.Top), new Point(X(selected), plot.Bottom));
+        context.DrawLine(new Pen(Brush.Parse(FlowPalette.Text), 1), new Point(X(selected), plot.Top), new Point(X(selected), plot.Bottom));
         Label(context, "1", new Point(plot.Left, plot.Bottom + 5));
         if (days.Count > 1) Label(context, days.Count.ToString(CultureInfo.CurrentCulture), new Point(plot.Right - 20, plot.Bottom + 5));
         Label(context, "Simulation Day (end of day)", new Point(plot.Left + Math.Max(0, (plot.Width - 150) / 2), plot.Bottom + 23));
@@ -81,5 +82,5 @@ public sealed class DailyChart : Control
 
     private static void Label(DrawingContext context, string text, Point location) =>
         context.DrawText(new FormattedText(text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
-            new Typeface("Inter"), 11, Brush.Parse("#526279")), location);
+            new Typeface("Inter"), 11, Brush.Parse(FlowPalette.Secondary)), location);
 }

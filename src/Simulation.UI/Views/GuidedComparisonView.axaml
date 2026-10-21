@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:charts="using:Simulation.UI.Controls" Background="#F5F5F0" x:Class="Simulation.UI.Views.GuidedComparisonView" x:DataType="vm:LiveViewModel">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:charts="using:Simulation.UI.Controls" Background="{DynamicResource FlowPanel}" x:Class="Simulation.UI.Views.GuidedComparisonView" x:DataType="vm:LiveViewModel">
  <StackPanel Spacing="12">
   <TextBlock Text="{Binding GuidedTitle}" FontSize="24" FontWeight="Bold"/>
   <TextBlock Text="{Binding GuidedProgress}" TextWrapping="Wrap"/>

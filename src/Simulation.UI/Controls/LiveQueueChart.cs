@@ -1,3 +1,4 @@
+using Simulation.UI.Theming;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
@@ -27,7 +28,7 @@ public sealed class LiveQueueChart : Control
         if (Points is not { Count: > 0 } points) return;
         var max = Math.Max(1, points.Max(p => Math.Max(Math.Max(p.Review, p.Testing), ShowRework ? p.Rework : 0)));
         double Y(int n) => Plot.Bottom - (double)n / max * Plot.Height;
-        var grid = new Pen(Brushes.LightGray, 1);
+        var grid = new Pen(Brush.Parse(FlowPalette.Border), 1);
         context.DrawLine(grid, Plot.BottomLeft, Plot.BottomRight);
         Label(context, max.ToString(), new(0, Plot.Top)); Label(context, "0", new(0, Plot.Bottom - 10));
         Label(context, "1", new(Plot.Left, Plot.Bottom + 5)); Label(context, $"Day {CurrentDay}", new(Plot.Right - 70, Plot.Bottom + 5));
@@ -35,7 +36,7 @@ public sealed class LiveQueueChart : Control
         for (var s = 0; s < (ShowRework ? 3 : 2); s++)
         {
             int Value(LiveQueuePoint p) => s == 0 ? p.Review : s == 1 ? p.Testing : p.Rework;
-            var pen = new Pen(Brush.Parse(s == 0 ? "#246B91" : s == 1 ? "#AE6B0D" : "#8753A6"), 1.7);
+            var pen = new Pen(Brush.Parse(s == 0 ? FlowPalette.Accent : s == 1 ? FlowPalette.Warning : FlowPalette.Purple), 1.7);
             Point? previous = null;
             for (var i = 0; i < points.Count; i += bucket)
             {
@@ -48,7 +49,7 @@ public sealed class LiveQueueChart : Control
             }
         }
         foreach (var change in Changes ?? [])
-            context.DrawLine(new Pen(Brushes.SlateGray, 1, DashStyle.Dash), new(X(change.Day), Plot.Top), new(X(change.Day), Plot.Bottom));
+            context.DrawLine(new Pen(Brush.Parse(FlowPalette.Secondary), 1, DashStyle.Dash), new(X(change.Day), Plot.Top), new(X(change.Day), Plot.Bottom));
     }
     protected override void OnPointerMoved(PointerEventArgs e)
     {
@@ -58,5 +59,5 @@ public sealed class LiveQueueChart : Control
         ToolTip.SetTip(this, changes.Length == 0 ? null : string.Join("\n", changes.Select(c => $"Day {c.Day}: {c.Description}")));
     }
     private static void Label(DrawingContext c, string text, Point p) => c.DrawText(new FormattedText(text,
-        CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Inter"), 11, Brushes.SlateGray), p);
+        CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Inter"), 11, Brush.Parse(FlowPalette.Secondary)), p);
 }

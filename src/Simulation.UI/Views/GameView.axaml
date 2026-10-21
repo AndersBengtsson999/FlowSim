@@ -1,24 +1,24 @@
 <UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:views="using:Simulation.UI.Views" xmlns:controls="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.GameView" x:DataType="vm:LiveViewModel">
  <UserControl.Styles>
-  <Style Selector="Button.stationClose:focus-visible"><Setter Property="BorderBrush" Value="#FFEB00"/><Setter Property="BorderThickness" Value="2"/></Style>
+  <Style Selector="Button.stationClose:focus-visible"><Setter Property="BorderBrush" Value="{DynamicResource FlowAccent}"/><Setter Property="BorderThickness" Value="2"/></Style>
  </UserControl.Styles>
- <Border Background="#101A25" CornerRadius="10" Padding="12">
+ <Border Background="{DynamicResource FlowWorkshop}" CornerRadius="10" Padding="12">
   <StackPanel Spacing="8">
    <StackPanel Name="WorkshopHeader" Spacing="8">
     <Grid ColumnDefinitions="*,Auto,Auto">
-     <TextBlock Text="THE SOFTWARE WORKSHOP" Foreground="#FFEB00" FontSize="19" FontWeight="Bold" VerticalAlignment="Center" TextWrapping="Wrap"/>
+     <TextBlock Text="THE SOFTWARE WORKSHOP" Foreground="{DynamicResource FlowAccent}" FontSize="19" FontWeight="Bold" VerticalAlignment="Center" TextWrapping="Wrap"/>
      <ComboBox Grid.Column="1" Name="GameRenderingMode" Margin="8,0" ItemsSource="{Binding GameRenderingModes}" SelectedItem="{Binding GameRenderingMode}" AutomationProperties.Name="Game rendering mode"/>
-     <Border Grid.Column="2" Background="#253341" CornerRadius="5" Padding="10,6"><TextBlock Text="{Binding DayLabel}" Foreground="White" FontSize="18" FontWeight="SemiBold"/></Border>
+     <Border Grid.Column="2" Background="{DynamicResource FlowElevated}" CornerRadius="5" Padding="10,6"><TextBlock Text="{Binding DayLabel}" Foreground="{DynamicResource FlowText}" FontSize="18" FontWeight="SemiBold"/></Border>
     </Grid>
     <WrapPanel Orientation="Horizontal">
-     <CheckBox Name="AnimateGameActivity" IsVisible="{Binding SpriteRendering}" Content="Animate activity" IsChecked="{Binding AnimateGameActivity}" Foreground="#D3DEE7" Margin="0,0,14,0" AutomationProperties.Name="Animate workshop activity. Turn off to reduce motion."/>
-     <CheckBox Content="Team Performance" IsChecked="{Binding DashboardVisible}" Foreground="#D3DEE7" Margin="0,0,10,0" AutomationProperties.Name="Show Team Performance dashboard"/>
+     <CheckBox Name="AnimateGameActivity" IsVisible="{Binding SpriteRendering}" Content="Animate activity" IsChecked="{Binding AnimateGameActivity}" Foreground="{DynamicResource FlowText}" Margin="0,0,14,0" AutomationProperties.Name="Animate workshop activity. Turn off to reduce motion."/>
+     <CheckBox Content="Team Performance" IsChecked="{Binding DashboardVisible}" Foreground="{DynamicResource FlowText}" Margin="0,0,10,0" AutomationProperties.Name="Show Team Performance dashboard"/>
      <ComboBox Name="StationPicker" Width="190" PlaceholderText="Inspect a station" ItemsSource="{Binding #GameWorld.StationOptions}" SelectedItem="{Binding #GameWorld.SelectedStation, Mode=TwoWay}" AutomationProperties.Name="Select workshop station" Margin="0,0,10,0"/>
-     <Button Classes="stationClose" Content="−" Click="ZoomOutClicked" Background="#243945" Foreground="#E3ECEC" Margin="0,0,4,0" AutomationProperties.Name="Zoom out" ToolTip.Tip="Zoom out"/>
-     <TextBlock Text="{Binding #GameWorld.ZoomLabel}" Foreground="#E3ECEC" VerticalAlignment="Center" Margin="4,0,8,0" MinWidth="38"/>
-     <Button Classes="stationClose" Content="+" Click="ZoomInClicked" Background="#243945" Foreground="#E3ECEC" Margin="0,0,6,0" AutomationProperties.Name="Zoom in" ToolTip.Tip="Zoom in"/>
-     <Button Classes="stationClose" Content="Fit to View" Click="FitClicked" Background="#243945" Foreground="#E3ECEC" Margin="0,0,8,0" AutomationProperties.Name="Fit workshop to view"/>
-     <Button Content="Help" Background="#243945" Foreground="#E3ECEC" BorderBrush="#6A818A" AutomationProperties.Name="Workshop help">
+     <Button Classes="stationClose" Content="−" Click="ZoomOutClicked" Background="{DynamicResource FlowElevated}" Foreground="{DynamicResource FlowText}" Margin="0,0,4,0" AutomationProperties.Name="Zoom out" ToolTip.Tip="Zoom out"/>
+     <TextBlock Text="{Binding #GameWorld.ZoomLabel}" Foreground="{DynamicResource FlowText}" VerticalAlignment="Center" Margin="4,0,8,0" MinWidth="38"/>
+     <Button Classes="stationClose" Content="+" Click="ZoomInClicked" Background="{DynamicResource FlowElevated}" Foreground="{DynamicResource FlowText}" Margin="0,0,6,0" AutomationProperties.Name="Zoom in" ToolTip.Tip="Zoom in"/>
+     <Button Classes="stationClose" Content="Fit to View" Click="FitClicked" Background="{DynamicResource FlowElevated}" Foreground="{DynamicResource FlowText}" Margin="0,0,8,0" AutomationProperties.Name="Fit workshop to view"/>
+     <Button Content="Help" Background="{DynamicResource FlowElevated}" Foreground="{DynamicResource FlowText}" BorderBrush="{DynamicResource FlowBorder}" AutomationProperties.Name="Workshop help">
       <Button.Flyout><Flyout><StackPanel Spacing="8" MaxWidth="390">
        <TextBlock Text="Inspect the workshop" FontSize="17" FontWeight="Bold"/>
        <TextBlock Text="Ordinary wheel or two-finger scrolling scrolls the page. Hold Cmd on macOS, or Ctrl on Windows/Linux, while scrolling to zoom around the pointer (75–250%). The + / − buttons also zoom. Drag empty scene space to pan, or middle-drag anywhere. Fit to View centers the workshop. Camera changes are immediate, without inertia. Click a station or its storage zone. You can also choose a station from the list. With the world focused, use arrow keys to select, Enter or Space to open, and Escape to close." TextWrapping="Wrap"/>
@@ -29,7 +29,7 @@
       </StackPanel></Flyout></Button.Flyout>
      </Button>
     </WrapPanel>
-    <Expander IsVisible="{Binding HasGuidedExperiment}" HorizontalAlignment="Stretch" Background="#F5F7F8" Foreground="#17232D" Padding="8" Header="{Binding GuidedHeader}">
+    <Expander IsVisible="{Binding HasGuidedExperiment}" HorizontalAlignment="Stretch" Background="{DynamicResource FlowPanel}" Foreground="{DynamicResource FlowText}" Padding="8" Header="{Binding GuidedHeader}">
      <StackPanel Spacing="6">
       <TextBlock Text="{Binding GuidedProgress}" TextWrapping="Wrap"/>
       <Grid ColumnDefinitions="2*,*,*"><TextBlock Text="Matched period" FontWeight="SemiBold"/><TextBlock Grid.Column="1" Text="Baseline" FontWeight="SemiBold"/><TextBlock Grid.Column="2" Text="Intervention" FontWeight="SemiBold"/></Grid>
@@ -41,45 +41,45 @@
      </StackPanel>
     </Expander>
     <views:ProductLaunchView IsVisible="{Binding HasSession}"/>
-    <TextBlock Text="{Binding WorkshopFeedback}" Foreground="#E3ECEC" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Latest simulated day feedback"/>
-    <TextBlock Name="WorkflowSummary" Text="{Binding #GameWorld.WorkflowSummary}" Foreground="#C7D8D8" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Current workflow observations"/>
+    <TextBlock Text="{Binding WorkshopFeedback}" Foreground="{DynamicResource FlowText}" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Latest simulated day feedback"/>
+    <TextBlock Name="WorkflowSummary" Text="{Binding #GameWorld.WorkflowSummary}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Current workflow observations"/>
    </StackPanel>
    <Grid Name="DashboardLayout" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
    <Grid Name="WorkshopContent" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
     <Border Name="WorldViewport" ClipToBounds="True" HorizontalAlignment="Stretch" VerticalAlignment="Top">
      <controls:GameWorldControl Name="GameWorld" CustomerLaunch="{Binding LaunchNotices.Current}" Scene="{Binding GameScene}" UseSprites="{Binding SpriteRendering}" AnimateActivity="{Binding AnimateGameActivity}" SimulationRunning="{Binding IsRunning}" PlaybackSpeed="{Binding Speed}" AutomationProperties.Name="Interactive workshop. Use arrow keys to select stations, Enter to inspect, Escape to close."/>
     </Border>
-    <Border Name="StationPanel" VerticalAlignment="Top" Grid.Row="1" IsVisible="{Binding #GameWorld.HasSelection}" Background="#1B2C37" BorderBrush="#4F626A" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,10,0,0">
+    <Border Name="StationPanel" VerticalAlignment="Top" Grid.Row="1" IsVisible="{Binding #GameWorld.HasSelection}" Background="{DynamicResource FlowPanel}" BorderBrush="{DynamicResource FlowBorder}" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,10,0,0">
      <Grid RowDefinitions="Auto,Auto,*">
       <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
-       <TextBlock Text="{Binding #GameWorld.Details.Title}" Foreground="#FFEB00" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
-       <Button Grid.Column="1" Foreground="#E3ECEC" Background="#243945" Content="Info" Margin="8,0" ToolTip.Tip="{Binding #GameWorld.Details.Help}"/>
-       <Button Grid.Column="2" Name="CloseStation" Classes="stationClose" Foreground="#E3ECEC" Background="#243945" Content="Close" Click="CloseStationClicked" AutomationProperties.Name="Close station details"/>
+       <TextBlock Text="{Binding #GameWorld.Details.Title}" Foreground="{DynamicResource FlowWarning}" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
+       <Button Grid.Column="1" Foreground="{DynamicResource FlowText}" Background="{DynamicResource FlowElevated}" Content="Info" Margin="8,0" ToolTip.Tip="{Binding #GameWorld.Details.Help}"/>
+       <Button Grid.Column="2" Name="CloseStation" Classes="stationClose" Foreground="{DynamicResource FlowText}" Background="{DynamicResource FlowElevated}" Content="Close" Click="CloseStationClicked" AutomationProperties.Name="Close station details"/>
       </Grid>
       <StackPanel Grid.Row="1" Spacing="4" Margin="0,0,0,8">
-       <TextBlock Text="{Binding #GameWorld.Details.CompactSummary}" Foreground="#E3ECEC" TextWrapping="Wrap"/>
-       <TextBlock Text="{Binding #GameWorld.Inspection.MembershipNotice}" Foreground="#BACCD4" FontSize="12" TextWrapping="Wrap"/>
-       <Button Name="TestingExperiment" Background="#FFEB00" Foreground="#17232D" IsVisible="{Binding #GameWorld.IsTestingSelected}" Content="Experiment with test capacity" Command="{Binding BeginGuidedCommand}" HorizontalAlignment="Left"/>
+       <TextBlock Text="{Binding #GameWorld.Details.CompactSummary}" Foreground="{DynamicResource FlowText}" TextWrapping="Wrap"/>
+       <TextBlock Text="{Binding #GameWorld.Inspection.MembershipNotice}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" TextWrapping="Wrap"/>
+       <Button Name="TestingExperiment" Background="{DynamicResource FlowAccent}" Foreground="{DynamicResource FlowOnAccent}" IsVisible="{Binding #GameWorld.IsTestingSelected}" Content="Experiment with test capacity" Command="{Binding BeginGuidedCommand}" HorizontalAlignment="Left"/>
       </StackPanel>
       <ListBox Grid.Row="2" Name="InspectionList" ItemsSource="{Binding #GameWorld.Inspection.Items}" Background="Transparent" BorderThickness="0"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.IsScrollChainingEnabled="False" ScrollViewer.BringIntoViewOnFocusChange="False">
        <ListBox.Styles><Style Selector="ListBoxItem"><Setter Property="HorizontalContentAlignment" Value="Stretch"/><Setter Property="Padding" Value="0"/></Style></ListBox.Styles>
        <ListBox.ItemTemplate><DataTemplate x:DataType="vm:InspectionItemViewModel">
         <StackPanel>
-         <TextBlock IsVisible="{Binding ShowGroup}" Text="{Binding GroupHeading}" FontWeight="SemiBold" Foreground="#FFEB00" Margin="0,8,0,4"/>
+         <TextBlock IsVisible="{Binding ShowGroup}" Text="{Binding GroupHeading}" FontWeight="SemiBold" Foreground="{DynamicResource FlowWarning}" Margin="0,8,0,4"/>
          <Expander IsExpanded="{Binding Expanded, Mode=TwoWay}" HorizontalAlignment="Stretch" ScrollViewer.BringIntoViewOnFocusChange="False">
           <Expander.Header><TextBlock Text="{Binding Data.Heading}" TextWrapping="Wrap"/></Expander.Header>
-          <StackPanel Background="#EEF3F5" Margin="0" Spacing="2">
-             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="#17232D" Text="Status" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="#17232D" Grid.Column="1" Text="{Binding Data.Status}" TextWrapping="Wrap"/></Grid>
-             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="#17232D" Text="Development size" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="#17232D" Grid.Column="1" Text="{Binding Data.DevelopmentSize}" TextWrapping="Wrap"/></Grid>
-             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="#17232D" Text="Code review size" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="#17232D" Grid.Column="1" Text="{Binding Data.ReviewSize}" TextWrapping="Wrap"/></Grid>
-             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="#17232D" Text="Testing size" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="#17232D" Grid.Column="1" Text="{Binding Data.TestingSize}" TextWrapping="Wrap"/></Grid>
-             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="#17232D" Text="Days in current state" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="#17232D" Grid.Column="1" Text="{Binding Data.StateDays}" TextWrapping="Wrap"/></Grid>
-             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="#17232D" Text="Elapsed to delivery or now" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="#17232D" Grid.Column="1" Text="{Binding Data.ElapsedDays}" TextWrapping="Wrap"/></Grid>
-             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="#17232D" Text="Queue waiting" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="#17232D" Grid.Column="1" Text="{Binding Data.WaitingDays}" TextWrapping="Wrap"/></Grid>
-             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="#17232D" Text="Rework entries" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="#17232D" Grid.Column="1" Text="{Binding Data.ReworkEntries}" TextWrapping="Wrap"/></Grid>
-             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="#17232D" Text="Work received last day" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="#17232D" Grid.Column="1" Text="{Binding Data.RecentWork}" TextWrapping="Wrap"/></Grid>
-             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="#17232D" Text="Dependencies" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="#17232D" Grid.Column="1" Text="{Binding Data.DependencyStatus}" TextWrapping="Wrap"/></Grid>
+          <StackPanel Background="{DynamicResource FlowPanel}" Margin="0" Spacing="2">
+             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="{DynamicResource FlowText}" Text="Status" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="{DynamicResource FlowText}" Grid.Column="1" Text="{Binding Data.Status}" TextWrapping="Wrap"/></Grid>
+             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="{DynamicResource FlowText}" Text="Development size" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="{DynamicResource FlowText}" Grid.Column="1" Text="{Binding Data.DevelopmentSize}" TextWrapping="Wrap"/></Grid>
+             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="{DynamicResource FlowText}" Text="Code review size" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="{DynamicResource FlowText}" Grid.Column="1" Text="{Binding Data.ReviewSize}" TextWrapping="Wrap"/></Grid>
+             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="{DynamicResource FlowText}" Text="Testing size" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="{DynamicResource FlowText}" Grid.Column="1" Text="{Binding Data.TestingSize}" TextWrapping="Wrap"/></Grid>
+             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="{DynamicResource FlowText}" Text="Days in current state" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="{DynamicResource FlowText}" Grid.Column="1" Text="{Binding Data.StateDays}" TextWrapping="Wrap"/></Grid>
+             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="{DynamicResource FlowText}" Text="Elapsed to delivery or now" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="{DynamicResource FlowText}" Grid.Column="1" Text="{Binding Data.ElapsedDays}" TextWrapping="Wrap"/></Grid>
+             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="{DynamicResource FlowText}" Text="Queue waiting" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="{DynamicResource FlowText}" Grid.Column="1" Text="{Binding Data.WaitingDays}" TextWrapping="Wrap"/></Grid>
+             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="{DynamicResource FlowText}" Text="Rework entries" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="{DynamicResource FlowText}" Grid.Column="1" Text="{Binding Data.ReworkEntries}" TextWrapping="Wrap"/></Grid>
+             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="{DynamicResource FlowText}" Text="Work received last day" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="{DynamicResource FlowText}" Grid.Column="1" Text="{Binding Data.RecentWork}" TextWrapping="Wrap"/></Grid>
+             <Grid ColumnDefinitions="*,*" Margin="0,2"><TextBlock Foreground="{DynamicResource FlowText}" Text="Dependencies" TextWrapping="Wrap" Margin="0,0,8,0"/><TextBlock Foreground="{DynamicResource FlowText}" Grid.Column="1" Text="{Binding Data.DependencyStatus}" TextWrapping="Wrap"/></Grid>
           </StackPanel>
          </Expander>
         </StackPanel>

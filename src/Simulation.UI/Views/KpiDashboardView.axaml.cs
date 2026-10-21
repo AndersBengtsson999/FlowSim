@@ -52,8 +52,8 @@ public partial class KpiDashboardView : UserControl
         if(!vm.ExplorerOpen)vm.OpenExplorer(vm.KpiSettings.Selected!.FirstOrDefault());
         var view=new KpiDashboardView { expandedView=true, ChartHeight=300, DataContext=vm, Margin=new Thickness(12) };
         view.RefreshPresentation();view.CloseExplorerButton.Content="Return to compact view";
-        var window=new Window {Title="FLOW · KPI Explorer",Width=860,Height=900,MinWidth=620,MinHeight=520,Content=view,Background=Avalonia.Media.Brush.Parse("#EFF3F4")};
-        window.RequestedThemeVariant=Avalonia.Styling.ThemeVariant.Light;
+        var window=new Window {Title="FLOW · KPI Explorer",Width=860,Height=900,MinWidth=620,MinHeight=520,Content=view,Background=Avalonia.Media.Brush.Parse(Simulation.UI.Theming.FlowPalette.Content)};
+        window.RequestedThemeVariant=Avalonia.Styling.ThemeVariant.Dark;
         window.KeyBindings.Add(new KeyBinding {Gesture=new(Key.Escape),Command=new RelayCommand(window.Close)});
         if(OperatingSystem.IsMacOS() && owner is MainWindow main)
             window.KeyBindings.Add(new KeyBinding {Gesture=main.ExitGesture,Command=main.ExitCommand});

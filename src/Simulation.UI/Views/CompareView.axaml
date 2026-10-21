@@ -109,11 +109,11 @@
          <TextBlock Text="{Binding Name}" />
          <StackPanel Margin="0,0,16,0" Grid.Column="1">
           <TextBlock Text="{Binding Before}" />
-          <ProgressBar Value="{Binding Before}" Maximum="{Binding Scale}" Height="6" Foreground="#768FA6" />
+          <ProgressBar Value="{Binding Before}" Maximum="{Binding Scale}" Height="6" Foreground="{DynamicResource FlowSecondary}" />
          </StackPanel>
          <StackPanel Margin="0,0,16,0" Grid.Column="2">
           <TextBlock Text="{Binding After}" />
-          <ProgressBar Value="{Binding After}" Maximum="{Binding Scale}" Height="6" Foreground="#768FA6" />
+          <ProgressBar Value="{Binding After}" Maximum="{Binding Scale}" Height="6" Foreground="{DynamicResource FlowSecondary}" />
          </StackPanel>
         </Grid>
        </DataTemplate>

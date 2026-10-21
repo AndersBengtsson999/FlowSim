@@ -1,3 +1,4 @@
+using Simulation.UI.Theming;
 using Simulation.Core;
 
 namespace Simulation.UI.ViewModels;
@@ -25,24 +26,24 @@ public static class FlowPresentation
         string Active(string description, int count, int? limit) => limit is null ? description : $"{count} / {limit} · {description}";
         var rows = new List<FlowStateRow>
         {
-            new("Backlog", d.BacklogCount - d.WaitingForDependencyCount, "Not started", "#F1F5F9", "↓"),
-            new("Development", d.DevelopmentCount, Active("active items", d.DevelopmentCount, configuration?.DevelopmentWipLimit) + $"\nCapacity used {d.UsedDevelopmentCapacity:0.##} · Effective work {d.DevelopmentWork:0.##}", "#E8F1F7", "↓"),
-            new("Waiting for Code Review", d.WaitingForCodeReviewCount, "QUEUE · awaiting admission", "#FFF2D8", "↓"),
-            new("Code Review", d.CodeReviewCount, Active("Active stage · shared developer pool", d.CodeReviewCount, configuration?.CodeReviewWipLimit), "#E8F1F7", "↓"),
-            new("Waiting for Testing", d.WaitingForTestingCount, "QUEUE · awaiting admission", "#FFF2D8", "↓"),
-            new("Testing", d.TestingCount, Active("Active stage · tester capacity", d.TestingCount, configuration?.TestingWipLimit), "#E8F1F7", "↓"),
-            new("Ready for Release", d.ReadyForReleaseCount, configuration?.Release.Description ?? "Awaiting release", "#FFF2D8", "↓"),
-            new("Released", d.DoneCount, "Delivered", "#E6F2ED", "")
+            new("Backlog", d.BacklogCount - d.WaitingForDependencyCount, "Not started", FlowPalette.Panel, "↓"),
+            new("Development", d.DevelopmentCount, Active("active items", d.DevelopmentCount, configuration?.DevelopmentWipLimit) + $"\nCapacity used {d.UsedDevelopmentCapacity:0.##} · Effective work {d.DevelopmentWork:0.##}", FlowPalette.Elevated, "↓"),
+            new("Waiting for Code Review", d.WaitingForCodeReviewCount, "QUEUE · awaiting admission", FlowPalette.QueueWarning, "↓"),
+            new("Code Review", d.CodeReviewCount, Active("Active stage · shared developer pool", d.CodeReviewCount, configuration?.CodeReviewWipLimit), FlowPalette.Elevated, "↓"),
+            new("Waiting for Testing", d.WaitingForTestingCount, "QUEUE · awaiting admission", FlowPalette.QueueWarning, "↓"),
+            new("Testing", d.TestingCount, Active("Active stage · tester capacity", d.TestingCount, configuration?.TestingWipLimit), FlowPalette.Elevated, "↓"),
+            new("Ready for Release", d.ReadyForReleaseCount, configuration?.Release.Description ?? "Awaiting release", FlowPalette.QueueWarning, "↓"),
+            new("Released", d.DoneCount, "Delivered", FlowPalette.Completed, "")
         };
         if (rework)
         {
-            rows.Add(new("Waiting for Rework", d.WaitingForReworkCount, "QUEUE · feedback from inspections", "#FFF2D8", "↓"));
-            rows.Add(new("Rework", d.ReworkCount, Active("Returns to Code Review", d.ReworkCount, configuration?.Quality.ReworkWipLimit), "#E8F1F7", "↩"));
+            rows.Add(new("Waiting for Rework", d.WaitingForReworkCount, "QUEUE · feedback from inspections", FlowPalette.QueueWarning, "↓"));
+            rows.Add(new("Rework", d.ReworkCount, Active("Returns to Code Review", d.ReworkCount, configuration?.Quality.ReworkWipLimit), FlowPalette.Elevated, "↩"));
         }
         bool WaitingDependency(WorkItemDaySnapshot w) => w.State == WorkItemStatus.Backlog && w.CreatedDay <= d.Day && w.ResidualDependency is { } dependency && dependency.ResolutionDay > (long)d.Day + 1;
         var showDependencies = configuration?.ResidualDependencies.Rate > 0 || d.Items.Any(w => w.ResidualDependency is not null);
         if (showDependencies)
-            rows.Insert(1, new("Waiting for Dependency", d.WaitingForDependencyCount, "Backlog subset · no active WIP", "#F3F1ED", ""));
+            rows.Insert(1, new("Waiting for Dependency", d.WaitingForDependencyCount, "Backlog subset · no active WIP", FlowPalette.Panel, ""));
         var itemsByState = d.Items.Where(w => w.CreatedDay <= d.Day).ToLookup(w => w.State);
         return rows.Select(row => row with {
             CompactQueueRows = showDependencies,

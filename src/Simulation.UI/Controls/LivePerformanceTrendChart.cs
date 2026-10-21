@@ -1,3 +1,4 @@
+using Simulation.UI.Theming;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
@@ -22,7 +23,7 @@ public sealed class LivePerformanceTrendChart : Control
         }
     }
     public static readonly StyledProperty<LiveTrendSeries?> SeriesProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, LiveTrendSeries?>(nameof(Series));
-    public static readonly StyledProperty<IBrush> SeriesBrushProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, IBrush>(nameof(SeriesBrush), Brush.Parse("#326D84"));
+    public static readonly StyledProperty<IBrush> SeriesBrushProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, IBrush>(nameof(SeriesBrush), Brush.Parse(FlowPalette.Accent));
     public IBrush SeriesBrush { get => GetValue(SeriesBrushProperty); set => SetValue(SeriesBrushProperty, value); }
     public static readonly StyledProperty<bool> SamplesOnlyProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, bool>(nameof(SamplesOnly));
     public bool SamplesOnly { get => GetValue(SamplesOnlyProperty); set => SetValue(SamplesOnlyProperty, value); }
@@ -46,7 +47,7 @@ public sealed class LivePerformanceTrendChart : Control
         if (Series is not { Points.Count: > 0 } series) { if (!Compact) Label(context, "No completed simulated days yet.", new(Plot.Left, Plot.Top)); return; }
         var (min,max) = ValueScale;
         double Y(double value) => Plot.Bottom - (value - min) / (max - min) * Plot.Height;
-        var gridPen = new Pen(Brush.Parse("#E4EAEE"), 1);
+        var gridPen = new Pen(Brush.Parse(FlowPalette.Border), 1);
         context.DrawLine(gridPen, Plot.BottomLeft, Plot.BottomRight);
         if (!Compact)
         {
@@ -64,7 +65,7 @@ public sealed class LivePerformanceTrendChart : Control
                 context.DrawEllipse(pen.Brush, null, new(X(sample.Day), Y(sample.Value!.Value)), 1.6, 1.6);
             if (ComparisonSeries is { } comparison)
                 foreach (var sample in comparison.Points.Where(p=>p.Value.HasValue))
-                    context.DrawRectangle(Brush.Parse("#875387"), null, new Rect(X(sample.Day)-2,Y(sample.Value!.Value)-2,4,4));
+                    context.DrawRectangle(Brush.Parse(FlowPalette.Purple), null, new Rect(X(sample.Day)-2,Y(sample.Value!.Value)-2,4,4));
             return;
         }
         Point? previous = null;
@@ -90,7 +91,7 @@ public sealed class LivePerformanceTrendChart : Control
         foreach (var marker in series.Interventions)
         {
             var selected = marker.Day == SelectedDay;
-            context.DrawLine(new Pen(Brushes.SlateGray, selected ? 2 : 1, DashStyle.Dash), new(X(marker.Day), Plot.Top), new(X(marker.Day), Plot.Bottom));
+            context.DrawLine(new Pen(Brush.Parse(FlowPalette.Secondary), selected ? 2 : 1, DashStyle.Dash), new(X(marker.Day), Plot.Top), new(X(marker.Day), Plot.Bottom));
         }
         if (!Compact && series.Points.All(p => p.Value is null)) Label(context, "No defined values in this range.", new(Plot.Left + 8, Plot.Top + 10));
     }
@@ -117,5 +118,5 @@ public sealed class LivePerformanceTrendChart : Control
         ToolTip.SetTip(this, text);
     }
     private static void Label(DrawingContext context, string text, Point point) => context.DrawText(new FormattedText(text,
-        CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Inter"), 12, Brush.Parse("#61717E")), point);
+        CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Inter"), 12, Brush.Parse(FlowPalette.Secondary)), point);
 }

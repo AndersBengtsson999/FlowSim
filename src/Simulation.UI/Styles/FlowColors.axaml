@@ -1,0 +1,23 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:theme="using:Simulation.UI.Theming">
+ <SolidColorBrush x:Key="FlowApp" Color="{x:Static theme:FlowPalette.AppColor}"/>
+ <SolidColorBrush x:Key="FlowSidebar" Color="{x:Static theme:FlowPalette.SidebarColor}"/>
+ <SolidColorBrush x:Key="FlowContent" Color="{x:Static theme:FlowPalette.ContentColor}"/>
+ <SolidColorBrush x:Key="FlowPanel" Color="{x:Static theme:FlowPalette.PanelColor}"/>
+ <SolidColorBrush x:Key="FlowElevated" Color="{x:Static theme:FlowPalette.ElevatedColor}"/>
+ <SolidColorBrush x:Key="FlowText" Color="{x:Static theme:FlowPalette.TextColor}"/>
+ <SolidColorBrush x:Key="FlowSecondary" Color="{x:Static theme:FlowPalette.SecondaryColor}"/>
+ <SolidColorBrush x:Key="FlowMuted" Color="{x:Static theme:FlowPalette.MutedColor}"/>
+ <SolidColorBrush x:Key="FlowAccent" Color="{x:Static theme:FlowPalette.AccentColor}"/>
+ <SolidColorBrush x:Key="FlowHover" Color="{x:Static theme:FlowPalette.HoverColor}"/>
+ <SolidColorBrush x:Key="FlowSelected" Color="{x:Static theme:FlowPalette.SelectedColor}"/>
+ <SolidColorBrush x:Key="FlowSuccess" Color="{x:Static theme:FlowPalette.SuccessColor}"/>
+ <SolidColorBrush x:Key="FlowWarning" Color="{x:Static theme:FlowPalette.WarningColor}"/>
+ <SolidColorBrush x:Key="FlowError" Color="{x:Static theme:FlowPalette.ErrorColor}"/>
+ <SolidColorBrush x:Key="FlowBorder" Color="{x:Static theme:FlowPalette.BorderColor}"/>
+ <SolidColorBrush x:Key="FlowOnAccent" Color="{x:Static theme:FlowPalette.OnAccentColor}"/>
+ <SolidColorBrush x:Key="FlowQueueWarning" Color="{x:Static theme:FlowPalette.QueueWarningColor}"/>
+ <SolidColorBrush x:Key="FlowQueueError" Color="{x:Static theme:FlowPalette.QueueErrorColor}"/>
+ <SolidColorBrush x:Key="FlowCompleted" Color="{x:Static theme:FlowPalette.CompletedColor}"/>
+ <SolidColorBrush x:Key="FlowPurple" Color="{x:Static theme:FlowPalette.PurpleColor}"/>
+ <SolidColorBrush x:Key="FlowWorkshop" Color="{x:Static theme:FlowPalette.WorkshopColor}"/>
+</ResourceDictionary>

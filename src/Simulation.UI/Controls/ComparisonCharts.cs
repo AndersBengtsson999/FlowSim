@@ -1,3 +1,4 @@
+using Simulation.UI.Theming;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
@@ -20,7 +21,7 @@ public sealed class ComparisonBarChart : Control
         {
             var v = values[i]; var y = row * i;
             ChartText.Draw(context, v.Name.Length > 27 ? v.Name[..24] + "…" : v.Name, new(0, y + 6));
-            if (v.Value is { } value) context.DrawRectangle(Brushes.Teal, null, new Rect(205, y + 4, Math.Max(0, (Bounds.Width - 310) * value / max), Math.Max(1, row - 10)));
+            if (v.Value is { } value) context.DrawRectangle(Brush.Parse(FlowPalette.Accent), null, new Rect(205, y + 4, Math.Max(0, (Bounds.Width - 310) * value / max), Math.Max(1, row - 10)));
             ChartText.Draw(context, Simulation.Application.AnalysisReport.Number(v.Value), new(Math.Max(210, Bounds.Width - 95), y + 6));
         }
     }
@@ -36,11 +37,11 @@ public sealed class ComparisonFlowChart : Control
         var all = series.SelectMany(s => s.Points).ToArray(); if (all.Length == 0) return;
         var plot = new Rect(50, 70, Math.Max(1, Bounds.Width - 70), Math.Max(1, Bounds.Height - 105));
         double max = Math.Max(1, all.Max(p => p.Value)), start = all.Min(p => p.Day), end = all.Max(p => p.Day);
-        IBrush[] colors = [Brushes.Teal, Brushes.DarkOrchid, Brushes.DarkOrange];
+        IBrush[] colors = [Brush.Parse(FlowPalette.Accent), Brush.Parse(FlowPalette.Purple), Brush.Parse(FlowPalette.Warning)];
         for (int i = 0; i <= 2; i++)
         {
             double y = plot.Bottom - i / 2.0 * plot.Height;
-            context.DrawLine(new Pen(Brushes.LightGray), new(plot.Left, y), new(plot.Right, y));
+            context.DrawLine(new Pen(Brush.Parse(FlowPalette.Border)), new(plot.Left, y), new(plot.Right, y));
             ChartText.Draw(context, (max * i / 2).ToString("0.##", CultureInfo.InvariantCulture), new(0, y - 7));
         }
         for (int i = 0; i < Math.Min(3, series.Count); i++)
@@ -55,5 +56,5 @@ public sealed class ComparisonFlowChart : Control
 internal static class ChartText
 {
     public static void Draw(DrawingContext c, string text, Point at) => c.DrawText(new FormattedText(text, CultureInfo.InvariantCulture,
-        FlowDirection.LeftToRight, new Typeface("Arial"), 12, Brushes.SlateGray), at);
+        FlowDirection.LeftToRight, new Typeface("Arial"), 12, Brush.Parse(FlowPalette.Secondary)), at);
 }

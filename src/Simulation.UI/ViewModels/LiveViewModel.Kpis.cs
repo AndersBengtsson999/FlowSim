@@ -1,3 +1,4 @@
+using Simulation.UI.Theming;
 using System.ComponentModel;
 using System.Globalization;
 using Simulation.Application;
@@ -16,7 +17,7 @@ public sealed class KpiChoice(TeamKpiDefinition definition, LiveViewModel owner)
 public sealed record KpiCard(TeamKpiObservation Observation)
 {
     public bool Selected { get; init; }
-    public string SelectionBorder => Selected ? "#A68F00" : "#D6DFE3";
+    public string SelectionBorder => Selected ? FlowPalette.Accent : FlowPalette.Border;
     public string Name => Observation.Definition.Name;
     public string Unit => Observation.Definition.Unit;
     public string Kind => Observation.Definition.Kind;

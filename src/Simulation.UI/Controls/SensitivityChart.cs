@@ -1,3 +1,4 @@
+using Simulation.UI.Theming;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
@@ -26,7 +27,7 @@ public sealed class SensitivityChart : Control
         for (int i = 0; i <= 4; i++)
         {
             var y = plot.Bottom - i / 4.0 * plot.Height;
-            context.DrawLine(new Pen(Brushes.LightGray), new(plot.Left, y), new(plot.Right, y));
+            context.DrawLine(new Pen(Brush.Parse(FlowPalette.Border)), new(plot.Left, y), new(plot.Right, y));
             Label(context, (max * i / 4).ToString("0.###", CultureInfo.InvariantCulture), new(0, y - 7));
         }
         Point? previous = null;
@@ -35,13 +36,13 @@ public sealed class SensitivityChart : Control
             var v = p.MeasurementWindow.GetValueOrDefault(Metric)?.P50;
             if (v is null) { previous = null; continue; } // Do not connect across missing measurements.
             var at = new Point(X(p.ParameterValue), plot.Bottom - v.Value / max * plot.Height);
-            if (previous is { } last) context.DrawLine(new Pen(Brushes.Teal, 2), last, at);
-            context.DrawEllipse(Brushes.Teal, null, at, 4, 4); previous = at;
+            if (previous is { } last) context.DrawLine(new Pen(Brush.Parse(FlowPalette.Accent), 2), last, at);
+            context.DrawEllipse(Brush.Parse(FlowPalette.Accent), null, at, 4, 4); previous = at;
             if (points.Length <= 15) Label(context, p.ParameterValue.ToString("0.###", CultureInfo.InvariantCulture), new(at.X - 10, plot.Bottom + 8));
         }
         if (points.Length > 15) { Label(context, lo.ToString(CultureInfo.InvariantCulture), new(plot.Left, plot.Bottom + 8)); Label(context, hi.ToString(CultureInfo.InvariantCulture), new(plot.Right - 30, plot.Bottom + 8)); }
         Label(context, "Parameter value (probabilities are ratios 0–1)", new(plot.Left, plot.Bottom + 30));
     }
     private static void Label(DrawingContext c, string s, Point p) => c.DrawText(new FormattedText(s, CultureInfo.InvariantCulture,
-        FlowDirection.LeftToRight, new Typeface("Arial"), 12, Brushes.SlateGray), p);
+        FlowDirection.LeftToRight, new Typeface("Arial"), 12, Brush.Parse(FlowPalette.Secondary)), p);
 }

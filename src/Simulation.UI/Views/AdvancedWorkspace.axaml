@@ -6,15 +6,15 @@
   <Style Selector="TextBlock.section">
    <Setter Property="FontSize" Value="17" />
    <Setter Property="FontWeight" Value="SemiBold" />
-   <Setter Property="Foreground" Value="#173B50" />
+   <Setter Property="Foreground" Value="{DynamicResource FlowText}" />
   </Style>
   <Style Selector="TextBlock.note">
    <Setter Property="FontSize" Value="12" />
-   <Setter Property="Foreground" Value="#526279" />
+   <Setter Property="Foreground" Value="{DynamicResource FlowSecondary}" />
    <Setter Property="TextWrapping" Value="Wrap" />
   </Style>
   <Style Selector="Border.card">
-   <Setter Property="Background" Value="White" />
+   <Setter Property="Background" Value="{DynamicResource FlowPanel}" />
    <Setter Property="CornerRadius" Value="6" />
    <Setter Property="Padding" Value="18" />
   </Style>
@@ -297,8 +297,8 @@
                </StackPanel>
               </Grid>
              </Border>
-             <ProgressBar Value="{Binding Count}" Maximum="100" Height="5" Foreground="#BD8A36" />
-             <TextBlock Text="{Binding Arrow}" HorizontalAlignment="Center" Foreground="#64748B" FontSize="12" />
+             <ProgressBar Value="{Binding Count}" Maximum="100" Height="5" Foreground="{DynamicResource FlowWarning}" />
+             <TextBlock Text="{Binding Arrow}" HorizontalAlignment="Center" Foreground="{DynamicResource FlowSecondary}" FontSize="12" />
             </StackPanel>
            </DataTemplate>
           </ListBox.ItemTemplate>
@@ -321,7 +321,7 @@
               <ItemsControl ItemsSource="{Binding SelectedHistory}">
                <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="vm:HistoryRow">
-                 <Border Background="White" Padding="10" Margin="0,0,0,3">
+                 <Border Background="{DynamicResource FlowPanel}" Padding="10" Margin="0,0,0,3">
                   <Grid ColumnDefinitions="70,*">
                    <TextBlock Text="{Binding Day, StringFormat='Day {0}'}" />
                    <TextBlock Grid.Column="1" Text="{Binding Description}" TextWrapping="Wrap" />
@@ -340,7 +340,7 @@
              <StackPanel Spacing="8">
               <TextBlock Text="Feedback loop · Code Review or Testing discovers a defect ↘" Classes="section" TextWrapping="Wrap" />
               <Grid ColumnDefinitions="*,30,*">
-               <Border Background="#FFF2D8" Padding="12">
+               <Border Background="{DynamicResource FlowQueueWarning}" Padding="12">
                 <StackPanel>
                  <TextBlock Text="Waiting for Rework" FontWeight="SemiBold" />
                  <TextBlock Text="{Binding WaitingForReworkCount}" FontSize="22" />
@@ -348,7 +348,7 @@
                 </StackPanel>
                </Border>
                <TextBlock Grid.Column="1" Text="→" VerticalAlignment="Center" HorizontalAlignment="Center" />
-               <Border Grid.Column="2" Background="#E8F1F7" Padding="12">
+               <Border Grid.Column="2" Background="{DynamicResource FlowElevated}" Padding="12">
                 <StackPanel>
                  <TextBlock Text="Rework" FontWeight="SemiBold" />
                  <TextBlock Text="{Binding ReworkCount}" FontSize="22" />
@@ -493,7 +493,7 @@
           <TextBlock Text="Read-only results, in scenario order. Days are boundary timestamps: start 0, finish up to the horizon. Blank lead/cycle time means incomplete. Times are simulated working days." Classes="note" Margin="0,0,0,12" />
           <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
            <StackPanel MinWidth="2220">
-            <Grid ColumnDefinitions="110,100,190,120,80,100,100,100,110,100,140,140,140,110,110,150,150,150" Background="#E2E8F0" Margin="0,0,0,4">
+            <Grid ColumnDefinitions="110,100,190,120,80,100,100,100,110,100,140,140,140,110,110,150,150,150" Background="{DynamicResource FlowPanel}" Margin="0,0,0,4">
              <TextBlock Grid.Column="0" Text="Id" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
              <TextBlock Grid.Column="1" Text="Name" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
              <TextBlock Grid.Column="2" Text="Final State" Margin="8" TextWrapping="Wrap" FontWeight="SemiBold" />
@@ -516,7 +516,7 @@
             <ItemsControl ItemsSource="{Binding WorkItems}">
              <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="core:WorkItemResult">
-               <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1">
+               <Border Background="{DynamicResource FlowPanel}" BorderBrush="{DynamicResource FlowBorder}" BorderThickness="0,0,0,1">
                 <Grid ColumnDefinitions="110,100,190,120,80,100,100,100,110,100,140,140,140,110,110,150,150,150">
                  <TextBlock Grid.Column="0" Text="{Binding Id}" Margin="8" />
                  <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="8" />
@@ -559,7 +559,7 @@
            <ItemsControl ItemsSource="{Binding SelectedHistory}">
             <ItemsControl.ItemTemplate>
              <DataTemplate x:DataType="vm:HistoryRow">
-              <Border Background="White" Padding="10" Margin="0,0,0,3">
+              <Border Background="{DynamicResource FlowPanel}" Padding="10" Margin="0,0,0,3">
                <Grid ColumnDefinitions="70,*">
                 <TextBlock Text="{Binding Day, StringFormat='Day {0}'}" />
                 <TextBlock Grid.Column="1" Text="{Binding Description}" TextWrapping="Wrap" />
@@ -602,7 +602,7 @@
         <TextBlock Text="Repeated runs sample effort and, when enabled, defect discovery and Rework. Capacity stays fixed. These are model outcomes, not real-project predictions without calibration. The Variable Effort Example is illustrative, not Easy-Laser data." Classes="note" />
         <StackPanel IsVisible="{Binding HasMonteCarlo}" Spacing="14">
          <TextBlock Text="Percentiles of per-run metrics · linear interpolation · Samples = runs included. Lead/cycle percentiles omit runs with no completed items. Other metrics include every run. — means no observations." Classes="note" />
-         <Grid ColumnDefinitions="*,100,100,100,100,80" Background="#E2E8F0">
+         <Grid ColumnDefinitions="*,100,100,100,100,80" Background="{DynamicResource FlowPanel}">
           <TextBlock Text="Metric" Margin="10" />
           <TextBlock Grid.Column="1" Text="P50" Margin="10" />
           <TextBlock Grid.Column="2" Text="P75" Margin="10" />
@@ -613,7 +613,7 @@
          <ItemsControl ItemsSource="{Binding MonteCarloMetrics}">
           <ItemsControl.ItemTemplate>
            <DataTemplate x:DataType="vm:PercentileRow">
-            <Border Background="White" Padding="0,6" Margin="0,0,0,3">
+            <Border Background="{DynamicResource FlowPanel}" Padding="0,6" Margin="0,0,0,3">
              <Grid ColumnDefinitions="*,100,100,100,100,80">
               <TextBlock Text="{Binding Name}" Margin="10,0" TextWrapping="Wrap" />
               <TextBlock Grid.Column="1" Text="{Binding P50}" Margin="10,0" />
@@ -630,7 +630,7 @@
          <ItemsControl ItemsSource="{Binding MonteCarloQualityMetrics}">
           <ItemsControl.ItemTemplate>
            <DataTemplate x:DataType="vm:PercentileRow">
-            <Border Background="White" Padding="0,6" Margin="0,0,0,3">
+            <Border Background="{DynamicResource FlowPanel}" Padding="0,6" Margin="0,0,0,3">
              <Grid ColumnDefinitions="*,100,100,100,100,80">
               <TextBlock Text="{Binding Name}" Margin="10,0" TextWrapping="Wrap" />
               <TextBlock Grid.Column="1" Text="{Binding P50}" Margin="10,0" />
@@ -671,7 +671,7 @@
     <Button Content="Run Simulation" Command="{Binding RunCommand}" Classes="primary" />
     <Button Content="Cancel" Command="{Binding CancelCommand}" IsVisible="{Binding IsBusy}" />
    </WrapPanel>
-   <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Foreground="#B42318" TextWrapping="Wrap" />
+   <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Foreground="{DynamicResource FlowError}" TextWrapping="Wrap" />
    <TextBlock Text="{Binding StatusMessage}" Classes="note" />
   </StackPanel>
  </Grid>

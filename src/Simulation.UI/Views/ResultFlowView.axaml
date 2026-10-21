@@ -34,8 +34,8 @@
           </StackPanel>
          </Grid>
         </Border>
-        <ProgressBar Value="{Binding Count}" Maximum="100" Height="5" Foreground="#BD8A36" />
-        <TextBlock Text="{Binding Arrow}" HorizontalAlignment="Center" Foreground="#64748B" FontSize="12" />
+        <ProgressBar Value="{Binding Count}" Maximum="100" Height="5" Foreground="{DynamicResource FlowWarning}" />
+        <TextBlock Text="{Binding Arrow}" HorizontalAlignment="Center" Foreground="{DynamicResource FlowSecondary}" FontSize="12" />
        </StackPanel>
       </DataTemplate>
      </ListBox.ItemTemplate>
@@ -56,7 +56,7 @@
       <StackPanel Spacing="8">
        <TextBlock Text="Feedback loop · Code Review or Testing discovers a defect ↘" Classes="section" TextWrapping="Wrap" />
        <Grid ColumnDefinitions="*,30,*">
-        <Border Background="#FFF2D8" Padding="12">
+        <Border Background="{DynamicResource FlowQueueWarning}" Padding="12">
          <StackPanel>
           <TextBlock Text="Waiting for Rework" FontWeight="SemiBold" />
           <TextBlock Text="{Binding WaitingForReworkCount}" FontSize="22" />
@@ -64,7 +64,7 @@
          </StackPanel>
         </Border>
         <TextBlock Grid.Column="1" Text="→" VerticalAlignment="Center" HorizontalAlignment="Center" />
-        <Border Grid.Column="2" Background="#E8F1F7" Padding="12">
+        <Border Grid.Column="2" Background="{DynamicResource FlowElevated}" Padding="12">
          <StackPanel>
           <TextBlock Text="Rework" FontWeight="SemiBold" />
           <TextBlock Text="{Binding ReworkCount}" FontSize="22" />
@@ -90,7 +90,7 @@
          <ItemsControl ItemsSource="{Binding SelectedHistory}">
           <ItemsControl.ItemTemplate>
            <DataTemplate x:DataType="vm:HistoryRow">
-            <Border Background="White" Padding="10" Margin="0,0,0,3">
+            <Border Background="{DynamicResource FlowPanel}" Padding="10" Margin="0,0,0,3">
              <Grid ColumnDefinitions="70,*">
               <TextBlock Text="{Binding Day, StringFormat='Day {0}'}" />
               <TextBlock Grid.Column="1" Text="{Binding Description}" TextWrapping="Wrap" />
