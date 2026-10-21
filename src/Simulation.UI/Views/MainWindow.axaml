@@ -193,6 +193,7 @@
    <ScrollViewer HorizontalScrollBarVisibility="Auto" IsVisible="{Binding ResultsVisible}">
     <StackPanel MaxWidth="900" HorizontalAlignment="Left" Spacing="16">
      <TextBlock Text="What happened?" Classes="page" />
+     <views:CustomerLaunchNotice DataContext="{Binding Owner.RunLaunchNotices}"/>
      <TextBlock Text="{Binding Owner.CustomerLaunchSummary}" TextWrapping="Wrap"/>
      <ItemsControl ItemsSource="{Binding RunCards}" ItemTemplate="{StaticResource ResultCard}">
       <ItemsControl.ItemsPanel>

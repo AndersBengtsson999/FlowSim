@@ -111,7 +111,7 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         Status(dc, state, "testing-wait", 708, 523);
         Count(dc, $"{state.Areas[4].Count:N0} staged{Grouped(state.Areas[4].Count)}", 449, 520, false);
         Status(dc, state, "ready", 449, 544);
-        Count(dc, $"{state.Areas[5].Count:N0} delivered", 214, 415, true);
+        Count(dc, $"{state.Areas[5].Count:N0} internally released", 214, 415, true);
         if (release is not null) Count(dc, release.Caption, 170, 470, true);
     }
     private static string Grouped(int count) => count > WorkshopQueue.StackCount(count) ? " · grouped" : "";

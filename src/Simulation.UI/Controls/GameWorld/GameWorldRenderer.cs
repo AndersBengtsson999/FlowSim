@@ -22,8 +22,8 @@ internal sealed class GameWorldRenderer
             if (station.AreaIndex != 5) GamePackages.Draw(dc, labels, area, new(x, y + 45), station.AreaIndex is 0 or 4);
             else
             {
-                labels.Text(dc, $"{area.Count:N0} delivered", x, y + 57, 20, "#FFEF86", true);
-                labels.Text(dc, $"{scene.ReleasedToday:N0} today · parked delivery van", x, y + 82, 13, centered: true);
+                labels.Text(dc, $"{area.Count:N0} internally released", x, y + 57, 20, "#FFEF86", true);
+                labels.Text(dc, $"{scene.ReleasedToday:N0} today · internal release van", x, y + 82, 13, centered: true);
             }
         }
         GameWorkstations.Maintenance(dc);

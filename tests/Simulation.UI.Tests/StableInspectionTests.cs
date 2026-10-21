@@ -33,7 +33,7 @@ public class StableInspectionTests
         Assert.Equal("Blocked work",(Item("B",WorkItemStatus.Backlog) with {PrerequisiteBlocked=true}).Group);
         Assert.Equal("Blocked work",new InspectedWorkItem("C",WorkItemStatus.Backlog,true,"").Group);
         Assert.Equal("Ready for release",Item("D",WorkItemStatus.ReadyForRelease).Group);
-        Assert.Equal("Delivered work",Item("E",WorkItemStatus.Done).Group);
+        Assert.Equal("Internally released work",Item("E",WorkItemStatus.Done).Group);
         Assert.Equal("Active work",Item("F",WorkItemStatus.Testing).Group);
     }
     [Theory]

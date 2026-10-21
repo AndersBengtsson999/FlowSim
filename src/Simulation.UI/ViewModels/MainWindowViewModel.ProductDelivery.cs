@@ -2,6 +2,7 @@ using Simulation.Core;
 namespace Simulation.UI.ViewModels;
 public sealed partial class MainWindowViewModel
 {
+    public CustomerLaunchPresentation RunLaunchNotices { get; } = new();
     public string ProductVersionName { get; set; } = "Version 1.0";
     public string LaunchAfter { get; set; } = "";
     public string LaunchSprintLength { get; set; } = "10";

@@ -1,0 +1,41 @@
+# B6.3.1 investigation (before implementation)
+
+The B6.3 ProductLaunchView always renders a padded light panel, summary, pending explanation and planning form. Only metrics/history are collapsed. This causes the excess toolbar height. Use one dark summary/Details expander and keep decisions discoverable in the summary.
+
+ProductDeliveryLedger owns immutable customer launch IDs, version IDs, dates and item membership. It runs after the daily internal release observation. LIVE pauses at its authoritative decision; unattended Run uses the same ledger's automatic policy. Existing truck animation observes internal releases, so its wording must explicitly say internal release. Presentation timers cannot advance simulation.
+
+DailySnapshot.Economics is authoritative incurred staffing cost (Developers + Specialists + Testers). Rework is already included, not an additional expense. WorkItemDaySnapshot.ConsumedCapacity records raw development/review/testing capacity; ReworkWork records raw rework capacity. Specialist-specific per-item employee assignments are not recorded. Effective work is not a valid substitute for raw capacity when productivity differs.
+
+Allocation method: for each day with Economics and recorded raw item capacity (explicit ConsumedCapacity or complete cumulative DeliveryCost deltas), allocate (developer + specialist daily cost) × item raw (development + review + rework) / available developer capacity, plus tester daily cost × item raw testing / available tester capacity. Developer and specialist cost is a blended pool estimate, not exact employee accounting. Collaboration is already included in raw development consumption. At default productivity explicit capacity is intentionally omitted; complete cumulative DeliveryCost observations supply authoritative daily deltas instead. An absent/incomplete DeliveryCost never implies invented effort. Do not add rework staffing cost again. Cap each pool's allocation at its incurred cost to absorb numerical drift. Idle time, technical debt repayment and missing observations remain unallocated. Missing Economics means that day's cost is unknown, not zero measured expenditure. No legacy raw capacity is inferred.
+
+Classify cumulative item allocations using recorded internal release state and authoritative customer launch membership/day. A launch changes classification only, never incurred or allocated expense. WIP is owned by stable item identity across versions; version membership starts at internal release. Reconstruct history only from these persisted daily observations, with explicit missing-data disclosure. No new derived financial ledger is needed in persistence. Reconciliation uses decimal SEK without rounding until display: WIP + awaiting + launched + unallocated = known incurred staffing cost.
+
+## Implemented presentation
+
+The collapsed dark expander shows active version, plan, remaining days, awaiting-item count and an explicit decision-required message. Details keeps its expansion state through LIVE updates and separates customer delivery, economics and history into tabs. The header wraps at narrow widths instead of clipping. A dark local theme and explicit text colors preserve contrast.
+
+CustomerLaunchPresentation queues every unseen authoritative launch ID. Dismiss advances to the next queued launch; repeated refreshes cannot add duplicates. Manual LIVE launches and completed unattended Run results use the same presenter. Restoring checkpoints clears stale pending UI notifications and retains acknowledgement IDs; loading historical sessions seeds existing IDs without replaying them. Permanent version history retains launch counts and dates. A fresh simulation resets presentation acknowledgements.
+
+The workshop reuses the existing embedded van for a 3.5-second customer departure with an explicit CUSTOMER LAUNCH caption. Its presentation clock can run while LIVE is paused at the resolved decision; it neither advances nor resumes simulation. Animate Activity off suppresses movement but never the textual notification. Internal release captions and inspection labels now explicitly say internally released. No new art or network dependencies.
+
+Unattended Run has no running workshop surface: it presents queued launch confirmations in Results after completion. It does not open a modal dialog or interrupt the calculation. A dismissed launch remains in version history. UI acknowledgement state is intentionally session-local; stable event identity and history remain persisted by the existing core ledger.
+
+## Economics and persistence
+
+LaunchEconomics is a read-only projection of persisted DailySnapshot observations and ProductDeliveryState, shared by the summary and chart. Complete cumulative raw DeliveryCost deltas cover the default-productivity encoding; explicit ConsumedCapacity covers productivity-adjusted observations. Missing capacity remains unallocated. Developer/specialist costs use a blended rate: the engine has no recorded employee-to-item assignment, so these are estimates, not exact specialist invoices. All rework/collaboration capacity is counted once.
+
+Classification is by item identity and the launch event's actual item membership. WIP crosses version boundaries without reassignment; only internal release associates it with a version. Postponement changes no costs. A launch transfers allocated cost to customer-launched cost, including that day's internal releases, without changing incurred expenditure. Values use decimal SEK and round only for display. The unallocated residual reconciles to recorded staffing expense. Debt repayment is overhead, not attributed to queued items.
+
+No redundant cost-category snapshots or new persistence schema are needed: raw capacity, daily monetary rates/totals, internal release observations and customer launch membership were already saved. Reload/checkpoint reconstruction uses those records, never present-day rates. Missing monetary history is explicitly counted and excluded from the known incurred-cost scope, not claimed as zero actual expenditure.
+
+The chart uses Avalonia drawing, like the existing daily charts, without changing KPI Explorer. It displays four series and customer launch markers over the recorded days. Display reduction preserves per-bucket extrema and launch boundaries. Daily endpoints show the post-decision classification; intraday expenditure/launch timing beyond the recorded end-of-day convention is not inferred.
+
+## Verification and limitations
+
+Tests cover classification, exact launch inclusion, unchanged expense on postponement/launch, blended specialist costs, review/testing/rework, idle/missing-data overhead, daily reconciliation, deterministic reconstruction, persistence, queue deduplication, multiple unseen launches, checkpoint/load suppression, compact summary and expansion, and animation-disabled textual confirmation. Existing simulation/regression tests remain in the full suite.
+
+The Avalonia acceptance harness uses Version 2.0, ten-day sprints, internal releases every ten days and a Day 60 launch. It renders compact/expanded/narrow views, checks cost transfer, notification/dismissal, postponement to Day 80, persistence, Run automatic events and station/Fit/Explorer preservation. Screenshots are actual renders. Automated native verification is not physical trackpad testing; Windows/Linux runtime behavior is not verified here.
+
+Remaining limits: blended item-cost estimates, explicit unavailable legacy observations, one active version, end-of-day economic chart resolution. Notification acknowledgement is not an accounting event and is not persisted across app sessions. Historical loads deliberately do not replay old celebrations. Cost reconstruction is linear in recorded item-day observations and is cached for an unchanged LIVE day/launch count. No revenue, customer adoption, additional staffing rules or workflow stages were added.
+
+Final verification: Release build succeeded with zero warnings/errors. Full suite **869 passed**: Core 218, Application 281, UI 370, zero failures/skips. Native macOS and headless/Skia acceptance both passed. Final native screenshots were visually inspected for dark contrast, narrow layout, launch notification and workshop customer-van caption; the earlier low-contrast render was corrected before completion.

@@ -7,7 +7,8 @@ namespace Simulation.UI.Controls.GameWorld;
 public enum ReleasePhase { Loading, Departing, Away, Returning, FeedbackOnly }
 public sealed record ReleaseVisual(int Count, int FirstDay, int LastDay, ReleasePhase Phase, double Offset, double LoadProgress)
 {
-    public string Caption => FirstDay == LastDay ? $"+{Count:N0} Released · Day {FirstDay}" : $"+{Count:N0} Released · Days {FirstDay}–{LastDay}";
+    public string? CustomerVersion { get; init; }
+    public string Caption => CustomerVersion is not null ? $"CUSTOMER LAUNCH · {CustomerVersion} · Day {LastDay} · {Count} items" : FirstDay == LastDay ? $"+{Count:N0} internally released · Day {FirstDay}" : $"+{Count:N0} internally released · Days {FirstDay}–{LastDay}";
     public static IReadOnlySet<string> ReplacedObjects { get; } = new HashSet<string> { "release/van", "queue/delivered/0", "queue/delivered/1", "queue/delivered/2" };
     public IReadOnlyList<SpriteObject> Sprites()
     {

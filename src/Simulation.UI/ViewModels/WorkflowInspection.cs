@@ -12,7 +12,7 @@ public sealed record InspectedWorkItem(string Id, WorkItemStatus State, bool Res
     {
         WorkItemStatus.Development or WorkItemStatus.CodeReview or WorkItemStatus.Testing or WorkItemStatus.Rework => "Active work",
         WorkItemStatus.ReadyForRelease => "Ready for release",
-        WorkItemStatus.Done or WorkItemStatus.Released => "Delivered work",
+        WorkItemStatus.Done or WorkItemStatus.Released => "Internally released work",
         _ => "Waiting for capacity"
     };
     public int GroupOrder => Group switch { "Active work" => 0, "Waiting for capacity" => 1, "Blocked work" => 2, "Ready for release" => 3, _ => 4 };
@@ -80,7 +80,7 @@ public static class WorkflowStateNames
         WorkItemStatus.WaitingForCodeReview => "Waiting for code review", WorkItemStatus.CodeReview => "Code review",
         WorkItemStatus.WaitingForTesting => "Waiting for testing", WorkItemStatus.Testing => "Testing",
         WorkItemStatus.WaitingForRework => "Waiting for rework", WorkItemStatus.Rework => "Rework",
-        WorkItemStatus.ReadyForRelease => "Ready for release", WorkItemStatus.Done or WorkItemStatus.Released => "Delivered",
+        WorkItemStatus.ReadyForRelease => "Ready for release", WorkItemStatus.Done or WorkItemStatus.Released => "Internally released",
         _ => "Unknown state"
     };
 }

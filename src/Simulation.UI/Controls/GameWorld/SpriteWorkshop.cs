@@ -59,7 +59,7 @@ public sealed class SpriteWorkshop
             new("rework-active", "Rework active", state.ActiveRework, new(612, 211), true, 2),
             new("rework-wait", "Rework waiting", state.WaitingRework, new(639, 225), false, 2),
             // Released today is an event sample, explicitly not another WIP queue.
-            new("delivered", "Delivered today", state.ReleasedToday, new(284, 354), true, 3)
+            new("delivered", "Internally released today", state.ReleasedToday, new(284, 354), true, 3)
         ];
         var objects = new List<SpriteObject>();
         var workers = new List<WorkshopWorker>();

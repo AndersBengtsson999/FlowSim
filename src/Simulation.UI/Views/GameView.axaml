@@ -47,7 +47,7 @@
    <Grid Name="DashboardLayout" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
    <Grid Name="WorkshopContent" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
     <Border Name="WorldViewport" ClipToBounds="True" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-     <controls:GameWorldControl Name="GameWorld" Scene="{Binding GameScene}" UseSprites="{Binding SpriteRendering}" AnimateActivity="{Binding AnimateGameActivity}" SimulationRunning="{Binding IsRunning}" PlaybackSpeed="{Binding Speed}" AutomationProperties.Name="Interactive workshop. Use arrow keys to select stations, Enter to inspect, Escape to close."/>
+     <controls:GameWorldControl Name="GameWorld" CustomerLaunch="{Binding LaunchNotices.Current}" Scene="{Binding GameScene}" UseSprites="{Binding SpriteRendering}" AnimateActivity="{Binding AnimateGameActivity}" SimulationRunning="{Binding IsRunning}" PlaybackSpeed="{Binding Speed}" AutomationProperties.Name="Interactive workshop. Use arrow keys to select stations, Enter to inspect, Escape to close."/>
     </Border>
     <Border Name="StationPanel" VerticalAlignment="Top" Grid.Row="1" IsVisible="{Binding #GameWorld.HasSelection}" Background="#1B2C37" BorderBrush="#4F626A" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,10,0,0">
      <Grid RowDefinitions="Auto,Auto,*">

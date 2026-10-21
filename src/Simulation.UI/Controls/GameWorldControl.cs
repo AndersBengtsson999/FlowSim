@@ -23,6 +23,16 @@ public sealed partial class GameWorldControl : Control
     public bool SimulationRunning { get => GetValue(SimulationRunningProperty); set => SetValue(SimulationRunningProperty, value); }
     public static readonly StyledProperty<double> PlaybackSpeedProperty = AvaloniaProperty.Register<GameWorldControl, double>(nameof(PlaybackSpeed), 1);
     public double PlaybackSpeed { get => GetValue(PlaybackSpeedProperty); set => SetValue(PlaybackSpeedProperty, value); }
+    public static readonly StyledProperty<LaunchNotice?> CustomerLaunchProperty = AvaloniaProperty.Register<GameWorldControl, LaunchNotice?>(nameof(CustomerLaunch));
+    public LaunchNotice? CustomerLaunch { get => GetValue(CustomerLaunchProperty); set => SetValue(CustomerLaunchProperty, value); }
+    private double launchStarted = double.NegativeInfinity;
+    private bool LaunchAnimating => AnimateActivity && CustomerLaunch is not null && monotonic.Elapsed.TotalSeconds - launchStarted < 3.5;
+    private ReleaseVisual? CustomerVehicle()
+    {
+        if (!LaunchAnimating || CustomerLaunch is not { } launch) return null;
+        var t = Math.Clamp((monotonic.Elapsed.TotalSeconds - launchStarted) / 3.5, 0, 1);
+        return new(launch.Items, launch.Day, launch.Day, ReleasePhase.Departing, t * t * (3 - 2 * t), 1) { CustomerVersion = launch.Version };
+    }
     private readonly PackageMotion packages = new();
     private readonly WorkerMotion workers = new();
     private readonly QueueStackMotion queues = new();
@@ -63,6 +73,8 @@ public sealed partial class GameWorldControl : Control
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
+        if (change.Property == CustomerLaunchProperty) { launchStarted = CustomerLaunch is null || !AnimateActivity ? double.NegativeInfinity : monotonic.Elapsed.TotalSeconds; SynchronizeAnimation(); InvalidateVisual(); }
+        if (change.Property == AnimateActivityProperty && !AnimateActivity) launchStarted = double.NegativeInfinity;
         if (change.Property == BoundsProperty || change.Property == UseSpritesProperty) ResizeCamera();
         if (change.Property == SceneProperty || change.Property == SelectedStationProperty) RefreshStationDetails();
         if (change.Property == PlaybackSpeedProperty) { packages.Cancel(); queues.Cancel(); workers.Synchronize(animation.Seconds); }
@@ -83,7 +95,7 @@ public sealed partial class GameWorldControl : Control
         base.Render(context);
         context.DrawRectangle(Brushes.Transparent, null, new Rect(Bounds.Size));
         using var cameraTransform = context.PushTransform(Camera.Matrix);
-        if (UseSprites) (sprites ??= new()).Render(context, Scene, AnimateActivity ? animation.Seconds : 0, AnimateActivity, packages.Sample(animation.Seconds), packages.Release(animation.Seconds), workers.Sample(animation.Seconds, animation.IsRunning && PlaybackSpeed <= 2), queues, SelectedStation, hoveredStation, IsFocused);
+        if (UseSprites) (sprites ??= new()).Render(context, Scene, AnimateActivity ? animation.Seconds : 0, AnimateActivity, packages.Sample(animation.Seconds), CustomerVehicle() ?? packages.Release(animation.Seconds), workers.Sample(animation.Seconds, animation.IsRunning && PlaybackSpeed <= 2), queues, SelectedStation, hoveredStation, IsFocused);
         else { renderer.Render(context, Scene); StationMap.Highlight(context, SelectedStation, hoveredStation, IsFocused); }
     }
     private void SynchronizeAnimation()
@@ -93,12 +105,12 @@ public sealed partial class GameWorldControl : Control
         var run = PresentationClock.ShouldRun(attached, visible, inViewport, UseSprites, AnimateActivity, SimulationRunning, Scene is { HasSession: true });
         if (!attached || !visible || !inViewport || !UseSprites || !AnimateActivity) { packages.Cancel(); queues.Cancel(); workers.Synchronize(animation.Seconds); }
         animation.SetRunning(run, monotonic.Elapsed);
-        if (run) animationTimer.Start(); else animationTimer.Stop();
+        if (run || (attached && visible && inViewport && UseSprites && LaunchAnimating)) animationTimer.Start(); else animationTimer.Stop();
     }
     private void AnimationTick(object? sender, EventArgs e)
     {
         SynchronizeAnimation();
-        if (!animation.IsRunning) return;
+        if (!animation.IsRunning && !LaunchAnimating) { InvalidateVisual(); return; }
         AnimationTicks++;
         InvalidateVisual();
     }

@@ -1,0 +1,5 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" x:Class="Simulation.UI.Views.CustomerLaunchNotice" x:DataType="vm:CustomerLaunchPresentation">
+ <Border IsVisible="{Binding HasNotification}" Background="#243945" BorderBrush="#FFEB00" BorderThickness="2" CornerRadius="6" Padding="10" Margin="0,4">
+  <Grid ColumnDefinitions="*,Auto"><StackPanel Spacing="4"><TextBlock Text="CUSTOMER LAUNCH COMPLETED" Foreground="#FFEB00" FontWeight="Bold"/><TextBlock Text="{Binding Description}" Foreground="#E3ECEC" TextWrapping="Wrap"/></StackPanel><Button Grid.Column="1" Content="{Binding PendingLabel}" Command="{Binding DismissCommand}" Margin="8,0,0,0" VerticalAlignment="Top"/></Grid>
+ </Border>
+</UserControl>

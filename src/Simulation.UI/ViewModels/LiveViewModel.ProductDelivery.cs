@@ -2,6 +2,29 @@ using Simulation.Core;
 namespace Simulation.UI.ViewModels;
 public sealed partial class LiveViewModel
 {
+    public CustomerLaunchPresentation LaunchNotices { get; } = new();
+    private bool productDetailsExpanded;
+    public bool ProductDetailsExpanded
+    {
+        get => productDetailsExpanded;
+        set { if (productDetailsExpanded == value) return; productDetailsExpanded = value; PropertyChanged?.Invoke(this, new(nameof(ProductDetailsExpanded))); PropertyChanged?.Invoke(this, new(nameof(LaunchCostHistory))); PropertyChanged?.Invoke(this, new(nameof(LaunchEconomicsSummary))); }
+    }
+    private (object? Session, int Day, int Launches) costKey;
+    private LaunchCostHistory? costHistory;
+    public LaunchCostHistory LaunchCostHistory
+    {
+        get
+        {
+            var key = ((object?)Live?.Session, Day, Live?.Session.ProductDelivery.CustomerLaunches.Count ?? 0);
+            if (costHistory is null || key != costKey) { costHistory = LaunchEconomics.Calculate(Live?.Session.Days ?? [], Live?.Session.ProductDelivery); costKey = key; }
+            return costHistory;
+        }
+    }
+    public string LaunchEconomicsSummary => LaunchEconomicsText.Describe(LaunchCostHistory);
+    public string ProductCompactSummary => Live is null ? "Product version" : $"{Live.Session.ProductDelivery.Versions[^1].Name} | " +
+        (Live.Session.ProductDelivery.Versions[^1].PlannedDay is { } day ? $"Launch Day {day} | {Math.Max(0, day - Day)} days left" : "Manual launch") +
+        $" | {Live.Session.ProductDelivery.InternalReleases.Where(r => r.VersionId == Live.Session.ProductDelivery.Versions[^1].Id).Sum(r => r.ItemIds.Count)} items awaiting launch" +
+        (LaunchDecisionPending ? " | DECISION REQUIRED — open Details" : "");
     public bool ShowFlowProduct => HasSession && FlowBoardSelected;
     public bool LaunchDecisionPending => Live?.Session.PendingLaunchDecision is not null;
     public bool CanEditLaunch => HasSession && !IsRunning && !editing && !stopped;

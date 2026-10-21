@@ -316,6 +316,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     public async Task RunMonteCarloAsync()
     {
         if (isBusy) return;
+        RunLaunchNotices.Reset();
         isBusy = true; errorMessage = ""; monteCarlo = null;
         statusMessage = "Starting Monte Carlo…"; selectedView = 3;
         using var source = new CancellationTokenSource();
@@ -348,6 +349,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
     public async Task RunAsync()
     {
         if (isBusy) return;
+        RunLaunchNotices.Reset();
         isBusy = true; errorMessage = ""; result = null; selectedWorkItem = null; selectedDay = 1;
         statusMessage = "Running…";
         NotifyAll();
@@ -358,6 +360,7 @@ public sealed partial class MainWindowViewModel : INotifyPropertyChanged
             var request = ReadRequest();
             var executedAt = DateTimeOffset.UtcNow;
             result = await Task.Run(() => runner.Run(request, source.Token), source.Token);
+            RunLaunchNotices.Observe(result.ProductDelivery);
             lastRunRequest = request; lastRunTime = executedAt;
             selectedWorkItem = result.WorkItems.FirstOrDefault();
             selectedDay = 1;

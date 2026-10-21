@@ -24,7 +24,7 @@ public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> R
             "Code Review" => "Review developed work before testing",
             "Testing" => "Test reviewed work before release",
             "Ready for Release" => "Completed work awaiting release policy",
-            "Release" => "Delivered work, cumulative",
+            "Release" => "Internally released work, cumulative",
             _ => "Repay aggregate technical debt using shared developer capacity"
         });
         string Number(double value) => value.ToString("0.##");
@@ -63,7 +63,7 @@ public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> R
                 Add("Waiting for release", s.Areas[4].Waiting); Add("Release policy", s.ReleasePolicy); Add("Released today", s.ReleasedToday); Pressure("ready");
                 explanation += " Scheduled accumulation can be expected batching; its size alone is not a capacity diagnosis."; break;
             case "Release":
-                Add("Delivered · cumulative", s.Areas[5].Count); Add("Released today", s.ReleasedToday); Add("Ready for release", s.Areas[4].Waiting); Add("Release policy", s.ReleasePolicy); Pressure("ready");
+                Add("Internally released · cumulative", s.Areas[5].Count); Add("Released today", s.ReleasedToday); Add("Ready for release", s.Areas[4].Waiting); Add("Release policy", s.ReleasePolicy); Pressure("ready");
                 explanation += " The vehicle represents observed releases; a trip may combine several days at fast playback."; break;
             case "Technical Debt":
                 Add("Debt · effort", Number(s.Debt)); Add("Debt ratio", s.DebtRatio.ToString("P1"));
