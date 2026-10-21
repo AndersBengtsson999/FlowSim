@@ -66,6 +66,7 @@ public sealed class SimulationSession
     private readonly ProductDeliveryLedger productDelivery;
     public ProductDeliveryState ProductDelivery => productDelivery.Capture();
     public LaunchDecision? PendingLaunchDecision => productDelivery.Pending;
+    public void ConfigureCustomerLaunch(LaunchSchedule schedule) => productDelivery.Configure(CurrentDay, schedule);
     public void PlanCustomerLaunch(int amount, LaunchPlanUnit unit, int sprintLength) => productDelivery.Plan(CurrentDay, amount, unit, sprintLength);
     public void RenameActiveVersion(string name) => productDelivery.Rename(name);
     public CustomerLaunch LaunchProductVersion(string versionId) => productDelivery.Launch(versionId, CurrentDay);

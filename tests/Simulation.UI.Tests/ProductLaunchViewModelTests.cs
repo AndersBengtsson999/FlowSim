@@ -8,7 +8,7 @@ public class ProductLaunchViewModelTests
 {
     private static LiveViewModel Create()
     {
-        var vm=new LiveViewModel();vm.Setup.LaunchAfter="6";vm.Setup.LaunchUnit="Sprints";vm.Setup.LaunchSprintLength="10";vm.Start();vm.Pause();return vm;
+        var vm=new LiveViewModel();vm.Setup.LaunchMode="One-time";vm.Setup.LaunchAfter="6";vm.Setup.LaunchUnit="Sprints";vm.Setup.LaunchSprintLength="10";vm.Start();vm.Pause();return vm;
     }
     [Fact] public async Task AcceleratedLiveStopsAt60AndCannotBypassTheDecision()
     {
@@ -28,10 +28,10 @@ public class ProductLaunchViewModelTests
     }
     [Fact] public void InitialPlanRoundTripsAndNeverUsesCalendarDates()
     {
-        var owner=new MainWindowViewModel();owner.ProductVersionName="Version X";owner.LaunchAfter="6";owner.LaunchUnit="Sprints";owner.LaunchSprintLength="10";
+        var owner=new MainWindowViewModel();owner.LaunchMode="One-time";owner.ProductVersionName="Version X";owner.LaunchAfter="6";owner.LaunchUnit="Sprints";owner.LaunchSprintLength="10";
         var config=owner.CaptureSetup();owner.LoadConfiguration(config);Assert.Equal(config.ProductLaunch,owner.CaptureSetup().ProductLaunch);
         Assert.Equal(60,ProductLaunchSettings.TargetDay(0,6,config.ProductLaunch.Unit,config.ProductLaunch.SprintLength));
-        owner.LaunchAfter="";Assert.Null(owner.CaptureSetup().ProductLaunch.After);
+        owner.LaunchMode="Manual";owner.LaunchAfter="";Assert.Null(owner.CaptureSetup().ProductLaunch.After);
     }
     [Fact] public void InvalidPostponementDoesNotResolvePendingDecision()
     {

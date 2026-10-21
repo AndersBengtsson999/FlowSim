@@ -2,6 +2,19 @@ using Simulation.Core;
 namespace Simulation.UI.ViewModels;
 public sealed partial class LiveViewModel
 {
+    public IReadOnlyList<string> LaunchModes => ProductDeliveryPresentation.Modes;
+    public string LaunchModeDraft { get; set; } = "Manual";
+    public string LaunchInterval { get; set; } = "6";
+    public RelayCommand ConfigureLaunchCommand { get; private set; } = null!;
+    private void ReadLaunchStrategy()
+    {
+        if (Live is null) return;
+        var rule = Live.Session.ProductDelivery.Versions[^1].EffectiveSchedule;
+        LaunchModeDraft = ProductDeliveryPresentation.ModeName(rule.Mode);
+        LaunchInterval = rule.Interval?.ToString() ?? "6";
+        PlanningUnit = rule.Unit == LaunchPlanUnit.Sprints ? "Sprints" : "Working days";
+        PlanningSprintLength = rule.SprintLength.ToString();
+    }
     public CustomerLaunchPresentation LaunchNotices { get; } = new();
     private bool productDetailsExpanded;
     public bool ProductDetailsExpanded
@@ -21,9 +34,9 @@ public sealed partial class LiveViewModel
         }
     }
     public string LaunchEconomicsSummary => LaunchEconomicsText.Describe(LaunchCostHistory);
-    public string ProductCompactSummary => Live is null ? "Product version" : $"{Live.Session.ProductDelivery.Versions[^1].Name} | " +
-        (Live.Session.ProductDelivery.Versions[^1].PlannedDay is { } day ? $"Launch Day {day} | {Math.Max(0, day - Day)} days left" : "Manual launch") +
-        $" | {Live.Session.ProductDelivery.InternalReleases.Where(r => r.VersionId == Live.Session.ProductDelivery.Versions[^1].Id).Sum(r => r.ItemIds.Count)} items awaiting launch" +
+    public string ProductCompactSummary => Live is null ? "Product version" : $"{Live.Session.ProductDelivery.Versions[^1].Name} | {ProductDeliveryPresentation.Rule(Live.Session.ProductDelivery.Versions[^1].EffectiveSchedule)} | " +
+        (Live.Session.ProductDelivery.Versions[^1].PlannedDay is { } day ? $"Launch Day {day} | {Math.Max(0, day - Day)} days left" : "Launch not scheduled") +
+        $" | {Live.Session.ProductDelivery.InternalReleases.Where(r => r.VersionId == Live.Session.ProductDelivery.Versions[^1].Id).Sum(r => r.ItemIds.Count)} awaiting | {Live.Session.ProductDelivery.CustomerLaunches.Count} launches" +
         (LaunchDecisionPending ? " | DECISION REQUIRED — open Details" : "");
     public bool ShowFlowProduct => HasSession && FlowBoardSelected;
     public bool LaunchDecisionPending => Live?.Session.PendingLaunchDecision is not null;
@@ -44,19 +57,27 @@ public sealed partial class LiveViewModel
             if (Live is null) return "Start LIVE to track product versions.";
             var state = Live.Session.ProductDelivery; var v = state.Versions[^1];
             var releases = state.InternalReleases.Where(r => r.VersionId == v.Id).ToArray();
-            return $"{v.Name} ({v.Id}) · Day {Day} · " + (v.PlannedDay is { } planned ? $"Customer launch Day {planned} · {Math.Max(0, planned - Day)} working days remaining" : "Manual customer launch · no planned day") +
+            return $"{v.Name} ({v.Id}) · Day {Day} · " + (v.PlannedDay is { } planned ? $"Customer launch Day {planned} · {Math.Max(0, planned - Day)} working days remaining" : "Launch not scheduled") +
                 $"\n{releases.Length} internal releases · {releases.Sum(r => r.ItemIds.Count)} internally released items awaiting customer launch";
         }
     }
-    public string ProductDecisionText => LaunchDecisionPending ? $"Customer launch decision pending at the end of Day {Day}. No next day can run until you launch or postpone. Launch includes only work already internally released, including today's releases." : "Plan/postpone from the current day. Launch Now includes only internally released work. A successor version starts automatically; unfinished work keeps flowing. Pause LIVE to edit.";
+    public string ProductDecisionText => LaunchDecisionPending ? $"Customer launch decision pending at the end of Day {Day}. No next day can run until you launch or postpone. Launch includes only work already internally released, including today's releases." : "Plan/postpone from the current day. Launch Now includes only internally released work. A successor version starts automatically; unfinished work keeps flowing. Recurring intervals restart from the actual launch day; postponing changes only this version’s target. Pause LIVE to edit.";
     public string LiveCustomerSummary => ProductDeliveryPresentation.Summary(Live?.Session.ProductDelivery, Live?.Session.WorkItems.ToDictionary(w => w.Id, w => w.DevelopmentStartedDay) ?? []);
-    public string LiveCustomerHistory => ProductDeliveryPresentation.History(Live?.Session.ProductDelivery);
+    public string LiveCustomerHistory => ProductDeliveryPresentation.History(Live?.Session.ProductDelivery, LaunchCostHistory);
     private void InitializeProductDelivery()
     {
+        ConfigureLaunchCommand = new(() => Guard(() =>
+        {
+            if (!CanEditLaunch) return;
+            var mode = ProductDeliveryPresentation.ParseMode(LaunchModeDraft);
+            Live!.Session.ConfigureCustomerLaunch(new(mode, mode == LaunchPlanningMode.Manual ? null : Positive(LaunchInterval, "Launch interval"),
+                PlanningUnit == "Sprints" ? LaunchPlanUnit.Sprints : LaunchPlanUnit.WorkingDays, Positive(PlanningSprintLength, "Sprint length")));
+            ReadLaunchStrategy(); status = "Launch strategy applied from the current day. Recurring intervals restart at each actual launch."; Refresh();
+        }), () => CanEditLaunch);
         LaunchProductCommand = new(() => Guard(() =>
         {
             if (!CanLaunchProduct) return;
-            Live!.Session.LaunchProductVersion(Live.Session.ProductDelivery.Versions[^1].Id);
+            Live!.Session.LaunchProductVersion(Live.Session.ProductDelivery.Versions[^1].Id); ReadLaunchStrategy();
             status = $"Customer launch recorded on Day {Day}. The next version is active; Resume when ready."; Refresh();
         }), () => CanLaunchProduct);
         PlanLaunchCommand = new(() => Guard(() =>

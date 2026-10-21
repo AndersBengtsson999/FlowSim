@@ -8,13 +8,14 @@
   <TextBlock Text="Product version / customer launch (initial plan)" FontWeight="SemiBold"/>
   <TextBox Text="{Binding ProductVersionName, Mode=TwoWay}" Watermark="Version name" AutomationProperties.Name="Initial product version name"/>
   <WrapPanel>
-   <TextBlock Text="Launch after" VerticalAlignment="Center" Margin="0,0,8,0"/>
-   <TextBox Text="{Binding LaunchAfter, Mode=TwoWay}" Watermark="Manual" Width="90" AutomationProperties.Name="Initial customer launch after"/>
+   <ComboBox ItemsSource="{Binding LaunchModes}" SelectedItem="{Binding LaunchMode, Mode=TwoWay}" Width="130" Margin="0,0,8,0" AutomationProperties.Name="Customer launch mode"/>
+   <TextBlock Text="Launch interval" VerticalAlignment="Center" Margin="0,0,8,0"/>
+   <TextBox Text="{Binding LaunchAfter, Mode=TwoWay}" Watermark="Interval" Width="90" AutomationProperties.Name="Initial customer launch after"/>
    <ComboBox ItemsSource="{Binding LaunchUnits}" SelectedItem="{Binding LaunchUnit, Mode=TwoWay}" Width="145"/>
    <TextBlock Text="Sprint length" VerticalAlignment="Center" Margin="8,0"/>
    <TextBox Text="{Binding LaunchSprintLength, Mode=TwoWay}" Width="65" AutomationProperties.Name="Initial sprint planning length"/>
    <TextBlock Text="working days" VerticalAlignment="Center" Margin="8,0"/>
   </WrapPanel>
-  <TextBlock Text="Leave launch duration blank for manual launch. A sprint is only a planning duration. LIVE pauses after processing the planned day; unattended Run launches automatically. Existing delivery metrics measure internal releases." TextWrapping="Wrap" FontSize="12"/>
+  <TextBlock Text="Manual: launch not scheduled. One-time: current version only. Recurring: next interval starts at actual launch day. A sprint is only a planning duration. LIVE pauses after processing the planned day; unattended Run launches automatically. Existing delivery metrics measure internal releases." TextWrapping="Wrap" FontSize="12"/>
  </StackPanel>
 </UserControl>

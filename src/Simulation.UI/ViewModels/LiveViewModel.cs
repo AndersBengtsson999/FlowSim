@@ -266,7 +266,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         ApplyCommand = new(() => Guard(ApplyChanges), () => editing);
         CancelChangeCommand = new(() => { CancelGuidedDraft(); editing = false; status = "Changes discarded. Resume when ready."; Notify(); });
         CheckpointCommand = new(() => Guard(() => { Pause(); Live!.CreateCheckpoint(CheckpointLabel); status = "Checkpoint created."; Notify(); }), () => HasSession && !editing && !fastAdvancing);
-        RestoreCommand = new(() => Guard(() => { Pause(); if (SelectedCheckpoint is null) throw new ArgumentException("Select a checkpoint."); Live!.RestoreCheckpoint(SelectedCheckpoint.Id); LaunchNotices.Observe(Live.Session.ProductDelivery, historical: true); InvalidateGuided("A checkpoint was restored. Start a new comparison."); stopped = false; editing = false; RebuildHistory(); Refresh(); status = "Checkpoint restored. Resume when ready."; Notify(); }));
+        RestoreCommand = new(() => Guard(() => { Pause(); if (SelectedCheckpoint is null) throw new ArgumentException("Select a checkpoint."); Live!.RestoreCheckpoint(SelectedCheckpoint.Id); ReadLaunchStrategy(); LaunchNotices.Observe(Live.Session.ProductDelivery, historical: true); InvalidateGuided("A checkpoint was restored. Start a new comparison."); stopped = false; editing = false; RebuildHistory(); Refresh(); status = "Checkpoint restored. Resume when ready."; Notify(); }));
         DeleteCheckpointCommand = new(() => { if (SelectedCheckpoint is { } c) Live?.DeleteCheckpoint(c.Id); SelectedCheckpoint = null; Notify(); });
         DetailsCommand = new(() => { Pause(); var r = Live?.Session.GetResult(); Details = r is null ? "" : $"All-time · {r.SimulationDays} days\nLead Time {r.AverageLeadTime:0.0} · Cycle Time {r.AverageCycleTime:0.0} · Waiting Time {r.AverageWaitingTime:0.0}\nThroughput {r.ThroughputPerFiveDays:0.0} / 5 days · Average WIP {r.AverageWip:0.0}\nDefects {r.TotalDefectsFound} · Rework effort {r.TotalReworkEffort:0.0}\nDeveloper utilization {r.DeveloperUtilization:P0} · Tester utilization {r.TesterUtilization:P0}"; Notify(); });
         LimitCommand = new(() => Guard(() => { if (Live is not null) Live.SafetyLimit = Positive(SafetyLimit, "Safety Limit"); status = "Safety limit updated."; Notify(); }));
@@ -278,7 +278,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         var setup = Setup.CaptureSetup();
         setup = setup with { Quality = ReadQuality(Setup) };
         Live = LiveSimulation.Start(setup, SupplyMode(ArrivalMode), Rate(ArrivalRate));
-        PlanningSprintLength = setup.ProductLaunch.SprintLength.ToString();
+        ReadLaunchStrategy();
         Live.Dashboard = KpiSettings;
         Live.SafetyLimit = limit; Live.RollingWindow = RollingWindow; setupExpanded = false;
         LaunchNotices.Reset(); stopped = false; queueHistory.Clear(); Refresh(); Resume();
@@ -382,7 +382,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         editing = false; status = Live.Session.Changes.Count == previousChanges ? "No parameters changed. Resume when ready." : $"Changes recorded at Day {Day}; effective Day {Day + 1}. Resume when ready."; Refresh();
     }
     public void Load(LiveSimulation live)
-    { InvalidateGuided("A LIVE session was loaded. Start a new comparison."); Pause(); LaunchNotices.Reset(); LaunchNotices.Observe(live.Session.ProductDelivery, historical: true); Live = live; PlanningSprintLength = live.Session.Configuration.ProductLaunch.SprintLength.ToString(); LoadKpis(); setupExpanded = false; stopped = false; editing = false; rollingWindow = live.RollingWindow; SafetyLimit = live.SafetyLimit.ToString(); SelectedCheckpoint = null; selectedFlow = null; Details = ""; RebuildHistory(); Refresh(); status = "Live simulation opened. Resume when ready."; Notify(); }
+    { InvalidateGuided("A LIVE session was loaded. Start a new comparison."); Pause(); LaunchNotices.Reset(); LaunchNotices.Observe(live.Session.ProductDelivery, historical: true); Live = live; ReadLaunchStrategy(); LoadKpis(); setupExpanded = false; stopped = false; editing = false; rollingWindow = live.RollingWindow; SafetyLimit = live.SafetyLimit.ToString(); SelectedCheckpoint = null; selectedFlow = null; Details = ""; RebuildHistory(); Refresh(); status = "Live simulation opened. Resume when ready."; Notify(); }
     public void NotifyStatus(string message) { status = message; Notify(); }
     private void RebuildHistory() { queueHistory.Clear(); if (Live is not null) foreach (var d in Live.Session.Days) queueHistory.Add(Point(d)); }
     private static LiveQueuePoint Point(DailySnapshot d) => new(d.Day + 1, d.WaitingForCodeReviewCount, d.WaitingForTestingCount, d.WaitingForReworkCount);
@@ -485,7 +485,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
     private void Notify()
     {
         PropertyChanged?.Invoke(this, new(string.Empty));
-        LaunchProductCommand?.Refresh(); PlanLaunchCommand?.Refresh(); RenameVersionCommand?.Refresh();
+        ConfigureLaunchCommand?.Refresh(); LaunchProductCommand?.Refresh(); PlanLaunchCommand?.Refresh(); RenameVersionCommand?.Refresh();
         BeginGuidedCommand?.Refresh(); RunToDayCommand?.Refresh(); StartCommand?.Refresh(); PauseCommand?.Refresh(); ResumeCommand?.Refresh(); StepCommand?.Refresh(); StopCommand?.Refresh(); ChangeCommand?.Refresh(); ApplyCommand?.Refresh(); CheckpointCommand?.Refresh();
     }
     public void Dispose() { guidedCancellation?.Cancel(); guidedCancellation?.Dispose(); stopFastAdvance = true; timer.Stop(); }

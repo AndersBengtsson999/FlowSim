@@ -12,6 +12,12 @@
    <TextBlock Text="{Binding ProductDecisionText}" TextWrapping="Wrap" Foreground="#FFE36A"/>
    <TextBlock Text="{Binding ProductVersionSummary}" TextWrapping="Wrap"/>
    <WrapPanel IsVisible="{Binding CanEditLaunch}">
+    <ComboBox ItemsSource="{Binding LaunchModes}" SelectedItem="{Binding LaunchModeDraft, Mode=TwoWay}" Width="130" Margin="0,0,6,4" AutomationProperties.Name="Launch strategy"/>
+    <TextBlock Text="Interval" VerticalAlignment="Center" Margin="0,0,6,4"/><TextBox Text="{Binding LaunchInterval, Mode=TwoWay}" Width="65" Margin="0,0,6,4" AutomationProperties.Name="Recurring launch interval"/>
+    <Button Content="Apply launch strategy" Command="{Binding ConfigureLaunchCommand}" Margin="0,0,8,4"/>
+   </WrapPanel>
+   <TextBlock Text="Interval uses the unit and sprint length below. Apply schedules from today. Recurring restarts from actual launch day; postponing affects only the current target." TextWrapping="Wrap" FontSize="11"/>
+   <WrapPanel IsVisible="{Binding CanEditLaunch}">
     <TextBox Text="{Binding VersionNameDraft, Mode=TwoWay}" Watermark="Name active version" Width="180" Margin="0,0,6,4"/><Button Content="Rename" Command="{Binding RenameVersionCommand}" Margin="0,0,12,4"/>
     <Button Content="Launch Now" Command="{Binding LaunchProductCommand}" Background="#FFEB00" Foreground="#17232D" Margin="0,0,8,4"/>
     <TextBlock Text="Plan / postpone by" VerticalAlignment="Center" Margin="0,0,6,4"/>
