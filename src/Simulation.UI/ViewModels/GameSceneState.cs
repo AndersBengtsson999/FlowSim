@@ -26,6 +26,7 @@ public sealed record GameSceneState(int Day, IReadOnlyList<GameArea> Areas, int 
     public IReadOnlyList<ItemJourney> Journeys { get; init; } = [];
     public int ChangedItems { get; init; }
     public IReadOnlyDictionary<string, QueuePressure> QueuePressures { get; init; } = new Dictionary<string, QueuePressure>();
+    public int AwaitingCustomerLaunch { get; init; }
     public int ActiveDevelopment { get; init; }
     public int ActiveRework { get; init; }
     public int WaitingRework { get; init; }
@@ -87,6 +88,7 @@ public sealed record GameSceneState(int Day, IReadOnlyList<GameArea> Areas, int 
         {
             InspectionItems = s.WorkItems.Where(w => w.CreatedDay <= Math.Max(0, s.CurrentDay - 1)).Select(w => InspectedWorkItem.From(w, s.CurrentDay, completed, s.CurrentDay > 0 ? observations.GetValueOrDefault(w.Id) : null)).ToArray(),
             QueuePressures = QueuePressure.From(live),
+            AwaitingCustomerLaunch = CustomerDeliveryMetrics.From(s.ProductDelivery, new Dictionary<string, int?>()).InternallyReleasedItemsAwaitingLaunch,
             SessionIdentity = identities.GetValue(s, _ => new()).Value, Journeys = journeys.ToArray(), ChangedItems = changed,
             ActiveDevelopment = d.DevelopmentCount, ActiveRework = d.ReworkCount,
             WaitingRework = d.WaitingForReworkCount, DependencyWaiting = d.WaitingForDependencyCount,

@@ -11,6 +11,15 @@ public partial class KpiDashboardView : UserControl
     public Orientation LayoutOrientation { get=>GetValue(LayoutOrientationProperty);set=>SetValue(LayoutOrientationProperty,value); }
     public static readonly StyledProperty<double> ChartHeightProperty = AvaloniaProperty.Register<KpiDashboardView,double>(nameof(ChartHeight),160);
     public double ChartHeight { get=>GetValue(ChartHeightProperty);set=>SetValue(ChartHeightProperty,value); }
+    public static readonly StyledProperty<double> CardWidthProperty = AvaloniaProperty.Register<KpiDashboardView, double>(nameof(CardWidth), 250);
+    public double CardWidth { get => GetValue(CardWidthProperty); private set => SetValue(CardWidthProperty, value); }
+    public double CompactHeadingHeight => DashboardHeading.Bounds.Height + EvaluationHeading.Bounds.Height + 28;
+    public static double ResponsiveCardWidth(double width)
+    {
+        var available = Math.Max(200, width - 16);
+        var columns = Math.Max(1, (int)(available / 258));
+        return Math.Min(290, available / columns - 8);
+    }
     private LiveViewModel? observed;
     private Window? expandedWindow;
     private bool expandedView;
@@ -31,6 +40,7 @@ public partial class KpiDashboardView : UserControl
     private void Changed(object? sender,PropertyChangedEventArgs e)=>RefreshPresentation();
     private void RefreshPresentation()
     {
+        CardWidth = ResponsiveCardWidth(Bounds.Width);
         ExplorerSurface.IsVisible=observed?.ExplorerOpen==true && (expandedView || !observed.ExplorerExpanded);
         CardStrip.IsVisible=!expandedView;
         ExpandExplorer.IsVisible=!expandedView && observed?.ExplorerOpen==true;

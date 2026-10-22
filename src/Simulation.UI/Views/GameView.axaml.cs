@@ -35,6 +35,8 @@ public partial class GameView : UserControl
     {
         var vm = DataContext as Simulation.UI.ViewModels.LiveViewModel;
         var next = ((object?)vm?.Live?.Session, vm?.Day ?? 0, vm?.Live?.Session.ProductDelivery.CustomerLaunches.Count ?? 0, vm?.KpiWindow ?? 20, GameWorld.SelectedStation);
+        ReleaseEconomics.IsVisible = GameWorld.SelectedStation == "Release";
+        if (ReleaseEconomics.IsVisible) ReleaseEconomics.Text = vm?.ReleaseInspectionText ?? "";
         if (contextKey == next) return;
         contextKey = next;
         ContextKpis.ItemsSource = vm?.StationPerformance(GameWorld.SelectedStation);
@@ -78,7 +80,8 @@ public partial class GameView : UserControl
         if (side) WorkshopContent.ColumnDefinitions[1].Width = new GridLength(GameWorld.HasSelection ? 300 : 0);
         var scroll = this.GetVisualAncestors().OfType<ScrollViewer>().FirstOrDefault();
         var bottom = scroll?.TranslatePoint(new Point(0, scroll.Bounds.Height), root)?.Y ?? root.Bounds.Height;
-        var dashboardHeight = !dashboardSide && !explorer && KpiPanel.IsVisible ? KpiPanel.Bounds.Height + 8 : 0;
+        // Reserve the dashboard heading, not every card: the workshop gets the main viewport.
+        var dashboardHeight = !dashboardSide && !explorer && KpiPanel.IsVisible ? KpiPanel.CompactHeadingHeight : 0;
         var height = StationMap.FitHeight(Math.Min(root.Bounds.Height, bottom) - Math.Max(0, position.Y) - dashboardHeight, WorkshopHeader.Bounds.Height, side, GameWorld.HasSelection);
         var sceneHeight = GameWorld.UseSprites ? StationMap.SceneHeight : 680;
         var width = Math.Max(1, WorkshopContent.Bounds.Width - (side && GameWorld.HasSelection ? 300 : 0));

@@ -60,6 +60,7 @@
       <ScrollViewer Grid.Row="1" MaxHeight="220" HorizontalScrollBarVisibility="Disabled"><StackPanel Spacing="4" Margin="0,0,0,8">
        <TextBlock Text="{Binding #GameWorld.Details.CompactSummary}" Foreground="{DynamicResource FlowText}" TextWrapping="Wrap"/>
        <TextBlock Text="{Binding #GameWorld.Inspection.MembershipNotice}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" TextWrapping="Wrap"/>
+       <TextBlock Name="ReleaseEconomics" FontSize="13" TextWrapping="Wrap" Foreground="{DynamicResource FlowText}"/>
        <TextBlock Text="{Binding #GameWorld.Details.SnapshotSummary}" TextWrapping="Wrap" FontSize="12"/>
        <TextBlock Text="{Binding #GameWorld.Details.Condition}" Foreground="{Binding #GameWorld.Details.ConditionColor}" FontWeight="SemiBold" TextWrapping="Wrap"/>
        <TextBlock Text="{Binding #GameWorld.Details.EvidencePeriod}" FontSize="11" Foreground="{DynamicResource FlowSecondary}" TextWrapping="Wrap"/>

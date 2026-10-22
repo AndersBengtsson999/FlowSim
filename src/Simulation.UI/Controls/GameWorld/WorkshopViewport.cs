@@ -10,7 +10,8 @@ public sealed class WorkshopViewport
     public Size View { get; private set; } = new(1080, 620);
     public double Zoom { get; private set; } = 1;
     public bool IsManual { get; private set; }
-    public double FitScale => Math.Min(View.Width / World.Width, View.Height / World.Height);
+    public double Padding { get; private set; }
+    public double FitScale => Math.Min(Math.Max(1, View.Width - 2 * Padding) / World.Width, Math.Max(1, View.Height - 2 * Padding) / World.Height);
     public double Scale => FitScale * Zoom;
     public Vector Offset { get; private set; }
     public Matrix Matrix => new(Scale, 0, 0, Scale, Offset.X, Offset.Y);
@@ -18,11 +19,11 @@ public sealed class WorkshopViewport
     public Point ToWorld(Point p) => new((p.X - Offset.X) / Scale, (p.Y - Offset.Y) / Scale);
     private Point Center => new(View.Width / 2, View.Height / 2);
 
-    public void Resize(Size view, Size world)
+    public void Resize(Size view, Size world, double padding = 0)
     {
-        if (view.Width <= 0 || view.Height <= 0 || world.Width <= 0 || world.Height <= 0 || view == View && world == World) return;
+        if (view.Width <= 0 || view.Height <= 0 || world.Width <= 0 || world.Height <= 0 || view == View && world == World && padding == Padding) return;
         var center = ToWorld(Center);
-        View = view; World = world;
+        View = view; World = world; Padding = Math.Clamp(double.IsFinite(padding) ? padding : 0, 0, Math.Min(view.Width, view.Height) / 4);
         if (!IsManual) Fit();
         else { Offset = new(Center.X - center.X * Scale, Center.Y - center.Y * Scale); Clamp(); }
     }

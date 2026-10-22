@@ -95,7 +95,7 @@ public sealed partial class GameWorldControl : Control
         base.Render(context);
         context.DrawRectangle(Brushes.Transparent, null, new Rect(Bounds.Size));
         using var cameraTransform = context.PushTransform(Camera.Matrix);
-        if (UseSprites) (sprites ??= new()).Render(context, Scene, AnimateActivity ? animation.Seconds : 0, AnimateActivity, packages.Sample(animation.Seconds), CustomerVehicle() ?? packages.Release(animation.Seconds), workers.Sample(animation.Seconds, animation.IsRunning && PlaybackSpeed <= 2), queues, SelectedStation, hoveredStation, IsFocused);
+        if (UseSprites) (sprites ??= new()).Render(context, Scene, AnimateActivity ? animation.Seconds : 0, AnimateActivity, packages.Sample(animation.Seconds), CustomerVehicle() ?? packages.Release(animation.Seconds), workers.Sample(animation.Seconds, animation.IsRunning && PlaybackSpeed <= 2), queues, SelectedStation, hoveredStation, IsFocused, Camera.Scale);
         else { renderer.Render(context, Scene); StationMap.Highlight(context, SelectedStation, hoveredStation, IsFocused); }
         StationMap.SelectionOutline(context, SelectedStation, Camera.Scale);
     }

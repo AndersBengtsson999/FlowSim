@@ -102,7 +102,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         {
             if (value == visualization || !Visualizations.Contains(value)) return;
             visualization = value;
-            foreach (var name in new[] { nameof(Visualization), nameof(GameViewSelected), nameof(FlowBoardSelected), nameof(ShowLiveOverview), nameof(ShowLiveStatus), nameof(ShowLiveDebt) })
+            foreach (var name in new[] { nameof(Visualization), nameof(GameViewSelected), nameof(FlowBoardSelected), nameof(ShowLiveOverview), nameof(ShowLiveStatus), nameof(ShowLiveDebt), nameof(ShowFlowProduct) })
                 PropertyChanged?.Invoke(this, new(name));
         }
     }

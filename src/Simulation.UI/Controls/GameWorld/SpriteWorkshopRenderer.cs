@@ -8,6 +8,8 @@ namespace Simulation.UI.Controls.GameWorld;
 
 internal sealed class SpriteWorkshopRenderer : IDisposable
 {
+    private double labelSize = 16;
+    private double drawingScale = 1;
     private readonly SpriteAssets assets = new();
     private readonly GameDrawing labels = new();
     private SpriteWorkshop? workshop;
@@ -15,8 +17,11 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
     private WorkshopEffects? effects;
     internal int DecodeCount => assets.DecodeCount;
     internal int ObjectCount => workshop?.Objects.Count ?? 0;
-    internal void Render(DrawingContext dc, GameSceneState? state, double seconds = 0, bool animateFrames = false, IReadOnlyList<SpriteObject>? moving = null, ReleaseVisual? release = null, IReadOnlyList<LivingWorker>? living = null, QueueStackMotion? queueMotion = null, string? selected = null, string? hovered = null, bool focused = false)
+    internal void Render(DrawingContext dc, GameSceneState? state, double seconds = 0, bool animateFrames = false, IReadOnlyList<SpriteObject>? moving = null, ReleaseVisual? release = null, IReadOnlyList<LivingWorker>? living = null, QueueStackMotion? queueMotion = null, string? selected = null, string? hovered = null, bool focused = false, double scale = 1)
     {
+        drawingScale = Math.Max(.1, scale);
+        var nextSize = Math.Round(Math.Clamp(13 / drawingScale, 14, 24), 1);
+        if (nextSize != labelSize) { labelSize = nextSize; labels.ClearLabels(); }
         if (state is not { HasSession: true })
         {
             workshop = null; batch = null; effects = null; labels.ClearLabels();
@@ -40,7 +45,11 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
             var p = queue.Position;
             var pressure = state.QueuePressures.GetValueOrDefault(queue.Id, QueuePressure.Normal);
             if (pressure.Kind != QueuePressureKind.Normal)
-                dc.DrawEllipse(null, new Pen(Ink(pressure.Color), pressure.Kind == QueuePressureKind.Blocked ? 3 : 2), new(p.X, p.Y + 7), 42, 22);
+            {
+                if (pressure.Kind is QueuePressureKind.Growing or QueuePressureKind.Constrained or QueuePressureKind.Blocked)
+                    using (dc.PushOpacity(.18)) dc.DrawEllipse(Ink(pressure.Color), null, new(p.X, p.Y + 7), 48, 26);
+                dc.DrawEllipse(null, new Pen(Ink(pressure.Color), 2.5 / drawingScale), new(p.X, p.Y + 7), 48, 26);
+            }
             Box(dc, p.X, p.Y + 8, 64, 30, 3, queue.Active ? "#547C70" : queue.Id == "ready" ? "#A28B4D" : "#7A7051", "#394B48", "#4F5D50");
             WorkflowMarkings.QueueIdentity(dc, queue);
         }
@@ -111,7 +120,7 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         Status(dc, state, "testing-wait", 708, 523);
         Count(dc, $"{state.Areas[4].Count:N0} staged{Grouped(state.Areas[4].Count)}", 449, 520, false);
         Status(dc, state, "ready", 449, 544);
-        Count(dc, $"{state.Areas[5].Count:N0} internally released", 214, 415, true);
+        Count(dc, $"{state.AwaitingCustomerLaunch:N0} awaiting launch", 214, 415, true);
         if (release is not null) Count(dc, release.Caption, 170, 470, true);
     }
     private static string Grouped(int count) => count > WorkshopQueue.StackCount(count) ? " · grouped" : "";
@@ -120,9 +129,12 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         var pressure = state.QueuePressures.GetValueOrDefault(id, QueuePressure.Normal);
         if (pressure.Label.Length == 0) return;
         var caption = pressure.Kind == QueuePressureKind.Blocked ? "Blocked · " + pressure.Label : pressure.Label;
-        var width = caption.Length * 6.2 + 14;
-        dc.DrawRectangle(Ink("#182D37"), new Pen(Ink(pressure.Color), 1), new Rect(x - width / 2, y - 1, width, 20), 4, 4);
-        labels.Text(dc, caption, x, y, 12, pressure.Color, true);
+        var size = Math.Max(14, labelSize - 2);
+        y += Math.Max(0, labelSize - 16);
+        var width = caption.Length * size * .55 + 16;
+        x = Math.Clamp(x, width / 2 + 8, Math.Max(width / 2 + 8, 1072 - width / 2));
+        dc.DrawRectangle(Ink("#182D37"), new Pen(Ink(pressure.Color), 1), new Rect(x - width / 2, y - 1, width, size + 7), 4, 4);
+        labels.Text(dc, caption, x, y, size, pressure.Color, true);
     }
     private void Title(DrawingContext dc, string text, double x, double y, string color)
     {
@@ -132,9 +144,10 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
     private void Count(DrawingContext dc, string text, double x, double y, bool active)
     {
         // Opaque backing preserves readability over the continuous floor and walkways.
-        var width = text.Length * 7.4 + 14;
-        dc.DrawRectangle(Ink("#1A3035"), null, new Rect(x - width / 2, y - 1, width, 21), 5, 5);
-        labels.Text(dc, text, x, y, 14, active ? "#99E8CD" : "#FFDF99", true);
+        var width = Math.Min(1060, text.Length * labelSize * .55 + 16);
+        x = Math.Clamp(x, width / 2 + 8, 1072 - width / 2);
+        dc.DrawRectangle(Ink("#1A3035"), null, new Rect(x - width / 2, y - 1, width, labelSize + 7), 5, 5);
+        labels.Text(dc, text, x, y, labelSize, active ? "#99E8CD" : "#FFDF99", true);
     }
     public void Dispose() => assets.Dispose();
 }
