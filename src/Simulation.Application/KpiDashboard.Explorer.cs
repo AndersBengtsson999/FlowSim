@@ -5,6 +5,8 @@ public static partial class KpiDashboard
 {
     private static double? ObservedValue(TeamKpi id, SimulationSession session, int first, int last)
     {
+        if (id == TeamKpi.UnlaunchedDevelopmentCost)
+            return (double?)LaunchEconomics.Calculate(session.Days, session.ProductDelivery).Points.FirstOrDefault(p => p.Day == last)?.Unlaunched;
         if (id <= TeamKpi.TechnicalDebt) return RawValue(id, session.Days, first, last);
         var days = session.Days.Skip(first - 1).Take(last - first + 1).ToArray();
         if (days.Length == 0) return null;
@@ -40,6 +42,8 @@ public static partial class KpiDashboard
     }
     public static string Interpretation(TeamKpi metric) => metric switch
     {
+        TeamKpi.WorkVolumePerSek => "Higher means more original Development effort internally released per unit of staffing cost, not more customer value. Customer launches do not change this ratio.",
+        TeamKpi.UnlaunchedDevelopmentCost => "A stock of observed allocated cost, not period expenditure. Customer launches reclassify included work; they create no expense. WIP and excluded work remain unlaunched.",
         TeamKpi.DeveloperUtilization or TeamKpi.TesterUtilization => "High utilization does not imply high delivery performance and may coincide with growing queues.",
         TeamKpi.CostPerDelivery or TeamKpi.TotalTeamCost => "Staffing cost is not value or profit. Work size, batching and window boundaries affect cost per delivery.",
         TeamKpi.CycleTime => "A mean can hide large differences between items. Only released items enter this cohort; old unfinished work is excluded.",

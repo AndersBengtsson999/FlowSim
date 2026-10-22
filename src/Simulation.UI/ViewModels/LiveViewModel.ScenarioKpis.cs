@@ -3,11 +3,11 @@ namespace Simulation.UI.ViewModels;
 public sealed record ScenarioKpiDisplayRow(ScenarioKpiRow Row)
 {
     public string Name => Row.Definition.Name;
-    public string Unit => Row.Definition.Unit;
+    public string Unit => KpiDisplay.Unit(Row.Definition);
     public string Baseline => Format(Row.Baseline);
     public string Intervention => Format(Row.Intervention);
     public string Difference => Format(Row.Difference) + (Row.Definition.Id is TeamKpi.DeveloperUtilization or TeamKpi.TesterUtilization ? " pp" : "");
-    private static string Format(double? value) => value?.ToString("0.##") ?? "N/A";
+    private string Format(double? value) => KpiDisplay.Format(Row.Definition.Id, value);
 }
 public sealed partial class LiveViewModel
 {
@@ -23,8 +23,10 @@ public sealed partial class LiveViewModel
     public IReadOnlyList<ScenarioKpiDisplayRow> ScenarioRows { get; private set; } = [];
     public string ScenarioStatus => ScenarioComparison is not { } c ? guidedMessage + " No active experiment. Start a staffing experiment, change only Developers or only Testers, apply, then resume LIVE." :
         $"Evaluation Days {c.FirstDay}–{c.EndDay} · {c.ObservedDays}/{c.EndDay-c.FirstDay+1} days. " + (c.Unavailable is { } unavailable ? "Unavailable · " + unavailable : $"Matched Days {c.FirstDay}–{c.FirstDay+c.ObservedDays-1}. " + (c.FirstDay+c.ObservedDays-1==c.EndDay ? "Complete." : "In progress."));
-    public LiveTrendSeries ScenarioBaseline => new(ScenarioComparison?.Points.Select(p=>new LiveTrendPoint(p.Day,p.Baseline)).ToArray() ?? [],[]);
-    public LiveTrendSeries ScenarioIntervention => new(ScenarioComparison?.Points.Select(p=>new LiveTrendPoint(p.Day,p.Intervention)).ToArray() ?? [],[]);
+    public LiveTrendSeries ScenarioBaseline => new(ScenarioComparison?.Points.Select(p=>new LiveTrendPoint(p.Day,KpiDisplay.Scale(ScenarioKpi.Id,p.Baseline))).ToArray() ?? [],[]);
+    public LiveTrendSeries ScenarioIntervention => new(ScenarioComparison?.Points.Select(p=>new LiveTrendPoint(p.Day,KpiDisplay.Scale(ScenarioKpi.Id,p.Intervention))).ToArray() ?? [],[]);
+    public string ScenarioUnit => KpiDisplay.Unit(ScenarioKpi);
+    public string ScenarioNumberFormat => KpiDisplay.NumberFormat(ScenarioKpi.Id);
     public string ScenarioEconomics { get; private set; } = "";
     private void RefreshScenarioKpis()
     {

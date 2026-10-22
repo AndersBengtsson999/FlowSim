@@ -1,7 +1,7 @@
 using Simulation.Core;
 namespace Simulation.Application;
 
-public enum TeamKpi { ReleasedThroughput, CycleTime, CostPerDelivery, ReworkEffort, TotalTeamCost, DeveloperUtilization, TesterUtilization, TotalWip, DevelopmentQueue, ReviewQueue, TestingQueue, TechnicalDebt, CycleTimeP85, DeliveryFrequency, DeliveryVariability, WipAge, ReviewQueueGrowth, ReworkCost, ReworkProportion, DebtGrowth, DebtRepayment, CostPerWorkSize, WorkVolumePerSek }
+public enum TeamKpi { ReleasedThroughput, CycleTime, CostPerDelivery, ReworkEffort, TotalTeamCost, DeveloperUtilization, TesterUtilization, TotalWip, DevelopmentQueue, ReviewQueue, TestingQueue, TechnicalDebt, CycleTimeP85, DeliveryFrequency, DeliveryVariability, WipAge, ReviewQueueGrowth, ReworkCost, ReworkProportion, DebtGrowth, DebtRepayment, CostPerWorkSize, WorkVolumePerSek, UnlaunchedDevelopmentCost }
 public sealed record KpiDashboardSettings(int Window = 20, IReadOnlyList<TeamKpi>? Selected = null, bool Visible = true, TeamKpi? Explorer = null, TeamKpi? Comparison = null)
 {
     public static IReadOnlyList<TeamKpi> Defaults { get; } = Array.AsReadOnly(new[] { TeamKpi.ReleasedThroughput, TeamKpi.CycleTime, TeamKpi.CostPerDelivery, TeamKpi.ReworkEffort });
@@ -14,14 +14,15 @@ public sealed record TeamKpiDefinition(TeamKpi Id, string Name, string Unit, str
 public sealed record TeamKpiObservation(TeamKpiDefinition Definition, double? Value, double? Previous, int FirstDay, int LastDay,
     int AvailableDays, int Window, LiveTrendSeries Trend)
 {
+    public LaunchCostHistory? BalanceHistory { get; init; }
     public double? Difference => Value - Previous;
 }
 public static partial class KpiDashboard
 {
     public static IReadOnlyList<TeamKpiDefinition> Definitions { get; } = Array.AsReadOnly(new[] {
-        new TeamKpiDefinition(TeamKpi.ReleasedThroughput,"Released throughput","items / 5 days","Period rate","Actually released items / observed days × 5. Partial history uses observed days only.",LiveTrendMetric.Throughput),
+        new TeamKpiDefinition(TeamKpi.ReleasedThroughput,"Released throughput","items / 5 days","Period rate","Internally released items / observed days × 5. Partial history uses observed days only.",LiveTrendMetric.Throughput),
         new(TeamKpi.CycleTime,"Cycle time","days","Released cohort average","Development start to release, averaged over items released in the window. N/A without releases.",LiveTrendMetric.CycleTime),
-        new(TeamKpi.CostPerDelivery,"Cost / delivered item","SEK / item","Period ratio","Recorded team cost / actually released items. N/A without releases or complete monetary observations.",LiveTrendMetric.TeamCostPerDelivery),
+        new(TeamKpi.CostPerDelivery,"Cost / delivered item","SEK / item","Period ratio","Recorded team cost / internally released items. N/A without releases or complete monetary observations.",LiveTrendMetric.TeamCostPerDelivery),
         new(TeamKpi.ReworkEffort,"Rework effort","capacity units","Period total","Actual raw developer capacity consumed by Rework. Not a percentage or inferred defect effort."),
         new(TeamKpi.TotalTeamCost,"Total team cost","SEK","Period total","Sum of recorded daily staffing cost, including idle available staff. N/A if any monetary observation is missing."),
         new(TeamKpi.DeveloperUtilization,"Developer utilization","%","Period ratio","Total used / total available developer capacity. N/A when available capacity is zero.",LiveTrendMetric.DeveloperUtilization),
@@ -41,18 +42,28 @@ public static partial class KpiDashboard
         new(TeamKpi.DebtGrowth,"Technical debt growth","effort units","Period net change","Sum of recorded debt created minus debt repaid. Can be negative; not a monetary liability."),
         new(TeamKpi.DebtRepayment,"Debt repayment effort","capacity units","Period total","Sum of recorded raw repayment capacity. Not the amount of debt removed when productivity differs."),
         new(TeamKpi.CostPerWorkSize,"Cost / delivered work size","SEK / effort unit","Period ratio","Recorded team cost / sum of original Development effort of released items. Base effort is a size proxy, not business value."),
-        new(TeamKpi.WorkVolumePerSek,"Delivered work / SEK","effort units / SEK","Period ratio","Original Development effort of released items / recorded team cost. Zero deliveries gives zero when cost is positive; not business value.")
+        new(TeamKpi.WorkVolumePerSek,"Delivered work / 1,000 SEK","effort units / SEK","Period ratio","Original Development effort of internally released items / recorded team cost. Customer launches do not define this numerator. Displayed per 1,000 SEK. Zero deliveries gives zero when cost is positive; not business value."),
+        new(TeamKpi.UnlaunchedDevelopmentCost,"Unlaunched Development Cost","SEK","Current accumulated balance","Estimated allocated WIP plus internally released work awaiting customer launch. Excludes unallocated overhead; not a rolling-period cost. Missing historical allocations are excluded, never invented.")
     });
-    public static IReadOnlyList<TeamKpiObservation> Project(SimulationSession session, KpiDashboardSettings settings, int range = 40)
+    public static IReadOnlyList<TeamKpiObservation> Project(SimulationSession session, KpiDashboardSettings settings, int range = 40, LaunchCostHistory? launchCosts = null)
     {
         settings = settings.Normalize();
         var end = session.CurrentDay; var window = settings.Window; var start = Math.Max(1, end - window + 1);
         var current = end == 0 ? null : LivePerformance.Period(session, start, end);
         var previous = end < 2 * window ? null : LivePerformance.Period(session, end - 2 * window + 1, end - window);
         var trendStart = Math.Max(1, end - range + 1);
+        if (settings.Selected!.Contains(TeamKpi.UnlaunchedDevelopmentCost)) launchCosts ??= LaunchEconomics.Calculate(session.Days, session.ProductDelivery);
         return settings.Selected!.Select(id =>
         {
             var definition = Definitions.Single(d => d.Id == id);
+            if (id == TeamKpi.UnlaunchedDevelopmentCost)
+            {
+                var history = launchCosts!;
+                return new TeamKpiObservation(definition, (double)history.Current.Unlaunched, null,
+                    end, end, end == 0 ? 0 : 1, 0,
+                    new(history.Points.Where(p => p.Day >= trendStart).Select(p => new LiveTrendPoint(p.Day, (double)p.Unlaunched)).ToArray(), []))
+                    { BalanceHistory = history };
+            }
             var trend = definition.Trend is { } metric ? LivePerformanceTrend.Project(session, metric, window, range) :
                 new LiveTrendSeries(Enumerable.Range(trendStart, Math.Max(0, end - trendStart + 1)).Select(day =>
                     new LiveTrendPoint(day, ObservedValue(id, session, Math.Max(1, day - window + 1), day))).ToArray(),

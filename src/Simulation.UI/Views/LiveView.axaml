@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:views="using:Simulation.UI.Views" xmlns:core="using:Simulation.Core" xmlns:app="using:Simulation.Application" xmlns:charts="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.LiveView" x:DataType="vm:LiveViewModel">
  <UserControl.Styles>
+  <Style Selector="Expander.compactSummary /template/ ToggleButton"><Setter Property="MinHeight" Value="32"/><Setter Property="Padding" Value="8,3"/></Style>
   <Style Selector="ListBox#LiveFlow ListBoxItem"><Setter Property="Padding" Value="0"/><Setter Property="Margin" Value="0"/><Setter Property="MinHeight" Value="0"/></Style>
   <Style Selector="Button"><Setter Property="Padding" Value="10,6"/><Setter Property="Margin" Value="0,0,6,0"/></Style>
   <Style Selector="Border.interventionRow:focus-within"><Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}"/></Style>
@@ -76,8 +77,8 @@
  </UserControl.Resources>
  <Grid>
  <ScrollViewer Name="LiveScroll" HorizontalScrollBarVisibility="Disabled">
- <StackPanel Spacing="8" Margin="0,4">
-  <Grid IsVisible="{Binding ShowLiveOverview}" ColumnDefinitions="*,Auto" Margin="0,0,0,4"><StackPanel><TextBlock Text="Live workspace" FontSize="24" FontWeight="Bold"/><TextBlock Text="Follow the work. Understand the wait." Classes="liveSecondary"/></StackPanel><Border Grid.Column="1" Background="{DynamicResource FlowSidebar}" CornerRadius="4" Padding="14,6" VerticalAlignment="Center"><StackPanel Orientation="Horizontal" Spacing="8"><TextBlock Text="DAY" Foreground="{DynamicResource FlowWarning}" FontSize="11" VerticalAlignment="Center"/><TextBlock Text="{Binding Day}" Foreground="{DynamicResource FlowText}" FontSize="24" FontWeight="Bold"/></StackPanel></Border></Grid>
+ <StackPanel Spacing="5" Margin="0,2">
+  <Grid IsVisible="{Binding ShowLiveOverview}" ColumnDefinitions="*,Auto" Margin="0,0,0,4"><StackPanel><TextBlock Text="Live workspace" FontSize="20" FontWeight="Bold"/></StackPanel><Border Grid.Column="1" Background="{DynamicResource FlowSidebar}" CornerRadius="4" Padding="14,6" VerticalAlignment="Center"><StackPanel Orientation="Horizontal" Spacing="8"><TextBlock Text="DAY" Foreground="{DynamicResource FlowWarning}" FontSize="11" VerticalAlignment="Center"/><TextBlock Text="{Binding Day}" Foreground="{DynamicResource FlowText}" FontSize="24" FontWeight="Bold"/></StackPanel></Border></Grid>
   <Border IsVisible="{Binding ShowLiveStatus}" Classes="livePanel" AutomationProperties.Name="Live Status">
    <StackPanel Spacing="2">
     <ItemsControl ItemsSource="{Binding StatusPrimaryGroups}" ItemTemplate="{StaticResource StatusGroup}"><ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate></ItemsControl.ItemsPanel></ItemsControl>
@@ -106,8 +107,12 @@
    <Button Content="Reset" Classes="sessionReset destructive" Foreground="{DynamicResource FlowError}" Command="{Binding ResetCommand}" IsVisible="{Binding HasSession}" Margin="8,0,8,0" ToolTip.Tip="Discard this timeline and its checkpoints. Save first to keep it."/>
    <TextBlock Text="{Binding PlaybackState, StringFormat='● {0}'}" Classes="liveSecondary" VerticalAlignment="Center" Margin="8,0" ToolTip.Tip="{Binding Status}" AutomationProperties.Name="Simulation state"/>
    <TextBlock Text="{Binding Status}" IsVisible="{Binding HasStatusMessage}" Classes="liveSecondary" TextWrapping="Wrap" MaxWidth="360" VerticalAlignment="Center" Margin="8,0"/>
+   <StackPanel Orientation="Horizontal" Spacing="10" Margin="6,2">
+    <TextBlock Text="View" VerticalAlignment="Center" FontWeight="SemiBold"/>
+    <ComboBox Name="LiveVisualization" ItemsSource="{Binding Visualizations}" SelectedItem="{Binding Visualization, Mode=TwoWay}" MinWidth="160" AutomationProperties.Name="Live visualization"/>
+   </StackPanel>
   </WrapPanel>
-  <Expander IsVisible="{Binding ShowLiveOverview}" Name="SetupSection" IsExpanded="{Binding SetupExpanded, Mode=TwoWay}" HorizontalAlignment="Stretch">
+  <Expander IsVisible="{Binding ShowLiveOverview}" Name="SetupSection" Classes="compactSummary" IsExpanded="{Binding SetupExpanded, Mode=TwoWay}" HorizontalAlignment="Stretch">
    <Expander.Header><TextBlock TextWrapping="Wrap" FontSize="13"><Run Text="{Binding ConfigurationHeading}" FontWeight="SemiBold"/><Run Text="{Binding ConfigurationValues}"/></TextBlock></Expander.Header>
    <StackPanel>
   <StackPanel IsVisible="{Binding SetupVisible}" Spacing="14" MaxWidth="820" HorizontalAlignment="Stretch">
@@ -200,11 +205,7 @@
     <Grid ColumnDefinitions="*,Auto"><TextBlock Text="{Binding DebtText}" FontSize="12" TextWrapping="Wrap" VerticalAlignment="Center"/><Button Grid.Column="1" Content="Details" Padding="5,0" MinHeight="20" Margin="8,0,0,0"><Button.Flyout><Flyout><TextBlock Text="{Binding DebtDetails}" TextWrapping="Wrap" MaxWidth="500"/></Flyout></Button.Flyout></Button></Grid>
     <charts:TechnicalDebtBar State="{Binding DebtBar}" Height="32" AutomationProperties.Name="{Binding DebtText}"/>
    </StackPanel>
-   <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,4">
-    <TextBlock Text="View" VerticalAlignment="Center" FontWeight="SemiBold"/>
-    <ComboBox Name="LiveVisualization" ItemsSource="{Binding Visualizations}" SelectedItem="{Binding Visualization, Mode=TwoWay}" MinWidth="160" AutomationProperties.Name="Live visualization"/>
-   </StackPanel>
-   <Expander Name="EconomicSummary" Background="{DynamicResource FlowPanel}" Header="{Binding EconomicHeader}" HorizontalAlignment="Stretch">
+   <Expander Name="EconomicSummary" Classes="compactSummary" Background="{DynamicResource FlowPanel}" Header="{Binding EconomicHeader}" HorizontalAlignment="Stretch">
     <StackPanel Spacing="8" Margin="8">
      <StackPanel Orientation="Horizontal" Spacing="12"><TextBlock Text="Window · days" VerticalAlignment="Center"/><ComboBox ItemsSource="{Binding RollingWindows}" SelectedItem="{Binding RollingWindow}" AutomationProperties.Name="Economic evaluation window"/></StackPanel>
      <TextBlock Text="{Binding EconomicWindow}" TextWrapping="Wrap"/>
@@ -255,7 +256,8 @@
       </StackPanel>
      </Expander>
 </StackPanel></Expander>
-<Expander Classes="liveAnalysis" Header="Team Performance" HorizontalAlignment="Stretch"><StackPanel Spacing="8">
+<views:KpiDashboardView IsVisible="{Binding DashboardVisible}"/>
+<Expander Classes="liveAnalysis" Header="Detailed Team Performance" HorizontalAlignment="Stretch"><StackPanel Spacing="8">
      <StackPanel Orientation="Horizontal" Spacing="8">
       <TextBlock Text="Window · days" VerticalAlignment="Center"/>
       <ComboBox ItemsSource="{Binding RollingWindows}" SelectedItem="{Binding RollingWindow, Mode=TwoWay}" AutomationProperties.Name="Performance window · days" />

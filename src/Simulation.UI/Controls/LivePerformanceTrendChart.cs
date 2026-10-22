@@ -12,6 +12,9 @@ namespace Simulation.UI.Controls;
 /// <summary>Single neutral series. Pixel envelopes bound drawing cost; tooltips use original points.</summary>
 public sealed class LivePerformanceTrendChart : Control
 {
+    public static readonly StyledProperty<string?> NumberFormatProperty = AvaloniaProperty.Register<LivePerformanceTrendChart, string?>(nameof(NumberFormat));
+    public string? NumberFormat { get => GetValue(NumberFormatProperty); set => SetValue(NumberFormatProperty, value); }
+    private string Format(double value, string fallback) => value.ToString(NumberFormat ?? fallback, CultureInfo.CurrentCulture);
     public static readonly StyledProperty<LiveTrendSeries?> ComparisonSeriesProperty = AvaloniaProperty.Register<LivePerformanceTrendChart,LiveTrendSeries?>(nameof(ComparisonSeries));
     public LiveTrendSeries? ComparisonSeries { get=>GetValue(ComparisonSeriesProperty);set=>SetValue(ComparisonSeriesProperty,value); }
     public (double Minimum,double Maximum) ValueScale
@@ -34,7 +37,7 @@ public sealed class LivePerformanceTrendChart : Control
     public LiveTrendSeries? Series { get => GetValue(SeriesProperty); set => SetValue(SeriesProperty, value); }
     public string Unit { get => GetValue(UnitProperty); set => SetValue(UnitProperty, value); }
     public int SelectedDay { get => GetValue(SelectedDayProperty); set => SetValue(SelectedDayProperty, value); }
-    static LivePerformanceTrendChart() => AffectsRender<LivePerformanceTrendChart>(SeriesProperty, UnitProperty, SelectedDayProperty, CompactProperty, SamplesOnlyProperty, SeriesBrushProperty, ComparisonSeriesProperty);
+    static LivePerformanceTrendChart() => AffectsRender<LivePerformanceTrendChart>(SeriesProperty, NumberFormatProperty, UnitProperty, SelectedDayProperty, CompactProperty, SamplesOnlyProperty, SeriesBrushProperty, ComparisonSeriesProperty);
     private Rect Plot => Compact ? new(2, 2, Math.Max(1, Bounds.Width - 4), Math.Max(1, Bounds.Height - 4)) : new(55, 27, Math.Max(1, Bounds.Width - 70), Math.Max(1, Bounds.Height - 58));
     private int First => Series?.Points.FirstOrDefault()?.Day ?? 0;
     private int Last => Series?.Points.LastOrDefault()?.Day ?? 0;
@@ -53,7 +56,7 @@ public sealed class LivePerformanceTrendChart : Control
         {
         context.DrawLine(gridPen, Plot.TopLeft, Plot.TopRight);
         context.DrawLine(gridPen, new(Plot.Left, Plot.Center.Y), new(Plot.Right, Plot.Center.Y));
-        Label(context, max.ToString("G4"), new(0, Plot.Top)); Label(context, min.ToString("G4"), new(0, Plot.Bottom - 12));
+        Label(context, Format(max,"G4"), new(0, Plot.Top)); Label(context, Format(min,"G4"), new(0, Plot.Bottom - 12));
         Label(context, $"Day {Start}", new(Plot.Left, Plot.Bottom + 7));
         if (Last > Start) Label(context, $"Day {Last}", new(Plot.Right - 65, Plot.Bottom + 7));
         }
@@ -101,10 +104,10 @@ public sealed class LivePerformanceTrendChart : Control
         if (ComparisonSeries is { } comparison)
         {
             var other=comparison.Points.FirstOrDefault(p=>p.Day==day);
-            string V(double? value)=>value?.ToString("G17",CultureInfo.CurrentCulture) ?? "N/A";
+            string V(double? value)=>value is { } number ? Format(number,"G17") : "N/A";
             return $"Day {day}\nBaseline: {V(point?.Value)} {Unit}\nIntervention: {V(other?.Value)} {Unit}\nDifference: {V(other?.Value-point?.Value)} {Unit}";
         }
-        return point is null ? "" : $"Day {day}: {(point.Value is { } v ? v.ToString("G17", CultureInfo.CurrentCulture) + " " + Unit : "Unavailable")}";
+        return point is null ? "" : $"Day {day}: {(point.Value is { } v ? Format(v,"G17") + " " + Unit : "Unavailable")}";
     }
     protected override void OnPointerMoved(PointerEventArgs e)
     {

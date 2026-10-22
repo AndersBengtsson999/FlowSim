@@ -29,6 +29,7 @@ public class KpiExplorerTests
             TeamKpi.DebtGrowth=>days.Sum(d=>d.Debt!.Created-d.Debt.Repaid),
             TeamKpi.DebtRepayment=>days.Sum(d=>d.Debt!.RepaymentCapacity),
             TeamKpi.CostPerWorkSize=>releases.Length==0?null:(double?)economics.TotalTeamCost/releases.Sum(w=>w.DevelopmentEffort),
+            TeamKpi.UnlaunchedDevelopmentCost=>(double)LaunchEconomics.Calculate(session.Days,session.ProductDelivery).Current.Unlaunched,
             TeamKpi.WorkVolumePerSek=>releases.Sum(w=>w.DevelopmentEffort)/(double)economics.TotalTeamCost!,
             _=>throw new Exception()};
         foreach(var id in Enum.GetValues<TeamKpi>().Where(id=>id>TeamKpi.TechnicalDebt))
