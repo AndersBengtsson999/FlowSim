@@ -49,8 +49,8 @@ public static class StationMap
         return Names[index < 0 ? offset < 0 ? Names.Count - 1 : 0 : (index + offset + Names.Count) % Names.Count];
     }
     public static bool SidePanel(double width) => width >= 1120;
-    public static double FitHeight(double remainingHeight, double headerHeight, bool sidePanel, bool selected) =>
-        Math.Max(240, remainingHeight - headerHeight - 32 - (!sidePanel && selected ? 210 : 0));
+    public static double FitHeight(double remainingHeight, double headerHeight, bool sidePanel, bool selected, double minimumHeight = 240) =>
+        Math.Max(minimumHeight, remainingHeight - headerHeight - 32 - (!sidePanel && selected ? 210 : 0));
     public static double SelectionStroke(double scale) => 2 / Math.Max(.01, scale);
     internal static void SelectionOutline(DrawingContext dc, string? selected, double scale)
     {

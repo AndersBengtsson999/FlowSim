@@ -1,10 +1,11 @@
 <UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:app="using:Simulation.Application" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:charts="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.KpiDashboardView" x:DataType="vm:LiveViewModel" Name="Dashboard" Foreground="{DynamicResource FlowText}">
- <UserControl.Styles><Style Selector="Button"><Setter Property="MinHeight" Value="30"/><Setter Property="Padding" Value="10,5"/><Setter Property="Margin" Value="0"/></Style><Style Selector="Button:focus-visible"><Setter Property="BorderBrush" Value="{DynamicResource FlowAccent}"/><Setter Property="BorderThickness" Value="2"/></Style></UserControl.Styles>
+ <UserControl.Styles><Style Selector="Button"><Setter Property="MinHeight" Value="30"/><Setter Property="Padding" Value="10,5"/><Setter Property="Margin" Value="0"/></Style><Style Selector="Button.compactKpi:pointerover"><Setter Property="Opacity" Value="0.82"/></Style><Style Selector="Button:focus-visible"><Setter Property="BorderBrush" Value="{DynamicResource FlowAccent}"/><Setter Property="BorderThickness" Value="2"/></Style></UserControl.Styles>
  <Border Background="{DynamicResource FlowPanel}" CornerRadius="6" Padding="8">
-  <StackPanel Spacing="6">
-   <Grid Name="DashboardHeading" ColumnDefinitions="*,Auto">
+  <StackPanel Spacing="4">
+   <Grid Name="DashboardHeading" ColumnDefinitions="*,Auto,Auto">
+    <Button Grid.Column="1" Content="Analyze ↗" Click="ExpandExplorerClicked" Margin="0,0,6,0" AutomationProperties.Name="Open detailed KPI analysis"/>
     <TextBlock Text="Team Performance" FontWeight="Bold" Foreground="{DynamicResource FlowText}" VerticalAlignment="Center"/>
-    <Button Grid.Column="1" Name="ChooseKpis" Content="KPIs…" Padding="6,3" AutomationProperties.Name="Choose up to four KPIs">
+    <Button Grid.Column="2" Name="ChooseKpis" Content="KPIs…" Padding="6,3" AutomationProperties.Name="Choose up to four KPIs">
      <Button.Flyout><Flyout><StackPanel Spacing="4" Width="290">
       <TextBlock Text="Choose up to four KPIs" FontWeight="Bold"/>
       <TextBlock Text="{Binding KpiSelectionSummary}" TextWrapping="Wrap"/>
@@ -17,7 +18,7 @@
    </Grid>
    <StackPanel Name="EvaluationHeading" Orientation="Horizontal" Spacing="6"><TextBlock Text="Rolling evaluation · days" Foreground="{DynamicResource FlowText}" VerticalAlignment="Center"/><ComboBox Name="KpiWindowPicker" ItemsSource="{Binding KpiWindows}" SelectedItem="{Binding KpiWindow}" MinHeight="24" Padding="6,2" AutomationProperties.Name="KPI rolling evaluation days"/></StackPanel>
    <TextBlock Text="Choose KPIs to show values." IsVisible="{Binding NoKpis}" Foreground="{DynamicResource FlowText}"/>
-   <WrapPanel>
+   <WrapPanel IsVisible="False">
     <Button Name="ExpandExplorer" Background="{DynamicResource FlowAccent}" Foreground="{DynamicResource FlowOnAccent}" FontWeight="SemiBold" Content="Expand Explorer ↗" Click="ExpandExplorerClicked" ToolTip.Tip="Open a larger, non-modal Explorer. The workshop stays active."/>
     <Button Name="DetachedNote" Content="Explorer is open ↗" Click="ExpandExplorerClicked"/>
    </WrapPanel>
@@ -38,8 +39,10 @@
        <Grid Name="MetricGraphs" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
        <ContentControl Name="PrimaryMetric" Content="{Binding ExplorerPrimary}"><ContentControl.ContentTemplate><DataTemplate x:DataType="vm:KpiCard"><StackPanel Spacing="3">
         <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="{DynamicResource FlowAccent}"/>
-        <TextBlock Text="Definition · hover for details" ToolTip.Tip="{Binding ExplorerDescription}" FontSize="12"/>
+        <TextBlock Text="{Binding ExplorerDescription}" TextWrapping="Wrap" FontSize="12"/>
         <TextBlock Text="{Binding Period}" ToolTip.Tip="{Binding Kind}" FontSize="12"/>
+        <TextBlock Text="{Binding Change}" ToolTip.Tip="{Binding ComparisonHelp}" TextWrapping="Wrap" FontSize="12"/>
+        <TextBlock Text="{Binding TrendCaption}" TextWrapping="Wrap" FontSize="12"/>
         <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="{Binding Value}" FontWeight="Bold"/><TextBlock Text="{Binding Unit}"/></StackPanel>
         <charts:LivePerformanceTrendChart IsVisible="{Binding IsPeriod}" Series="{Binding Trend}" Unit="{Binding Unit}" NumberFormat="{Binding NumberFormat}" SamplesOnly="True" Height="{Binding #Dashboard.ChartHeight}"/>
         <StackPanel IsVisible="{Binding IsBalance}" Spacing="3">
@@ -51,8 +54,10 @@
        </StackPanel></DataTemplate></ContentControl.ContentTemplate></ContentControl>
        <ContentControl Name="SecondaryMetric" Grid.Row="1" Content="{Binding ExplorerSecondary}" IsVisible="{Binding HasComparison}"><ContentControl.ContentTemplate><DataTemplate x:DataType="vm:KpiCard"><StackPanel Spacing="3">
         <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="{DynamicResource FlowPurple}"/>
-        <TextBlock Text="Definition · hover for details" ToolTip.Tip="{Binding ExplorerDescription}" FontSize="12"/>
+        <TextBlock Text="{Binding ExplorerDescription}" TextWrapping="Wrap" FontSize="12"/>
         <TextBlock Text="{Binding Period}" ToolTip.Tip="{Binding Kind}" FontSize="12"/>
+        <TextBlock Text="{Binding Change}" ToolTip.Tip="{Binding ComparisonHelp}" TextWrapping="Wrap" FontSize="12"/>
+        <TextBlock Text="{Binding TrendCaption}" TextWrapping="Wrap" FontSize="12"/>
         <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="{Binding Value}" FontWeight="Bold"/><TextBlock Text="{Binding Unit}"/></StackPanel>
         <charts:LivePerformanceTrendChart IsVisible="{Binding IsPeriod}" Series="{Binding Trend}" Unit="{Binding Unit}" NumberFormat="{Binding NumberFormat}" SeriesBrush="{DynamicResource FlowPurple}" SamplesOnly="True" Height="{Binding #Dashboard.ChartHeight}"/>
         <StackPanel IsVisible="{Binding IsBalance}" Spacing="3">
@@ -90,17 +95,10 @@
     <ItemsControl ItemsSource="{Binding DisplayCards}">
      <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
      <ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:KpiCard">
-      <Button Click="OpenExplorerClicked" Padding="0" Background="Transparent" AutomationProperties.Name="{Binding Name}"><Border Background="{DynamicResource FlowPanel}" BorderBrush="{Binding SelectionBorder}" BorderThickness="2" CornerRadius="4" Padding="7" Width="{Binding #Dashboard.CardWidth}" MinHeight="172" Margin="0,0,6,6" ToolTip.Tip="{Binding Help}">
+      <Button Classes="compactKpi" Cursor="Hand" Click="OpenExplorerClicked" Padding="0" Background="Transparent" AutomationProperties.Name="{Binding Name}"><Border Background="{DynamicResource FlowPanel}" BorderBrush="{Binding SelectionBorder}" BorderThickness="2" CornerRadius="4" Padding="7" Width="{Binding #Dashboard.CardWidth}" MinHeight="88" Margin="0,0,6,6" ToolTip.Tip="{Binding Help}">
        <StackPanel Spacing="1">
-        <TextBlock Text="{Binding Name}" Foreground="{DynamicResource FlowText}" FontSize="13" FontWeight="SemiBold" TextWrapping="Wrap"/>
-        <WrapPanel><TextBlock Margin="0,0,5,0" MaxWidth="{Binding $parent[StackPanel].Bounds.Width}" TextWrapping="Wrap" Text="{Binding Value}" Foreground="{DynamicResource FlowText}" FontWeight="Bold" FontSize="23"/><TextBlock Text="{Binding Unit}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" VerticalAlignment="Center"/></WrapPanel>
-        <TextBlock IsVisible="{Binding IsPeriod}" Text="{Binding Kind}" Foreground="{DynamicResource FlowSecondary}" FontSize="12"/>
-        <TextBlock Text="{Binding Period}" Foreground="{DynamicResource FlowSecondary}" FontSize="12"/>
-        <TextBlock IsVisible="{Binding IsPeriod}" TextWrapping="Wrap" Text="{Binding Change}" Foreground="{DynamicResource FlowText}" FontSize="12" ToolTip.Tip="{Binding ComparisonHelp}"/>
-        <TextBlock IsVisible="{Binding IsBalance}" Text="{Binding Components}" FontSize="12" TextWrapping="Wrap"/>
-        <TextBlock IsVisible="{Binding IsBalance}" Text="{Binding Change}" FontSize="12" TextWrapping="Wrap" ToolTip.Tip="{Binding AllocationNote}"/>
-        <charts:LivePerformanceTrendChart Series="{Binding Trend}" Unit="{Binding Unit}" NumberFormat="{Binding NumberFormat}" Compact="True" SamplesOnly="True" Height="28"/>
-        <TextBlock TextWrapping="Wrap" Text="{Binding TrendCaption}" Foreground="{DynamicResource FlowSecondary}" FontSize="12"/>
+        <TextBlock MinHeight="30" Text="{Binding Name}" Foreground="{DynamicResource FlowSecondary}" FontSize="13" FontWeight="SemiBold" TextWrapping="Wrap"/>
+        <WrapPanel MinHeight="44"><TextBlock Margin="0,0,5,0" MaxWidth="{Binding $parent[StackPanel].Bounds.Width}" TextWrapping="Wrap" Text="{Binding Value}" Foreground="{DynamicResource FlowText}" FontWeight="Bold" FontSize="23"/><TextBlock Text="{Binding Unit}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" VerticalAlignment="Center"/></WrapPanel>
        </StackPanel>
       </Border></Button>
      </DataTemplate></ItemsControl.ItemTemplate>

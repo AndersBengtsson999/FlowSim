@@ -59,15 +59,7 @@ public partial class GameView : UserControl
     private void FitWorkshop()
     {
         if (!IsEffectivelyVisible || TopLevel.GetTopLevel(this) is not { } root || this.TranslatePoint(default, root) is not { } position) return;
-        var explorer = DataContext is Simulation.UI.ViewModels.LiveViewModel { ExplorerOpen: true, ExplorerExpanded: false };
-        var dashboardSide = explorer && Bounds.Width >= 1200;
-        var dashboardWidth = dashboardSide && KpiPanel.IsVisible ? 420 : 0;
-        if (DashboardLayout.ColumnDefinitions.Count != 2) DashboardLayout.ColumnDefinitions = new("*,0");
-        if (DashboardLayout.ColumnDefinitions[1].Width.Value != dashboardWidth) DashboardLayout.ColumnDefinitions[1].Width = new GridLength(dashboardWidth);
-        Grid.SetColumn(KpiPanel, dashboardSide ? 1 : 0); Grid.SetRow(KpiPanel, dashboardSide ? 0 : 1);
-        KpiPanel.LayoutOrientation = Avalonia.Layout.Orientation.Horizontal;
-        KpiPanel.Margin = dashboardSide ? new Thickness(10,0,0,0) : new Thickness(0,8,0,0);
-        var side = StationMap.SidePanel(Math.Max(1, Bounds.Width - dashboardWidth));
+        var side = StationMap.SidePanel(Math.Max(1, Bounds.Width));
         if (sidePanel != side)
         {
             sidePanel = side;
@@ -80,16 +72,17 @@ public partial class GameView : UserControl
         if (side) WorkshopContent.ColumnDefinitions[1].Width = new GridLength(GameWorld.HasSelection ? 300 : 0);
         var scroll = this.GetVisualAncestors().OfType<ScrollViewer>().FirstOrDefault();
         var bottom = scroll?.TranslatePoint(new Point(0, scroll.Bounds.Height), root)?.Y ?? root.Bounds.Height;
-        // Reserve the dashboard heading, not every card: the workshop gets the main viewport.
-        var dashboardHeight = !dashboardSide && !explorer && KpiPanel.IsVisible ? KpiPanel.CompactHeadingHeight : 0;
-        var height = StationMap.FitHeight(Math.Min(root.Bounds.Height, bottom) - Math.Max(0, position.Y) - dashboardHeight, WorkshopHeader.Bounds.Height, side, GameWorld.HasSelection);
+        // Reserve the complete compact KPI strip; the workshop uses the remaining viewport.
+        var dashboardHeight = KpiPanel.IsVisible ? KpiPanel.Bounds.Height : 0;
+        var minimumHeight = Bounds.Width < 900 || (!side && GameWorld.HasSelection) ? 300 : 180;
+        var height = StationMap.FitHeight(Math.Min(root.Bounds.Height, bottom) - Math.Max(0, position.Y) - dashboardHeight, WorkshopHeader.Bounds.Height, side, GameWorld.HasSelection, minimumHeight);
         var sceneHeight = GameWorld.UseSprites ? StationMap.SceneHeight : 680;
         var width = Math.Max(1, WorkshopContent.Bounds.Width - (side && GameWorld.HasSelection ? 300 : 0));
         // Preserve readable sprites; short windows may scroll the dashboard instead of miniaturizing the workshop.
-        var fittedHeight = Math.Min(Math.Max(420, height), width * sceneHeight / 1080);
+        var fittedHeight = Math.Min(Math.Max(180, height), width * sceneHeight / 1080);
         if (Math.Abs(WorldViewport.Height - fittedHeight) > 1 || double.IsNaN(WorldViewport.Height)) WorldViewport.Height = fittedHeight;
         // Reserve a usable work-item list beneath the bounded contextual section.
-        var panelHeight = Math.Max(420, Math.Min(height, root.Bounds.Height * .75));
+        var panelHeight = side ? Math.Max(360, fittedHeight) : 420;
         if (Math.Abs(StationPanel.Height - panelHeight) > 1 || double.IsNaN(StationPanel.Height)) StationPanel.Height = panelHeight;
 
     }

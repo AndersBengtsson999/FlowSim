@@ -13,12 +13,11 @@ public partial class KpiDashboardView : UserControl
     public double ChartHeight { get=>GetValue(ChartHeightProperty);set=>SetValue(ChartHeightProperty,value); }
     public static readonly StyledProperty<double> CardWidthProperty = AvaloniaProperty.Register<KpiDashboardView, double>(nameof(CardWidth), 250);
     public double CardWidth { get => GetValue(CardWidthProperty); private set => SetValue(CardWidthProperty, value); }
-    public double CompactHeadingHeight => DashboardHeading.Bounds.Height + EvaluationHeading.Bounds.Height + 28;
     public static double ResponsiveCardWidth(double width)
     {
         var available = Math.Max(200, width - 16);
-        var columns = Math.Max(1, (int)(available / 258));
-        return Math.Min(290, available / columns - 8);
+        var columns = Math.Clamp((int)(available / 200), 1, 5);
+        return Math.Min(290, available / columns - 14);
     }
     private LiveViewModel? observed;
     private Window? expandedWindow;
@@ -41,16 +40,18 @@ public partial class KpiDashboardView : UserControl
     private void RefreshPresentation()
     {
         CardWidth = ResponsiveCardWidth(Bounds.Width);
-        ExplorerSurface.IsVisible=observed?.ExplorerOpen==true && (expandedView || !observed.ExplorerExpanded);
+        ExplorerSurface.IsVisible=expandedView && observed?.ExplorerOpen==true;
+        EvaluationHeading.IsVisible=expandedView;
+        DashboardHeading.IsVisible=!expandedView;
         CardStrip.IsVisible=!expandedView;
-        ExpandExplorer.IsVisible=!expandedView && observed?.ExplorerOpen==true;
-        DetachedNote.IsVisible=!expandedView && observed?.ExplorerExpanded==true;
+        ExpandExplorer.IsVisible=false;
+        DetachedNote.IsVisible=false;
         var pair=expandedView && Bounds.Width>=780 && observed?.HasComparison==true;
         if(pairedCharts!=pair){pairedCharts=pair;MetricGraphs.ColumnDefinitions=new(pair ? "*,*" : "*");MetricGraphs.RowDefinitions=new(pair ? "Auto" : "Auto,Auto");Grid.SetRow(SecondaryMetric,pair?0:1);Grid.SetColumn(SecondaryMetric,pair?1:0);SecondaryMetric.Margin=new Thickness(pair?12:0,0,0,0);}
 
     }
     private void OpenExplorerClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    { if(sender is Control { DataContext: KpiCard card } && DataContext is LiveViewModel vm) vm.OpenExplorer(card.Observation.Definition.Id); }
+    { if(sender is Control { DataContext: KpiCard card } && DataContext is LiveViewModel vm) { vm.OpenExplorer(card.Observation.Definition.Id); OpenExpandedExplorer(); } }
     private void CloseExplorerClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     { if(expandedView) (TopLevel.GetTopLevel(this) as Window)?.Close();else if(DataContext is LiveViewModel vm)vm.CloseExplorer(); }
     private void RemoveComparisonClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e) { if(DataContext is LiveViewModel vm) vm.ClearComparison(); }
