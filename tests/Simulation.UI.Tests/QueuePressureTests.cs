@@ -29,7 +29,7 @@ public sealed class QueuePressureTests
         Assert.Equal(QueuePressureKind.Blocked, P(35, 0, [], []).Kind);
         Assert.Equal(QueuePressureKind.Growing, P(35, 2, [32, 33, 34, 35], [false, true, true]).Kind);
         Assert.Equal(QueuePressureKind.Constrained, P(35, 2, [32, 33, 34, 35], [true, true, true]).Kind);
-        Assert.Equal(QueuePressureKind.Normal, P(30, 2, [32, 33, 34, 30], [true, true, true]).Kind);
+        Assert.Equal(QueuePressureKind.Shrinking, P(30, 2, [32, 33, 34, 30], [true, true, true]).Kind);
         Assert.Equal(QueuePressureKind.Batching, P(35, 2, [32, 33, 34, 35], [true, true, true], true).Kind);
         Assert.Equal(QueuePressureKind.Blocked, P(35, 0, [], [], true).Kind);
     }

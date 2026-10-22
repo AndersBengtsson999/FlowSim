@@ -6,6 +6,10 @@ public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> R
     public IReadOnlyList<InspectedWorkItem> Items { get; init; } = [];
     public string CompactSummary { get; init; } = "";
     public string Help => string.Join("\n", Rows.Select(r => $"{r.Label}: {r.Value}")) + "\n\n" + Explanation + "\nActive WIP means admitted work, not proof of processing today. Queue waiting excludes backlog and active-state time.";
+    public string SnapshotSummary { get; init; } = "";
+    public string ConditionColor { get; init; } = Simulation.UI.Theming.FlowPalette.Secondary;
+    public string Condition { get; init; } = "";
+    public string EvidencePeriod { get; init; } = "";
     public string Observation { get; init; } = "";
     public string ItemSummary { get; init; } = "";
     public static readonly StationDetails Empty = new("", [], "");
@@ -85,7 +89,11 @@ public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> R
         return new(selection, rows, explanation)
         {
             CompactSummary = $"Total items: {items.Length} · " + string.Join(" · ", items.GroupBy(i => i.Group).OrderBy(g => g.First().GroupOrder).Select(g => $"{g.Key}: {g.Count()}")) + $"\nQueue trend: {pressure.Trend}",
-            Observation = $"Observed queue: {pressure.Trend}. " + (pressure.Label.Length > 0 ? pressure.Label + ". " : "") + "This is an observation, not a proven root cause.",
+            SnapshotSummary = string.Join(" · ", rows.Where(r => r.Label.StartsWith("Active") || r.Label.Contains("utilization · last day")).Select(r => $"{r.Label}: {r.Value}")),
+            ConditionColor = pressure.Kind == QueuePressureKind.Normal ? Simulation.UI.Theming.FlowPalette.Secondary : pressure.Color,
+            Condition = pressureId.Length == 0 ? "Shared capacity activity" : pressure.Condition,
+            EvidencePeriod = pressureId.Length == 0 ? $"Current Day {s.Day}" : pressure.Period,
+            Observation = pressureId.Length == 0 ? "No waiting-queue pressure classification for this activity." : pressure.Evidence,
             Items = items.ToArray(),
             ItemSummary = station == "Technical Debt" ? "Aggregate maintenance effort; no individual debt work items." : $"{items.Length} items · Expand an item to inspect. Active WIP means admitted work, not proof of processing today. Queue waiting excludes backlog and active-state time."
         };

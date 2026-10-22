@@ -32,7 +32,7 @@ public sealed class StationInteractionTests
         for (var i = 0; i < 7; i++) selected = StationMap.Move(selected, 1);
         Assert.Equal("Backlog", selected); Assert.Equal("Technical Debt", StationMap.Move(selected, -1));
     }
-    [Theory] [InlineData(900, 600, false)] [InlineData(1600, 850, true)]
+    [Theory] [InlineData(900, 600, false)] [InlineData(1600, 850, true)] [InlineData(1120, 700, true)] [InlineData(1119, 700, false)]
     public void ResponsiveLayoutKeepsPositiveWorldAndOnlyReservesOpenPanel(double width, double remaining, bool side)
     {
         Assert.Equal(side, StationMap.SidePanel(width));

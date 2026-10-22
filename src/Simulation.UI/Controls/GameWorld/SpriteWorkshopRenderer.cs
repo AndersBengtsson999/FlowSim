@@ -99,15 +99,15 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         if (state.QueuePressures.GetValueOrDefault("testing-wait", QueuePressure.Normal).Kind == QueuePressureKind.Blocked)
             labels.Text(dc, "INACTIVE", 710, 314, 11, "#FFC27A", true);
         Title(dc, "5 · READY FOR RELEASE", 449, 370, "#E9D9B8");
-        Title(dc, "6 · RELEASE", 214, 244, "#FFEB00");
+        Title(dc, "6 · INTERNAL RELEASE", 214, 244, "#FFEB00");
         Title(dc, "TECHNICAL DEBT", 432, 205, "#FFD0A7");
         if (WorkflowMarkings.HasReturns(state)) labels.Text(dc, "↶ Rework", 680, 264, 12, "#E9B9DD", true);
         Count(dc, $"Debt · {state.Debt:0.##}", 424, 335, false);
         Count(dc, $"{state.Areas[0].Count:N0} waiting{Grouped(state.Areas[0].Count)}", 287, 108, false);
         Count(dc, $"Dev WIP · {state.ActiveDevelopment:N0}", 555, 255, true);
-        Count(dc, $"Review queue · {state.Areas[2].Waiting:N0}{Grouped(state.Areas[2].Waiting)}", 933, 343, false);
+        Count(dc, $"Waiting review · {state.Areas[2].Waiting:N0}{Grouped(state.Areas[2].Waiting)}", 933, 343, false);
         Status(dc, state, "review-wait", 938, 367);
-        Count(dc, $"Testing queue · {state.Areas[3].Waiting:N0}{Grouped(state.Areas[3].Waiting)}", 708, 499, false);
+        Count(dc, $"Waiting testing · {state.Areas[3].Waiting:N0}{Grouped(state.Areas[3].Waiting)}", 708, 499, false);
         Status(dc, state, "testing-wait", 708, 523);
         Count(dc, $"{state.Areas[4].Count:N0} staged{Grouped(state.Areas[4].Count)}", 449, 520, false);
         Status(dc, state, "ready", 449, 544);

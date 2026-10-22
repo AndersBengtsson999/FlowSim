@@ -4,7 +4,7 @@
  </UserControl.Styles>
  <Border Background="{DynamicResource FlowWorkshop}" CornerRadius="10" Padding="12">
   <StackPanel Spacing="8">
-   <StackPanel Name="WorkshopHeader" Spacing="8">
+   <StackPanel Name="WorkshopHeader" Spacing="4">
     <Grid ColumnDefinitions="*,Auto,Auto">
      <TextBlock Text="THE SOFTWARE WORKSHOP" Foreground="{DynamicResource FlowAccent}" FontSize="19" FontWeight="Bold" VerticalAlignment="Center" TextWrapping="Wrap"/>
      <ComboBox Grid.Column="1" Name="GameRenderingMode" Margin="8,0" ItemsSource="{Binding GameRenderingModes}" SelectedItem="{Binding GameRenderingMode}" AutomationProperties.Name="Game rendering mode"/>
@@ -22,7 +22,8 @@
       <Button.Flyout><Flyout><StackPanel Spacing="8" MaxWidth="390">
        <TextBlock Text="Inspect the workshop" FontSize="17" FontWeight="Bold"/>
        <TextBlock Text="Ordinary wheel or two-finger scrolling scrolls the page. Hold Cmd on macOS, or Ctrl on Windows/Linux, while scrolling to zoom around the pointer (75–250%). The + / − buttons also zoom. Drag empty scene space to pan, or middle-drag anywhere. Fit to View centers the workshop. Camera changes are immediate, without inertia. Click a station or its storage zone. You can also choose a station from the list. With the world focused, use arrow keys to select, Enter or Space to open, and Escape to close." TextWrapping="Wrap"/>
-       <TextBlock Text="Counts are exact. Stacks grow nonlinearly and are bounded samples: grouped boxes do not each represent one item. ↑ growing · Ⅱ observed capacity constraint · ! zero capacity · B scheduled batch · D dependency waiting." TextWrapping="Wrap"/>
+       <TextBlock Text="Counts are exact. Stacks grow nonlinearly and are bounded samples: grouped boxes do not each represent one item. ↓ shrinking · ↑ growing · Ⅱ observed capacity constraint · ! zero capacity · B scheduled batch · D dependency waiting." TextWrapping="Wrap"/>
+       <TextBlock Text="{x:Static vm:QueuePressure.Thresholds}" TextWrapping="Wrap"/>
        <TextBlock Text="Figures and trips illustrate shared capacity, not individual employees. D = developer · S = specialist · T = tester. Extra team capacity is grouped rather than drawn as more people." TextWrapping="Wrap"/>
        <TextBlock Text="Packages and the vehicle replay observed events. A trip may combine release days. Motion creates no extra WIP. Above 2× speed, unnecessary trips are skipped. LIVE pause freezes animation. Station details never change or pause the simulation." TextWrapping="Wrap"/>
        <TextBlock Text="{Binding GameAnimationStatus}" TextWrapping="Wrap"/>
@@ -41,8 +42,8 @@
      </StackPanel>
     </Expander>
     <views:ProductLaunchView IsVisible="{Binding HasSession}"/>
-    <TextBlock Text="{Binding WorkshopFeedback}" Foreground="{DynamicResource FlowText}" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Latest simulated day feedback"/>
-    <TextBlock Name="WorkflowSummary" Text="{Binding #GameWorld.WorkflowSummary}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Current workflow observations"/>
+    <WrapPanel><TextBlock Margin="0,0,14,0" Text="{Binding WorkshopFeedback}" Foreground="{DynamicResource FlowText}" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Latest simulated day feedback"/>
+    <TextBlock ToolTip.Tip="{x:Static vm:QueuePressure.Thresholds}" Name="WorkflowSummary" Text="{Binding #GameWorld.WorkflowSummary}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Current workflow observations"/></WrapPanel>
    </StackPanel>
    <Grid Name="DashboardLayout" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
    <Grid Name="WorkshopContent" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
@@ -52,15 +53,33 @@
     <Border Name="StationPanel" VerticalAlignment="Top" Grid.Row="1" IsVisible="{Binding #GameWorld.HasSelection}" Background="{DynamicResource FlowPanel}" BorderBrush="{DynamicResource FlowBorder}" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,10,0,0">
      <Grid RowDefinitions="Auto,Auto,*">
       <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
-       <TextBlock Text="{Binding #GameWorld.Details.Title}" Foreground="{DynamicResource FlowWarning}" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
+       <TextBlock Text="{Binding #GameWorld.Details.Title}" Foreground="{DynamicResource FlowAccent}" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
        <Button Grid.Column="1" Foreground="{DynamicResource FlowText}" Background="{DynamicResource FlowElevated}" Content="Info" Margin="8,0" ToolTip.Tip="{Binding #GameWorld.Details.Help}"/>
        <Button Grid.Column="2" Name="CloseStation" Classes="stationClose" Foreground="{DynamicResource FlowText}" Background="{DynamicResource FlowElevated}" Content="Close" Click="CloseStationClicked" AutomationProperties.Name="Close station details"/>
       </Grid>
-      <StackPanel Grid.Row="1" Spacing="4" Margin="0,0,0,8">
+      <ScrollViewer Grid.Row="1" MaxHeight="220" HorizontalScrollBarVisibility="Disabled"><StackPanel Spacing="4" Margin="0,0,0,8">
        <TextBlock Text="{Binding #GameWorld.Details.CompactSummary}" Foreground="{DynamicResource FlowText}" TextWrapping="Wrap"/>
        <TextBlock Text="{Binding #GameWorld.Inspection.MembershipNotice}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" TextWrapping="Wrap"/>
+       <TextBlock Text="{Binding #GameWorld.Details.SnapshotSummary}" TextWrapping="Wrap" FontSize="12"/>
+       <TextBlock Text="{Binding #GameWorld.Details.Condition}" Foreground="{Binding #GameWorld.Details.ConditionColor}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+       <TextBlock Text="{Binding #GameWorld.Details.EvidencePeriod}" FontSize="11" Foreground="{DynamicResource FlowSecondary}" TextWrapping="Wrap"/>
+       <TextBlock Text="{Binding #GameWorld.Details.Observation}" FontSize="12" TextWrapping="Wrap" ToolTip.Tip="{x:Static vm:QueuePressure.Thresholds}"/>
+       <Expander Header="Related KPIs · open Explorer" HorizontalAlignment="Stretch">
+        <StackPanel Spacing="4">
+         <TextBlock Text="Period KPIs use the selected dashboard window. Balances use the current day. Association does not prove causation." FontSize="11" TextWrapping="Wrap"/>
+         <ItemsControl Name="ContextKpis"><ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:KpiCard">
+          <Button Click="ContextKpiClicked" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="6,3" ToolTip.Tip="{Binding Help}"><StackPanel>
+           <TextBlock Text="{Binding Name}" TextWrapping="Wrap" FontSize="12"/>
+           <TextBlock FontWeight="SemiBold" TextWrapping="Wrap"><Run Text="{Binding Value}"/><Run Text=" "/><Run Text="{Binding Unit}"/></TextBlock>
+           <TextBlock Text="{Binding Period}" FontSize="11"/>
+          </StackPanel></Button>
+         </DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+         <TextBlock Name="LaunchContext" Text="{Binding ProductCompactSummary}" FontSize="12" TextWrapping="Wrap"/>
+         <Button Name="LaunchDetailsLink" Content="Product version / launch details" Click="LaunchDetailsClicked"/>
+        </StackPanel>
+       </Expander>
        <Button Name="TestingExperiment" Background="{DynamicResource FlowAccent}" Foreground="{DynamicResource FlowOnAccent}" IsVisible="{Binding #GameWorld.IsTestingSelected}" Content="Experiment with test capacity" Command="{Binding BeginGuidedCommand}" HorizontalAlignment="Left"/>
-      </StackPanel>
+      </StackPanel></ScrollViewer>
       <ListBox Grid.Row="2" Name="InspectionList" ItemsSource="{Binding #GameWorld.Inspection.Items}" Background="Transparent" BorderThickness="0"
                ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.IsScrollChainingEnabled="False" ScrollViewer.BringIntoViewOnFocusChange="False">
        <ListBox.Styles><Style Selector="ListBoxItem"><Setter Property="HorizontalContentAlignment" Value="Stretch"/><Setter Property="Padding" Value="0"/></Style></ListBox.Styles>

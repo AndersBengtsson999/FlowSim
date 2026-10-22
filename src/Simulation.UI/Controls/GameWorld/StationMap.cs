@@ -48,17 +48,27 @@ public static class StationMap
         var index = Array.IndexOf(Names.ToArray(), current);
         return Names[index < 0 ? offset < 0 ? Names.Count - 1 : 0 : (index + offset + Names.Count) % Names.Count];
     }
-    public static bool SidePanel(double width) => width >= 1250;
+    public static bool SidePanel(double width) => width >= 1120;
     public static double FitHeight(double remainingHeight, double headerHeight, bool sidePanel, bool selected) =>
         Math.Max(240, remainingHeight - headerHeight - 32 - (!sidePanel && selected ? 210 : 0));
+    public static double SelectionStroke(double scale) => 2 / Math.Max(.01, scale);
+    internal static void SelectionOutline(DrawingContext dc, string? selected, double scale)
+    {
+        var region = Regions.Concat(QueueRegions).FirstOrDefault(r => r.Name == selected);
+        if (region is null) return;
+        var geometry = new StreamGeometry();
+        using (var path = geometry.Open()) { path.BeginFigure(region.Points[0], false); foreach (var p in region.Points.Skip(1)) path.LineTo(p); path.EndFigure(true); }
+        // Constant screen-width outline, no fill above workers or packages.
+        dc.DrawGeometry(null, new Pen(Ink(Simulation.UI.Theming.FlowPalette.Accent), SelectionStroke(scale)), geometry);
+    }
     internal static void Highlight(DrawingContext dc, string? selected, string? hover, bool focused)
     {
         foreach (var region in Regions.Concat(QueueRegions).Where(r => r.Name == selected || r.Name == hover || focused && selected is null && r.Name == Names[0]))
         {
             var geometry = new StreamGeometry();
             using (var path = geometry.Open()) { path.BeginFigure(region.Points[0], true); foreach (var p in region.Points.Skip(1)) path.LineTo(p); path.EndFigure(true); }
-            using (dc.PushOpacity(region.Name == selected ? .12 : .06)) dc.DrawGeometry(Ink("#FFEB00"), null, geometry);
-            dc.DrawGeometry(null, new Pen(Ink(region.Name == selected ? "#FFEB00" : "#D5E1DA"), region.Name == selected ? 2.5 : 1.5,
+            using (dc.PushOpacity(region.Name == selected ? .12 : .06)) dc.DrawGeometry(Ink(Simulation.UI.Theming.FlowPalette.Accent), null, geometry);
+            dc.DrawGeometry(null, new Pen(Ink(region.Name == selected ? Simulation.UI.Theming.FlowPalette.Accent : "#D5E1DA"), region.Name == selected ? 2.5 : 1.5,
                 focused ? new DashStyle([3, 2], 0) : null), geometry);
         }
     }

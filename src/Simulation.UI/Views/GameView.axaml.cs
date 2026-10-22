@@ -8,6 +8,8 @@ namespace Simulation.UI.Views;
 public partial class GameView : UserControl
 {
     private bool? sidePanel;
+    private Simulation.UI.ViewModels.LiveViewModel? contextOwner;
+    private (object? Session, int Day, int Launches, int Window, string? Station)? contextKey;
     public GameView()
     {
         InitializeComponent();
@@ -15,8 +17,36 @@ public partial class GameView : UserControl
         StationPanel.AddHandler(Control.RequestBringIntoViewEvent, (_, e) => e.Handled = true);
         GameWorld.Inspection.Updating += CaptureInspectionAnchor;
         GameWorld.Inspection.Updated += RestoreInspectionAnchor;
+        GameWorld.PropertyChanged += (_, e) => { if (e.Property == Simulation.UI.Controls.GameWorldControl.DetailsProperty) RefreshContext(); };
+        DataContextChanged += (_, _) => ObserveContext();
+        AttachedToVisualTree += (_, _) => ObserveContext();
+        DetachedFromVisualTree += (_, _) => { if (contextOwner is not null) contextOwner.PropertyChanged -= ContextChanged; contextOwner = null; contextKey = null; };
         LayoutUpdated += (_, _) => FitWorkshop();
     }
+    private void ObserveContext()
+    {
+        if (contextOwner is not null) contextOwner.PropertyChanged -= ContextChanged;
+        contextOwner = DataContext as Simulation.UI.ViewModels.LiveViewModel;
+        if (contextOwner is not null) contextOwner.PropertyChanged += ContextChanged;
+        contextKey = null; RefreshContext();
+    }
+    private void ContextChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => RefreshContext();
+    private void RefreshContext()
+    {
+        var vm = DataContext as Simulation.UI.ViewModels.LiveViewModel;
+        var next = ((object?)vm?.Live?.Session, vm?.Day ?? 0, vm?.Live?.Session.ProductDelivery.CustomerLaunches.Count ?? 0, vm?.KpiWindow ?? 20, GameWorld.SelectedStation);
+        if (contextKey == next) return;
+        contextKey = next;
+        ContextKpis.ItemsSource = vm?.StationPerformance(GameWorld.SelectedStation);
+        LaunchContext.IsVisible = LaunchDetailsLink.IsVisible = GameWorld.SelectedStation is "Release" or "Ready for Release";
+    }
+    private void ContextKpiClicked(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Control { DataContext: Simulation.UI.ViewModels.KpiCard card } && DataContext is Simulation.UI.ViewModels.LiveViewModel vm)
+        { vm.OpenExplorer(card.Observation.Definition.Id); KpiPanel.OpenExpandedExplorer(); }
+    }
+    private void LaunchDetailsClicked(object? sender, RoutedEventArgs e)
+    { if (DataContext is Simulation.UI.ViewModels.LiveViewModel vm) { vm.ProductDetailsExpanded = true; this.GetVisualDescendants().OfType<ProductLaunchView>().FirstOrDefault()?.BringIntoView(); } }
     private void CloseStationClicked(object? sender, RoutedEventArgs e)
     {
         GameWorld.SelectedStation = null; GameWorld.Focus(Avalonia.Input.NavigationMethod.Pointer);
@@ -55,7 +85,8 @@ public partial class GameView : UserControl
         // Preserve readable sprites; short windows may scroll the dashboard instead of miniaturizing the workshop.
         var fittedHeight = Math.Min(Math.Max(420, height), width * sceneHeight / 1080);
         if (Math.Abs(WorldViewport.Height - fittedHeight) > 1 || double.IsNaN(WorldViewport.Height)) WorldViewport.Height = fittedHeight;
-        var panelHeight = side ? Math.Max(320, height) : 380;
+        // Reserve a usable work-item list beneath the bounded contextual section.
+        var panelHeight = Math.Max(420, Math.Min(height, root.Bounds.Height * .75));
         if (Math.Abs(StationPanel.Height - panelHeight) > 1 || double.IsNaN(StationPanel.Height)) StationPanel.Height = panelHeight;
 
     }
