@@ -18,17 +18,7 @@
      <TextBlock Text="{Binding #GameWorld.ZoomLabel}" Foreground="{DynamicResource FlowText}" VerticalAlignment="Center" Margin="4,0,8,0" MinWidth="38"/>
      <Button Classes="stationClose" Content="+" Click="ZoomInClicked" Background="{DynamicResource FlowElevated}" Foreground="{DynamicResource FlowText}" Margin="0,0,6,0" AutomationProperties.Name="Zoom in" ToolTip.Tip="Zoom in"/>
      <Button Classes="stationClose" Content="Fit to View" Click="FitClicked" Background="{DynamicResource FlowElevated}" Foreground="{DynamicResource FlowText}" Margin="0,0,8,0" AutomationProperties.Name="Fit workshop to view"/>
-     <Button Content="Help" Background="{DynamicResource FlowElevated}" Foreground="{DynamicResource FlowText}" BorderBrush="{DynamicResource FlowBorder}" AutomationProperties.Name="Workshop help">
-      <Button.Flyout><Flyout><StackPanel Spacing="8" MaxWidth="390">
-       <TextBlock Text="Inspect the workshop" FontSize="17" FontWeight="Bold"/>
-       <TextBlock Text="Ordinary wheel or two-finger scrolling scrolls the page. Hold Cmd on macOS, or Ctrl on Windows/Linux, while scrolling to zoom around the pointer (75–250%). The + / − buttons also zoom. Drag empty scene space to pan, or middle-drag anywhere. Fit to View centers the workshop. Camera changes are immediate, without inertia. Click a station or its storage zone. You can also choose a station from the list. With the world focused, use arrow keys to select, Enter or Space to open, and Escape to close." TextWrapping="Wrap"/>
-       <TextBlock Text="Counts are exact. Stacks grow nonlinearly and are bounded samples: grouped boxes do not each represent one item. ↓ shrinking · ↑ growing · Ⅱ observed capacity constraint · ! zero capacity · B scheduled batch · D dependency waiting." TextWrapping="Wrap"/>
-       <TextBlock Text="{x:Static vm:QueuePressure.Thresholds}" TextWrapping="Wrap"/>
-       <TextBlock Text="Figures and trips illustrate shared capacity, not individual employees. D = developer · S = specialist · T = tester. Extra team capacity is grouped rather than drawn as more people." TextWrapping="Wrap"/>
-       <TextBlock Text="Packages and the vehicle replay observed events. A trip may combine release days. Motion creates no extra WIP. Above 2× speed, unnecessary trips are skipped. LIVE pause freezes animation. Station details never change or pause the simulation." TextWrapping="Wrap"/>
-       <TextBlock Text="{Binding GameAnimationStatus}" TextWrapping="Wrap"/>
-      </StackPanel></Flyout></Button.Flyout>
-     </Button>
+     <Button Content="Help" Click="OpenWorkshopGuide" AutomationProperties.Name="Open Game View guide"/>
     </WrapPanel>
     <Expander IsVisible="{Binding HasGuidedExperiment}" HorizontalAlignment="Stretch" Background="{DynamicResource FlowPanel}" Foreground="{DynamicResource FlowText}" Padding="8" Header="{Binding GuidedHeader}">
      <StackPanel Spacing="6">
@@ -60,7 +50,8 @@
       <ScrollViewer Grid.Row="1" MaxHeight="220" HorizontalScrollBarVisibility="Disabled"><StackPanel Spacing="4" Margin="0,0,0,8">
        <TextBlock Text="{Binding #GameWorld.Details.CompactSummary}" Foreground="{DynamicResource FlowText}" TextWrapping="Wrap"/>
        <TextBlock Text="{Binding #GameWorld.Inspection.MembershipNotice}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" TextWrapping="Wrap"/>
-       <TextBlock Name="ReleaseEconomics" FontSize="13" TextWrapping="Wrap" Foreground="{DynamicResource FlowText}"/>
+       <Button Content="Learn more" Click="OpenStationGuide" HorizontalAlignment="Left"/>
+         <TextBlock Name="ReleaseEconomics" FontSize="13" TextWrapping="Wrap" Foreground="{DynamicResource FlowText}"/>
        <TextBlock Text="{Binding #GameWorld.Details.SnapshotSummary}" TextWrapping="Wrap" FontSize="12"/>
        <TextBlock Text="{Binding #GameWorld.Details.Condition}" Foreground="{Binding #GameWorld.Details.ConditionColor}" FontWeight="SemiBold" TextWrapping="Wrap"/>
        <TextBlock Text="{Binding #GameWorld.Details.EvidencePeriod}" FontSize="11" Foreground="{DynamicResource FlowSecondary}" TextWrapping="Wrap"/>

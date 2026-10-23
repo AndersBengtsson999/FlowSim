@@ -40,6 +40,7 @@
        <ContentControl Name="PrimaryMetric" Content="{Binding ExplorerPrimary}"><ContentControl.ContentTemplate><DataTemplate x:DataType="vm:KpiCard"><StackPanel Spacing="3">
         <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="{DynamicResource FlowAccent}"/>
         <TextBlock Text="{Binding ExplorerDescription}" TextWrapping="Wrap" FontSize="12"/>
+        <Button Content="Learn more" HorizontalAlignment="Left" Click="OpenMetricGuide" AutomationProperties.Name="Open guide for this KPI"/>
         <TextBlock Text="{Binding Period}" ToolTip.Tip="{Binding Kind}" FontSize="12"/>
         <TextBlock Text="{Binding Change}" ToolTip.Tip="{Binding ComparisonHelp}" TextWrapping="Wrap" FontSize="12"/>
         <TextBlock Text="{Binding TrendCaption}" TextWrapping="Wrap" FontSize="12"/>
@@ -55,6 +56,7 @@
        <ContentControl Name="SecondaryMetric" Grid.Row="1" Content="{Binding ExplorerSecondary}" IsVisible="{Binding HasComparison}"><ContentControl.ContentTemplate><DataTemplate x:DataType="vm:KpiCard"><StackPanel Spacing="3">
         <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="{DynamicResource FlowPurple}"/>
         <TextBlock Text="{Binding ExplorerDescription}" TextWrapping="Wrap" FontSize="12"/>
+        <Button Content="Learn more" HorizontalAlignment="Left" Click="OpenMetricGuide" AutomationProperties.Name="Open guide for this KPI"/>
         <TextBlock Text="{Binding Period}" ToolTip.Tip="{Binding Kind}" FontSize="12"/>
         <TextBlock Text="{Binding Change}" ToolTip.Tip="{Binding ComparisonHelp}" TextWrapping="Wrap" FontSize="12"/>
         <TextBlock Text="{Binding TrendCaption}" TextWrapping="Wrap" FontSize="12"/>

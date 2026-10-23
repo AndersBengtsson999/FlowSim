@@ -50,6 +50,8 @@ public partial class KpiDashboardView : UserControl
         if(pairedCharts!=pair){pairedCharts=pair;MetricGraphs.ColumnDefinitions=new(pair ? "*,*" : "*");MetricGraphs.RowDefinitions=new(pair ? "Auto" : "Auto,Auto");Grid.SetRow(SecondaryMetric,pair?0:1);Grid.SetColumn(SecondaryMetric,pair?1:0);SecondaryMetric.Margin=new Thickness(pair?12:0,0,0,0);}
 
     }
+    private void OpenMetricGuide(object? sender,Avalonia.Interactivity.RoutedEventArgs e)
+    { if(sender is Control { DataContext: KpiCard card }) Simulation.UI.Help.GuideService.Open(this,Simulation.UI.Help.GuideCatalog.Default.Metric(card.Observation.Definition.Id)); }
     private void OpenExplorerClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     { if(sender is Control { DataContext: KpiCard card } && DataContext is LiveViewModel vm) { vm.OpenExplorer(card.Observation.Definition.Id); OpenExpandedExplorer(); } }
     private void CloseExplorerClicked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

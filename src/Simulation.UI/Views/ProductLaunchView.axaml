@@ -9,6 +9,17 @@
  <Expander Name="ProductDetails" IsExpanded="{Binding ProductDetailsExpanded, Mode=TwoWay}" HorizontalAlignment="Stretch" Background="{DynamicResource FlowPanel}" Foreground="{DynamicResource FlowText}" BorderBrush="{DynamicResource FlowBorder}" Padding="0" ScrollViewer.BringIntoViewOnFocusChange="False">
   <Expander.Header><Grid ColumnDefinitions="*,Auto"><TextBlock Text="{Binding ProductCompactSummary}" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="12"/><TextBlock Grid.Column="1" Text="Details" Foreground="{DynamicResource FlowAccent}" Margin="12,0,0,0" VerticalAlignment="Center"/></Grid></Expander.Header>
   <StackPanel Spacing="8" Margin="10">
+   <Button Content="Learn more" HorizontalAlignment="Left" AutomationProperties.Name="Learn about product versions and customer launches">
+    <Button.Flyout><Flyout><StackPanel Spacing="4">
+     <Button Content="Product versions" Tag="releases.versions" Click="OpenGuide"/>
+     <Button Content="Internal releases and awaiting work" Tag="releases.awaiting" Click="OpenGuide"/>
+     <Button Content="Manual launches" Tag="releases.manual" Click="OpenGuide"/>
+     <Button Content="Scheduled launch and Postpone" Tag="releases.scheduled" Click="OpenGuide"/>
+     <Button Content="Recurring launches" Tag="releases.recurring" Click="OpenGuide"/>
+     <Button Content="Launch Now decisions" Tag="releases.customer-launch" Click="OpenGuide"/>
+     <Button Content="Launch Economics" Tag="economics.cost-allocation" Click="OpenGuide"/>
+    </StackPanel></Flyout></Button.Flyout>
+   </Button>
    <TextBlock Text="{Binding ProductDecisionText}" TextWrapping="Wrap" Foreground="{DynamicResource FlowWarning}"/>
    <TextBlock Text="{Binding ProductVersionSummary}" TextWrapping="Wrap"/>
    <WrapPanel IsVisible="{Binding CanEditLaunch}">

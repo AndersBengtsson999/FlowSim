@@ -42,6 +42,8 @@ public partial class GameView : UserControl
         ContextKpis.ItemsSource = vm?.StationPerformance(GameWorld.SelectedStation);
         LaunchContext.IsVisible = LaunchDetailsLink.IsVisible = GameWorld.SelectedStation is "Release" or "Ready for Release";
     }
+    private void OpenWorkshopGuide(object? sender, RoutedEventArgs e) => Simulation.UI.Help.GuideService.Open(this,"live-game-view");
+    private void OpenStationGuide(object? sender, RoutedEventArgs e) => Simulation.UI.Help.GuideService.Open(this,Simulation.UI.Help.GuideCatalog.Default.Station(GameWorld.SelectedStation));
     private void ContextKpiClicked(object? sender, RoutedEventArgs e)
     {
         if (sender is Control { DataContext: Simulation.UI.ViewModels.KpiCard card } && DataContext is Simulation.UI.ViewModels.LiveViewModel vm)

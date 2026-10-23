@@ -1,0 +1,850 @@
+{
+  "Chapters": [
+    {
+      "Id": "getting-started",
+      "File": "01-getting-started.md",
+      "Title": "Getting Started"
+    },
+    {
+      "Id": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "How FLOW Works"
+    },
+    {
+      "Id": "live-game-view",
+      "File": "03-live-and-game-view.md",
+      "Title": "LIVE & Game View"
+    },
+    {
+      "Id": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "KPIs & Performance"
+    },
+    {
+      "Id": "releases",
+      "File": "05-releases-and-customer-launches.md",
+      "Title": "Releases & Customer Launches"
+    },
+    {
+      "Id": "economics",
+      "File": "06-economics.md",
+      "Title": "Economics"
+    },
+    {
+      "Id": "experiments",
+      "File": "07-experiments-and-decisions.md",
+      "Title": "Experiments & Decisions"
+    },
+    {
+      "Id": "reference",
+      "File": "08-reference-and-glossary.md",
+      "Title": "Reference & Glossary"
+    }
+  ],
+  "Sections": [
+    {
+      "Id": "getting-started",
+      "Chapter": "getting-started",
+      "File": "01-getting-started.md",
+      "Title": "Getting Started",
+      "Keywords": "",
+      "Related": []
+    },
+    {
+      "Id": "getting-started.first-simulation",
+      "Chapter": "getting-started",
+      "File": "01-getting-started.md",
+      "Title": "Your first simulation",
+      "Keywords": "start setup first run checkpoint",
+      "Related": [
+        "live-game-view.navigation",
+        "experiments.interventions"
+      ]
+    },
+    {
+      "Id": "getting-started.workspace",
+      "Chapter": "getting-started",
+      "File": "01-getting-started.md",
+      "Title": "Read the LIVE workspace",
+      "Keywords": "overview interface controls",
+      "Related": [
+        "live-game-view.station-inspection",
+        "kpis-performance"
+      ]
+    },
+    {
+      "Id": "getting-started.first-experiment",
+      "Chapter": "getting-started",
+      "File": "01-getting-started.md",
+      "Title": "A first experiment",
+      "Keywords": "hypothesis baseline first experiment",
+      "Related": [
+        "experiments.interventions",
+        "experiments.causality"
+      ]
+    },
+    {
+      "Id": "getting-started.limitations",
+      "Chapter": "getting-started",
+      "File": "01-getting-started.md",
+      "Title": "Know what the model leaves out",
+      "Keywords": "limitations forecast simulation",
+      "Related": [
+        "reference.limitations"
+      ]
+    },
+    {
+      "Id": "how-flow-works",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "How FLOW Works",
+      "Keywords": "",
+      "Related": []
+    },
+    {
+      "Id": "workflow.backlog",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Backlog and arrivals",
+      "Keywords": "arrival rate supply backlog",
+      "Related": [
+        "workflow.dependencies",
+        "workflow.wip"
+      ]
+    },
+    {
+      "Id": "workflow.development",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Development and shared capacity",
+      "Keywords": "developer capacity priority staffing",
+      "Related": [
+        "workflow.code-review",
+        "workflow.collaboration",
+        "workflow.skills"
+      ]
+    },
+    {
+      "Id": "workflow.code-review",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Code Review",
+      "Keywords": "review capacity review queue",
+      "Related": [
+        "workflow.rework",
+        "kpi.review-queue"
+      ]
+    },
+    {
+      "Id": "workflow.testing",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Testing and tester capacity",
+      "Keywords": "tester capacity testing bottleneck",
+      "Related": [
+        "workflow.queues",
+        "kpi.tester-utilization",
+        "experiments.capacity"
+      ]
+    },
+    {
+      "Id": "workflow.queues",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Waiting queues and pressure",
+      "Keywords": "queue trend growing shrinking sustained bottleneck",
+      "Related": [
+        "kpi.review-queue-growth",
+        "live-game-view.station-inspection"
+      ]
+    },
+    {
+      "Id": "workflow.wip",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Work in progress and limits",
+      "Keywords": "WIP work in progress limit admission",
+      "Related": [
+        "kpi.total-wip",
+        "kpi.wip-age"
+      ]
+    },
+    {
+      "Id": "workflow.productivity",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Productivity versus capacity",
+      "Keywords": "productivity effective effort raw capacity",
+      "Related": [
+        "economics.resource-costs",
+        "kpi.developer-utilization"
+      ]
+    },
+    {
+      "Id": "workflow.skills",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Skills and specialists",
+      "Keywords": "specialist skills eligible capacity",
+      "Related": [
+        "workflow.collaboration",
+        "experiments.capacity"
+      ]
+    },
+    {
+      "Id": "workflow.collaboration",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Collaboration",
+      "Keywords": "pairing collaboration efficiency 50 percent",
+      "Related": [
+        "live-game-view.animation",
+        "workflow.development"
+      ]
+    },
+    {
+      "Id": "workflow.rework",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Defects and Rework",
+      "Keywords": "defect quality rework",
+      "Related": [
+        "kpi.rework-effort",
+        "kpi.rework-cost"
+      ]
+    },
+    {
+      "Id": "workflow.technical-debt",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Technical debt",
+      "Keywords": "shortcut debt tolerance repayment overhead",
+      "Related": [
+        "kpi.technical-debt",
+        "kpi.debt-growth",
+        "kpi.debt-repayment"
+      ]
+    },
+    {
+      "Id": "workflow.dependencies",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Dependencies",
+      "Keywords": "dependency external wait blocked",
+      "Related": [
+        "workflow.backlog",
+        "workflow.determinism"
+      ]
+    },
+    {
+      "Id": "workflow.determinism",
+      "Chapter": "how-flow-works",
+      "File": "02-how-flow-works.md",
+      "Title": "Seeds and replay",
+      "Keywords": "seed deterministic replay checkpoint random",
+      "Related": [
+        "experiments.reproducibility"
+      ]
+    },
+    {
+      "Id": "live-game-view",
+      "Chapter": "live-game-view",
+      "File": "03-live-and-game-view.md",
+      "Title": "LIVE & Game View",
+      "Keywords": "",
+      "Related": []
+    },
+    {
+      "Id": "live-game-view.navigation",
+      "Chapter": "live-game-view",
+      "File": "03-live-and-game-view.md",
+      "Title": "Controls and navigation",
+      "Keywords": "pause resume step advance speed reset save load",
+      "Related": [
+        "getting-started.first-simulation",
+        "experiments.interventions"
+      ]
+    },
+    {
+      "Id": "live-game-view.camera",
+      "Chapter": "live-game-view",
+      "File": "03-live-and-game-view.md",
+      "Title": "Zoom, pan and Fit to View",
+      "Keywords": "zoom pan fit trackpad keyboard",
+      "Related": [
+        "live-game-view.station-inspection"
+      ]
+    },
+    {
+      "Id": "live-game-view.station-inspection",
+      "Chapter": "live-game-view",
+      "File": "03-live-and-game-view.md",
+      "Title": "Inspect stations, queues and items",
+      "Keywords": "station inspection items queue learn more",
+      "Related": [
+        "workflow.queues",
+        "releases.awaiting",
+        "economics.cost-allocation"
+      ]
+    },
+    {
+      "Id": "live-game-view.animation",
+      "Chapter": "live-game-view",
+      "File": "03-live-and-game-view.md",
+      "Title": "Read animations cautiously",
+      "Keywords": "sprites animation worker motion release vehicle",
+      "Related": [
+        "releases.customer-launch"
+      ]
+    },
+    {
+      "Id": "live-game-view.performance",
+      "Chapter": "live-game-view",
+      "File": "03-live-and-game-view.md",
+      "Title": "Team Performance and analysis",
+      "Keywords": "KPI Explorer compact analyze comparison",
+      "Related": [
+        "kpis-performance",
+        "releases.customer-launch"
+      ]
+    },
+    {
+      "Id": "kpis-performance",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "KPIs & Performance",
+      "Keywords": "",
+      "Related": []
+    },
+    {
+      "Id": "kpi.released-throughput",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Released throughput",
+      "Keywords": "ReleasedThroughput Released throughput items / 5 days",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.cycle-time",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Cycle time",
+      "Keywords": "CycleTime Cycle time days",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.cost-per-item",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Cost / delivered item",
+      "Keywords": "CostPerDelivery Cost / delivered item SEK / item",
+      "Related": [
+        "kpis-performance",
+        "economics.cost-allocation"
+      ]
+    },
+    {
+      "Id": "kpi.rework-effort",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Rework effort",
+      "Keywords": "ReworkEffort Rework effort capacity units",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.total-team-cost",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Total team cost",
+      "Keywords": "TotalTeamCost Total team cost SEK",
+      "Related": [
+        "kpis-performance",
+        "economics.cost-allocation"
+      ]
+    },
+    {
+      "Id": "kpi.developer-utilization",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Developer utilization",
+      "Keywords": "DeveloperUtilization Developer utilization %",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.tester-utilization",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Tester utilization",
+      "Keywords": "TesterUtilization Tester utilization %",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.total-wip",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Total WIP",
+      "Keywords": "TotalWip Total WIP items",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.development-queue",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Development queue",
+      "Keywords": "DevelopmentQueue Development queue items",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.review-queue",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Code Review queue",
+      "Keywords": "ReviewQueue Code Review queue items",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.testing-queue",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Testing queue",
+      "Keywords": "TestingQueue Testing queue items",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.technical-debt",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Technical debt",
+      "Keywords": "TechnicalDebt Technical debt effort units",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.cycle-time-p85",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Cycle time \u00b7 P85",
+      "Keywords": "CycleTimeP85 Cycle time \u00b7 P85 days",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.delivery-frequency",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Delivery frequency",
+      "Keywords": "DeliveryFrequency Delivery frequency % of days",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.delivery-variability",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Delivery variability",
+      "Keywords": "DeliveryVariability Delivery variability items / day",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.wip-age",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Age of WIP",
+      "Keywords": "WipAge Age of WIP days",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.review-queue-growth",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Review queue growth",
+      "Keywords": "ReviewQueueGrowth Review queue growth items / day",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.rework-cost",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Rework cost",
+      "Keywords": "ReworkCost Rework cost SEK",
+      "Related": [
+        "kpis-performance",
+        "economics.cost-allocation"
+      ]
+    },
+    {
+      "Id": "kpi.rework-proportion",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Rework proportion",
+      "Keywords": "ReworkProportion Rework proportion %",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.debt-growth",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Technical debt growth",
+      "Keywords": "DebtGrowth Technical debt growth effort units",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.debt-repayment",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Debt repayment effort",
+      "Keywords": "DebtRepayment Debt repayment effort capacity units",
+      "Related": [
+        "kpis-performance",
+        "workflow.queues"
+      ]
+    },
+    {
+      "Id": "kpi.cost-per-work-size",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Cost / delivered work size",
+      "Keywords": "CostPerWorkSize Cost / delivered work size SEK / effort unit",
+      "Related": [
+        "kpis-performance",
+        "economics.cost-allocation"
+      ]
+    },
+    {
+      "Id": "kpi.delivered-work-per-1000-sek",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Delivered work / 1,000 SEK",
+      "Keywords": "WorkVolumePerSek Delivered work / 1,000 SEK effort units / 1,000 SEK",
+      "Related": [
+        "kpis-performance",
+        "economics.cost-allocation"
+      ]
+    },
+    {
+      "Id": "kpi.unlaunched-cost",
+      "Chapter": "kpis-performance",
+      "File": "04-kpis-and-performance.md",
+      "Title": "Unlaunched Development Cost",
+      "Keywords": "UnlaunchedDevelopmentCost Unlaunched Development Cost SEK",
+      "Related": [
+        "kpis-performance",
+        "economics.cost-allocation"
+      ]
+    },
+    {
+      "Id": "releases",
+      "Chapter": "releases",
+      "File": "05-releases-and-customer-launches.md",
+      "Title": "Releases & Customer Launches",
+      "Keywords": "",
+      "Related": []
+    },
+    {
+      "Id": "releases.internal-release",
+      "Chapter": "releases",
+      "File": "05-releases-and-customer-launches.md",
+      "Title": "Work completion and internal release",
+      "Keywords": "deployment release flow based scheduled unlimited",
+      "Related": [
+        "releases.customer-launch",
+        "kpi.released-throughput"
+      ]
+    },
+    {
+      "Id": "releases.versions",
+      "Chapter": "releases",
+      "File": "05-releases-and-customer-launches.md",
+      "Title": "Product versions",
+      "Keywords": "version active successor history",
+      "Related": [
+        "releases.customer-launch",
+        "releases.recurring"
+      ]
+    },
+    {
+      "Id": "releases.customer-launch",
+      "Chapter": "releases",
+      "File": "05-releases-and-customer-launches.md",
+      "Title": "Customer launch decisions",
+      "Keywords": "launch now decision pending unattended run",
+      "Related": [
+        "releases.manual",
+        "releases.scheduled",
+        "releases.recurring",
+        "economics.cost-allocation"
+      ]
+    },
+    {
+      "Id": "releases.manual",
+      "Chapter": "releases",
+      "File": "05-releases-and-customer-launches.md",
+      "Title": "Manual launch",
+      "Keywords": "manual launch no target",
+      "Related": [
+        "releases.awaiting",
+        "releases.customer-launch"
+      ]
+    },
+    {
+      "Id": "releases.scheduled",
+      "Chapter": "releases",
+      "File": "05-releases-and-customer-launches.md",
+      "Title": "One-time launch and postponement",
+      "Keywords": "one-time scheduled postpone sprint target",
+      "Related": [
+        "releases.recurring",
+        "experiments.interventions"
+      ]
+    },
+    {
+      "Id": "releases.recurring",
+      "Chapter": "releases",
+      "File": "05-releases-and-customer-launches.md",
+      "Title": "Recurring customer launches",
+      "Keywords": "recurring interval actual day cadence",
+      "Related": [
+        "releases.internal-release",
+        "releases.scheduled"
+      ]
+    },
+    {
+      "Id": "releases.awaiting",
+      "Chapter": "releases",
+      "File": "05-releases-and-customer-launches.md",
+      "Title": "Awaiting launch and launch history",
+      "Keywords": "awaiting customer launch stock history",
+      "Related": [
+        "economics.cost-allocation",
+        "kpi.unlaunched-cost"
+      ]
+    },
+    {
+      "Id": "economics",
+      "Chapter": "economics",
+      "File": "06-economics.md",
+      "Title": "Economics",
+      "Keywords": "",
+      "Related": []
+    },
+    {
+      "Id": "economics.resource-costs",
+      "Chapter": "economics",
+      "File": "06-economics.md",
+      "Title": "Resource costs and daily team cost",
+      "Keywords": "default cost salary monthly daily availability SEK",
+      "Related": [
+        "kpi.total-team-cost",
+        "economics.period-costs"
+      ]
+    },
+    {
+      "Id": "economics.period-costs",
+      "Chapter": "economics",
+      "File": "06-economics.md",
+      "Title": "Period totals and delivery ratios",
+      "Keywords": "cost per delivery ratio total incurred",
+      "Related": [
+        "kpi.cost-per-item",
+        "kpi.delivered-work-per-1000-sek"
+      ]
+    },
+    {
+      "Id": "economics.cost-allocation",
+      "Chapter": "economics",
+      "File": "06-economics.md",
+      "Title": "Launch Economics and cost allocation",
+      "Keywords": "economic reconciliation unallocated overhead WIP awaiting launched balance",
+      "Related": [
+        "kpi.unlaunched-cost",
+        "releases.awaiting"
+      ]
+    },
+    {
+      "Id": "economics.interpretation",
+      "Chapter": "economics",
+      "File": "06-economics.md",
+      "Title": "Interpret economic consequences",
+      "Keywords": "financial limitations profit value interpretation",
+      "Related": [
+        "experiments.causality",
+        "reference.limitations"
+      ]
+    },
+    {
+      "Id": "experiments",
+      "Chapter": "experiments",
+      "File": "07-experiments-and-decisions.md",
+      "Title": "Experiments & Decisions",
+      "Keywords": "",
+      "Related": []
+    },
+    {
+      "Id": "experiments.interventions",
+      "Chapter": "experiments",
+      "File": "07-experiments-and-decisions.md",
+      "Title": "Interventions and before/after timing",
+      "Keywords": "before after day 100 timing intervention optional label",
+      "Related": [
+        "kpis-performance",
+        "workflow.determinism"
+      ]
+    },
+    {
+      "Id": "experiments.capacity",
+      "Chapter": "experiments",
+      "File": "07-experiments-and-decisions.md",
+      "Title": "Test staffing, productivity and WIP",
+      "Keywords": "experiment developers testers productivity limits launch frequency",
+      "Related": [
+        "workflow.development",
+        "workflow.testing",
+        "economics.interpretation"
+      ]
+    },
+    {
+      "Id": "experiments.reproducibility",
+      "Chapter": "experiments",
+      "File": "07-experiments-and-decisions.md",
+      "Title": "Reproducibility and checkpoints",
+      "Keywords": "checkpoint restore reproducibility seed comparison",
+      "Related": [
+        "workflow.determinism"
+      ]
+    },
+    {
+      "Id": "experiments.causality",
+      "Chapter": "experiments",
+      "File": "07-experiments-and-decisions.md",
+      "Title": "Avoid misleading conclusions",
+      "Keywords": "causality correlation bias baseline bottleneck",
+      "Related": [
+        "getting-started.limitations",
+        "economics.interpretation"
+      ]
+    },
+    {
+      "Id": "reference",
+      "Chapter": "reference",
+      "File": "08-reference-and-glossary.md",
+      "Title": "Reference & Glossary",
+      "Keywords": "",
+      "Related": []
+    },
+    {
+      "Id": "reference.glossary",
+      "Chapter": "reference",
+      "File": "08-reference-and-glossary.md",
+      "Title": "Glossary and abbreviations",
+      "Keywords": "glossary abbreviations WIP KPI P85 SEK FIFO N/A",
+      "Related": []
+    },
+    {
+      "Id": "reference.faq",
+      "Chapter": "reference",
+      "File": "08-reference-and-glossary.md",
+      "Title": "Frequently asked questions",
+      "Keywords": "FAQ questions N/A busy throughput",
+      "Related": [
+        "workflow.queues",
+        "economics.cost-allocation"
+      ]
+    },
+    {
+      "Id": "reference.troubleshooting",
+      "Chapter": "reference",
+      "File": "08-reference-and-glossary.md",
+      "Title": "Troubleshooting",
+      "Keywords": "troubleshooting error validation resume zoom missing",
+      "Related": [
+        "live-game-view.navigation",
+        "releases.customer-launch"
+      ]
+    },
+    {
+      "Id": "reference.limitations",
+      "Chapter": "reference",
+      "File": "08-reference-and-glossary.md",
+      "Title": "Model and guide limitations",
+      "Keywords": "limitations forecast financial real world",
+      "Related": [
+        "getting-started.limitations",
+        "experiments.causality"
+      ]
+    }
+  ],
+  "Metrics": {
+    "ReleasedThroughput": "kpi.released-throughput",
+    "CycleTime": "kpi.cycle-time",
+    "CostPerDelivery": "kpi.cost-per-item",
+    "ReworkEffort": "kpi.rework-effort",
+    "TotalTeamCost": "kpi.total-team-cost",
+    "DeveloperUtilization": "kpi.developer-utilization",
+    "TesterUtilization": "kpi.tester-utilization",
+    "TotalWip": "kpi.total-wip",
+    "DevelopmentQueue": "kpi.development-queue",
+    "ReviewQueue": "kpi.review-queue",
+    "TestingQueue": "kpi.testing-queue",
+    "TechnicalDebt": "kpi.technical-debt",
+    "CycleTimeP85": "kpi.cycle-time-p85",
+    "DeliveryFrequency": "kpi.delivery-frequency",
+    "DeliveryVariability": "kpi.delivery-variability",
+    "WipAge": "kpi.wip-age",
+    "ReviewQueueGrowth": "kpi.review-queue-growth",
+    "ReworkCost": "kpi.rework-cost",
+    "ReworkProportion": "kpi.rework-proportion",
+    "DebtGrowth": "kpi.debt-growth",
+    "DebtRepayment": "kpi.debt-repayment",
+    "CostPerWorkSize": "kpi.cost-per-work-size",
+    "WorkVolumePerSek": "kpi.delivered-work-per-1000-sek",
+    "UnlaunchedDevelopmentCost": "kpi.unlaunched-cost"
+  }
+}

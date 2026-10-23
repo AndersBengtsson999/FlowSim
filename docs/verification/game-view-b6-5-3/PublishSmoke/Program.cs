@@ -1,0 +1,11 @@
+using System.Reflection;
+using System.Runtime.Loader;
+var directory=Path.GetFullPath(args[0]);
+AssemblyLoadContext.Default.Resolving+=(_,name)=>File.Exists(Path.Combine(directory,name.Name+".dll"))?AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(directory,name.Name+".dll")):null;
+var assembly=AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(directory,"Simulation.UI.dll"));
+var type=assembly.GetType("Simulation.UI.Help.GuideCatalog",true)!;
+var catalog=Activator.CreateInstance(type)!;
+type.GetMethod("Validate")!.Invoke(catalog,[true]);
+var resources=assembly.GetManifestResourceNames().Where(n=>n.StartsWith("Guide/",StringComparison.Ordinal)).ToArray();
+if(!resources.Contains("Guide/registry.json")||!resources.Contains("Guide/08-reference-and-glossary.md"))throw new InvalidDataException("Missing published guide resources");
+Console.WriteLine($"PASS: published Simulation.UI.dll contains {resources.Length} guide resources. All chapters, IDs, links, metric mappings and required illustrations load from embedded resources outside the repository.");

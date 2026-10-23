@@ -71,9 +71,7 @@
     </StackPanel>
     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
     <Button Content="Application ▾" Classes="headerButton" AutomationProperties.Name="Application menu"><Button.Flyout><MenuFlyout><MenuItem Header="Exit Application" InputGesture="{Binding #RootWindow.ExitGesture}" Command="{Binding #RootWindow.ExitCommand}"/></MenuFlyout></Button.Flyout></Button>
-    <Button Content="Help  ?" Classes="headerButton" VerticalAlignment="Center" AutomationProperties.Name="Simulation help">
-     <Button.Flyout><Flyout><StackPanel Spacing="8" MaxWidth="340"><TextBlock Text="Work with the flow" FontWeight="Bold" FontSize="18"/><TextBlock Text="Start a Live session, watch the queues and pause to change your team or working assumptions. Changes take effect on the next simulated day." TextWrapping="Wrap"/><TextBlock Text="Scenarios runs a separate simulation. Compare and Explore help investigate alternatives. Leaving Live pauses the current session." TextWrapping="Wrap"/><TextBlock Text="Blue identifies primary controls. Orange and red queue highlights indicate accumulation; inspect their tooltips for the numbers." TextWrapping="Wrap"/></StackPanel></Flyout></Button.Flyout>
-    </Button>
+    <Button Content="Help  ?" Classes="headerButton" VerticalAlignment="Center" Click="OpenGuide" AutomationProperties.Name="Open FLOW User Guide"/>
     </StackPanel>
    </Grid>
   </Border>

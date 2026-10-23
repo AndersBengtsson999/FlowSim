@@ -28,5 +28,6 @@ public partial class MainWindow : Window
         if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) desktop.TryShutdown();
         else Close();
     }
+    private void OpenGuide(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => Simulation.UI.Help.GuideService.Open(this);
     private void ToggleNavigation(object? sender, Avalonia.Interactivity.RoutedEventArgs e) => Sidebar.IsVisible = !Sidebar.IsVisible;
 }
