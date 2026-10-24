@@ -51,3 +51,13 @@ The documentation tests check eight chapters, all headings/registry references, 
 The native production-view harness in docs/verification/game-view-b6-5-3 checks global/Game View/station/KPI/product entry points, single-window reuse, all chapter renders, wide/medium/narrow layouts, search/empty results, close/reopen, simulation snapshot equality and continued playback. It also repeats prior LIVE/KPI/launch/inspection/Flow Board acceptance checks.
 
 Build, full-suite, native and publish results are recorded with the verification artifacts. Physical keyboard/screen-reader/trackpad usability still needs human acceptance; automated focus and layout checks cannot establish a complete accessibility audit. Screenshot values illustrate a captured session and must not be read as default model values. The guide describes a learning model, not financial or operational forecasts.
+
+## B6.6.1 — Simulation Insights (2026-10-24)
+
+- Extended Chapter 7 with the LIVE indicator, modeless reader, observation/explanation/experiment separation, evidence states, actual four/20-day windows, next-day intervention boundary, shared developer capacity, transition counts, limitations and ephemeral acknowledgements.
+- Added `experiments.simulation-insights` and `reference.insight-terms` to the existing registry, related-topic links and search metadata. All analysis rows map directly to the first topic; related station/KPI links use existing readers.
+- Added a verified rendering from `docs/verification/b6-6-1/headless/screenshots/insights-wide.png`, copied unchanged to `assets/images/simulation-insights.png`. Clearly captioned as actual Avalonia/Skia controls, not a native desktop screenshot.
+- Cross-checked against `SimulationInsights`, `InsightTracker`, `LiveViewModel.Insights`, `InsightsWindow`, `LiveView`, and unchanged `QueuePressure.From` / `KpiDashboard` / `SimulationEngine` / `WorkItem` definitions.
+- No inferred intervention effects, independent review staffing pool, numeric causal confidence or automatic application of suggestions is documented or implemented.
+- Offline resources, search, stable topic IDs, links, metric mappings and required image loading are checked by automated tests and the verification harness.
+- Ordinary native macOS acceptance remains outstanding: Avalonia.Native failed before a window opened with RenderTimer error −6661. Headless Skia UI acceptance passes; logs and limitations are in the B6.6.1 report.

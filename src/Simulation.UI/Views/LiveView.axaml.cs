@@ -1,4 +1,7 @@
 using Avalonia.Controls;
+using Avalonia.VisualTree;
+using Simulation.UI.Insights;
+using Simulation.UI.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Simulation.Infrastructure;
@@ -8,6 +11,33 @@ namespace Simulation.UI.Views;
 
 public partial class LiveView : UserControl
 {
+    public InsightsWindow? CurrentInsightsWindow { get; private set; }
+    private void OpenInsightsClicked(object? sender,RoutedEventArgs e)=>OpenInsights();
+    public void OpenInsights()
+    {
+        if(CurrentInsightsWindow is not null)
+        {
+            if(CurrentInsightsWindow.WindowState==WindowState.Minimized)CurrentInsightsWindow.WindowState=WindowState.Normal;
+            CurrentInsightsWindow.Activate();return;
+        }
+        if(DataContext is not LiveViewModel model || TopLevel.GetTopLevel(this) is not Window owner)return;
+        var window=new InsightsWindow(model,OpenInsightStation,OpenInsightKpi);
+        if(owner is MainWindow main && OperatingSystem.IsMacOS())window.KeyBindings.Add(new(){Gesture=main.ExitGesture,Command=main.ExitCommand});
+        CurrentInsightsWindow=window;window.Closed+=(_,_)=>CurrentInsightsWindow=null;window.Show(owner);
+    }
+    public void OpenInsightStation(string name)
+    {
+        Model.Visualization="Game View";
+        var world=this.GetVisualDescendants().OfType<GameWorldControl>().FirstOrDefault();
+        if(world is not null) { world.SelectedStation=name;world.BringIntoView(); }
+        (TopLevel.GetTopLevel(this) as Window)?.Activate();
+    }
+    public void OpenInsightKpi(Simulation.Application.TeamKpi metric)
+    {
+        Model.OpenExplorer(metric);
+        var panels=this.GetVisualDescendants().OfType<KpiDashboardView>();
+        (panels.FirstOrDefault(p=>p.IsEffectivelyVisible)??panels.FirstOrDefault())?.OpenExpandedExplorer();
+    }
     private LiveViewModel? observed;
     private bool guidedEditorShown;
     public LiveView()
@@ -15,6 +45,7 @@ public partial class LiveView : UserControl
         InitializeComponent();
         DataContextChanged += (_, _) =>
         {
+            CurrentInsightsWindow?.Close();
             if (observed is not null) observed.PropertyChanged -= ModelChanged;
             observed = DataContext as LiveViewModel;
             if (observed is not null) observed.PropertyChanged += ModelChanged;

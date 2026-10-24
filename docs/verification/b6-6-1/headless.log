@@ -1,0 +1,17 @@
+PASS: Compact LIVE entry visible
+PASS: Analysis opened
+PASS: Reuses analysis window
+PASS: Dark theme
+PASS: Selection reviews evidence
+PASS: Separate explanation
+PASS: Analysis and review did not mutate state
+PASS: Context Help opens
+PASS: Correct Help content
+PASS: Station navigation
+PASS: Existing KPI Explorer navigation
+PASS: Close releases window
+PASS: Reopening preserves acknowledgement
+PASS: LIVE advances while analysis is open
+PASS: Changed evidence is updated, not new
+PASS: Loading resets ephemeral review state
+PASS: Headless/Skia window reuse, selection/review, updated lifecycle, narrow layout, LIVE playback, navigation, Help, offline resources and read-only state.

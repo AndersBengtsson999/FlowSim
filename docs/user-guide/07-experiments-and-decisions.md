@@ -41,3 +41,29 @@ Record the seed, initial settings, arrival mode, effort distributions, intervent
 A queue shrinking immediately after a staffing change may reflect work already completed upstream. A large release batch can temporarily improve throughput or cost per delivered item without improving the underlying flow. Different work sizes can change item-based KPIs. A customer launch can reduce unlaunched cost without reducing expense.
 
 Use at least one flow measure, one queue/unfinished-work measure and one resource measure. State alternative explanations and note partial periods. Test one change where possible, then replicate across seeds. FLOW explores consequences within a simplified model; it cannot establish real-world causality by itself.
+
+## Simulation Insights {#experiments.simulation-insights}
+
+Simulation Insights is an optional, read-only interpretation of existing simulation observations. Open **Insights** in the compact LIVE toolbar. LIVE keeps running; no suggestion is applied and no popup or sound interrupts you. Click again to focus the same window. Close it and reopen it whenever needed.
+
+![Simulation Insights showing a selected Testing queue relationship, separate observation, evidence, possible explanation and suggested experiment.](assets/images/simulation-insights.png)
+
+*Actual Avalonia control rendering using the headless Skia verification harness, Day 35. This is not a native macOS window capture.*
+
+The master list shows queue observations for Development, Code Review and Testing, plus supported capacity relationships. Select a row to review its details. The window separates **Observation** (recorded facts), **Possible explanation** (a hypothesis with limitations), and **Suggested experiment** (an optional way to investigate). Evidence strength describes the available observations, **not** the probability that an explanation is true.
+
+**Insufficient evidence** means fewer than four comparable queue observations. A one-day increase can still be an observable recent trend, but cannot establish sustained pressure. **Observed condition** describes directly observed states such as zero configured capacity or a stable queue. **Observable trend** describes changes in counts. **Trend with supporting capacity evidence** uses the existing Station Inspection rule: four nondecreasing daily queue counts with net growth, plus full relevant pool usage on the last three days. Code Review also requires positive review work on those days. This identifies potential pressure, not a proven root cause. A large queue alone is not enough.
+
+Development uses eligible Backlog, excluding unresolved dependency waiting. The Development queue KPI includes all Backlog; these quantities are deliberately labelled differently. The existing station rule does **not** diagnose a Development bottleneck from saturation. Zero configured capacity is a separate current-configuration observation; a newly recorded configuration becomes effective next day.
+
+Queue classifications use at most **four** post-change observations. Capacity relationships use at most **20 simulated workdays**, restarting after any intervention. The window shows the actual periods, including partial periods; it does not pretend that queue and capacity evidence have the same dates. Capacity findings need at least four observations. For a change on Day 100, the first post-change evidence is Day 101. KPI Explorer retains its own selected rolling window and may include earlier history.
+
+Capacity evidence uses recorded raw capacity and work-item transitions. Code Review shares developer capacity with Development, Rework and debt repayment; it is not a separate staffing pool. Positive upstream output alongside net downstream queue growth is a correlation. Endpoint growth need not be continuous growth. Stage transition totals can include repeat review/testing attempts and are not new KPI definitions. Internal releases are not customer launches.
+
+Unused Testing capacity alongside no active or waiting work at day end does not establish that work was absent all day. The evidence also reports dependency-waiting and WIP-limit observations. These are possible context, not proof of a cause. No recommendation automatically reduces staffing.
+
+**New, reviewed and updated:** the LIVE indicator counts only new relevant observations; a separate **updated** count identifies a changed classification or a returning condition. Selecting a row reviews the evidence currently displayed. Advancing the day or changing a queue count within the same classification does not make it new again. If a selected insight changes materially while LIVE runs, use **Mark this evidence reviewed** or select it again. Resolved observations remain marked **No longer relevant** with their observation dates. Stable queues and insufficient-history entries are informational and do not inflate the indicator.
+
+Acknowledgements belong to the current open timeline only. Loading a session, starting/resetting a session or restoring a checkpoint clears them. They are not saved; reopening a saved session may therefore show relevant insights as new. Closing only the analysis window preserves acknowledgements. No save format, simulation state or random stream is changed.
+
+Use the station buttons to inspect the existing workshop and the metric buttons to open the existing KPI Explorer. Contextual Help returns here. The list moves above the detail reader in narrow windows. Expand **Recorded metrics** for raw capacity and stage-output counts with their actual period. Suggestions direct you to the existing [guided staffing comparison](#experiments.capacity) or scenario comparison workflow. Test one supported setting at a time and inspect downstream flow, utilization and cost. Improvement is not guaranteed. This version does not infer intervention effects, perform automatic optimization or assign numeric causal confidence.

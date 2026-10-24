@@ -1,0 +1,1 @@
+PASS: published Simulation.UI.dll contains 20 guide resources. All chapters, IDs, links, metric mappings and required illustrations load from embedded resources outside the repository.

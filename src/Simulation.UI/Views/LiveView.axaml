@@ -100,6 +100,7 @@
    </Button>
    <Border Classes="toolbarSeparator" IsVisible="{Binding HasSession}"/>
    <Button Content="Change team / work" Command="{Binding ChangeCommand}" IsVisible="{Binding HasSession}" Classes="primary"/>
+   <Button Name="InsightsButton" Content="{Binding InsightsIndicator}" Click="OpenInsightsClicked" IsVisible="{Binding HasSession}" ToolTip.Tip="Read-only observations, possible explanations and optional experiments" AutomationProperties.Name="Simulation Insights"/>
    <Button Content="Checkpoint" Command="{Binding CheckpointCommand}" IsVisible="{Binding HasSession}" ToolTip.Tip="Create a checkpoint. Restore and files are below the analysis sections."/>
    <Border Classes="toolbarSeparator" IsVisible="{Binding HasSession}"/>
    <TextBlock Classes="liveSecondary" Text="Speed" Margin="6,0" VerticalAlignment="Center" IsVisible="{Binding HasSession}"/>

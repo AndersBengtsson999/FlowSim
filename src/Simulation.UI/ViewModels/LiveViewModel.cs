@@ -321,7 +321,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         if (LaunchDecisionPending) { Pause(); status = $"Customer launch decision required at Day {Day}."; Notify(); }
         if (Live.LimitReached) { Pause(); status = "Live simulation safety limit reached."; Notify(); }
     });
-    public void Reset() { LaunchNotices.Reset(); ProductDetailsExpanded = false; InvalidateGuided("LIVE was reset. Start a new comparison."); Pause(); Live = null; gameScene = null; setupExpanded = true; stopped = false; editing = false; queueHistory.Clear(); Flow = []; Metrics = []; Details = ""; SelectedCheckpoint = null; selectedFlow = null; selectedIntervention = null; RefreshPerformance(); status = "Ready to start."; Notify(); }
+    public void Reset() { LaunchNotices.Reset(); ProductDetailsExpanded = false; InvalidateGuided("LIVE was reset. Start a new comparison."); Pause(); Live = null; RefreshInsights(); gameScene = null; setupExpanded = true; stopped = false; editing = false; queueHistory.Clear(); Flow = []; Metrics = []; Details = ""; SelectedCheckpoint = null; selectedFlow = null; selectedIntervention = null; RefreshPerformance(); status = "Ready to start."; Notify(); }
     public void BeginChange()
     {
         if (!CanChange) return;
@@ -390,6 +390,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
     private void Refresh()
     {
         if (Live is null) return;
+        RefreshInsights();
         LaunchNotices.Observe(Live.Session.ProductDelivery);
         RefreshGuided();
         gameScene = null;

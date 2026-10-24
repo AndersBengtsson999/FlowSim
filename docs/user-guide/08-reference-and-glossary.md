@@ -71,3 +71,16 @@ FLOW is a simplified, daily-step learning model. It has aggregate resource pools
 The guide describes the implemented behavior audited for B6.5.3. Screenshot values are captured examples and may differ from your settings. Historical imports can have less detail than new sessions. Illustrations explain relationships; they are not additional calculations or predictive analytics.
 
 Use the verification report in the repository for implementation references and audit findings. No inaccessible editorial drafts were reviewed.
+
+## Insight terminology {#reference.insight-terms}
+
+| Term | Meaning |
+| --- | --- |
+| Observation | A measured condition or change, with its actual period and evidence. |
+| Possible explanation | An explicitly uncertain hypothesis; not a proven cause. |
+| Evidence strength | A description of supporting observations, not a confidence percentage. |
+| Material insight change | A change in station-pressure classification, or recurrence after resolution. Dates and raw count changes alone do not qualify. |
+| Reviewed insight | Evidence acknowledged by selecting it; review does not change the simulation. |
+| Suggested experiment | An optional supported comparison intended to test a hypothesis, never an automatic intervention. |
+
+See [Simulation Insights](#experiments.simulation-insights) for windows, limitations and acknowledgement lifetime.

@@ -452,8 +452,8 @@
       "Id": "kpi.cycle-time-p85",
       "Chapter": "kpis-performance",
       "File": "04-kpis-and-performance.md",
-      "Title": "Cycle time \u00b7 P85",
-      "Keywords": "CycleTimeP85 Cycle time \u00b7 P85 days",
+      "Title": "Cycle time · P85",
+      "Keywords": "CycleTimeP85 Cycle time · P85 days",
       "Related": [
         "kpis-performance",
         "workflow.queues"
@@ -818,6 +818,29 @@
       "Related": [
         "getting-started.limitations",
         "experiments.causality"
+      ]
+    },
+    {
+      "Id": "experiments.simulation-insights",
+      "Chapter": "experiments",
+      "File": "07-experiments-and-decisions.md",
+      "Title": "Simulation Insights",
+      "Keywords": "insight new reviewed updated bottleneck pressure observation evidence explanation experiment capacity imbalance",
+      "Related": [
+        "experiments.causality",
+        "experiments.capacity",
+        "live-game-view.station-inspection",
+        "reference.insight-terms"
+      ]
+    },
+    {
+      "Id": "reference.insight-terms",
+      "Chapter": "reference",
+      "File": "08-reference-and-glossary.md",
+      "Title": "Insight terminology",
+      "Keywords": "insight glossary evidence strength acknowledgement material change hypothesis",
+      "Related": [
+        "experiments.simulation-insights"
       ]
     }
   ],
