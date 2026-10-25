@@ -6,3 +6,7 @@
 TestResults/
 migration-backups/
 docs/ACCOUNT_HANDOVER.md
+
+# Local macOS release artifacts
+/dist/
+/packaging/macos/__pycache__/
