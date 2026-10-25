@@ -830,7 +830,8 @@
         "experiments.causality",
         "experiments.capacity",
         "live-game-view.station-inspection",
-        "reference.insight-terms"
+        "reference.insight-terms",
+        "experiments.insight-evidence"
       ]
     },
     {
@@ -841,6 +842,29 @@
       "Keywords": "insight glossary evidence strength acknowledgement material change hypothesis",
       "Related": [
         "experiments.simulation-insights"
+      ]
+    },
+    {
+      "Id": "experiments.insight-evidence",
+      "Chapter": "experiments",
+      "File": "07-experiments-and-decisions.md",
+      "Title": "Visual evidence and prepared comparisons",
+      "Keywords": "prepared comparison chart exact samples queue capacity baseline seed confirmation cancel tester",
+      "Related": [
+        "experiments.simulation-insights",
+        "experiments.capacity",
+        "experiments.causality",
+        "reference.prepared-comparison"
+      ]
+    },
+    {
+      "Id": "reference.prepared-comparison",
+      "Chapter": "reference",
+      "File": "08-reference-and-glossary.md",
+      "Title": "Evidence charts and prepared baselines",
+      "Keywords": "sample endpoint growth frozen baseline proposal",
+      "Related": [
+        "experiments.insight-evidence"
       ]
     }
   ],

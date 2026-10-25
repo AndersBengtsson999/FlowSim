@@ -6,6 +6,7 @@ using Simulation.Application;
 using Simulation.UI.Help;
 using Simulation.UI.ViewModels;
 using Simulation.UI.Theming;
+using Simulation.UI.Controls;
 
 namespace Simulation.UI.Insights;
 
@@ -23,6 +24,8 @@ public sealed class InsightsWindow : Window
     private bool refreshing;
     private bool metricsExpanded;
     private string[] listLabels=[];
+    private string? selectedChartTitle;
+    public PreparedInsightWindow? PreparedWindow { get; private set; }
     public string? SelectedInsightId { get; private set; }
     public InsightsWindow(LiveViewModel model,Action<string> station,Action<TeamKpi> kpi)
     {
@@ -36,7 +39,13 @@ public sealed class InsightsWindow : Window
         header.Children.Add(summary);root.Children.Add(header);
         reader=new ScrollViewer{Content=details,HorizontalScrollBarVisibility=Avalonia.Controls.Primitives.ScrollBarVisibility.Disabled};
         body.Children.Add(list);body.Children.Add(reader);Grid.SetColumn(reader,1);Grid.SetRow(body,1);root.Children.Add(body);Content=root;
-        list.ItemTemplate=new Avalonia.Controls.Templates.FuncDataTemplate<TrackedInsight>((item,_)=>new TextBlock {Text=item?.Label,TextWrapping=TextWrapping.Wrap,Margin=new Thickness(6),MaxWidth=280,HorizontalAlignment=HorizontalAlignment.Left});
+        list.ItemTemplate=new Avalonia.Controls.Templates.FuncDataTemplate<TrackedInsight>((item,_)=>
+        {
+            var row=new StackPanel{Spacing=4,Margin=new Thickness(6)};
+            row.Children.Add(new TextBlock{Text=item?.ShortTitle,FontWeight=FontWeight.SemiBold,TextTrimming=TextTrimming.CharacterEllipsis});
+            row.Children.Add(new TextBlock{Text=item?.Secondary,FontSize=12,Foreground=Brush.Parse(FlowPalette.Secondary),TextTrimming=TextTrimming.CharacterEllipsis});
+            ToolTip.SetTip(row,item?.Label);return row;
+        });
         list.SelectionChanged+=(_,_)=>{if(!refreshing && list.SelectedItem is TrackedInsight item)Select(item.Insight.Id);};
         SizeChanged+=(_,_)=>{
             var narrow=ClientSize.Width<850;
@@ -45,7 +54,7 @@ public sealed class InsightsWindow : Window
             if(list.SelectedItem is not null)list.ScrollIntoView(list.SelectedItem);
         };
         model.PropertyChanged+=Changed;
-        Closed+=(_,_)=>model.PropertyChanged-=Changed;
+        Closed+=(_,_)=>{model.PropertyChanged-=Changed;PreparedWindow?.Close();};
         Refresh();
     }
     private void Changed(object? sender,System.ComponentModel.PropertyChangedEventArgs e)
@@ -56,7 +65,7 @@ public sealed class InsightsWindow : Window
         summary.Text=report is null?"Start a LIVE session to observe evidence.":$"Day {report.Day} · Capacity evidence: {report.CapacityPeriod}\nQueue classification: last four post-change observations. {model.Insights.Items.Count(i=>i.Insight.Relevant)} active · {model.Insights.NewCount} new · {model.Insights.UpdatedCount} updated. Evidence strength is not causal confidence.";
         refreshing=true;
         var items=model.Insights.Items;
-        var labels=items.Select(i=>i.Label).ToArray();
+        var labels=items.Select(i=>i.Label+i.Secondary).ToArray();
         if(!labels.SequenceEqual(listLabels)) { list.ItemsSource=items;listLabels=labels; }
         list.SelectedItem=((IEnumerable<TrackedInsight>?)list.ItemsSource)?.FirstOrDefault(i=>i.Insight.Id==SelectedInsightId);
         refreshing=false;
@@ -75,9 +84,14 @@ public sealed class InsightsWindow : Window
         Text(i.Title,$"{(i.Category==InsightCategory.QueuePressure?"Queue pressure":"Capacity imbalance")} · {tracked.Status}\nObserved: {i.Period}");
         Text("Observation",i.Observation);
         Text("Evidence",i.Evidence+"\n"+Strength(i.Strength));
+        AddEvidenceCharts(i);
 
         Text("Possible explanation",i.Explanation);
         Text("Suggested experiment",i.Experiment);
+        if(InsightExperimentProposal.Supports(i,model.Live))
+        {
+            var prepare=new WrapPanel();Button(prepare,"Prepare comparison",()=>PrepareComparison(i.Id));details.Children.Add(prepare);
+        }
         if(!i.Relevant)Text("Current relevance", "No active alert. Evidence above may describe an earlier observation period; check its dates before acting.");
         var links=new WrapPanel();
         foreach(var name in i.Stations)Button(links,"Inspect "+name,()=>station(name));
@@ -91,6 +105,34 @@ public sealed class InsightsWindow : Window
         // A changed classification remains Updated until explicitly selected/reviewed, even if its details are visible.
         if(tracked.Status is InsightStatus.New or InsightStatus.Updated)
         { var acknowledge=new WrapPanel();Button(acknowledge,"Mark this evidence reviewed",()=>Select(i.Id));details.Children.Add(acknowledge); }
+    }
+    public void PrepareComparison(string id)
+    {
+        if(PreparedWindow is not null){PreparedWindow.Activate();return;}
+        var insight=model.Insights.Items.FirstOrDefault(x=>x.Insight.Id==id)?.Insight;
+        if(insight is null || InsightExperimentProposal.Prepare(insight,model.Live) is not { } proposal)return;
+        var window=new PreparedInsightWindow(proposal,()=>{ station("Testing"); });
+        PreparedWindow=window;window.Closed+=(_,_)=>PreparedWindow=null;window.Show(this);
+    }
+    private void AddEvidenceCharts(SimulationInsight insight)
+    {
+        if(insight.Charts.Count==0)
+        {details.Children.Add(new TextBlock{Text="No recorded chart observations in this period.",TextWrapping=TextWrapping.Wrap});return;}
+        var selector=new ComboBox{ItemsSource=insight.Charts,HorizontalAlignment=HorizontalAlignment.Stretch};
+        selector.SelectedItem=insight.Charts.FirstOrDefault(c=>c.Title==selectedChartTitle)??insight.Charts[0];
+        var panel=new StackPanel{Spacing=6};
+        void Draw()
+        {
+            if(selector.SelectedItem is not InsightChart chart)return;
+            selectedChartTitle=chart.Title;panel.Children.Clear();
+            panel.Children.Add(new TextBlock{Text=$"Recorded samples: {chart.Period}. Station classification uses at most four post-change observations.",TextWrapping=TextWrapping.Wrap,FontSize=12});
+            panel.Children.Add(new TextBlock{Text=chart.PrimaryLabel+" (blue dots)"+(chart.SecondaryLabel is null?"":" · "+chart.SecondaryLabel+" (purple squares)"),TextWrapping=TextWrapping.Wrap,FontSize=12});
+            panel.Children.Add(new LivePerformanceTrendChart{Series=chart.Primary,ComparisonSeries=chart.Secondary,Unit=chart.Unit,SamplesOnly=true,Height=150});
+            panel.Children.Add(new TextBlock{Text="Samples only; no interpolation. Queue size is not daily growth. Endpoint growth and correlated measurements do not establish sustained pressure or a cause.",TextWrapping=TextWrapping.Wrap,FontSize=12,Foreground=Brush.Parse(FlowPalette.Secondary)});
+            var values=new StackPanel{Spacing=4};foreach(var row in chart.Measurements)values.Children.Add(new TextBlock{Text=row,TextWrapping=TextWrapping.Wrap,FontSize=12});
+            panel.Children.Add(new Expander{Header="Exact chart measurements",Content=values,HorizontalAlignment=HorizontalAlignment.Stretch});
+        }
+        selector.SelectionChanged+=(_,_)=>Draw();Draw();details.Children.Add(selector);details.Children.Add(panel);
     }
     private void Text(string heading,string value)
     {

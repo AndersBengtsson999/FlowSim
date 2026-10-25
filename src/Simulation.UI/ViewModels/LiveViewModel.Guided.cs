@@ -121,12 +121,12 @@ public sealed partial class LiveViewModel
         GuidedIncrementalShort = "Incremental cost per additional delivery: " + TeamEconomics.Money(EconomicPeriod.IncrementalCostPerAdditionalDelivery(bp.Economics, xp.Economics));
         GuidedIncrementalCost = GuidedIncrementalShort +
             ". Δ team cost / Δ released items, only when deliveries increase. Negative means lower total cost with more deliveries; positive means additional cost per additional delivery. N/A means no additional deliveries or missing monetary history.";
-        GuidedTeamCost = [new("Unchanged baseline", (double?)bp.Economics.TotalTeamCost), new("LIVE intervention", (double?)xp.Economics.TotalTeamCost)];
+        GuidedTeamCost = [new("Unchanged baseline", (double?)bp.Economics.TotalTeamCost), new(GuidedAlternativeName, (double?)xp.Economics.TotalTeamCost)];
         GuidedQueueSeries = [new("Unchanged baseline", b.TestingQueue.Select(p => new ComparisonFlowPoint(p.Day, p.Count)).ToArray()),
-            new("LIVE intervention", x.TestingQueue.Select(p => new ComparisonFlowPoint(p.Day, p.Count)).ToArray())];
-        GuidedReleased = [new("Unchanged baseline", bp.Completed), new("LIVE intervention", xp.Completed)];
-        GuidedCycleTime = [new("Unchanged baseline", bp.CycleTime), new("LIVE intervention", xp.CycleTime)];
-        GuidedCost = [new("Unchanged baseline", bp.ConsumedSystemCapacity?.Total), new("LIVE intervention", xp.ConsumedSystemCapacity?.Total)];
-        GuidedInterpretation = $"Observed LIVE minus baseline: released {D(bp.Completed, xp.Completed)} items; Testing queue {D(bp.Testing.Current, xp.Testing.Current)} items; cycle time {D(bp.CycleTime, xp.CycleTime)} days; cost {D(bp.ConsumedSystemCapacity?.Total, xp.ConsumedSystemCapacity?.Total)} capacity. These are matched-period differences, not a ranking of benefit.";
+            new(GuidedAlternativeName, x.TestingQueue.Select(p => new ComparisonFlowPoint(p.Day, p.Count)).ToArray())];
+        GuidedReleased = [new("Unchanged baseline", bp.Completed), new(GuidedAlternativeName, xp.Completed)];
+        GuidedCycleTime = [new("Unchanged baseline", bp.CycleTime), new(GuidedAlternativeName, xp.CycleTime)];
+        GuidedCost = [new("Unchanged baseline", bp.ConsumedSystemCapacity?.Total), new(GuidedAlternativeName, xp.ConsumedSystemCapacity?.Total)];
+        GuidedInterpretation = $"Observed {GuidedAlternativeName} minus baseline: released {D(bp.Completed, xp.Completed)} items; Testing queue {D(bp.Testing.Current, xp.Testing.Current)} items; cycle time {D(bp.CycleTime, xp.CycleTime)} days; cost {D(bp.ConsumedSystemCapacity?.Total, xp.ConsumedSystemCapacity?.Total)} capacity. These are matched-period differences, not a ranking of benefit.";
     }
 }

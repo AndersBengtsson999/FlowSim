@@ -84,3 +84,14 @@ Use the verification report in the repository for implementation references and 
 | Suggested experiment | An optional supported comparison intended to test a hypothesis, never an automatic intervention. |
 
 See [Simulation Insights](#experiments.simulation-insights) for windows, limitations and acknowledgement lifetime.
+
+## Evidence charts and prepared baselines {#reference.prepared-comparison}
+
+| Term | Meaning |
+| --- | --- |
+| Recorded sample | A value at an actual completed simulated day; no invented intermediate value. |
+| Endpoint growth | Last observed queue size minus first; not necessarily continuous or sustained growth. |
+| Frozen baseline | A captured simulation state, including current random-stream state, retained independently while LIVE continues. |
+| Prepared comparison | A temporary editable proposal that requires explicit confirmation to run isolated branches through the existing guided comparison. |
+
+See [visual evidence and prepared comparisons](#experiments.insight-evidence).

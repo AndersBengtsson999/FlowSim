@@ -3,6 +3,12 @@ namespace Simulation.UI.Insights;
 public enum InsightStatus { New, Reviewed, Updated, NoLongerRelevant, Informational }
 public sealed record TrackedInsight(SimulationInsight Insight, InsightStatus Status)
 {
+    public string ShortTitle => Insight.Id switch {
+        "queue.backlog"=>"Development queue", "queue.review-wait"=>"Code Review queue", "queue.testing-wait"=>"Testing queue",
+        "imbalance.review-wait"=>"Development → Review", "imbalance.testing-wait"=>"Review → Testing",
+        "imbalance.testing-supply"=>"Unused Testing capacity", _=>Insight.Title };
+    public string StatusLabel => Status==InsightStatus.NoLongerRelevant?"No longer relevant":Status.ToString();
+    public string Secondary => $"{StatusLabel} · {(Insight.Period.Observations==0?"No history":$"Days {Insight.Period.FirstDay}–{Insight.Period.LastDay}")}";
     public string Label => $"{Insight.Title} · {Status switch { InsightStatus.NoLongerRelevant=>"No longer relevant",_=>Status.ToString() }}";
     public override string ToString()=>Label;
 }
