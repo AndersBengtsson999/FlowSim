@@ -34,10 +34,13 @@ public sealed partial class LiveViewModel
         }
     }
     public string LaunchEconomicsSummary => LaunchEconomicsText.Describe(LaunchCostHistory);
-    public string ProductCompactSummary => Live is null ? "Product version" : $"{Live.Session.ProductDelivery.Versions[^1].Name} | {ProductDeliveryPresentation.Rule(Live.Session.ProductDelivery.Versions[^1].EffectiveSchedule)} | " +
-        (Live.Session.ProductDelivery.Versions[^1].PlannedDay is { } day ? $"Launch Day {day} | {Math.Max(0, day - Day)} days left" : "Launch not scheduled") +
-        $" | {Live.Session.ProductDelivery.InternalReleases.Where(r => r.VersionId == Live.Session.ProductDelivery.Versions[^1].Id).Sum(r => r.ItemIds.Count)} awaiting | {Live.Session.ProductDelivery.CustomerLaunches.Count} launches" +
-        (LaunchDecisionPending ? " | DECISION REQUIRED — open Details" : "");
+    public string ProductCompactSummary => Live is null ? "Start LIVE to track customer launches" : $"{Live.Session.ProductDelivery.Versions[^1].Name} | {ProductDeliveryPresentation.Rule(Live.Session.ProductDelivery.Versions[^1].EffectiveSchedule)} | {AwaitingCustomerLaunch} awaiting customer launch | {CustomerLaunchPlan}" +
+        (LaunchDecisionPending ? " | Decision required" : "");
+    public int AwaitingCustomerLaunch => Live is null ? 0 : Live.Session.ProductDelivery.InternalReleases.Where(r=>r.VersionId==Live.Session.ProductDelivery.Versions[^1].Id).Sum(r=>r.ItemIds.Count);
+    public string CustomerLaunchPlan => Live?.Session.ProductDelivery.Versions[^1].PlannedDay is { } day ? $"Scheduled Day {day}" : "Not scheduled";
+    public string CustomerLaunchStatus => !HasSession ? "No LIVE session." : LaunchDecisionPending ? "Decision required: launch or postpone before continuing LIVE." : AwaitingCustomerLaunch>0 ? "Internally released work is awaiting customer launch." : "No internally released work awaiting customer launch.";
+    public string ScheduleLaunchHelp => !HasSession ? "Start LIVE to schedule a customer launch." : IsRunning ? "Pause the simulation to enable customer launch." : editing ? "Finish or cancel the current intervention before scheduling a customer launch." : stopped ? "This LIVE session is stopped. Load or start a session to edit its launch plan." : "Schedule from the current simulated day; this postpones any existing target for this version.";
+    public string LaunchNowHelp => !CanEditLaunch ? ScheduleLaunchHelp.Replace("schedule a customer launch", "launch").Replace("scheduling a customer launch", "launching") : !CanLaunchProduct ? "No internally released items are available to launch." : "Launch only internally released items; unfinished work continues in the next version.";
     public bool ShowFlowProduct => HasSession && FlowBoardSelected;
     public bool LaunchDecisionPending => Live?.Session.PendingLaunchDecision is not null;
     public bool CanEditLaunch => HasSession && !IsRunning && !editing && !stopped;

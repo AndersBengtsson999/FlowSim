@@ -70,7 +70,7 @@ public sealed class InsightsWindow : Window
         summary.Text=report is null?"Start a LIVE session to observe evidence.":$"Day {report.Day} · {InsightPresentation.Overview(model.Insights.Items)}";
         refreshing=true;
         var items=InsightPresentation.Ordered(model.Insights.Items);
-        SelectedInsightId ??= items.FirstOrDefault()?.Insight.Id;
+        SelectedInsightId = InsightPresentation.Selection(items,SelectedInsightId);
         var labels=items.Select(i=>i.Label+i.Secondary+InsightPresentation.Group(i)).ToArray();
         if(!labels.SequenceEqual(listLabels)) {
             groupStarts.Clear();foreach(var group in items.GroupBy(InsightPresentation.Group))groupStarts.Add(group.First().Insight.Id);

@@ -74,14 +74,23 @@ public partial class GameView : UserControl
         if (side) WorkshopContent.ColumnDefinitions[1].Width = new GridLength(GameWorld.HasSelection ? 300 : 0);
         var scroll = this.GetVisualAncestors().OfType<ScrollViewer>().FirstOrDefault();
         var bottom = scroll?.TranslatePoint(new Point(0, scroll.Bounds.Height), root)?.Y ?? root.Bounds.Height;
-        // Reserve the complete compact KPI strip; the workshop uses the remaining viewport.
-        var dashboardHeight = KpiPanel.IsVisible ? KpiPanel.Bounds.Height : 0;
-        var minimumHeight = Bounds.Width < 900 || (!side && GameWorld.HasSelection) ? 300 : 180;
-        var height = StationMap.FitHeight(Math.Min(root.Bounds.Height, bottom) - Math.Max(0, position.Y) - dashboardHeight, WorkshopHeader.Bounds.Height, side, GameWorld.HasSelection, minimumHeight);
+        // A compact KPI column keeps values visible without taking workshop height on laptop/desktop widths.
+        var kpiBeside = KpiPanel.IsVisible && Bounds.Width >= 1000;
+        var columns = kpiBeside ? "*,220" : "*";
+        if (DashboardLayout.ColumnDefinitions.Count != (kpiBeside ? 2 : 1))
+        {
+            DashboardLayout.ColumnDefinitions = new(columns);
+            DashboardLayout.RowDefinitions = new(kpiBeside ? "Auto" : "Auto,Auto");
+            Grid.SetColumn(KpiPanel,kpiBeside ? 1 : 0);Grid.SetRow(KpiPanel,kpiBeside ? 0 : 1);
+            KpiPanel.Margin = kpiBeside ? new Thickness(10,0,0,0) : new Thickness(0,6,0,0);
+        }
+        var dashboardHeight = KpiPanel.IsVisible && !kpiBeside ? KpiPanel.Bounds.Height : 0;
         var sceneHeight = GameWorld.UseSprites ? StationMap.SceneHeight : 680;
         var width = Math.Max(1, WorkshopContent.Bounds.Width - (side && GameWorld.HasSelection ? 300 : 0));
-        // Preserve readable sprites; short windows may scroll the dashboard instead of miniaturizing the workshop.
-        var fittedHeight = Math.Min(Math.Max(180, height), width * sceneHeight / 1080);
+        // Keep a readable workshop even when launch details or wrapped KPI cards need page scrolling.
+        // Only resize its container; the existing camera preserves manual zoom and pan on resize.
+        var fittedHeight = WorkshopLayout.Height(width, sceneHeight,
+            Math.Min(root.Bounds.Height, bottom) - Math.Max(0, position.Y) - dashboardHeight - WorkshopHeader.Bounds.Height - 24, root.Bounds.Height);
         if (Math.Abs(WorldViewport.Height - fittedHeight) > 1 || double.IsNaN(WorldViewport.Height)) WorldViewport.Height = fittedHeight;
         // Reserve a usable work-item list beneath the bounded contextual section.
         var panelHeight = side ? Math.Max(360, fittedHeight) : 420;

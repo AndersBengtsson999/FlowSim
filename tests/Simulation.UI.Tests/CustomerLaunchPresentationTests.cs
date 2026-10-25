@@ -24,7 +24,7 @@ public class CustomerLaunchPresentationTests
     [Fact] public async Task LiveCompactDetailsPersistAndManualLaunchProducesNoticeWithAnimationOff()
     {
         using var vm=new LiveViewModel();vm.Setup.LaunchMode="One-time";vm.Setup.LaunchAfter="10";vm.Start();vm.Pause();vm.ProductDetailsExpanded=true;vm.AnimateGameActivity=false;
-        vm.TargetDay="100";await vm.RunToDayAsync();Assert.Equal(10,vm.Day);Assert.True(vm.ProductDetailsExpanded);Assert.Contains("DECISION REQUIRED",vm.ProductCompactSummary);
+        vm.TargetDay="100";await vm.RunToDayAsync();Assert.Equal(10,vm.Day);Assert.True(vm.ProductDetailsExpanded);Assert.Contains("Decision required",vm.ProductCompactSummary);
         vm.LaunchProductCommand.Execute(null);Assert.True(vm.LaunchNotices.HasNotification);Assert.Contains("Day 10",vm.LaunchNotices.Description);
         vm.Step();Assert.True(vm.ProductDetailsExpanded);Assert.True(vm.LaunchNotices.HasNotification);
         vm.LaunchNotices.DismissCommand.Execute(null);vm.Step();Assert.False(vm.LaunchNotices.HasNotification);

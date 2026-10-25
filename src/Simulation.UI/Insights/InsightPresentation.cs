@@ -6,6 +6,14 @@ public static class InsightPresentation
     public static int Group(TrackedInsight item) => item.Insight.Relevant ? 0 : item.Status == InsightStatus.NoLongerRelevant ? 2 : 1;
     public static string GroupTitle(TrackedInsight item) => Group(item) switch { 0 => "Active findings", 1 => "Other current observations", _ => "Previous findings · no longer relevant" };
     public static IReadOnlyList<TrackedInsight> Ordered(IEnumerable<TrackedInsight> items) => items.OrderBy(Group).ThenBy(i=>i.Insight.Category).ThenBy(i=>i.Insight.Id,StringComparer.Ordinal).ToArray();
+    // Keep the existing category/id priority within current findings. Only historical fallback is date ordered.
+    public static string? Selection(IEnumerable<TrackedInsight> source,string? selectedId)
+    {
+        var items=Ordered(source);
+        if(selectedId is not null && items.Any(i=>i.Insight.Id==selectedId))return selectedId;
+        return items.FirstOrDefault(i=>Group(i)<2)?.Insight.Id
+            ?? items.OrderByDescending(i=>i.Insight.Period.LastDay).FirstOrDefault()?.Insight.Id;
+    }
     public static string Plain(string text) => text.Replace("No sustained pressure established", "No consistent queue pressure detected",StringComparison.Ordinal);
     public static string Title(TrackedInsight item) => item.Insight.Id switch {
         "imbalance.testing-wait" => "Testing queue grew during Review output",

@@ -23,6 +23,7 @@ public partial class KpiDashboardView : UserControl
     private Window? expandedWindow;
     private bool expandedView;
     private bool? pairedCharts;
+    private bool? narrowHeading;
     public KpiDashboardView()
     {
         InitializeComponent();SizeChanged+=(_,_)=>RefreshPresentation();DataContextChanged+=(_,_)=>Observe();
@@ -40,6 +41,15 @@ public partial class KpiDashboardView : UserControl
     private void RefreshPresentation()
     {
         CardWidth = ResponsiveCardWidth(Bounds.Width);
+        var narrow=Bounds.Width<350;
+        if(narrowHeading!=narrow) {
+            narrowHeading=narrow;
+            DashboardHeading.ColumnDefinitions=new(narrow?"*,Auto":"*,Auto,Auto");
+            DashboardHeading.RowDefinitions=new(narrow?"Auto,Auto":"Auto");
+            Grid.SetColumnSpan(DashboardTitle,narrow?2:1);
+            Grid.SetRow(AnalyzeKpis,narrow?1:0);Grid.SetColumn(AnalyzeKpis,narrow?0:1);
+            Grid.SetRow(ChooseKpis,narrow?1:0);Grid.SetColumn(ChooseKpis,narrow?1:2);
+        }
         ExplorerSurface.IsVisible=expandedView && observed?.ExplorerOpen==true;
         EvaluationHeading.IsVisible=expandedView;
         DashboardHeading.IsVisible=!expandedView;

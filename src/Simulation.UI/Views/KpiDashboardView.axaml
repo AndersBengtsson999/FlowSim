@@ -1,10 +1,10 @@
 <UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:app="using:Simulation.Application" xmlns:vm="using:Simulation.UI.ViewModels" xmlns:charts="using:Simulation.UI.Controls" x:Class="Simulation.UI.Views.KpiDashboardView" x:DataType="vm:LiveViewModel" Name="Dashboard" Foreground="{DynamicResource FlowText}">
  <UserControl.Styles><Style Selector="Button"><Setter Property="MinHeight" Value="30"/><Setter Property="Padding" Value="10,5"/><Setter Property="Margin" Value="0"/></Style><Style Selector="Button.compactKpi:pointerover"><Setter Property="Opacity" Value="0.82"/></Style><Style Selector="Button:focus-visible"><Setter Property="BorderBrush" Value="{DynamicResource FlowAccent}"/><Setter Property="BorderThickness" Value="2"/></Style></UserControl.Styles>
- <Border Background="{DynamicResource FlowPanel}" CornerRadius="6" Padding="8">
+ <Border Background="{DynamicResource FlowPanel}" CornerRadius="6" Padding="5">
   <StackPanel Spacing="4">
    <Grid Name="DashboardHeading" ColumnDefinitions="*,Auto,Auto">
-    <Button Grid.Column="1" Content="Analyze ↗" Click="ExpandExplorerClicked" Margin="0,0,6,0" AutomationProperties.Name="Open detailed KPI analysis"/>
-    <TextBlock Text="Team Performance" FontWeight="Bold" Foreground="{DynamicResource FlowText}" VerticalAlignment="Center"/>
+    <Button Name="AnalyzeKpis" Grid.Column="1" Content="Analyze ↗" Click="ExpandExplorerClicked" Margin="0,0,6,0" AutomationProperties.Name="Open detailed KPI analysis"/>
+    <TextBlock Name="DashboardTitle" Text="Team Performance" FontWeight="Bold" Foreground="{DynamicResource FlowText}" VerticalAlignment="Center"/>
     <Button Grid.Column="2" Name="ChooseKpis" Content="KPIs…" Padding="6,3" AutomationProperties.Name="Choose up to four KPIs">
      <Button.Flyout><Flyout><StackPanel Spacing="4" Width="290">
       <TextBlock Text="Choose up to four KPIs" FontWeight="Bold"/>
@@ -97,10 +97,10 @@
     <ItemsControl ItemsSource="{Binding DisplayCards}">
      <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
      <ItemsControl.ItemTemplate><DataTemplate x:DataType="vm:KpiCard">
-      <Button Classes="compactKpi" Cursor="Hand" Click="OpenExplorerClicked" Padding="0" Background="Transparent" AutomationProperties.Name="{Binding Name}"><Border Background="{DynamicResource FlowPanel}" BorderBrush="{Binding SelectionBorder}" BorderThickness="2" CornerRadius="4" Padding="7" Width="{Binding #Dashboard.CardWidth}" MinHeight="88" Margin="0,0,6,6" ToolTip.Tip="{Binding Help}">
+      <Button Classes="compactKpi" Cursor="Hand" Click="OpenExplorerClicked" Padding="0" Background="Transparent" AutomationProperties.Name="{Binding Name}"><Border Background="{DynamicResource FlowPanel}" BorderBrush="{Binding SelectionBorder}" BorderThickness="2" CornerRadius="4" Padding="5" Width="{Binding #Dashboard.CardWidth}" MinHeight="68" Margin="0,0,6,3" ToolTip.Tip="{Binding Help}">
        <StackPanel Spacing="1">
-        <TextBlock MinHeight="30" Text="{Binding Name}" Foreground="{DynamicResource FlowSecondary}" FontSize="13" FontWeight="SemiBold" TextWrapping="Wrap"/>
-        <WrapPanel MinHeight="44"><TextBlock Margin="0,0,5,0" MaxWidth="{Binding $parent[StackPanel].Bounds.Width}" TextWrapping="Wrap" Text="{Binding Value}" Foreground="{DynamicResource FlowText}" FontWeight="Bold" FontSize="23"/><TextBlock Text="{Binding Unit}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" VerticalAlignment="Center"/></WrapPanel>
+        <TextBlock MinHeight="26" Text="{Binding Name}" Foreground="{DynamicResource FlowSecondary}" FontSize="13" FontWeight="SemiBold" TextWrapping="Wrap"/>
+        <WrapPanel MinHeight="28"><TextBlock Margin="0,0,5,0" MaxWidth="{Binding $parent[StackPanel].Bounds.Width}" TextWrapping="Wrap" Text="{Binding Value}" Foreground="{DynamicResource FlowText}" FontWeight="Bold" FontSize="21"/><TextBlock Text="{Binding Unit}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" VerticalAlignment="Center"/></WrapPanel>
        </StackPanel>
       </Border></Button>
      </DataTemplate></ItemsControl.ItemTemplate>

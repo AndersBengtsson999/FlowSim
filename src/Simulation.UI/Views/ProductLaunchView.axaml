@@ -7,7 +7,7 @@
  <ThemeVariantScope RequestedThemeVariant="Dark">
  <StackPanel Spacing="2">
  <Expander Name="ProductDetails" IsExpanded="{Binding ProductDetailsExpanded, Mode=TwoWay}" HorizontalAlignment="Stretch" Background="{DynamicResource FlowPanel}" Foreground="{DynamicResource FlowText}" BorderBrush="{DynamicResource FlowBorder}" Padding="0" ScrollViewer.BringIntoViewOnFocusChange="False">
-  <Expander.Header><Grid ColumnDefinitions="*,Auto"><TextBlock Text="{Binding ProductCompactSummary}" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="12"/><TextBlock Grid.Column="1" Text="Details" Foreground="{DynamicResource FlowAccent}" Margin="12,0,0,0" VerticalAlignment="Center"/></Grid></Expander.Header>
+  <Expander.Header><Grid ColumnDefinitions="*,Auto"><Grid Grid.Column="0" RowDefinitions="Auto,Auto"><TextBlock Text="Customer Launch" FontWeight="SemiBold"/><TextBlock Grid.Row="1" Text="{Binding ProductCompactSummary}" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="12"/></Grid><TextBlock Grid.Column="1" Text="Launch controls &amp; details" Foreground="{DynamicResource FlowAccent}" Margin="12,0,0,0" VerticalAlignment="Center"/></Grid></Expander.Header>
   <StackPanel Spacing="8" Margin="10">
    <Button Content="Learn more" HorizontalAlignment="Left" AutomationProperties.Name="Learn about product versions and customer launches">
     <Button.Flyout><Flyout><StackPanel Spacing="4">
@@ -20,34 +20,42 @@
      <Button Content="Launch Economics" Tag="economics.cost-allocation" Click="OpenGuide"/>
     </StackPanel></Flyout></Button.Flyout>
    </Button>
-   <TextBlock Text="{Binding ProductDecisionText}" TextWrapping="Wrap" Foreground="{DynamicResource FlowWarning}"/>
-   <TextBlock Text="{Binding ProductVersionSummary}" TextWrapping="Wrap"/>
-   <WrapPanel IsVisible="{Binding CanEditLaunch}">
+   <TextBlock Text="{Binding CustomerLaunchStatus}" TextWrapping="Wrap" FontWeight="SemiBold"/>
+   <WrapPanel><Button Name="LaunchNowButton" Content="Launch now" Command="{Binding LaunchProductCommand}" Background="{DynamicResource FlowAccent}" Foreground="{DynamicResource FlowOnAccent}" Margin="0,0,8,4"/></WrapPanel>
+   <TextBlock Text="{Binding LaunchNowHelp}" TextWrapping="Wrap" FontSize="12"/>
+
+
+   <TabControl>
+    <TabItem Header="Schedule launch"><StackPanel Spacing="6" Margin="0,8">
+   <WrapPanel IsEnabled="{Binding CanEditLaunch}">
     <ComboBox ItemsSource="{Binding LaunchModes}" SelectedItem="{Binding LaunchModeDraft, Mode=TwoWay}" Width="130" Margin="0,0,6,4" AutomationProperties.Name="Launch strategy"/>
     <TextBlock Text="Interval" VerticalAlignment="Center" Margin="0,0,6,4"/><TextBox Text="{Binding LaunchInterval, Mode=TwoWay}" Width="65" Margin="0,0,6,4" AutomationProperties.Name="Recurring launch interval"/>
     <Button Content="Apply launch strategy" Command="{Binding ConfigureLaunchCommand}" Margin="0,0,8,4"/>
    </WrapPanel>
    <TextBlock Text="Interval uses the unit and sprint length below. Apply schedules from today. Recurring restarts from actual launch day; postponing affects only the current target." TextWrapping="Wrap" FontSize="11"/>
-   <WrapPanel IsVisible="{Binding CanEditLaunch}">
+   <TextBlock Text="Schedule launch" FontWeight="SemiBold"/>
+   <TextBlock Text="{Binding ScheduleLaunchHelp}" TextWrapping="Wrap" FontSize="12"/>
+   <WrapPanel IsEnabled="{Binding CanEditLaunch}">
     <TextBox Text="{Binding VersionNameDraft, Mode=TwoWay}" Watermark="Name active version" Width="180" Margin="0,0,6,4"/><Button Content="Rename" Command="{Binding RenameVersionCommand}" Margin="0,0,12,4"/>
-    <Button Content="Launch Now" Command="{Binding LaunchProductCommand}" Background="{DynamicResource FlowAccent}" Foreground="{DynamicResource FlowOnAccent}" Margin="0,0,8,4"/>
+
     <TextBlock Text="Plan / postpone by" VerticalAlignment="Center" Margin="0,0,6,4"/>
     <TextBox Text="{Binding LaunchDelay, Mode=TwoWay}" Width="65" Margin="0,0,6,4" AutomationProperties.Name="Launch delay"/>
     <ComboBox ItemsSource="{Binding PlanningUnits}" SelectedItem="{Binding PlanningUnit, Mode=TwoWay}" Width="135" Margin="0,0,6,4"/>
     <TextBlock Text="Days / sprint" VerticalAlignment="Center" Margin="0,0,6,4"/><TextBox Text="{Binding PlanningSprintLength, Mode=TwoWay}" Width="65" Margin="0,0,6,4" AutomationProperties.Name="Launch planning sprint length"/>
-    <Button Content="Plan / Postpone Launch" Command="{Binding PlanLaunchCommand}" Margin="0,0,8,4"/>
+    <Button Name="ScheduleLaunchButton" Content="Schedule launch" Command="{Binding PlanLaunchCommand}" Margin="0,0,8,4"/>
    </WrapPanel>
-   <TabControl>
-    <TabItem Header="Customer delivery"><TextBlock Text="{Binding LiveCustomerSummary}" TextWrapping="Wrap" Margin="0,8"/></TabItem>
+    </StackPanel></TabItem>
+    <TabItem Header="Customer delivery"><StackPanel Spacing="6"><TextBlock Text="{Binding ProductVersionSummary}" TextWrapping="Wrap"/><TextBlock Text="{Binding LiveCustomerSummary}" TextWrapping="Wrap" Margin="0,8"/><TextBlock Text="{Binding ProductDecisionText}" TextWrapping="Wrap"/></StackPanel></TabItem>
     <TabItem Header="Launch Economics"><StackPanel Spacing="6" Margin="0,8">
      <TextBlock Text="{Binding LaunchEconomicsSummary}" TextWrapping="Wrap" FontSize="12"/>
      <WrapPanel><TextBlock Text="● WIP   " Foreground="{DynamicResource FlowAccent}"/><TextBlock Text="● Awaiting launch   " Foreground="{DynamicResource FlowWarning}"/><TextBlock Text="● Total unlaunched   " Foreground="{DynamicResource FlowPurple}"/><TextBlock Text="● Customer-launched" Foreground="{DynamicResource FlowSuccess}"/></WrapPanel>
      <controls:LaunchCostChart History="{Binding LaunchCostHistory}" Height="210" AutomationProperties.Name="Launch cost allocation history in SEK"/>
     </StackPanel></TabItem>
-    <TabItem Header="Launch history"><ScrollViewer MaxHeight="220"><TextBlock Text="{Binding LiveCustomerHistory}" TextWrapping="Wrap" Margin="0,8"/></ScrollViewer></TabItem>
+    <TabItem Header="Launch history"><TextBlock Text="{Binding LiveCustomerHistory}" TextWrapping="Wrap" Margin="0,8"/></TabItem>
    </TabControl>
   </StackPanel>
  </Expander>
+ <TextBlock IsVisible="{Binding IsRunning}" Text="Pause the simulation to enable customer launch." FontSize="12" TextWrapping="Wrap" Margin="4,2"/>
  <views:CustomerLaunchNotice DataContext="{Binding LaunchNotices}"/>
  </StackPanel>
  </ThemeVariantScope>

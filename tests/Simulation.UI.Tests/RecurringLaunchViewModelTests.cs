@@ -14,7 +14,8 @@ public class RecurringLaunchViewModelTests
             Assert.Contains("Recurring: every 6 sprints",vm.ProductCompactSummary);
             Assert.False(vm.ResumeCommand.CanExecute(null));Assert.False(vm.StepCommand.CanExecute(null));
             vm.LaunchProductCommand.Execute(null);Assert.Equal(day,vm.LaunchNotices.Current!.Day);
-            Assert.Contains($"{day/60} launches",vm.ProductCompactSummary);
+            Assert.Equal(day/60,vm.Live!.Session.ProductDelivery.CustomerLaunches.Count);
+            Assert.Contains($"actual Day {day}",vm.LiveCustomerHistory);
             vm.LaunchNotices.DismissCommand.Execute(null);Assert.False(vm.LaunchNotices.HasNotification);
         }
         await vm.RunToDayAsync();Assert.Equal(200,vm.Day);Assert.Contains("Day 240",vm.ProductCompactSummary);
@@ -34,7 +35,7 @@ public class RecurringLaunchViewModelTests
         vm.TargetDay="200";await vm.RunToDayAsync();Assert.Equal(60,vm.Day);
         vm.LaunchDelay="2";vm.PlanLaunchCommand.Execute(null);await vm.RunToDayAsync();Assert.Equal(80,vm.Day);
         vm.LaunchProductCommand.Execute(null);Assert.Equal(140,vm.Live!.Session.ProductDelivery.Versions[^1].PlannedDay);
-        vm.LaunchModeDraft="Manual";vm.ConfigureLaunchCommand.Execute(null);Assert.Contains("Launch not scheduled",vm.ProductCompactSummary);
+        vm.LaunchModeDraft="Manual";vm.ConfigureLaunchCommand.Execute(null);Assert.Contains("Not scheduled",vm.ProductCompactSummary);
         Assert.Null(vm.Live.Session.ProductDelivery.Versions[^1].PlannedDay);
     }
 }

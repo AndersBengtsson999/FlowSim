@@ -278,6 +278,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         var setup = Setup.CaptureSetup();
         setup = setup with { Quality = ReadQuality(Setup) };
         Live = LiveSimulation.Start(setup, SupplyMode(ArrivalMode), Rate(ArrivalRate));
+        ProductDetailsExpanded = false;
         ReadLaunchStrategy();
         Live.Dashboard = KpiSettings;
         Live.SafetyLimit = limit; Live.RollingWindow = RollingWindow; setupExpanded = false;
@@ -382,7 +383,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         editing = false; status = Live.Session.Changes.Count == previousChanges ? "No parameters changed. Resume when ready." : $"Changes recorded at Day {Day}; effective Day {Day + 1}. Resume when ready."; Refresh();
     }
     public void Load(LiveSimulation live)
-    { InvalidateGuided("A LIVE session was loaded. Start a new comparison."); Pause(); LaunchNotices.Reset(); LaunchNotices.Observe(live.Session.ProductDelivery, historical: true); Live = live; ReadLaunchStrategy(); LoadKpis(); setupExpanded = false; stopped = false; editing = false; rollingWindow = live.RollingWindow; SafetyLimit = live.SafetyLimit.ToString(); SelectedCheckpoint = null; selectedFlow = null; Details = ""; RebuildHistory(); Refresh(); status = "Live simulation opened. Resume when ready."; Notify(); }
+    { InvalidateGuided("A LIVE session was loaded. Start a new comparison."); Pause(); ProductDetailsExpanded = false; LaunchNotices.Reset(); LaunchNotices.Observe(live.Session.ProductDelivery, historical: true); Live = live; ReadLaunchStrategy(); LoadKpis(); setupExpanded = false; stopped = false; editing = false; rollingWindow = live.RollingWindow; SafetyLimit = live.SafetyLimit.ToString(); SelectedCheckpoint = null; selectedFlow = null; Details = ""; RebuildHistory(); Refresh(); status = "Live simulation opened. Resume when ready."; Notify(); }
     public void NotifyStatus(string message) { status = message; Notify(); }
     private void RebuildHistory() { queueHistory.Clear(); if (Live is not null) foreach (var d in Live.Session.Days) queueHistory.Add(Point(d)); }
     private static LiveQueuePoint Point(DailySnapshot d) => new(d.Day + 1, d.WaitingForCodeReviewCount, d.WaitingForTestingCount, d.WaitingForReworkCount);
