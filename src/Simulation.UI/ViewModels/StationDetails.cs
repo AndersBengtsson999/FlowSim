@@ -95,7 +95,7 @@ public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> R
             ConditionColor = pressure.Kind == QueuePressureKind.Normal ? Simulation.UI.Theming.FlowPalette.Secondary : pressure.Color,
             Condition = pressureId.Length == 0 ? "Shared capacity activity" : $"Queue trend: {trend.Label} · Pressure: {PressureLabel(pressure)}",
             EvidencePeriod = pressureId.Length == 0 ? $"Current Day {s.Day}" : trend.Period+" · "+pressure.Period,
-            Observation = pressureId.Length == 0 ? "No waiting-queue pressure classification for this activity." : pressure.Evidence,
+            Observation = pressureId.Length == 0 ? "No waiting-queue pressure classification for this activity." : trend.Evidence+"\nPressure evidence: "+pressure.Evidence,
             Items = items.ToArray(),
             ItemSummary = station == "Technical Debt" ? "Aggregate maintenance effort; no individual debt work items." : $"{items.Length} items · Expand an item to inspect. Active WIP means admitted work, not proof of processing today. Queue waiting excludes backlog and active-state time."
         };

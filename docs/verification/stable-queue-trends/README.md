@@ -1,5 +1,7 @@
 # Stable queue trends
 
+Update: the original two-high-window confirmation described below was corrected after a gradual-growth reproduction. See `../queue-trend-diagnosis/README.md` for the current high-entry/lower-confirmation rule, unchanged numeric thresholds and diagnostics. This document preserves the original investigation and baseline.
+
 ## Existing behavior (inspection before implementation)
 
 QueuePressure.Classify computes Growing/Shrinking/Unchanged from the last two queue counts. QueuePressure.From supplies at most four snapshots after the most recent configuration change. A separate Constrained classification requires four nondecreasing counts, net growth and exhausted observed capacity on the last three days. Zero capacity, dependencies and scheduled release accumulation have special classifications. SimulationInsights consumes these classifications for relevance, material state and pressure evidence.

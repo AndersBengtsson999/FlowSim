@@ -25,11 +25,10 @@ public sealed class InsightsWindow : Window
     private bool metricsExpanded;
     private bool evidenceExpanded;
     private bool measurementsExpanded;
-    private readonly HashSet<string> groupStarts=[];
-    private string[] listLabels=[];
+    private readonly InsightViewingSession viewing=new();
     private string? selectedChartTitle;
     public PreparedInsightWindow? PreparedWindow { get; private set; }
-    public string? SelectedInsightId { get; private set; }
+    public string? SelectedInsightId => viewing.SelectedId;
     public InsightsWindow(LiveViewModel model,Action<string> station,Action<TeamKpi> kpi)
     {
         this.model=model;this.station=station;this.kpi=kpi;
@@ -42,16 +41,21 @@ public sealed class InsightsWindow : Window
         header.Children.Add(summary);root.Children.Add(header);
         reader=new ScrollViewer{Content=details,HorizontalScrollBarVisibility=Avalonia.Controls.Primitives.ScrollBarVisibility.Disabled};
         body.Children.Add(list);body.Children.Add(reader);Grid.SetColumn(reader,1);Grid.SetRow(body,1);root.Children.Add(body);Content=root;
-        list.ItemTemplate=new Avalonia.Controls.Templates.FuncDataTemplate<TrackedInsight>((item,_)=>
+        list.ItemTemplate=new Avalonia.Controls.Templates.FuncDataTemplate<InsightDisplayEntry>((entry,_)=>
         {
+            var item=entry?.Item;
             var row=new StackPanel{Spacing=4,Margin=new Thickness(6)};
-            if(item is not null && groupStarts.Contains(item.Insight.Id))
-                row.Children.Add(new TextBlock{Text=InsightPresentation.GroupTitle(item),FontSize=12,Margin=new Thickness(0,10,0,4),Foreground=Brush.Parse(FlowPalette.Secondary),TextWrapping=TextWrapping.Wrap});
-            row.Children.Add(new TextBlock{Text=item is null?"":InsightPresentation.Title(item),FontWeight=FontWeight.SemiBold,TextWrapping=TextWrapping.Wrap});
-            row.Children.Add(new TextBlock{Text=item?.Secondary,FontSize=12,Foreground=Brush.Parse(FlowPalette.Secondary),TextTrimming=TextTrimming.CharacterEllipsis});
-            ToolTip.SetTip(row,item?.Label);return row;
+            if(entry?.Heading is { } heading)
+                row.Children.Add(new TextBlock{Text=heading,FontSize=12,Margin=new Thickness(0,10,0,4),Foreground=Brush.Parse(FlowPalette.Secondary),TextWrapping=TextWrapping.Wrap});
+            var title=new TextBlock{FontWeight=FontWeight.SemiBold,TextWrapping=TextWrapping.Wrap};
+            title.Bind(TextBlock.TextProperty,new Avalonia.Data.Binding(nameof(InsightDisplayEntry.Title)){Source=entry});
+            var status=new TextBlock{FontSize=12,Foreground=Brush.Parse(FlowPalette.Secondary),TextTrimming=TextTrimming.CharacterEllipsis};
+            status.Bind(TextBlock.TextProperty,new Avalonia.Data.Binding(nameof(InsightDisplayEntry.Status)){Source=entry});
+            row.Children.Add(title);row.Children.Add(status);
+            row.Bind(ToolTip.TipProperty,new Avalonia.Data.Binding(nameof(InsightDisplayEntry.Label)){Source=entry});return row;
         });
-        list.SelectionChanged+=(_,_)=>{if(!refreshing && list.SelectedItem is TrackedInsight item)Select(item.Insight.Id);};
+        list.ItemsSource=viewing.Entries;
+        list.SelectionChanged+=(_,_)=>{if(!refreshing && list.SelectedItem is InsightDisplayEntry entry)Select(entry.Id);};
         SizeChanged+=(_,_)=>{
             var narrow=ClientSize.Width<850;
             body.ColumnDefinitions=new(narrow?"*":"320,*");body.RowDefinitions=new(narrow?"170,*":"*");
@@ -67,26 +71,27 @@ public sealed class InsightsWindow : Window
     private void Refresh()
     {
         var report=model.InsightsReport;
-        summary.Text=report is null?"Start a LIVE session to observe evidence.":$"Day {report.Day} · {InsightPresentation.Overview(model.Insights.Items)}";
+        summary.Text=report is null?"Start a LIVE session to observe evidence.":$"Day {report.Day} · {InsightPresentation.Overview(model.Insights.Items)}\nOrder and groups stay fixed while this window is open; statuses below are current.";
         refreshing=true;
-        var items=InsightPresentation.Ordered(model.Insights.Items);
-        SelectedInsightId = InsightPresentation.Selection(items,SelectedInsightId);
-        var labels=items.Select(i=>i.Label+i.Secondary+InsightPresentation.Group(i)).ToArray();
-        if(!labels.SequenceEqual(listLabels)) {
-            groupStarts.Clear();foreach(var group in items.GroupBy(InsightPresentation.Group))groupStarts.Add(group.First().Insight.Id);
-            list.ItemsSource=items;listLabels=labels;
-        }
-        list.SelectedItem=((IEnumerable<TrackedInsight>?)list.ItemsSource)?.FirstOrDefault(i=>i.Insight.Id==SelectedInsightId);
+        viewing.Update(model.Insights.Items);
+        var items=viewing.Entries;
+        var selectedEntry=items.FirstOrDefault(i=>i.Id==SelectedInsightId);
+        if(!ReferenceEquals(list.SelectedItem,selectedEntry))list.SelectedItem=selectedEntry;
         refreshing=false;
-        if(items.FirstOrDefault(i=>i.Insight.Id==SelectedInsightId) is { } selected)Show(selected);
-        else {SelectedInsightId=null;details.Children.Clear();Text("Select an insight","Select a row to review its observation, evidence and optional experiment. Nothing is applied automatically.");}
+        if(items.FirstOrDefault(i=>i.Id==SelectedInsightId) is { } selected) {
+            if(selected.Available)Show(selected.Item);
+            else {details.Children.Clear();Text("Observation unavailable","This observation is no longer available in the current LIVE session. Your selection is retained. Select another observation or reopen Insights to rebuild the list.");}
+        }
+        else {details.Children.Clear();Text("Select an insight","Select a row to review its observation, evidence and optional experiment. Nothing is applied automatically.");}
     }
     public void Select(string id)
     {
-        var item=model.Insights.Items.FirstOrDefault(i=>i.Insight.Id==id);if(item is null)return;
-        SelectedInsightId=id;model.ReviewInsight(id);Refresh();reader.Offset=default;
+        if(!viewing.Select(id))return;
+        if(model.Insights.Items.Any(i=>i.Insight.Id==id))model.ReviewInsight(id);
+        Refresh();reader.Offset=default;
         if(list.SelectedItem is not null)list.ScrollIntoView(list.SelectedItem);
     }
+
     private void Show(TrackedInsight tracked)
     {
         var i=tracked.Insight;details.Children.Clear();
@@ -110,7 +115,7 @@ public sealed class InsightsWindow : Window
         Button(links,"Help · Simulation Insights",()=>GuideService.Open(this,i.Topic));details.Children.Add(links);
         var evidence=new StackPanel{Spacing=12,Margin=new Thickness(8)};
         evidence.Children.Add(new TextBlock{Text="Observation window: "+i.Period+"\n"+i.Evidence+"\n"+Strength(i.Strength),TextWrapping=TextWrapping.Wrap});
-        if(i.QueueDirection is { } trend)evidence.Children.Add(new TextBlock{Text=$"Queue trend: {trend.Label}. {trend.Evidence}\nOriginal pressure observation: {i.Observation}",TextWrapping=TextWrapping.Wrap});
+        if(i.QueueDirection is { } trend)evidence.Children.Add(new TextBlock{Text=$"{trend.Evidence}\nOriginal pressure observation: {i.Observation}",TextWrapping=TextWrapping.Wrap});
         AddEvidenceCharts(i,evidence);
         var metricPanel=new StackPanel{Spacing=8,Margin=new Thickness(8)};
         foreach(var metric in i.Metrics)metricPanel.Children.Add(new TextBlock{Text=metric.ToString(),TextWrapping=TextWrapping.Wrap});
