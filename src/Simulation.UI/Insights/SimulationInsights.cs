@@ -20,6 +20,7 @@ public sealed record SimulationInsight(string Id, InsightCategory Category, stri
     string[] Stations, TeamKpi[] Kpis, string Topic, bool Relevant, string MaterialState,
     IReadOnlyList<InsightMetric> Metrics)
 {
+    public QueueTrend? QueueDirection { get; init; }
     public IReadOnlyList<InsightChart> Charts { get; init; } = [];
 }
 public sealed record InsightReport(int Day, InsightPeriod CapacityPeriod, IReadOnlyList<SimulationInsight> Insights);
@@ -116,7 +117,9 @@ public static class SimulationInsights
                     Topic,true,p.Kind.ToString(),metrics.Concat(new[]{new InsightMetric("Queue change (last minus first)",delta,"items")}).ToArray()));
             }
         }
-        return new(session.CurrentDay,period,results.Select(i=>i with { Charts=InsightEvidence.Build(i,session.Days) }).ToArray());
+        var trends=QueueTrend.From(live);
+        return new(session.CurrentDay,period,results.Select(i=>i with { Charts=InsightEvidence.Build(i,session.Days),
+            QueueDirection=trends.GetValueOrDefault(i.Id[(i.Id.IndexOf('.')+1)..]) }).ToArray());
     }
     private static int Queue(DailySnapshot d,string key)=>key switch { "backlog"=>Math.Max(0,d.BacklogCount-d.WaitingForDependencyCount),"review-wait"=>d.WaitingForCodeReviewCount,_=>d.WaitingForTestingCount };
     private static InsightPeriod Period(DailySnapshot[] days,int requested)=>new(days.Length==0?null:days[0].Day+1,days.Length==0?null:days[^1].Day+1,days.Length,requested);

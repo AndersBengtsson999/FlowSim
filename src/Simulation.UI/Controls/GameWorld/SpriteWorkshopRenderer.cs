@@ -43,7 +43,7 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         foreach (var queue in workshop!.Queues)
         {
             var p = queue.Position;
-            var pressure = state.QueuePressures.GetValueOrDefault(queue.Id, QueuePressure.Normal);
+            var pressure = VisualPressure(state,queue.Id);
             if (pressure.Kind != QueuePressureKind.Normal)
             {
                 if (pressure.Kind is QueuePressureKind.Growing or QueuePressureKind.Constrained or QueuePressureKind.Blocked)
@@ -81,7 +81,7 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         batch!.Draw(dc, seconds, animateFrames, effects, dynamicSprites, hidden);
         foreach (var queue in workshop.Queues.Where(q => !q.Active))
         {
-            var pressure = state.QueuePressures.GetValueOrDefault(queue.Id, QueuePressure.Normal);
+            var pressure = VisualPressure(state,queue.Id);
             if (pressure.Marker.Length > 0)
             {
                 var p = new Point(queue.Position.X - 34, queue.Position.Y + 12);
@@ -123,10 +123,19 @@ internal sealed class SpriteWorkshopRenderer : IDisposable
         Count(dc, $"{state.AwaitingCustomerLaunch:N0} awaiting launch", 214, 415, true);
         if (release is not null) Count(dc, release.Caption, 170, 470, true);
     }
+    private static QueuePressure VisualPressure(GameSceneState state,string id)
+    {
+        var p=state.QueuePressures.GetValueOrDefault(id,QueuePressure.Normal);
+        var trend=state.QueueTrends.GetValueOrDefault(id,QueueTrend.Empty);
+        // Presentation copy only; authoritative pressure classification is retained in the scene and Insights.
+        if(p.Kind is QueuePressureKind.Constrained or QueuePressureKind.Blocked or QueuePressureKind.Batching or QueuePressureKind.Dependency)return p;
+        var kind=trend.Kind switch { QueueTrendKind.Growing=>QueuePressureKind.Growing,QueueTrendKind.Shrinking=>QueuePressureKind.Shrinking,_=>QueuePressureKind.Normal };
+        return new(kind,trend.Label);
+    }
     private static string Grouped(int count) => count > WorkshopQueue.StackCount(count) ? " · grouped" : "";
     private void Status(DrawingContext dc, GameSceneState state, string id, double x, double y)
     {
-        var pressure = state.QueuePressures.GetValueOrDefault(id, QueuePressure.Normal);
+        var pressure = VisualPressure(state,id);
         if (pressure.Label.Length == 0) return;
         var caption = pressure.Kind == QueuePressureKind.Blocked ? "Blocked · " + pressure.Label : pressure.Label;
         var size = Math.Max(14, labelSize - 2);

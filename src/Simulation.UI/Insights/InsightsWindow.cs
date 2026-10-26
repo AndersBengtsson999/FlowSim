@@ -94,7 +94,9 @@ public sealed class InsightsWindow : Window
         if(!i.Relevant)Text("Current relevance", tracked.Status==InsightStatus.NoLongerRelevant
             ? "This finding is no longer active. Its evidence may describe an earlier period; check the dates before acting."
             : "This is a current observation, not an active alert.");
-        Text("What FLOW observed",InsightPresentation.Plain(i.Observation));
+        Text("What FLOW observed",i.Category==InsightCategory.QueuePressure && i.QueueDirection is { } direction
+            ? $"Queue trend: {direction.Label}. Capacity pressure is assessed separately; see supporting evidence."
+            : (i.QueueDirection is { } t?$"Queue trend: {t.Label}.\n":"")+InsightPresentation.Plain(i.Observation));
         Text("What it might mean",i.Explanation);
         Text("What to explore next",i.Experiment);
         if(InsightExperimentProposal.Supports(i,model.Live))
@@ -108,6 +110,7 @@ public sealed class InsightsWindow : Window
         Button(links,"Help · Simulation Insights",()=>GuideService.Open(this,i.Topic));details.Children.Add(links);
         var evidence=new StackPanel{Spacing=12,Margin=new Thickness(8)};
         evidence.Children.Add(new TextBlock{Text="Observation window: "+i.Period+"\n"+i.Evidence+"\n"+Strength(i.Strength),TextWrapping=TextWrapping.Wrap});
+        if(i.QueueDirection is { } trend)evidence.Children.Add(new TextBlock{Text=$"Queue trend: {trend.Label}. {trend.Evidence}\nOriginal pressure observation: {i.Observation}",TextWrapping=TextWrapping.Wrap});
         AddEvidenceCharts(i,evidence);
         var metricPanel=new StackPanel{Spacing=8,Margin=new Thickness(8)};
         foreach(var metric in i.Metrics)metricPanel.Children.Add(new TextBlock{Text=metric.ToString(),TextWrapping=TextWrapping.Wrap});

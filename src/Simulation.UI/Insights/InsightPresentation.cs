@@ -15,7 +15,7 @@ public static class InsightPresentation
             ?? items.OrderByDescending(i=>i.Insight.Period.LastDay).FirstOrDefault()?.Insight.Id;
     }
     public static string Plain(string text) => text.Replace("No sustained pressure established", "No consistent queue pressure detected",StringComparison.Ordinal);
-    public static string Title(TrackedInsight item) => item.Insight.Id switch {
+    public static string Title(TrackedInsight item) => item.Insight.Category==InsightCategory.QueuePressure && item.Insight.QueueDirection is { } trend ? $"{item.ShortTitle} · {trend.Label}" : item.Insight.Id switch {
         "imbalance.testing-wait" => "Testing queue grew during Review output",
         "imbalance.review-wait" => "Review queue grew during Development output",
         "imbalance.testing-supply" => "Unused Testing capacity",

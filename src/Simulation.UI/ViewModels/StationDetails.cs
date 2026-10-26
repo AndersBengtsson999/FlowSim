@@ -36,6 +36,7 @@ public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> R
         {
             var p = s.QueuePressures.GetValueOrDefault(id, QueuePressure.Normal);
             Add("Queue change · last day", p.Trend);
+            Add("Queue trend",s.QueueTrends.GetValueOrDefault(id,QueueTrend.Empty).Label);
             if (p.Label.Length > 0) Add("Observed condition", p.Label);
         }
         void SharedDevelopers()
@@ -85,26 +86,29 @@ public sealed record StationDetails(string Title, IReadOnlyList<StationMetric> R
         if (selection == "Dependency queue") Add("Queue scope", "Unresolved residual dependencies (Backlog subset)");
         var pressureId = selection == "Dependency queue" ? "dependency" : station switch { "Backlog" => "backlog", "Development" => "rework-wait", "Code Review" => "review-wait", "Testing" => "testing-wait", "Ready for Release" or "Release" => "ready", _ => "" };
         var pressure = s.QueuePressures.GetValueOrDefault(pressureId, QueuePressure.Normal);
-        explanation = $"Observed queue: {pressure.Trend}. " + (pressure.Label.Length > 0 ? pressure.Label + ". " : "") + explanation;
+        var trend=s.QueueTrends.GetValueOrDefault(pressureId,QueueTrend.Empty);
+        explanation = trend.Evidence+"\n"+$"Observed daily queue: {pressure.Trend}. " + (pressure.Label.Length > 0 ? pressure.Label + ". " : "") + explanation;
         return new(selection, rows, explanation)
         {
-            CompactSummary = $"Total items: {items.Length} · " + string.Join(" · ", items.GroupBy(i => i.Group).OrderBy(g => g.First().GroupOrder).Select(g => $"{g.Key}: {g.Count()}")) + $"\nQueue trend: {pressure.Trend}",
+            CompactSummary = $"Total items: {items.Length} · " + string.Join(" · ", items.GroupBy(i => i.Group).OrderBy(g => g.First().GroupOrder).Select(g => $"{g.Key}: {g.Count()}")) + $"\nQueue trend: {trend.Label}",
             SnapshotSummary = string.Join(" · ", rows.Where(r => r.Label.StartsWith("Active") || r.Label.Contains("utilization · last day")).Select(r => $"{r.Label}: {r.Value}")),
             ConditionColor = pressure.Kind == QueuePressureKind.Normal ? Simulation.UI.Theming.FlowPalette.Secondary : pressure.Color,
-            Condition = pressureId.Length == 0 ? "Shared capacity activity" : pressure.Condition,
-            EvidencePeriod = pressureId.Length == 0 ? $"Current Day {s.Day}" : pressure.Period,
+            Condition = pressureId.Length == 0 ? "Shared capacity activity" : $"Queue trend: {trend.Label} · Pressure: {PressureLabel(pressure)}",
+            EvidencePeriod = pressureId.Length == 0 ? $"Current Day {s.Day}" : trend.Period+" · "+pressure.Period,
             Observation = pressureId.Length == 0 ? "No waiting-queue pressure classification for this activity." : pressure.Evidence,
             Items = items.ToArray(),
             ItemSummary = station == "Technical Debt" ? "Aggregate maintenance effort; no individual debt work items." : $"{items.Length} items · Expand an item to inspect. Active WIP means admitted work, not proof of processing today. Queue waiting excludes backlog and active-state time."
         };
     }
+    public static string PressureLabel(QueuePressure pressure)=>pressure.Kind is QueuePressureKind.Normal or QueuePressureKind.Growing or QueuePressureKind.Shrinking ? "No sustained pressure established" : pressure.Condition;
     public static string Summary(GameSceneState? s)
     {
         if (s is not { HasSession: true }) return "Start LIVE to inspect the workshop.";
         (string Id, string Name)[] order = [("backlog", "Backlog"), ("review-wait", "Review"), ("testing-wait", "Testing"), ("ready", "Release"), ("rework-wait", "Rework"), ("dependency", "Dependencies")];
-        var conditions = order.Where(x => s.QueuePressures.TryGetValue(x.Id, out var p) && p.Kind != QueuePressureKind.Normal)
-            .Select(x => x.Name + ": " + s.QueuePressures[x.Id].Label).ToArray();
-        return conditions.Length == 0 ? "No capacity warning observed · select a station for details" :
-            string.Join("  ·  ", conditions.Take(3)) + (conditions.Length > 3 ? $"  ·  +{conditions.Length - 3} more in station details" : "");
+        bool Warning(string id)=>s.QueuePressures.TryGetValue(id,out var p) && p.Kind is QueuePressureKind.Constrained or QueuePressureKind.Blocked or QueuePressureKind.Batching or QueuePressureKind.Dependency;
+        var conditions=order.Where(x=>s.QueueTrends.ContainsKey(x.Id) || Warning(x.Id)).OrderByDescending(x=>Warning(x.Id))
+            .Select(x=>$"{x.Name}: {s.QueueTrends.GetValueOrDefault(x.Id,QueueTrend.Empty).Label}"+(Warning(x.Id)?$" · {s.QueuePressures[x.Id].Label}":"")).ToArray();
+        return string.Join("  ·  ",conditions.Take(3))+(conditions.Length>3?" · more in station details":"");
+
     }
 }

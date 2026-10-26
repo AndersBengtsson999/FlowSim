@@ -33,7 +33,7 @@
     </Expander>
     <views:ProductLaunchView IsVisible="{Binding HasSession}"/>
     <WrapPanel><TextBlock Margin="0,0,14,0" Text="{Binding WorkshopFeedback}" Foreground="{DynamicResource FlowText}" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Latest simulated day feedback"/>
-    <TextBlock ToolTip.Tip="{x:Static vm:QueuePressure.Thresholds}" Name="WorkflowSummary" Text="{Binding #GameWorld.WorkflowSummary}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Current workflow observations"/></WrapPanel>
+    <TextBlock ToolTip.Tip="{x:Static vm:QueueTrend.Method}" Name="WorkflowSummary" Text="{Binding #GameWorld.WorkflowSummary}" Foreground="{DynamicResource FlowSecondary}" FontSize="12" TextWrapping="Wrap" AutomationProperties.Name="Current workflow observations"/></WrapPanel>
    </StackPanel>
    <Grid Name="DashboardLayout" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
    <Grid Name="WorkshopContent" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
