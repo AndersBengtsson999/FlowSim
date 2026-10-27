@@ -28,6 +28,45 @@ public sealed record KpiCard(TeamKpiObservation Observation)
     public string Components => BalanceHistory is { } h ? $"WIP: {h.Current.WorkInProgress:N0} SEK\nAwaiting customer launch: {h.Current.AwaitingLaunch:N0} SEK" : "";
     public string AllocationNote => BalanceHistory is { } h ? $"Estimated allocation · excludes overhead. Missing cost/capacity days: {h.MissingCostDays}/{h.MissingCapacityDays}." : "";
     public string Kind => Observation.Definition.Id == TeamKpi.WorkVolumePerSek ? "Internal release · period ratio" : Observation.Definition.Kind;
+    public bool IsSnapshot => Observation.Definition.Id is TeamKpi.TotalWip or TeamKpi.DevelopmentQueue or TeamKpi.ReviewQueue or TeamKpi.TestingQueue or TeamKpi.TechnicalDebt or TeamKpi.WipAge;
+    public string ValuePeriod => IsBalance ? Period : IsSnapshot ? $"Snapshot at Day {Observation.LastDay}" : $"Rolling evaluation · {Period}";
+    public string WindowExplanation => IsBalance || IsSnapshot
+        ? "This is a day-end value. The rolling window does not change this value or its displayed history."
+        : $"This value uses the selected {Observation.Window}-day evaluation window; each historical point ends on its labelled day.";
+    public string ShortDefinition => Observation.Definition.Id switch {
+        TeamKpi.UnlaunchedDevelopmentCost => "Estimated development cost tied to work that has not yet reached the customer.",
+        TeamKpi.ReleasedThroughput => "How many items the team releases internally per five simulation days.",
+        TeamKpi.CycleTime => "Average time from starting Development to internal release.",
+        TeamKpi.CycleTimeP85 => "The duration within which 85% of the observed releases finished.",
+        TeamKpi.CostPerDelivery => "Recorded staffing cost for each internally released item.",
+        TeamKpi.TotalTeamCost => "Recorded staffing cost over the evaluation period.",
+        TeamKpi.DeveloperUtilization => "Share of available developer capacity used.",
+        TeamKpi.TesterUtilization => "Share of available tester capacity used.",
+        TeamKpi.TotalWip => "Started work that has not yet been internally released.",
+        TeamKpi.DevelopmentQueue => "Items in the Backlog, including those waiting for dependencies.",
+        TeamKpi.ReviewQueue => "Items waiting for Code Review.",
+        TeamKpi.TestingQueue => "Items waiting for Testing.",
+        TeamKpi.TechnicalDebt => "Outstanding technical debt measured as modelled effort.",
+        TeamKpi.WipAge => "Average age of started, unreleased work.",
+        TeamKpi.ReworkEffort => "Developer capacity spent on rework during the period.",
+        TeamKpi.ReworkCost => "Recorded staffing cost allocated to rework.",
+        TeamKpi.ReworkProportion => "Share of consumed developer capacity spent on rework.",
+        TeamKpi.DeliveryFrequency => "Share of observed days with an internal release.",
+        TeamKpi.DeliveryVariability => "How much daily internal release counts vary.",
+        TeamKpi.ReviewQueueGrowth => "Overall change in the Code Review queue per day in the period.",
+        TeamKpi.DebtGrowth => "Technical debt created minus debt repaid during the period.",
+        TeamKpi.DebtRepayment => "Developer capacity spent repaying technical debt.",
+        TeamKpi.CostPerWorkSize => "Staffing cost per unit of original Development effort released.",
+        TeamKpi.WorkVolumePerSek => "Original Development effort internally released per 1,000 SEK of staffing cost.",
+        _ => Observation.Definition.Description
+    };
+    public string FinancialQualification => IsBalance ? "Includes WIP and released work awaiting customer launch. Estimated allocation, not lost revenue or cash expenditure; excludes overhead." : "";
+    public string WipBalance => BalanceHistory is { } h ? $"{h.Current.WorkInProgress:N0} SEK" : "N/A";
+    public string AwaitingBalance => BalanceHistory is { } h ? $"{h.Current.AwaitingLaunch:N0} SEK" : "N/A";
+    public string TotalBalance => BalanceHistory is { } h ? $"{h.Current.Unlaunched:N0} SEK" : "N/A";
+    public string HistoryCaption => Trend.Points.Count==0 ? "No recorded history yet" : $"Historical development · Days {Trend.Points[0].Day}–{Trend.Points[^1].Day} · {Unit}";
+    public string Limitations => (IsBalance ? AllocationNote + " Missing allocations are excluded, never invented. Full balance history is available in Launch Economics." : ComparisonHelp + $" Available evaluation days: {Observation.AvailableDays}/{Observation.Window}. Undefined samples remain N/A.")
+        + " History shows up to 120 observed days. " + KpiDashboard.Interpretation(Observation.Definition.Id);
     public string ExplorerDescription => Observation.Definition.Description + " " + KpiDashboard.Interpretation(Observation.Definition.Id);
     public string Help => Observation.Definition.Description + " " + ComparisonHelp + (IsBalance ? " Daily balance, not a rolling ratio." : " Trends show observed samples only; each rolling point ends on its labelled day.");
     private string Format(double? value) => KpiDisplay.Format(Observation.Definition.Id, value);

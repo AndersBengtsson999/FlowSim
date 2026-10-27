@@ -27,49 +27,75 @@
       <StackPanel Spacing="6">
        <Grid ColumnDefinitions="*,Auto"><TextBlock Text="KPI Explorer" FontWeight="Bold"/><Button Name="CloseExplorerButton" Grid.Column="1" Content="Compact view" Click="CloseExplorerClicked"/></Grid>
        <ComboBox Name="ExplorerModePicker" ItemsSource="{Binding ExplorerModes}" SelectedItem="{Binding ExplorerMode}" HorizontalAlignment="Stretch" AutomationProperties.Name="Explorer comparison mode"/>
+       <StackPanel IsVisible="{Binding ExploreMetrics}" Spacing="10">
+       <Grid Name="MetricSelectors" ColumnDefinitions="*" RowDefinitions="Auto,Auto">
+        <StackPanel Spacing="4">
+         <TextBlock Text="Primary KPI"/>
+         <ComboBox ItemsSource="{Binding ExplorerOptions}" SelectedItem="{Binding PrimaryKpi}" HorizontalAlignment="Stretch" AutomationProperties.Name="Primary KPI"><ComboBox.ItemTemplate><DataTemplate x:DataType="app:TeamKpiDefinition"><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate></ComboBox>
+        </StackPanel>
+        <StackPanel Name="ComparisonSelector" Grid.Row="1" IsVisible="{Binding CompareKpis}" Spacing="4">
+         <TextBlock Text="Comparison KPI"/>
+         <ComboBox ItemsSource="{Binding ExplorerOptions}" SelectedItem="{Binding ComparisonKpi}" HorizontalAlignment="Stretch" AutomationProperties.Name="Comparison KPI"><ComboBox.ItemTemplate><DataTemplate x:DataType="app:TeamKpiDefinition"><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate></ComboBox>
+        </StackPanel>
+       </Grid>
        <StackPanel IsVisible="{Binding CompareKpis}" Spacing="6">
-       <TextBlock Text="Period metrics: up to 120 observed days, using the evaluation window above. Balance charts: daily recorded allocations in the same historical range, not rolling. Full history is available in Launch Economics. Separate value scales; shared day range. Hover for values. Association does not prove causation." TextWrapping="Wrap" FontSize="12"/>
-
-
-       <TextBlock Text="Primary metric"/>
-       <ComboBox ItemsSource="{Binding ExplorerOptions}" SelectedItem="{Binding PrimaryKpi}" HorizontalAlignment="Stretch" AutomationProperties.Name="Primary KPI"><ComboBox.ItemTemplate><DataTemplate x:DataType="app:TeamKpiDefinition"><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate></ComboBox>
-       <TextBlock Text="Compare with"/>
-       <ComboBox ItemsSource="{Binding ExplorerOptions}" SelectedItem="{Binding ComparisonKpi}" HorizontalAlignment="Stretch" AutomationProperties.Name="Comparison KPI"><ComboBox.ItemTemplate><DataTemplate x:DataType="app:TeamKpiDefinition"><TextBlock Text="{Binding Name}"/></DataTemplate></ComboBox.ItemTemplate></ComboBox>
-       <Button Content="Remove comparison" Click="RemoveComparisonClicked" IsVisible="{Binding HasComparison}"/>
+        <Button Content="Remove comparison" Click="RemoveComparisonClicked" IsVisible="{Binding HasComparison}" HorizontalAlignment="Left"/>
+        <TextBlock Text="Choose a second KPI to compare its development with the primary KPI." IsVisible="{Binding ComparisonEmpty}" TextWrapping="Wrap"/>
+        <TextBlock Text="Separate value scales · units and dates shown on each chart. Association does not establish causation." TextWrapping="Wrap" FontSize="12"/>
+       </StackPanel>
        <Grid Name="MetricGraphs" RowDefinitions="Auto,Auto" ColumnDefinitions="*">
-       <ContentControl Name="PrimaryMetric" Content="{Binding ExplorerPrimary}"><ContentControl.ContentTemplate><DataTemplate x:DataType="vm:KpiCard"><StackPanel Spacing="3">
-        <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="{DynamicResource FlowAccent}"/>
-        <TextBlock Text="{Binding ExplorerDescription}" TextWrapping="Wrap" FontSize="12"/>
-        <Button Content="Learn more" HorizontalAlignment="Left" Click="OpenMetricGuide" AutomationProperties.Name="Open guide for this KPI"/>
-        <TextBlock Text="{Binding Period}" ToolTip.Tip="{Binding Kind}" FontSize="12"/>
-        <TextBlock Text="{Binding Change}" ToolTip.Tip="{Binding ComparisonHelp}" TextWrapping="Wrap" FontSize="12"/>
-        <TextBlock Text="{Binding TrendCaption}" TextWrapping="Wrap" FontSize="12"/>
-        <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="{Binding Value}" FontWeight="Bold"/><TextBlock Text="{Binding Unit}"/></StackPanel>
-        <charts:LivePerformanceTrendChart IsVisible="{Binding IsPeriod}" Series="{Binding Trend}" Unit="{Binding Unit}" NumberFormat="{Binding NumberFormat}" SamplesOnly="True" Height="{Binding #Dashboard.ChartHeight}"/>
+       <ContentControl Name="PrimaryMetric" Content="{Binding ExplorerPrimary}"><ContentControl.ContentTemplate><DataTemplate x:DataType="vm:KpiCard"><StackPanel Spacing="8">
+        <TextBlock Text="{Binding Name}" FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource FlowAccent}"/>
+        <WrapPanel><TextBlock Text="{Binding Value}" FontSize="32" FontWeight="Bold" Margin="0,0,8,0"/><TextBlock Text="{Binding Unit}" VerticalAlignment="Center"/></WrapPanel>
+        <TextBlock Text="{Binding ValuePeriod}" FontSize="12"/>
+        <TextBlock Text="{Binding ShortDefinition}" TextWrapping="Wrap"/>
+        <TextBlock Text="{Binding FinancialQualification}" IsVisible="{Binding IsBalance}" TextWrapping="Wrap" FontSize="12"/>
+        <TextBlock Text="{Binding WindowExplanation}" TextWrapping="Wrap" FontSize="12" Foreground="{DynamicResource FlowSecondary}"/>
+        <UniformGrid Columns="3" IsVisible="{Binding IsBalance}">
+         <StackPanel Margin="0,4,8,4"><TextBlock Text="Work in progress" TextWrapping="Wrap" FontSize="12"/><TextBlock Text="{Binding WipBalance}" FontWeight="SemiBold" TextWrapping="Wrap"/></StackPanel>
+         <StackPanel Margin="0,4,8,4"><TextBlock Text="Awaiting launch" TextWrapping="Wrap" FontSize="12"/><TextBlock Text="{Binding AwaitingBalance}" FontWeight="SemiBold" TextWrapping="Wrap"/></StackPanel>
+         <StackPanel Margin="0,4,0,4"><TextBlock Text="Unlaunched total" TextWrapping="Wrap" FontSize="12"/><TextBlock Text="{Binding TotalBalance}" FontWeight="SemiBold" TextWrapping="Wrap"/></StackPanel>
+        </UniformGrid>
+        <TextBlock Text="{Binding HistoryCaption}" FontWeight="SemiBold" TextWrapping="Wrap"/>
+        <charts:LivePerformanceTrendChart IsVisible="{Binding IsPeriod}" Series="{Binding Trend}" Unit="{Binding Unit}" NumberFormat="{Binding NumberFormat}" SeriesBrush="{DynamicResource FlowAccent}" SamplesOnly="True" Height="{Binding #Dashboard.ChartHeight}"/>
         <StackPanel IsVisible="{Binding IsBalance}" Spacing="3">
-         <TextBlock Text="{Binding Components}" TextWrapping="Wrap"/>
-         <TextBlock Text="{Binding AllocationNote}" FontSize="12" TextWrapping="Wrap"/>
          <WrapPanel><TextBlock Text="● WIP   " Foreground="{DynamicResource FlowAccent}"/><TextBlock Text="● Awaiting launch   " Foreground="{DynamicResource FlowWarning}"/><TextBlock Text="● Unlaunched total" Foreground="{DynamicResource FlowPurple}"/></WrapPanel>
          <charts:LaunchCostChart History="{Binding ExplorerBalanceHistory}" UnlaunchedOnly="True" Height="{Binding #Dashboard.ChartHeight}"/>
         </StackPanel>
+        <Expander Header="How it's calculated" HorizontalAlignment="Stretch"><StackPanel Spacing="6">
+         <TextBlock Text="{Binding ExplorerDescription}" TextWrapping="Wrap"/>
+         <TextBlock Text="{Binding Kind}" TextWrapping="Wrap"/>
+         <TextBlock Text="{Binding Change}" TextWrapping="Wrap"/>
+         <Button Content="Open KPI guide" Click="OpenMetricGuide" HorizontalAlignment="Left"/>
+        </StackPanel></Expander>
+        <Expander Header="Data limitations" HorizontalAlignment="Stretch"><TextBlock Text="{Binding Limitations}" TextWrapping="Wrap"/></Expander>
        </StackPanel></DataTemplate></ContentControl.ContentTemplate></ContentControl>
-       <ContentControl Name="SecondaryMetric" Grid.Row="1" Content="{Binding ExplorerSecondary}" IsVisible="{Binding HasComparison}"><ContentControl.ContentTemplate><DataTemplate x:DataType="vm:KpiCard"><StackPanel Spacing="3">
-        <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="{DynamicResource FlowPurple}"/>
-        <TextBlock Text="{Binding ExplorerDescription}" TextWrapping="Wrap" FontSize="12"/>
-        <Button Content="Learn more" HorizontalAlignment="Left" Click="OpenMetricGuide" AutomationProperties.Name="Open guide for this KPI"/>
-        <TextBlock Text="{Binding Period}" ToolTip.Tip="{Binding Kind}" FontSize="12"/>
-        <TextBlock Text="{Binding Change}" ToolTip.Tip="{Binding ComparisonHelp}" TextWrapping="Wrap" FontSize="12"/>
-        <TextBlock Text="{Binding TrendCaption}" TextWrapping="Wrap" FontSize="12"/>
-        <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="{Binding Value}" FontWeight="Bold"/><TextBlock Text="{Binding Unit}"/></StackPanel>
+       <ContentControl Name="SecondaryMetric" Content="{Binding ExplorerSecondary}" Grid.Row="1" IsVisible="{Binding ShowKpiComparison}"><ContentControl.ContentTemplate><DataTemplate x:DataType="vm:KpiCard"><StackPanel Spacing="8">
+        <TextBlock Text="{Binding Name}" FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="{DynamicResource FlowPurple}"/>
+        <WrapPanel><TextBlock Text="{Binding Value}" FontSize="32" FontWeight="Bold" Margin="0,0,8,0"/><TextBlock Text="{Binding Unit}" VerticalAlignment="Center"/></WrapPanel>
+        <TextBlock Text="{Binding ValuePeriod}" FontSize="12"/>
+        <TextBlock Text="{Binding ShortDefinition}" TextWrapping="Wrap"/>
+        <TextBlock Text="{Binding FinancialQualification}" IsVisible="{Binding IsBalance}" TextWrapping="Wrap" FontSize="12"/>
+        <TextBlock Text="{Binding WindowExplanation}" TextWrapping="Wrap" FontSize="12" Foreground="{DynamicResource FlowSecondary}"/>
+        <UniformGrid Columns="3" IsVisible="{Binding IsBalance}">
+         <StackPanel Margin="0,4,8,4"><TextBlock Text="Work in progress" TextWrapping="Wrap" FontSize="12"/><TextBlock Text="{Binding WipBalance}" FontWeight="SemiBold" TextWrapping="Wrap"/></StackPanel>
+         <StackPanel Margin="0,4,8,4"><TextBlock Text="Awaiting launch" TextWrapping="Wrap" FontSize="12"/><TextBlock Text="{Binding AwaitingBalance}" FontWeight="SemiBold" TextWrapping="Wrap"/></StackPanel>
+         <StackPanel Margin="0,4,0,4"><TextBlock Text="Unlaunched total" TextWrapping="Wrap" FontSize="12"/><TextBlock Text="{Binding TotalBalance}" FontWeight="SemiBold" TextWrapping="Wrap"/></StackPanel>
+        </UniformGrid>
+        <TextBlock Text="{Binding HistoryCaption}" FontWeight="SemiBold" TextWrapping="Wrap"/>
         <charts:LivePerformanceTrendChart IsVisible="{Binding IsPeriod}" Series="{Binding Trend}" Unit="{Binding Unit}" NumberFormat="{Binding NumberFormat}" SeriesBrush="{DynamicResource FlowPurple}" SamplesOnly="True" Height="{Binding #Dashboard.ChartHeight}"/>
         <StackPanel IsVisible="{Binding IsBalance}" Spacing="3">
-         <TextBlock Text="{Binding Components}" TextWrapping="Wrap"/>
-         <TextBlock Text="{Binding AllocationNote}" FontSize="12" TextWrapping="Wrap"/>
          <WrapPanel><TextBlock Text="● WIP   " Foreground="{DynamicResource FlowAccent}"/><TextBlock Text="● Awaiting launch   " Foreground="{DynamicResource FlowWarning}"/><TextBlock Text="● Unlaunched total" Foreground="{DynamicResource FlowPurple}"/></WrapPanel>
          <charts:LaunchCostChart History="{Binding ExplorerBalanceHistory}" UnlaunchedOnly="True" Height="{Binding #Dashboard.ChartHeight}"/>
         </StackPanel>
+        <Expander Header="How it's calculated" HorizontalAlignment="Stretch"><StackPanel Spacing="6">
+         <TextBlock Text="{Binding ExplorerDescription}" TextWrapping="Wrap"/>
+         <TextBlock Text="{Binding Kind}" TextWrapping="Wrap"/>
+         <TextBlock Text="{Binding Change}" TextWrapping="Wrap"/>
+         <Button Content="Open KPI guide" Click="OpenMetricGuide" HorizontalAlignment="Left"/>
+        </StackPanel></Expander>
+        <Expander Header="Data limitations" HorizontalAlignment="Stretch"><TextBlock Text="{Binding Limitations}" TextWrapping="Wrap"/></Expander>
        </StackPanel></DataTemplate></ContentControl.ContentTemplate></ContentControl>
-
        </Grid>
        </StackPanel>
        <StackPanel IsVisible="{Binding CompareScenarios}" Spacing="6">

@@ -24,6 +24,7 @@ public partial class KpiDashboardView : UserControl
     private bool expandedView;
     private bool? pairedCharts;
     private bool? narrowHeading;
+    private bool? pairedSelectors;
     public KpiDashboardView()
     {
         InitializeComponent();SizeChanged+=(_,_)=>RefreshPresentation();DataContextChanged+=(_,_)=>Observe();
@@ -56,7 +57,15 @@ public partial class KpiDashboardView : UserControl
         CardStrip.IsVisible=!expandedView;
         ExpandExplorer.IsVisible=false;
         DetachedNote.IsVisible=false;
-        var pair=expandedView && Bounds.Width>=780 && observed?.HasComparison==true;
+        var selectors=expandedView && Bounds.Width>=780 && observed?.CompareKpis==true;
+        if(pairedSelectors!=selectors) {
+            pairedSelectors=selectors;
+            MetricSelectors.ColumnDefinitions=new(selectors?"*,*":"*");MetricSelectors.RowDefinitions=new(selectors?"Auto":"Auto,Auto");
+            Grid.SetColumn(ComparisonSelector,selectors?1:0);Grid.SetRow(ComparisonSelector,selectors?0:1);
+            ComparisonSelector.Margin=new Thickness(selectors?12:0,selectors?0:6,0,0);
+        }
+        if(expandedView)ChartHeight=selectors?260:300;
+        var pair=expandedView && Bounds.Width>=780 && observed?.ShowKpiComparison==true;
         if(pairedCharts!=pair){pairedCharts=pair;MetricGraphs.ColumnDefinitions=new(pair ? "*,*" : "*");MetricGraphs.RowDefinitions=new(pair ? "Auto" : "Auto,Auto");Grid.SetRow(SecondaryMetric,pair?0:1);Grid.SetColumn(SecondaryMetric,pair?1:0);SecondaryMetric.Margin=new Thickness(pair?12:0,0,0,0);}
 
     }

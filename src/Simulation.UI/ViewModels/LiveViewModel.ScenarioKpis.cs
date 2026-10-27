@@ -11,12 +11,16 @@ public sealed record ScenarioKpiDisplayRow(ScenarioKpiRow Row)
 }
 public sealed partial class LiveViewModel
 {
-    private string explorerMode = "Compare KPIs";
+    private string explorerMode = "Explore one KPI";
     private TeamKpiDefinition scenarioKpi = KpiDashboard.Definitions.Single(d=>d.Id==TeamKpi.ReleasedThroughput);
-    public IReadOnlyList<string> ExplorerModes { get; } = ["Compare KPIs", "Compare Scenarios"];
+    public IReadOnlyList<string> ExplorerModes { get; } = ["Explore one KPI", "Compare KPIs", "Compare Scenarios"];
     public string ExplorerMode { get => explorerMode; set { if(value == explorerMode || !ExplorerModes.Contains(value))return; explorerMode=value; RefreshScenarioKpis(); Notify(); } }
     public bool CompareKpis => ExplorerMode == "Compare KPIs";
-    public bool CompareScenarios => !CompareKpis;
+    public bool CompareScenarios => ExplorerMode == "Compare Scenarios";
+    public bool ExploreKpi => ExplorerMode == "Explore one KPI";
+    public bool ExploreMetrics => !CompareScenarios;
+    public bool ShowKpiComparison => CompareKpis && HasComparison;
+    public bool ComparisonEmpty => CompareKpis && !HasComparison;
     public IReadOnlyList<TeamKpiDefinition> ScenarioOptions { get; } = KpiDashboard.Definitions.Where(d=>GuidedInterventionExperiment.ComparisonMetrics.Contains(d.Id)).ToArray();
     public TeamKpiDefinition ScenarioKpi { get=>scenarioKpi; set { if(value is null || value == scenarioKpi || !GuidedInterventionExperiment.ComparisonMetrics.Contains(value.Id))return; scenarioKpi=value; RefreshScenarioKpis(); Notify(); } }
     public ScenarioKpiComparison? ScenarioComparison { get; private set; }
