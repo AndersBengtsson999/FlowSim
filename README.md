@@ -1,8 +1,10 @@
-# Software Development Simulation
+# FLOW
 
 An Avalonia desktop simulator for exploring software delivery using capacity, independent stage effort, queues, dependencies and WIP. This is a simulation tool, not a project-management application.
 
-The current implementation is **Simulation Model v0.8 — Dependencies v1**, following Step 13 — Live Team Performance, including Simple Mode and Live simulation. It builds on the existing solution and its four-layer architecture. Earlier random batches, sprint/release settings and generic Size-based effort were replaced to match this model.
+The public application version is defined once in `ProductVersion.props`. **Application → About FLOW** shows that version together with the commit and source status embedded at build time. Local modifications are labelled `local changes`; builds without Git provenance explicitly show `unavailable (source archive)` / `unverified`, never an assumed release commit. Git is not needed to run the application.
+
+The public application version is independent of `SimulationModel.Version` and versioned JSON formats. See [the simulation model](docs/SIMULATION_MODEL.md) for model semantics. UI polish does not change these versions or simulation rules. Existing TEST packages remain test artefacts and are not relabelled by this change.
 
 ## Build and run on macOS
 

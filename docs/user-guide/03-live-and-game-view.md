@@ -13,11 +13,17 @@ LIVE is the interactive timeline. Game View and Flow Board present the same sess
 | Checkpoint | Capture a state for later restoration or comparison. |
 | Speed | Change playback speed, not simulation capacity or formulas. |
 | View | Choose Game View or Flow Board for the same session. |
-| Reset | Reset the session; use only when you intend to start over. |
+| Open Live Session… | Open a saved timeline, even before starting a session. Cancel or a load error keeps the current session; file operations pause LIVE. |
+| Save Live Session… | Pause and explicitly save the current timeline and checkpoints. Available after Start. |
+| Reset | Ask before discarding the current timeline and checkpoints. Cancel keeps the session and its playback state unchanged. Saved files are not deleted. |
 
-Checkpoint controls include **Restore**, **Delete**, **Save Live Session** and **Open Live Session**. Restore returns to captured model state; do not confuse it with undoing a visual zoom.
+**Open Live Session…** and **Save Live Session…** are in the LIVE toolbar. They are also available under **Checkpoints and files**, alongside **Restore** and **Delete**. Restore returns to captured model state; do not confuse it with undoing a visual zoom.
 
-Scenarios performs a separate run. Compare and Explore investigate alternatives. Leaving LIVE pauses the session; opening the non-modal user guide does not. Use **Application → Exit Application** to close gracefully (Cmd+Q on macOS; standard Windows exit behavior). There is no automatic simulation save on exit.
+Scenarios performs a separate run. Compare and Explore investigate alternatives. Leaving LIVE pauses the session; opening the non-modal user guide does not. Use **Application → Exit Application** to close gracefully (Cmd+Q on macOS; standard Windows exit behavior). There is no automatic simulation save on exit. **Application → About FLOW** shows the public application version and the commit/source status embedded in this build. These are separate from simulation model and saved-data format versions.
+
+![FLOW LIVE with Open Live Session and Save Live Session visible in the toolbar.](assets/images/live-session-controls.png)
+
+*Current FLOW UI, Day 35 example. Actual Avalonia/Skia control rendering; not a native macOS capture. Open is also available before Start; Save is disabled until a session exists.*
 
 ## Zoom, pan and Fit to View {#live-game-view.camera}
 

@@ -240,7 +240,10 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
     public RelayCommand ResumeCommand { get; }
     public RelayCommand StepCommand { get; }
     public RelayCommand StopCommand { get; }
-    public RelayCommand ResetCommand { get; }
+    public AsyncCommand ResetCommand { get; }
+    public Func<Task<bool>> ConfirmResetAsync { get; set; } = () => Task.FromResult(false);
+    private bool resetConfirmationPending;
+    private bool disposed;
     public RelayCommand ChangeCommand { get; }
     public RelayCommand ApplyCommand { get; }
     public RelayCommand CancelChangeCommand { get; }
@@ -261,7 +264,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         ResumeCommand = new(Resume, () => CanResume);
         StepCommand = new(Step, () => CanResume);
         StopCommand = new(() => { Pause(); stopped = true; status = "Stopped. Save results or Reset to start again."; Notify(); }, () => HasSession && !editing && !stopped);
-        ResetCommand = new(Reset);
+        ResetCommand = new(RequestResetAsync, () => HasSession && !fastAdvancing && !resetConfirmationPending);
         ChangeCommand = new(() => Guard(BeginChange), () => CanChange);
         ApplyCommand = new(() => Guard(ApplyChanges), () => editing);
         CancelChangeCommand = new(() => { CancelGuidedDraft(); editing = false; status = "Changes discarded. Resume when ready."; Notify(); });
@@ -313,7 +316,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         finally { fastAdvancing = false; Refresh(); Notify(); }
     }
     public void Resume() { if (!CanResume) return; running = true; status = "Running"; timer.Start(); Notify(); }
-    public void Tick() { if (running) Advance(); }
+    public void Tick() { if (running && !resetConfirmationPending) Advance(); }
     public void Step() { if (!CanResume) return; Advance(); }
     private void Advance() => Guard(() =>
     {
@@ -322,6 +325,24 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
         if (LaunchDecisionPending) { Pause(); status = $"Customer launch decision required at Day {Day}."; Notify(); }
         if (Live.LimitReached) { Pause(); status = "Live simulation safety limit reached."; Notify(); }
     });
+    public async Task RequestResetAsync()
+    {
+        if (!HasSession || fastAdvancing || resetConfirmationPending) return;
+        var original = Live;
+        // Freeze playback while the modal question is open without changing status or session data.
+        resetConfirmationPending = true;
+        timer.Stop();
+        try
+        {
+            if (await ConfirmResetAsync() && ReferenceEquals(original, Live) && !disposed) Reset();
+        }
+        finally
+        {
+            resetConfirmationPending = false;
+            if (running && !disposed) timer.Start();
+            ResetCommand.Refresh();
+        }
+    }
     public void Reset() { LaunchNotices.Reset(); ProductDetailsExpanded = false; InvalidateGuided("LIVE was reset. Start a new comparison."); Pause(); Live = null; RefreshInsights(); gameScene = null; setupExpanded = true; stopped = false; editing = false; queueHistory.Clear(); Flow = []; Metrics = []; Details = ""; SelectedCheckpoint = null; selectedFlow = null; selectedIntervention = null; RefreshPerformance(); status = "Ready to start."; Notify(); }
     public void BeginChange()
     {
@@ -488,7 +509,7 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
     {
         PropertyChanged?.Invoke(this, new(string.Empty));
         ConfigureLaunchCommand?.Refresh(); LaunchProductCommand?.Refresh(); PlanLaunchCommand?.Refresh(); RenameVersionCommand?.Refresh();
-        BeginGuidedCommand?.Refresh(); RunToDayCommand?.Refresh(); StartCommand?.Refresh(); PauseCommand?.Refresh(); ResumeCommand?.Refresh(); StepCommand?.Refresh(); StopCommand?.Refresh(); ChangeCommand?.Refresh(); ApplyCommand?.Refresh(); CheckpointCommand?.Refresh();
+        ResetCommand?.Refresh(); BeginGuidedCommand?.Refresh(); RunToDayCommand?.Refresh(); StartCommand?.Refresh(); PauseCommand?.Refresh(); ResumeCommand?.Refresh(); StepCommand?.Refresh(); StopCommand?.Refresh(); ChangeCommand?.Refresh(); ApplyCommand?.Refresh(); CheckpointCommand?.Refresh();
     }
-    public void Dispose() { guidedCancellation?.Cancel(); guidedCancellation?.Dispose(); stopFastAdvance = true; timer.Stop(); }
+    public void Dispose() { disposed = true; guidedCancellation?.Cancel(); guidedCancellation?.Dispose(); stopFastAdvance = true; timer.Stop(); }
 }

@@ -1,6 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <Product>FLOW</Product>
+    <Title>FLOW</Title>
+    <Version>$(FlowProductVersion)</Version>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
   <ItemGroup>
@@ -14,4 +17,26 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.22" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.22" />
   </ItemGroup>
+  <Target Name="FlowBuildIdentity" BeforeTargets="GetAssemblyAttributes">
+    <Error Condition="'$(Version)' != '$(FlowProductVersion)'" Text="FLOW version must match ProductVersion.props." />
+    <Exec Command="git rev-parse HEAD" WorkingDirectory="$(MSBuildProjectDirectory)" ConsoleToMSBuild="true" IgnoreExitCode="true" StandardErrorImportance="Low" StandardOutputImportance="Low">
+      <Output TaskParameter="ConsoleOutput" ItemName="FlowCommitOutput" />
+      <Output TaskParameter="ExitCode" PropertyName="FlowGitExitCode" />
+    </Exec>
+    <Exec Condition="'$(FlowGitExitCode)' == '0'" Command="git status --porcelain --untracked-files=normal" WorkingDirectory="$(MSBuildProjectDirectory)" ConsoleToMSBuild="true" IgnoreExitCode="true" StandardOutputImportance="Low">
+      <Output TaskParameter="ConsoleOutput" ItemName="FlowChangesOutput" />
+    </Exec>
+    <PropertyGroup>
+      <FlowCommit Condition="'$(FlowGitExitCode)' == '0'">@(FlowCommitOutput)</FlowCommit>
+      <FlowCommit Condition="'$(FlowGitExitCode)' != '0'">unavailable (source archive)</FlowCommit>
+      <FlowSourceState Condition="'@(FlowChangesOutput)' != ''">local changes</FlowSourceState>
+      <FlowSourceState Condition="'@(FlowChangesOutput)' == '' and '$(FlowGitExitCode)' == '0'">clean</FlowSourceState>
+      <FlowSourceState Condition="'$(FlowGitExitCode)' != '0'">unverified</FlowSourceState>
+    </PropertyGroup>
+    <ItemGroup>
+      <AssemblyMetadata Include="FlowPublicVersion" Value="$(FlowProductVersion)" />
+      <AssemblyMetadata Include="FlowCommit" Value="$(FlowCommit)" />
+      <AssemblyMetadata Include="FlowSourceState" Value="$(FlowSourceState)" />
+    </ItemGroup>
+  </Target>
 </Project>

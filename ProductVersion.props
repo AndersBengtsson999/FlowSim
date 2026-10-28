@@ -1,0 +1,4 @@
+<Project>
+  <!-- Public product version only. Simulation model and save formats are versioned separately. -->
+  <PropertyGroup><FlowProductVersion>1.0.0</FlowProductVersion></PropertyGroup>
+</Project>

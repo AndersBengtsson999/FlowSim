@@ -22,7 +22,7 @@ A simulated day is an abstract working period. Playback speed changes how fast d
 
 ![Verified LIVE Game View with five numbered regions: controls, product status, workshop, testing queue and KPI cards.](assets/images/live-overview.png)
 
-*Verified B6.5.2 application capture, Day 42; values are an example, not defaults. Numbered markers are a separate, scalable overlay.*
+*Historical B6.5.2 layout illustration, Day 42; values are an example, not defaults. Numbered markers are a separate, scalable overlay. For the current Save/Open controls, see [Controls and navigation](#live-game-view.navigation).*
 
 1. **Simulation controls** advance or pause time and expose changes and checkpoints.
 2. **Product version** summarizes the active version, launch strategy and awaiting items.

@@ -46,9 +46,14 @@ public partial class LiveView : UserControl
         DataContextChanged += (_, _) =>
         {
             CurrentInsightsWindow?.Close();
-            if (observed is not null) observed.PropertyChanged -= ModelChanged;
+            if (observed is not null) { observed.PropertyChanged -= ModelChanged; observed.ConfirmResetAsync = () => Task.FromResult(false); }
             observed = DataContext as LiveViewModel;
-            if (observed is not null) observed.PropertyChanged += ModelChanged;
+            if (observed is not null)
+            {
+                observed.PropertyChanged += ModelChanged;
+                observed.ConfirmResetAsync = () => TopLevel.GetTopLevel(this) is Window owner
+                    ? ProductDialogs.ConfirmReset(owner) : Task.FromResult(false);
+            }
         };
     }
     private void ModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -78,14 +83,21 @@ public partial class LiveView : UserControl
         }
         catch (Exception ex) { Model.NotifyStatus(ex.Message); }
     }
-    private async void OpenSession(object? sender, RoutedEventArgs e)
+    public async Task OpenSessionFromPickerAsync(Func<Task<string?>> selectPath)
     {
         Model.Pause();
+        if (await selectPath() is { } path) await LoadFromAsync(path);
+    }
+    private async void OpenSession(object? sender, RoutedEventArgs e)
+    {
         try
         {
-            var files = await TopLevel.GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(new()
-            { Title = "Open Live Session", AllowMultiple = false, FileTypeFilter = [new("Live simulation") { Patterns = ["*.json"] }] });
-            if (files.FirstOrDefault()?.TryGetLocalPath() is { } path) await LoadFromAsync(path);
+            await OpenSessionFromPickerAsync(async () =>
+            {
+                var files = await TopLevel.GetTopLevel(this)!.StorageProvider.OpenFilePickerAsync(new()
+                { Title = "Open Live Session", AllowMultiple = false, FileTypeFilter = [new("Live simulation") { Patterns = ["*.json"] }] });
+                return files.FirstOrDefault()?.TryGetLocalPath();
+            });
         }
         catch (Exception ex) { Model.NotifyStatus(ex.Message); }
     }

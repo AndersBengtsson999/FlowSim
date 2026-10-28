@@ -8,16 +8,19 @@ namespace Simulation.UI.Views;
 public partial class MainWindow : Window
 {
     public RelayCommand ExitCommand { get; }
+    public AsyncCommand AboutCommand { get; }
     public KeyGesture ExitGesture { get; } = OperatingSystem.IsMacOS() ? new(Key.Q, KeyModifiers.Meta) : new(Key.F4, KeyModifiers.Alt);
     public MainWindow()
     {
         ExitCommand = new(RequestExit);
+        AboutCommand = new(() => ProductDialogs.ShowAbout(this), () => true);
         InitializeComponent();
         if (OperatingSystem.IsMacOS())
         {
             KeyBindings.Add(new KeyBinding { Gesture=ExitGesture, Command=ExitCommand });
             var menu = new NativeMenu();
             var appMenu = new NativeMenu();
+            appMenu.Items.Add(new NativeMenuItem("About FLOW") { Command=AboutCommand });
             appMenu.Items.Add(new NativeMenuItem("Exit Application") { Command=ExitCommand, Gesture=ExitGesture });
             menu.Items.Add(new NativeMenuItem("FLOW") { Menu=appMenu });
             NativeMenu.SetMenu(this,menu);

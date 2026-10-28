@@ -87,6 +87,8 @@
    </StackPanel>
   </Border>
   <WrapPanel Name="LiveToolbar">
+   <Button Name="OpenLiveSessionButton" Content="Open Live Session…" Click="OpenSession" AutomationProperties.Name="Open Live Session" ToolTip.Tip="Open a saved LIVE session. The current session is kept if opening fails or is cancelled."/>
+   <Button Name="SaveLiveSessionButton" Content="Save Live Session…" Click="SaveSession" IsEnabled="{Binding HasSession}" AutomationProperties.Name="Save Live Session" ToolTip.Tip="Save this timeline and its checkpoints. Pauses LIVE."/>
    <Button Content="Start" Command="{Binding StartCommand}" IsVisible="{Binding SetupVisible}" Classes="primary"/>
    <Button Content="Pause" Command="{Binding PauseCommand}" IsVisible="{Binding HasSession}"/>
    <Button Content="Resume" Command="{Binding ResumeCommand}" IsVisible="{Binding HasSession}"/>
@@ -101,7 +103,7 @@
    <Border Classes="toolbarSeparator" IsVisible="{Binding HasSession}"/>
    <Button Content="Change team / work" Command="{Binding ChangeCommand}" IsVisible="{Binding HasSession}" Classes="primary"/>
    <Button Name="InsightsButton" Content="{Binding InsightsIndicator}" Click="OpenInsightsClicked" IsVisible="{Binding HasSession}" ToolTip.Tip="Read-only observations, possible explanations and optional experiments" AutomationProperties.Name="Simulation Insights"/>
-   <Button Content="Checkpoint" Command="{Binding CheckpointCommand}" IsVisible="{Binding HasSession}" ToolTip.Tip="Create a checkpoint. Restore and files are below the analysis sections."/>
+   <Button Content="Checkpoint" Command="{Binding CheckpointCommand}" IsVisible="{Binding HasSession}" ToolTip.Tip="Create a checkpoint. Restore is below the analysis sections."/>
    <Border Classes="toolbarSeparator" IsVisible="{Binding HasSession}"/>
    <TextBlock Classes="liveSecondary" Text="Speed" Margin="6,0" VerticalAlignment="Center" IsVisible="{Binding HasSession}"/>
    <ComboBox ItemsSource="{Binding Speeds}" SelectedItem="{Binding Speed, Mode=TwoWay}" Width="75" IsVisible="{Binding HasSession}"><ComboBox.ItemTemplate><DataTemplate x:DataType="x:Double"><TextBlock Text="{Binding StringFormat='{}{0}x'}"/></DataTemplate></ComboBox.ItemTemplate></ComboBox>
