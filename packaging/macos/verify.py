@@ -3,6 +3,8 @@
 import pathlib,plistlib,subprocess,os,sys,json,hashlib
 image=pathlib.Path(sys.argv[1]).resolve()
 logdir=image.parent/(image.stem+'-verification');logdir.mkdir(exist_ok=True)
+expected=image.with_suffix(image.suffix+'.sha256').read_text().split()[0]
+assert hashlib.sha256(image.read_bytes()).hexdigest()==expected,'SHA-256 sidecar mismatch'
 subprocess.run(['hdiutil','verify',str(image)],check=True,stdout=subprocess.DEVNULL)
 mounts=plistlib.loads(subprocess.check_output(['hdiutil','attach','-readonly','-nobrowse','-plist',str(image)]))
 mount=pathlib.Path(next(e['mount-point'] for e in mounts['system-entities'] if 'mount-point' in e))
@@ -14,6 +16,28 @@ try:
  config=json.loads((app/'Contents/MacOS/Simulation.UI.runtimeconfig.json').read_text())
  assert 'includedFrameworks' in config['runtimeOptions'] and 'frameworks' not in config['runtimeOptions']
  metadata=json.loads((app/'Contents/Resources/release.json').read_text())
+ info=plistlib.loads((app/'Contents/Info.plist').read_bytes())
+ assert info['CFBundleName']=='FLOW' and info['CFBundleShortVersionString']==metadata['version']
+ assert not list(app.rglob('*.pdb')) and not list(app.rglob('*.cs')),'Unexpected debug/source artefacts'
+ assert (app/'Contents/Resources/FLOW.icns').stat().st_size>0
+ notices=app/'Contents/Resources/ThirdPartyNotices'
+ assert (notices/'packages.txt').stat().st_size>0
+ assert list((app/'Contents/Resources/runtime').glob('*NOTICE*')),'Runtime notices absent'
+ if 'releaseDesignation' in metadata:
+  assert info['FlowReleaseDesignation']==metadata['releaseDesignation']
+  assert info['FlowSourceRevision']==metadata['revision'] and info['FlowBuildUtc']==metadata['buildUtc']
+  assert config['runtimeOptions']['includedFrameworks']==metadata['runtimeFrameworks']
+  external=json.loads(image.with_suffix('.manifest.json').read_text())
+  assert external['artifactSHA256']==expected and external['revision']==metadata['revision']
+  assert hashlib.sha256((app/'Contents/Resources/FLOW.icns').read_bytes()).hexdigest()==metadata['packagingResourceSHA256']['packaging/macos/FLOW.icns']
+  architecture=subprocess.check_output(['lipo','-archs',str(executable)],text=True).strip()
+  assert architecture==('arm64' if metadata['rid']=='osx-arm64' else 'x86_64')
+  probe=pathlib.Path(__file__).resolve().parent/'Probe/bin/Release/net10.0/Probe.dll'
+  with (logdir/'packaged-resources.json').open('w') as log:
+   subprocess.run(['dotnet',str(probe),str(app)],stdout=log,check=True)
+  metadata['packagedResourcesAndIdentityVerified']=True
+  metadata['executionMode']='native arm64' if metadata['rid']=='osx-arm64' else 'x64 via Rosetta on arm64'
+
  env={**os.environ,'DOTNET_ROOT':'/tmp/flow-no-installed-runtime','DOTNET_ROOT_ARM64':'/tmp/flow-no-installed-runtime','DOTNET_ROOT_X64':'/tmp/flow-no-installed-runtime',
       'COREHOST_TRACE':'1','COREHOST_TRACEFILE':str(logdir/'runtime.log')}
  with (logdir/'startup.log').open('w') as log:

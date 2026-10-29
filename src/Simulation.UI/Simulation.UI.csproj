@@ -19,11 +19,12 @@
   </ItemGroup>
   <Target Name="FlowBuildIdentity" BeforeTargets="GetAssemblyAttributes">
     <Error Condition="'$(Version)' != '$(FlowProductVersion)'" Text="FLOW version must match ProductVersion.props." />
-    <Exec Command="git rev-parse HEAD" WorkingDirectory="$(MSBuildProjectDirectory)" ConsoleToMSBuild="true" IgnoreExitCode="true" StandardErrorImportance="Low" StandardOutputImportance="Low">
+    <Error Condition="'$(FlowArchiveCommit)' != '' and !$([System.Text.RegularExpressions.Regex]::IsMatch('$(FlowArchiveCommit)', '^[a-f0-9]{40}$'))" Text="FlowArchiveCommit must be a full Git SHA from the exported release revision." />
+    <Exec Condition="'$(FlowArchiveCommit)' == ''" Command="git rev-parse HEAD" WorkingDirectory="$(MSBuildProjectDirectory)" ConsoleToMSBuild="true" IgnoreExitCode="true" StandardErrorImportance="Low" StandardOutputImportance="Low">
       <Output TaskParameter="ConsoleOutput" ItemName="FlowCommitOutput" />
       <Output TaskParameter="ExitCode" PropertyName="FlowGitExitCode" />
     </Exec>
-    <Exec Condition="'$(FlowGitExitCode)' == '0'" Command="git status --porcelain --untracked-files=normal" WorkingDirectory="$(MSBuildProjectDirectory)" ConsoleToMSBuild="true" IgnoreExitCode="true" StandardOutputImportance="Low">
+    <Exec Condition="'$(FlowArchiveCommit)' == '' and '$(FlowGitExitCode)' == '0'" Command="git status --porcelain --untracked-files=normal" WorkingDirectory="$(MSBuildProjectDirectory)" ConsoleToMSBuild="true" IgnoreExitCode="true" StandardOutputImportance="Low">
       <Output TaskParameter="ConsoleOutput" ItemName="FlowChangesOutput" />
     </Exec>
     <PropertyGroup>
@@ -32,11 +33,20 @@
       <FlowSourceState Condition="'@(FlowChangesOutput)' != ''">local changes</FlowSourceState>
       <FlowSourceState Condition="'@(FlowChangesOutput)' == '' and '$(FlowGitExitCode)' == '0'">clean</FlowSourceState>
       <FlowSourceState Condition="'$(FlowGitExitCode)' != '0'">unverified</FlowSourceState>
+      <FlowCommit Condition="'$(FlowArchiveCommit)' != ''">$(FlowArchiveCommit)</FlowCommit>
+      <FlowSourceState Condition="'$(FlowArchiveCommit)' != ''">clean archive</FlowSourceState>
+      <FlowReleaseDesignation Condition="'$(FlowReleaseDesignation)' == ''">Development</FlowReleaseDesignation>
+      <FlowBuildUtc Condition="'$(FlowBuildUtc)' == ''">not recorded</FlowBuildUtc>
+      <FlowArchitecture Condition="'$(RuntimeIdentifier)' != ''">$(RuntimeIdentifier)</FlowArchitecture>
+      <FlowArchitecture Condition="'$(RuntimeIdentifier)' == ''">framework-dependent</FlowArchitecture>
     </PropertyGroup>
     <ItemGroup>
       <AssemblyMetadata Include="FlowPublicVersion" Value="$(FlowProductVersion)" />
       <AssemblyMetadata Include="FlowCommit" Value="$(FlowCommit)" />
       <AssemblyMetadata Include="FlowSourceState" Value="$(FlowSourceState)" />
+      <AssemblyMetadata Include="FlowReleaseDesignation" Value="$(FlowReleaseDesignation)" />
+      <AssemblyMetadata Include="FlowBuildUtc" Value="$(FlowBuildUtc)" />
+      <AssemblyMetadata Include="FlowArchitecture" Value="$(FlowArchitecture)" />
     </ItemGroup>
   </Target>
 </Project>

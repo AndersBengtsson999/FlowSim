@@ -47,3 +47,20 @@ B6.6.1 from commit `a5105caf4cba8ffd1f5cf314097af1fc874c1e2d`, .NET runtime 10.0
 `verify.py PATH_TO_DMG` mounts the image read-only, verifies checksum and bundle signature, checks relative links and the self-contained runtime configuration, then starts the packaged executable for eight seconds with invalid external DOTNET_ROOT paths. It stops only its own test process and unmounts the image. Runtime traces and a verification manifest are retained beside each DMG.
 
 Apple Silicon startup was verified on this Mac; the Intel build was tested through installed Rosetta, not on native Intel hardware. This is a launch smoke test, not full UI regression or notarization acceptance. No valid Developer ID identity was available, so both artifacts remain explicitly labelled TEST and unnotarized. No package was uploaded to a website or Apple.
+
+## FLOW public version / RC builds
+
+The public version is read from the selected revision's `ProductVersion.props` and must match `--version`. RC1 is a separate designation, not a replacement for the numeric application/model/save-format versions:
+
+```sh
+python3 packaging/macos/build.py --ref RELEASE_COMMIT --version 1.0.0 --release RC1 --rid osx-arm64
+python3 packaging/macos/build.py --ref RELEASE_COMMIT --version 1.0.0 --release RC1 --rid osx-x64
+dotnet build packaging/macos/Probe/Probe.csproj -c Release
+python3 packaging/macos/verify.py dist/macos/FLOW-1.0.0-RC1-osx-arm64-TEST.dmg
+```
+
+Ad-hoc builds deliberately retain `-TEST.dmg`; the public version remains 1.0.0 in About and Info.plist. No existing 6.6.1 packages are reused. The build refuses mixed packaging-script provenance and reads the icon and entitlements from the same exported revision as the application. `FlowArchiveCommit`, release designation and UTC build time are supplied by this script to the UI build; About reads embedded metadata, not runtime Git state. Ordinary source builds keep their own clean/local/unverified status.
+
+Each architecture receives a `.manifest.json` with source commit, Git archive hash, resource hashes, UTC time, SDK, included runtime version, architecture, minimum OS, packaging method, signing/notarization status and final DMG hash. The in-bundle manifest cannot include its own enclosing DMG hash; the adjacent manifest does. Signing/stamping happens before the final checksum. No upload or Apple submission is performed by these scripts.
+
+The managed Probe opens the actual shipped assembly, validates About against the bundled manifest, validates all embedded guide links/images and reads every distinct sprite atlas through Avalonia's managed resource provider. It is a release verification tool and is not included in the app. `verify.py` compares the final checksum, bundle identity, runtime, icon, native architecture and resource probe, then smoke-starts the mounted app with invalid external DOTNET_ROOT paths. Smoke startup does not verify native menus, file pickers, trackpad, Gatekeeper quarantine acceptance or another Mac. On Apple Silicon, x64 startup is a Rosetta check only.

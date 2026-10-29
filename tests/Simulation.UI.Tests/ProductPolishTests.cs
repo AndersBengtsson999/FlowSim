@@ -76,8 +76,11 @@ public class ProductPolishTests
         Assert.Equal(version.Build, assembly.GetName().Version!.Build);
         Assert.Contains(ProductIdentity.Version, ProductIdentity.Description);
         Assert.Contains(ProductIdentity.Commit, ProductIdentity.Description);
+        Assert.Contains(ProductIdentity.ReleaseDesignation, ProductIdentity.Description);
+        Assert.Contains(ProductIdentity.BuildUtc, ProductIdentity.Description);
+        Assert.Contains(ProductIdentity.Architecture, ProductIdentity.Description);
         Assert.Contains(ProductIdentity.SourceState, ProductIdentity.Description);
-        Assert.Contains(ProductIdentity.SourceState, new[] { "clean", "local changes", "unverified" });
+        Assert.Contains(ProductIdentity.SourceState, new[] { "clean", "local changes", "unverified", "clean archive" });
         if (ProductIdentity.SourceState != "unverified") Assert.Matches("^[a-f0-9]{40}$", ProductIdentity.Commit);
     }
     [Fact]

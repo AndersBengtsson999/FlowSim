@@ -306,8 +306,11 @@ public sealed partial class LiveViewModel : INotifyPropertyChanged, IDisposable
                 if (session.Session.CurrentDay % 25 == 0)
                 {
                     Refresh();
-                    // Yield to the Avalonia dispatcher so Pause/navigation remain responsive.
+                    // Delay alone can resume at a higher priority than queued input/render work.
+                    // Explicitly yield to the background queue so Pause/navigation can run.
                     await Task.Delay(1);
+                    if (SynchronizationContext.Current is AvaloniaSynchronizationContext)
+                        await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
                 }
             }
             if (ReferenceEquals(Live, session)) status = LaunchDecisionPending ? $"Customer launch decision required at Day {Day}." : session.LimitReached ? "Live simulation safety limit reached." : $"Paused at Day {Day}.";

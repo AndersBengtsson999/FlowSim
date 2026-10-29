@@ -11,6 +11,9 @@ public static class ProductIdentity
     public static string Version => Metadata("FlowPublicVersion");
     public static string Commit => Metadata("FlowCommit");
     public static string SourceState => Metadata("FlowSourceState");
-    public static string Build => $"Commit: {Commit}\nSource: {SourceState}";
-    public static string Description => $"FLOW {Version}\nSoftware Development Simulation\n\n{Build}\n\nThe application version is separate from simulation model and saved-data format versions.";
+    public static string ReleaseDesignation => Metadata("FlowReleaseDesignation");
+    public static string BuildUtc => Metadata("FlowBuildUtc");
+    public static string Architecture => Metadata("FlowArchitecture");
+    public static string Build => $"Commit: {Commit}\nSource: {SourceState}\nBuild UTC: {BuildUtc}\nTarget: {Architecture}";
+    public static string Description => $"FLOW {Version} · {ReleaseDesignation}\nSoftware Development Simulation\n\n{Build}\n\nThe application version is separate from simulation model and saved-data format versions.";
 }
