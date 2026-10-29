@@ -22,7 +22,10 @@ try:
  assert (app/'Contents/Resources/FLOW.icns').stat().st_size>0
  notices=app/'Contents/Resources/ThirdPartyNotices'
  assert (notices/'packages.txt').stat().st_size>0
- assert list((app/'Contents/Resources/runtime').glob('*NOTICE*')),'Runtime notices absent'
+ for name in ['LICENSE.TXT','THIRD-PARTY-NOTICES.TXT']:
+  notice=notices/'DotNetRuntime'/name
+  assert notice.stat().st_size>0,'Runtime notice absent: '+name
+  assert hashlib.sha256(notice.read_bytes()).hexdigest()==metadata['runtimeNoticeSHA256'][name]
  if 'releaseDesignation' in metadata:
   assert info['FlowReleaseDesignation']==metadata['releaseDesignation']
   assert info['FlowSourceRevision']==metadata['revision'] and info['FlowBuildUtc']==metadata['buildUtc']

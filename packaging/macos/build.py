@@ -66,12 +66,22 @@ with tempfile.TemporaryDirectory(prefix='flow-macos-') as tmp:
         if doc.name=='README.md' and doc.parent.name in ['game-view-b1-1','game-view-b1-2','game-view-b1-3']:
             shutil.copyfile(doc,notices/(doc.parent.name+'.md'))
     runtime_config=json.loads((mac/'Simulation.UI.runtimeconfig.json').read_text())
+    # Runtime packs are SDK download dependencies, not necessarily project.assets libraries.
+    runtime_notices = notices/'DotNetRuntime';runtime_notices.mkdir()
+    runtime_version=runtime_config['runtimeOptions']['includedFrameworks'][0]['version']
+    runtime_pack=cache/('microsoft.netcore.app.runtime.'+a.rid)/runtime_version
+    runtime_notice_hashes={}
+    for name in ['LICENSE.TXT','THIRD-PARTY-NOTICES.TXT']:
+        origin=runtime_pack/name
+        if not origin.is_file():raise RuntimeError('Missing runtime redistribution notice: '+str(origin))
+        shutil.copyfile(origin,runtime_notices/name)
+        runtime_notice_hashes[name]=sha(origin)
     stamp={'product':'FLOW','version':a.version,'releaseDesignation':a.release or 'Release',
            'revision':revision,'sourceState':'clean archive','buildUtc':build_utc,'rid':a.rid,
            'sdkVersion':sdk,'runtimeFrameworks':runtime_config['runtimeOptions']['includedFrameworks'],
            'targetFramework':runtime_config['runtimeOptions']['tfm'],'minimumMacOS':'15.0',
            'packagingMethod':'git archive; dotnet publish self-contained; signed app bundle; hdiutil UDZO DMG',
-           'sourceArchiveSHA256':sha(archive),'packagingResourceSHA256':resource_hashes,'selfContained':True,
+           'runtimeNoticeSHA256':runtime_notice_hashes,'sourceArchiveSHA256':sha(archive),'packagingResourceSHA256':resource_hashes,'selfContained':True,
            'signature':'ad-hoc testing only' if a.identity=='-' else 'Developer ID Application',
            'notarized':False,'distribution':'controlled internal testing'}
     (resources/'release.json').write_text(json.dumps(stamp,indent=2)+'\n')
