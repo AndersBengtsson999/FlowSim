@@ -1,0 +1,16 @@
+FLOW 1.0.0 RC1 — Windows x64 portable preview
+
+For controlled internal testing; native Windows acceptance is still required.
+1. Obtain FLOW-1.0.0-RC1-win-x64.zip from the maintainer. Verify its SHA-256 against the separately supplied checksum.
+2. Right-click the ZIP and choose Extract All. Select a normal user folder, such as Documents\FLOW-RC1. Do not run from inside the ZIP.
+3. Open the extracted FLOW folder and double-click FLOW.exe. Keep all other files and folders together. No administrator installation or separate .NET installation is intended.
+4. Use Application > About FLOW to confirm version 1.0.0, RC1 and commit e1c36de0790405c68e6fa8a9e047727335517018.
+
+Target: Windows 11 x64; Windows 10 x64 only on editions/releases still supported by .NET 10. Microsoft currently limits supported Windows 10 to applicable LTSC/Enterprise editions. Windows 10/11 native compatibility remains unverified for this RC.
+Microsoft support matrix: https://learn.microsoft.com/dotnet/core/install/windows
+
+FLOW.exe is NOT Authenticode-signed. SmartScreen or organizational security policy may warn or block it. It is not certified as trusted by Windows. If blocked, contact the maintainer or IT; do not disable system-wide Windows security protections.
+
+Normal wheel scrolling scrolls the page; Ctrl+wheel zooms the workshop. Drag empty workshop space to pan. Use the Application menu or Alt+F4 to exit. Save LIVE explicitly before exiting; there is no automatic session save.
+
+Report Windows version/edition, About FLOW identification, steps, expected/actual result and screenshots through your agreed internal channel. Do not include sensitive session data unnecessarily.
