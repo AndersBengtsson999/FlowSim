@@ -37,7 +37,8 @@ try:
   assert architecture==('arm64' if metadata['rid']=='osx-arm64' else 'x86_64')
   probe=pathlib.Path(__file__).resolve().parent/'Probe/bin/Release/net10.0/Probe.dll'
   with (logdir/'packaged-resources.json').open('w') as log:
-   subprocess.run(['dotnet',str(probe),str(app)],stdout=log,check=True)
+   probe_command=[os.environ['FLOW_PROBE_EXECUTABLE']] if os.environ.get('FLOW_PROBE_EXECUTABLE') else ['dotnet',str(probe)]
+   subprocess.run([*probe_command,str(app)],stdout=log,check=True)
   metadata['packagedResourcesAndIdentityVerified']=True
   metadata['executionMode']='native arm64' if metadata['rid']=='osx-arm64' else 'x64 via Rosetta on arm64'
 
